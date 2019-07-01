@@ -1,349 +1,345 @@
 {
-    "scheming_version": 1,
-    "dataset_type": "spectrum-dataset",
-    "name": "Spectrum",
-    "about": "",
-    "about_url": "http://github.com/ckan/ckanext-scheming",
-    "add_data_on_create": false,
-    "dataset_fields": [
-        {
-            "field_name": "title",
-            "label": "Title",
-            "preset": "title",
-            "form_placeholder": "eg. A descriptive title"
-        },
-        {
-            "field_name": "name",
-            "label": "URL",
-            "preset": "dataset_slug",
-            "form_placeholder": "eg. my-dataset"
-        },
-        {
-            "field_name": "notes",
-            "label": "Description",
-            "form_snippet": "markdown.html",
-            "form_placeholder": "eg. Some useful notes about the data"
-        },
-        {
-            "field_name": "tag_string",
-            "label": "Tags",
-            "preset": "tag_string_autocomplete",
-            "form_placeholder": "Spectrum, PMTCT, ANC, ART",
-	    "default":"Spectrum, PMTCT, ANC, ART"
-        },
-        {
-            "field_name": "license_id",
-            "label": "License",
-            "form_snippet": "license.html",
-            "help_text": "License definitions and additional information can be found at http://opendefinition.org/"
-        },
-	{
-	    "field_name": "year",
-	    "label": "Year",
-	    "preset": "year"
-	},{
-	    "field_name": "geo-location",
-	    "label": "Geographical Location",
-	    "form_placeholder": "Country or province",
-	    "preset": "country_list",
-            "display_property": "dc:contributor"
-	},
-        {
-            "field_name": "owner_org",
-            "label": "Organization",
-            "preset": "dataset_organization"
-        },
-        {
-            "field_name": "url",
-            "label": "Source",
-            "form_placeholder": "http://example.com/dataset.json",
-            "display_property": "foaf:homepage",
-            "display_snippet": "link.html"
-        },
-        {
-            "field_name": "version",
-            "label": "Version",
-            "validators": "ignore_missing unicode package_version_validator",
-            "form_placeholder": "1.0"
-        },
-        {
-            "field_name": "maintainer",
-            "label": "Maintainer",
-            "form_placeholder": "Joe Bloggs",
-            "display_property": "dc:contributor"
-        },
-        {
-            "field_name": "maintainer_email",
-            "label": "Maintainer Email",
-            "form_placeholder": "joe@example.com",
-            "display_property": "dc:contributor",
-            "display_snippet": "email.html",
-            "display_email_name_field": "maintainer"
-        }
-    ],
-    "resources":[
-        {
-            "name":  "PMTCT Data",
-            "about": "A validated Spectrum PMTCT spreadsheet.",
-            "resource_type": "spectrum-pmtct",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "PMTCT Data"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_pmtct"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-pmtct"
-            }]
-        },
-        {
-            "name":  "Breastfeeding",
-            "about": "A validated Spectrum Breastfeeding spreadsheet.",
-            "resource_type": "spectrum-breastfeeding",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "Breastfeeding Data"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_breastfeeding"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-breastfeeding"
-            }]
-        },{
-            "name":  "ART Data",
-            "about": "A validated Spectrum ART spreadsheet.",
-            "resource_type": "spectrum-art",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "ART Data"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_art"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-art"
-            }]
-        },
-        {
-            "name":  "Known Status",
-            "about": "Data from people who know the HIV status.",
-            "resource_type": "spectrum-ks",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "Known Status"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_ks"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-ks"
-            }]
-        },
-        {
-            "name":  "Household Surveys",
-            "about": "HIV prevelence data from household surveys.",
-            "resource_type": "spectrum-hh",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "Household Surveys"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_hh"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-hh"
-            }]
-        }, {
-            "name":  "ANC Testing",
-            "about": "Data about ANC testing",
-            "resource_type": "spectrum-anc-test",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "ANC Testing"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_anc_test"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-anc-test"
-            }]
-        },{
-            "name":  "ANC Prevalence",
-            "about": "ANC Prevalence Data",
-            "resource_type": "spectrum-anc-prev",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "ANC Prevalances"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_anc_prev"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-anc-prev"
-            }]
-        },{
-            "name":  "Concentrated Prevalence",
-            "about": "Prevalance for the Concentrated HIV epidemic",
-            "resource_type": "spectrum-conc-prev",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "Concentrated Prevalence"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_conc_prev"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-conc-prev"
-            }]
-        },{
-            "name":  "Size Estimates",
-            "about": "Size estimated for the Concentrated HIV epidemic",
-            "resource_type": "spectrum-size",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "Size Estimates"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_size"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-size"
-            }]
-        },{
-            "name":  "Turnover",
-            "about": "Turnover times for high risk groups",
-            "resource_type": "spectrum-turnover",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "Turnover"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_turnover"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-turnover"
-            }]
-        },{
-            "name":  "Cases and Mortality",
-            "about": "HIV Cases and mortality data",
-            "resource_type": "spectrum-case-mortality",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "Cases and Mortality"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_case_mortality"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-case-mortality"
-            }]
-        },{
-            "name":  "District Breakdown",
-            "about": "HIV Cases and mortality data",
-            "resource_type": "spectrum-district",
-            "resource_fields": [{
-                "field_name": "name",
-                "preset": "hidden_value",
-                "field_value": "District Breakdown"
-            }, {
-                "field_name": "validator_schema",
-                "preset": "hidden_value",
-                "field_value": "spectrum_district"
-            }, {
-                "field_name": "resource_type",
-                "preset": "hidden_value",
-                "field_value": "spectrum-district"
-            }]
-        }
-    ],
-    "resource_fields": [
-        {
-            "field_name": "url",
-            "label": "URL",
-            "preset": "resource_url_upload"
-        },
-        {
-            "field_name": "name",
-            "label": "Name",
-            "form_placeholder": "eg. January 2011 Gold Prices"
-        },
-        {
-            "field_name": "description",
-            "label": "Description",
-            "form_snippet": "markdown.html",
-            "form_placeholder": "Some useful notes about the data"
-        },
-        {
-            "field_name": "validator_schema",
-            "label": "Choose schema",
-            "preset": "data_schema"
-        },
-        {
-            "field_name": "format",
-            "label": "Format",
-            "preset": "resource_format_autocomplete",
-            "required": true
-        },{
-	    "field_name": "restricted",
-	    "label": "Access Restriction",
-	    "preset": "restricted_fields",
-	    "validators": "restricted_json",
-	    "choices":
-	    [
-                {
-                    "value": "restricted",
-                    "label": "Restrictied to specified users and organizations"
-                },
-                {
-                    "value": "public",
-                    "label": "Public"
-                }
-            ],
-	    "form_attrs_users": {
-		"data-module": "autocomplete",
-		"data-module-tags": "",
-		"data-module-source": "/api/2/util/user/autocomplete?q=?"
-            },
-	    "form_attrs_orgs": {
-		"data-module": "autocomplete",
-		"data-module-tags": "",
-		"data-module-source": "/api/2/util/organization/autocomplete?q=?"
-            }
-	}
-    ]
+	"scheming_version": 1,
+	"dataset_type": "spectrum-dataset",
+	"name": "Spectrum",
+	"about": "",
+	"about_url": "http://github.com/ckan/ckanext-scheming",
+	"add_data_on_create": false,
+	"dataset_fields": [{
+			"field_name": "title",
+			"label": "Title",
+			"preset": "title",
+			"form_placeholder": "eg. A descriptive title"
+		},
+		{
+			"field_name": "name",
+			"label": "URL",
+			"preset": "dataset_slug",
+			"form_placeholder": "eg. my-dataset"
+		},
+		{
+			"field_name": "notes",
+			"label": "Description",
+			"form_snippet": "markdown.html",
+			"form_placeholder": "eg. Some useful notes about the data"
+		},
+		{
+			"field_name": "tag_string",
+			"label": "Tags",
+			"preset": "tag_string_autocomplete",
+			"form_placeholder": "Spectrum, PMTCT, ANC, ART",
+			"default": "Spectrum, PMTCT, ANC, ART"
+		},
+		{
+			"field_name": "license_id",
+			"label": "License",
+			"form_snippet": "license.html",
+			"help_text": "License definitions and additional information can be found at http://opendefinition.org/"
+		},
+		{
+			"field_name": "year",
+			"label": "Year",
+			"preset": "year"
+		},
+		{
+			"field_name": "geo-location",
+			"label": "Geographical Location",
+			"form_placeholder": "Country or province",
+			"preset": "country_list",
+			"display_property": "dc:contributor"
+		},
+		{
+			"field_name": "owner_org",
+			"label": "Organization",
+			"preset": "dataset_organization"
+		},
+		{
+			"field_name": "url",
+			"label": "Source",
+			"form_placeholder": "http://example.com/dataset.json",
+			"display_property": "foaf:homepage",
+			"display_snippet": "link.html"
+		},
+		{
+			"field_name": "version",
+			"label": "Version",
+			"validators": "ignore_missing unicode package_version_validator",
+			"form_placeholder": "1.0"
+		},
+		{
+			"field_name": "maintainer",
+			"label": "Maintainer",
+			"form_placeholder": "Joe Bloggs",
+			"display_property": "dc:contributor"
+		},
+		{
+			"field_name": "maintainer_email",
+			"label": "Maintainer Email",
+			"form_placeholder": "joe@example.com",
+			"display_property": "dc:contributor",
+			"display_snippet": "email.html",
+			"display_email_name_field": "maintainer"
+		}
+	],
+	"resources": [{
+			"name": "PMTCT Data",
+			"about": "A validated Spectrum PMTCT spreadsheet.",
+			"resource_type": "spectrum-pmtct",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "PMTCT Data"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_pmtct"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-pmtct"
+			}]
+		},
+		{
+			"name": "Breastfeeding",
+			"about": "A validated Spectrum Breastfeeding spreadsheet.",
+			"resource_type": "spectrum-breastfeeding",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "Breastfeeding Data"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_breastfeeding"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-breastfeeding"
+			}]
+		}, {
+			"name": "ART Data",
+			"about": "A validated Spectrum ART spreadsheet.",
+			"resource_type": "spectrum-art",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "ART Data"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_art"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-art"
+			}]
+		},
+		{
+			"name": "Known Status",
+			"about": "Data from people who know the HIV status.",
+			"resource_type": "spectrum-ks",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "Known Status"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_ks"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-ks"
+			}]
+		},
+		{
+			"name": "Household Surveys",
+			"about": "HIV prevelence data from household surveys.",
+			"resource_type": "spectrum-hh",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "Household Surveys"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_hh"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-hh"
+			}]
+		}, {
+			"name": "ANC Testing",
+			"about": "Data about ANC testing",
+			"resource_type": "spectrum-anc-test",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "ANC Testing"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_anc_test"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-anc-test"
+			}]
+		}, {
+			"name": "ANC Prevalence",
+			"about": "ANC Prevalence Data",
+			"resource_type": "spectrum-anc-prev",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "ANC Prevalances"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_anc_prev"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-anc-prev"
+			}]
+		}, {
+			"name": "Concentrated Prevalence",
+			"about": "Prevalance for the Concentrated HIV epidemic",
+			"resource_type": "spectrum-conc-prev",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "Concentrated Prevalence"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_conc_prev"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-conc-prev"
+			}]
+		}, {
+			"name": "Size Estimates",
+			"about": "Size estimated for the Concentrated HIV epidemic",
+			"resource_type": "spectrum-size",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "Size Estimates"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_size"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-size"
+			}]
+		}, {
+			"name": "Turnover",
+			"about": "Turnover times for high risk groups",
+			"resource_type": "spectrum-turnover",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "Turnover"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_turnover"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-turnover"
+			}]
+		}, {
+			"name": "Cases and Mortality",
+			"about": "HIV Cases and mortality data",
+			"resource_type": "spectrum-case-mortality",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "Cases and Mortality"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_case_mortality"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-case-mortality"
+			}]
+		}, {
+			"name": "District Breakdown",
+			"about": "HIV Cases and mortality data",
+			"resource_type": "spectrum-district",
+			"resource_fields": [{
+				"field_name": "name",
+				"preset": "hidden_value",
+				"field_value": "District Breakdown"
+			}, {
+				"field_name": "validator_schema",
+				"preset": "hidden_value",
+				"field_value": "spectrum_district"
+			}, {
+				"field_name": "resource_type",
+				"preset": "hidden_value",
+				"field_value": "spectrum-district"
+			}]
+		}
+	],
+	"resource_fields": [{
+			"field_name": "url",
+			"label": "URL",
+			"preset": "resource_url_upload"
+		},
+		{
+			"field_name": "name",
+			"label": "Name",
+			"form_placeholder": "eg. January 2011 Gold Prices"
+		},
+		{
+			"field_name": "description",
+			"label": "Description",
+			"form_snippet": "markdown.html",
+			"form_placeholder": "Some useful notes about the data"
+		},
+		{
+			"field_name": "validator_schema",
+			"label": "Choose schema",
+			"preset": "data_schema"
+		},
+		{
+			"field_name": "format",
+			"label": "Format",
+			"preset": "resource_format_autocomplete",
+			"required": true
+		}, {
+			"field_name": "restricted",
+			"label": "Access Restriction",
+			"preset": "restricted_fields",
+			"validators": "restricted_json",
+			"choices": [{
+					"value": "restricted",
+					"label": "Restrictied to specified users and organizations"
+				},
+				{
+					"value": "public",
+					"label": "Public"
+				}
+			],
+			"form_attrs_users": {
+				"data-module": "autocomplete",
+				"data-module-tags": "",
+				"data-module-source": "/api/2/util/user/autocomplete?q=?"
+			},
+			"form_attrs_orgs": {
+				"data-module": "autocomplete",
+				"data-module-tags": "",
+				"data-module-source": "/api/2/util/organization/autocomplete?q=?"
+			}
+		}
+	]
 }
