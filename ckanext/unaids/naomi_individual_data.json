@@ -1,0 +1,111 @@
+{
+    "fields": [
+        {
+            "name": "Survey ID",
+            "type": "string"
+        },
+        {
+            "name": "Cluster ID",
+            "type": "string"
+        },
+        {
+            "name": "Individual ID",
+            "type": "string"
+        },
+        {
+            "name": "Sex",
+            "type": "string",
+            "enum": ["male", "female"],
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Age",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0,
+                "maximum": 130
+            }
+        },
+        {
+            "name": "DOB",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "HIV Status",
+            "enum": ["positive", "negative"],
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "ART",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "ARV Biomarker Detected",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Viral Load Supression",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Ever tested",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Aware",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Ever had sex",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Age first had sex",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0,
+                "maximum": 130
+            }
+        },
+        {
+            "name": "Circumsised",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Survey ID",
+            "type": "string"
+        }
+    ]
+}

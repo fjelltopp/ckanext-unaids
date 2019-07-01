@@ -1,0 +1,44 @@
+{
+    "fields": [
+        {
+            "name": "Survey ID",
+            "type": "string"
+        },
+        {
+            "name": "Cluster ID",
+            "type": "string"
+        },
+        {
+            "name": "Stratum",
+            "type": "string"
+        },
+        {
+            "name": "Residence Type",
+            "type": "string"
+        },
+        {
+            "name": "Latitude",
+            "type": "number",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": -180,
+                "maximum": 180
+            }
+        },
+        {
+            "name": "Longitude",
+            "type": "number",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": -90,
+                "maximum": 90
+            }
+        },
+        {
+            "name": "Area ID",
+            "type": "string"
+        }
+    ]
+}

@@ -1,0 +1,40 @@
+{
+    "fields": [
+        {
+            "name": "Survey ID",
+            "type": "string"
+        },
+        {
+            "name": "Assay",
+            "type": "string"
+        },
+        {
+            "name": "Algorithm",
+            "type": "string"
+        },
+        {
+            "name": "MDRI",
+            "type": "string"
+        },
+        {
+            "name": "MDRI SE",
+            "type": "string"
+        },
+        {
+            "name": "FRR",
+            "type": "string"
+        },
+        {
+            "name": "FRR SE",
+            "type": "string"
+        },
+        {
+            "name": "VL Threshold",
+            "type": "string"
+        },
+        {
+            "name": "ARV's Tested",
+            "type": "string"
+        }
+    ]
+}

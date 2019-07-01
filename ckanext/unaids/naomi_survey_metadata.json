@@ -1,0 +1,68 @@
+{
+    "fields": [
+        {
+            "name": "Survey ID",
+            "type": "string"
+        },
+        {
+            "name": "Country",
+            "type": "string"
+        },
+        {
+            "name": "Survey Year",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 1970,
+                "maximum": 2021
+            }
+        },
+        {
+            "name": "Start Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "End Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Female Age",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0,
+                "maximum": 130
+            }
+        },
+        {
+            "name": "Male Age",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0,
+                "maximum": 130
+            }
+        },
+        {
+            "name": "Report reference",
+            "type": "string"
+        },
+        {
+            "name": "Microdata reference",
+            "type": "string"
+        },
+        {
+            "name": "Notes",
+            "type": "string"
+        }
+    ]
+}

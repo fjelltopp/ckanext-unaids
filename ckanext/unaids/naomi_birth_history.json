@@ -1,0 +1,45 @@
+{
+    "fields": [
+        {
+            "name": "Survey ID",
+            "type": "string"
+        },
+        {
+            "name": "Individaul ID",
+            "type": "string"
+        },
+        {
+            "name": "Birth ID",
+            "type": "string"
+        },
+        {
+            "name": "Child DOB",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Child Alive",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Age at death",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },
+        {
+            "name": "Breastfeeding",
+            "type": "boolean",
+            "constraints": {
+                "required": true
+            }
+        }
+    ]
+}
