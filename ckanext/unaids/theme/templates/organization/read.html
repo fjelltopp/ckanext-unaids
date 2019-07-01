@@ -3,7 +3,7 @@
 {% block page_primary_action %}
   {% if h.check_access('package_create', {'owner_org': c.group_dict.id}) %}
     {% snippet 'snippets/add_dataset.html', group=c.group_dict.id %}
-    {{ h.snippet ('snippets/add_dataset.html', dataset_type='hive-dataset') }}
+    {{ h.snippet ('snippets/add_dataset.html', dataset_type='naomi-dataset') }}
     {{ h.snippet ('snippets/add_dataset.html', dataset_type='spectrum-dataset') }}
 
    {% endif %}
