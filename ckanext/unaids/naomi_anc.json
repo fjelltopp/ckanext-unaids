@@ -1,0 +1,82 @@
+{
+    "fields": [
+        {
+            "name": "Facility ID",
+            "type": "string"
+        },
+        {
+            "name": "Start Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "End Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Age Start",
+            "type": "number",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0,
+                "maximum": 130
+            }
+        },
+        {
+            "name": "Age Span",
+            "type": "number",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 1,
+                "maximum": 130
+            }
+        },
+        {
+            "name": "Clients",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },
+        {
+            "name": "Known positive",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },
+        {
+            "name": "HIV tested",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },
+        {
+            "name": "HIV positive",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },
+        {
+            "name": "Already ART",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        }
+    ]
+}

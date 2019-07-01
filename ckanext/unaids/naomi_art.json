@@ -1,0 +1,80 @@
+{
+    "fields": [
+        {
+            "name": "Facility ID",
+            "type": "string"
+        },
+        {
+            "name": "Start Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "End Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Sex",
+            "type": "string",
+            "enum": ["male", "female"],
+            "constraints": {
+                "required": true
+            }
+        },{
+            "name": "Age Start",
+            "type": "number",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0,
+                "maximum": 130
+            }
+        },
+        {
+            "name": "Age Span",
+            "type": "number",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 1,
+                "maximum": 130
+            }
+        },{
+            "name": "Number on ART",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0,
+
+            }
+        },{
+            "name": "Number New Clients",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },{
+            "name": "Number Died",
+            "type": "integer",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },{
+            "name": "Number Disengaged",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 1970,
+                "maximum": 2021
+            }
+        }
+    ]
+}

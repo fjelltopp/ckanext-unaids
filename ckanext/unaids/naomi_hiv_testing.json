@@ -1,0 +1,40 @@
+{
+    "fields": [
+        {
+            "name": "Facility ID",
+            "type": "string"
+        },
+        {
+            "name": "Start Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "End Date",
+            "type": "date",
+            "constraints": {
+                "required": true
+            }
+        },
+        {
+            "name": "Number Tested",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        },
+        {
+            "name": "Number HIV Positive",
+            "type": "integer",
+            "decimalChar": ".",
+            "constraints": {
+                "required": true,
+                "minimum": 0
+            }
+        }
+    ]
+}
