@@ -137,6 +137,7 @@ def _safe_cast(val, to_type, default=None):
     except (ValueError, TypeError):
         return default
 
+
 def __get_resource_path(resource):
     resource_id = resource['id']
     resource_path = os.path.join(
