@@ -173,3 +173,8 @@ aside.secondary{
 .drag-and-drop{
   min-height: 300px;
 }
+
+.dataset-private{
+  margin-bottom: 15px;
+  display: inline-block;
+}
