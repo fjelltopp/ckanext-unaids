@@ -10,10 +10,15 @@ this.ckan.module('download_all', function ($) {
     },
     initialize: function () {
       $.proxyAll(this, /_on/);
-      if(this.options.files.length >= 1){
+      console.log(this.options.files)
+      if(this.options.files.length > 1){
+        console.log("Removing hidden");
+        console.log(this.options.files.length);
         $(this.el).removeClass('hidden');
         this.el.on('click', this._onClick);
-        console.log(this.options.files);
+      }else{
+        console.log("Adding hidden");
+        $(this.el).addClass('hidden');
       }
     },
     _onClick: function (event) {
