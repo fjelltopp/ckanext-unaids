@@ -1,0 +1,13 @@
+{% ckan_extends %}
+{% block resource_item_description %}
+<p class="description">
+  {% if res.description %}
+  {{ h.markdown_extract(h.get_translated(res, 'description'), extract_length=80) }}
+  {% endif %}
+</p>
+{% if res.last_modified %}
+<p class="description" title="{{ h.render_datetime(res.last_modified, with_hours=True) }}">
+  {{ _('Last modified') + ": "}}{{ h.time_ago_from_timestamp(res.last_modified) }}
+</p>
+{% endif %}
+{% endblock %}
