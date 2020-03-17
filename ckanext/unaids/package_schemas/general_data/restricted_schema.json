@@ -89,7 +89,6 @@
     "display_property": "dc:contributor"
   },
   {
-    "label": "Data Type",
     "field_name": "type_name",
     "preset": "hidden_value",
     "field_value": "General Data"

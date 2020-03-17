@@ -89,7 +89,6 @@
 			"preset": "dataset_organization"
 		},
     {
-      "label": "Data Type",
       "field_name": "type_name",
       "preset": "hidden_value",
       "field_value": "Spectrum File"
