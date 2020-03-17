@@ -66,9 +66,11 @@
       "field_name": "maintainer_email",
       "label": "Contact Email",
       "form_placeholder": "joe@example.com",
+      "preset": "user",
+      "user_field": "email",
       "display_snippet": "email.html",
       "display_email_name_field": "maintainer",
-      "validators": "email_validator",
+      "validators": "not_empty",
       "display_group": "Naomi Data Package"
     },
     {
