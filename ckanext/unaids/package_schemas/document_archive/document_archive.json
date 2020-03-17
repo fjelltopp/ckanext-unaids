@@ -60,6 +60,7 @@
       "display_email_name_field": "maintainer"
     },
     {
+      "label": "Data Type",
       "field_name": "type_name",
       "preset": "hidden_value",
       "field_value": "Document Archive"
