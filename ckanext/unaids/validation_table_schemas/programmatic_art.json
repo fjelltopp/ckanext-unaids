@@ -49,7 +49,7 @@
       "name": "current_art",
       "title": "Number on ART",
       "description": "Number currently receiving ART at the end of reporting period (year).",
-      "type": "integer",
+      "type": "number",
       "constraints": {
         "required": true,
         "minimum": 0
