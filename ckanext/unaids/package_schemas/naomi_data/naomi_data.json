@@ -105,8 +105,8 @@
     }
   ],
   "resources": [{
-      "name": "Naomi Output",
-      "about": "A ZIP file containing the output of the Naomi model",
+      "name": "Naomi Spectrum Digest",
+      "about": "A ZIP file containing the input and output of the Naomi and Spectrum models",
       "resource_type": "naomi-output-zip",
       "resource_fields": [{
         "field_name": "name",
