@@ -124,8 +124,8 @@
         "field_value": "naomi-output-zip"
       }]
     }, {
-      "name": "Naomi Model Options Specification",
-      "about": "The JSON file output by Naomi detailing the model options chosen.",
+      "name": "Naomi JSON File",
+      "about": "The JSON file created by \"File Save\" in the top left corner of the Naomi UI.",
       "resource_type": "naomi-output-json",
       "resource_fields": [{
         "field_name": "name",
