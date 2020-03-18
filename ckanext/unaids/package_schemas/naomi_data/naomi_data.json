@@ -12,7 +12,7 @@
       "form_snippet": "text.html",
       "validators": "autogenerate",
       "classes": ["hidden"],
-      "template": "{} Naomi Data {}",
+      "template": "{} Naomi Inputs and Outputs {}",
       "template_args": ["geo-location", "year"],
       "display_group": "Naomi Data Package"
     },
