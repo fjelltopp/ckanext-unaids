@@ -228,6 +228,12 @@
         "preset": "hidden_value",
         "field_value": "naomi_geographic"
       }, {
+        "field_name": "format",
+        "label": "Format",
+        "preset": "resource_format_autocomplete",
+        "required": true,
+        "default": "GeoJSON"
+      }, {
         "field_name": "resource_type",
         "preset": "hidden_value",
         "field_value": "naomi-geographic"
