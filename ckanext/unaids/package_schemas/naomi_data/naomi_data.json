@@ -243,6 +243,7 @@
       "name": "Spectrum File",
       "about": "A spectrum file used to run the Naomi model",
       "resource_type": "naomi-spectrum-file",
+      "bulk_upload": true,
       "resource_fields": [{
         "field_name": "name",
         "preset": "hidden_value",
@@ -257,6 +258,11 @@
         "field_name": "resource_type",
         "preset": "hidden_value",
         "field_value": "naomi-spectrum-file"
+      }, {
+          "field_name": "url",
+          "label": "URL",
+          "preset": "resource_url_upload",
+          "upload_label": "File (bulk drag-drop upload available)"
       }]
     }
   ],
