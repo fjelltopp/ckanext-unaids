@@ -26,12 +26,13 @@
   {% endif %}
 
   {%- set schema = h.scheming_get_dataset_schema(dataset_type) -%}
-  {% if not schema.get("resource_schemas",{}).get(resource_type, {}).get('bulk_upload', False) %}
+  {%- set resource_schema = schema.get("resource_schemas",{}).get(resource_type, {}) -%}
+  {% if not resource_schema.get('bulk_upload', False) %}
   <section class="module module-narrow module-shallow">
       <h2 class="module-heading"><i class="fa fa-upload"></i> {{ _('Bulk Upload') }}</h2>
       <div class="module-content"><p>{{ _('Bulk upload is not possible for this resource.') }}</p></div>
   </section>
   {% else %}
-    {% snippet 'ckanext-file_uploader_ui/upload.html' %}
+    {% snippet 'ckanext-file_uploader_ui/upload.html', schema=schema, resource_type=resource_type, pkg_name=pkg.get('name') %}
   {% endif %}
 {% endblock %}
