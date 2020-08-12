@@ -45,7 +45,7 @@
       }
     },
     {
-      "name": "ancrt_known_pos",
+      "name": "anc_known_pos",
       "title": "Number known positive",
       "description": "Number of ANC clients who self-report known HIV positive prior to first ANC visit and are not tested for HIV.",
       "type": "integer",
@@ -54,7 +54,7 @@
       }
     },
     {
-      "name": "ancrt_already_art",
+      "name": "anc_already_art",
       "title": "Number already on ART",
       "description": "Number of ANC clients already on ART prior to first ANC visit during a pregnancy.",
       "type": "integer",
@@ -63,7 +63,7 @@
       }
     },
     {
-      "name": "ancrt_tested",
+      "name": "anc_tested",
       "title": "Number HIV tested",
       "description": "Number of unique ANC clients who are tested for HIV during their pregnancy.",
       "type": "integer",
@@ -72,7 +72,7 @@
       }
     },
     {
-      "name": "ancrt_test_pos",
+      "name": "anc_tested_pos",
       "title": "Number Tested Positive",
       "description": "Number of ANC clients who test HIV positive at the first HIV test during a given pregnancy.",
       "type": "integer",
@@ -84,7 +84,7 @@
   "require_field_order": false,
   "primaryKey": ["area_id", "year", "age_group"],
   "custom-constraint": {
-      "constraint": "ancrt_already_art <= ancrt_known_pos",
-      "constraint": "ancrt_test_pos <= ancrt_tested_pos"
+      "constraint": "anc_already_art <= anc_known_pos",
+      "constraint": "anc_test_pos <= anc_tested_pos"
   }
 }

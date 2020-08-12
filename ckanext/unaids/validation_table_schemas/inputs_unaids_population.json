@@ -29,11 +29,11 @@
     {
       "name": "sex",
       "title": "Sex",
-      "description": "Biological sex.  Must be \"male\", \"female\",  or \"both\" where sex stratification is not available.",
+      "description": "Biological sex.  Must be \"both\", \"female\", or \"male\"".,
       "type": "string",
       "constraints": {
         "required": true,
-        "enum": ["male", "female", "both"]
+        "enum": ["both", "male", "female"]
       }
     },
     {
@@ -54,7 +54,17 @@
         "required": true,
         "minimum": 0
       }
-    }
+    },
+    {
+      "name": "asfr",
+      "title": "Age-specific fertility rate",
+      "description": "Age-specific fertility rate.",
+      "type": "number",
+      "constraints": {
+        "required": false,
+        "minimum": 0
+      }
+    }	     
   ],
   "require_field_order": false,
   "primaryKey": ["area_id", "calendar_quarter", "sex", "age_group"]

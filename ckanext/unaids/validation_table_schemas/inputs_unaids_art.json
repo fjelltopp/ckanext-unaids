@@ -17,11 +17,11 @@
     {
       "name": "sex",
       "title": "Sex",
-      "description": "Biological sex.  Must be \"male\", \"female\",  or \"both\" where sex stratification is not available.",
+      "description": "Biological sex.  Must be \"both\", \"female\", or \"male\".",
       "type": "string",
       "constraints": {
         "required": true,
-        "enum": ["male", "female", "both"]
+          "enum": ["both", "male", "female"]
       }
     },
     {
@@ -46,14 +46,24 @@
       }
     },
     {
-      "name": "current_art",
+      "name": "art_current",
       "title": "Number on ART",
       "description": "Number currently receiving ART at the end of reporting period (year).",
       "type": "number",
       "constraints": {
         "required": true,
-        "minimum": 0
+          "minimum": 0
       }
+    },
+    {
+       "name": "art_new",
+       "title": "Number newly initiating ART",
+       "description": "Number newly initiating ART diruing the reporting period (year).",
+       "type": "number",
+       "constraints": {
+         "required": true,
+         "minimum": 0
+       }
     }
   ],
   "require_field_order": false,

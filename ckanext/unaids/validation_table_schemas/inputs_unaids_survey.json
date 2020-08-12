@@ -1,6 +1,6 @@
 {
   "fields": [{
-      "name": "indicator_id",
+      "name": "indicator",
       "title": "Indicator ID",
       "description": "The indicator measured by the survey",
       "type": "string",
@@ -18,13 +18,11 @@
     },
     {
       "name": "survey_mid_calendar_quarter",
-      "title": "Year",
-      "description": "The calendar year.",
-      "type": "integer",
+      "title": "Survey Midpoint Calendar Quarter",
+      "description": "The calendar quarter nearest to the midpoint of the survey fieldwork period.",
+      "type": "string",
       "constraints": {
-          "required": true,
-          "minimum": 1970,
-          "maximum": 2021
+          "required": true
       }
     },{
       "name": "area_id",
@@ -42,7 +40,7 @@
       "type": "string"
     },
     {
-      "name": "restype",
+      "name": "res_type",
       "title": "Residence Type",
       "description": "Residence Type",
       "type": "string",
@@ -53,11 +51,11 @@
     {
       "name": "sex",
       "title": "Sex",
-      "description": "Biological sex.  Must be \"male\", \"female\",  or \"both\" where sex stratification is not available.",
+      "description": "Biological sex.  Must be \"both\", \"male\", or \"female\".",
       "type": "string",
       "constraints": {
         "required": true,
-        "enum": ["male", "female", "both"]
+          "enum": ["both", "female", "male"]
       }
     },
     {
@@ -70,7 +68,7 @@
       }
     },
     {
-      "name": "n_cluster",
+      "name": "n_clusters",
       "title": "Number of clusters",
       "description": "The number of survey clusters",
       "type": "string",
@@ -99,7 +97,7 @@
         "type": "float"
       }
     },{
-      "name": "standard_error",
+      "name": "se",
       "title": "Standard Error",
       "description": "The standard error on the estimate",
       "type": "string",
@@ -109,18 +107,18 @@
       }
     },
     {
-      "name": "confidence_interval_lower",
-      "title": "Confidence Interval Lower Bound",
-      "description": "The value of the confidence interval lower bound",
+      "name": "ci_lower",
+      "title": "95% Confidence Interval Lower Bound",
+      "description": "The value of the 95% confidence interval lower bound",
       "type": "string",
       "constraints": {
         "type": "float"
       }
     },
     {
-      "name": "confidence_interval_upper",
-      "title": "Confidence Interval Upper Bound",
-      "description": "The value of the confidence interval upper bound",
+      "name": "ci_upper",
+      "title": "95% Confidence Interval Upper Bound",
+      "description": "The value of the 95% confidence interval upper bound",
       "type": "string",
       "constraints": {
         "type": "float"
