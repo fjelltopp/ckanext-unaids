@@ -84,7 +84,8 @@
   "require_field_order": false,
   "primaryKey": ["area_id", "year", "age_group"],
   "custom-constraint": {
-      "constraint": "anc_already_art <= anc_known_pos",
-      "constraint": "anc_test_pos <= anc_tested_pos"
+      "constraint": "anc_clients >= anc_known_pos >= anc_already_art",
+      "constraint": "anc_clients >= anc_tested >= anc_tested_pos",
+      "constraint": "anc_clients >= anc_known_pos + anc_tested"
   }
 }
