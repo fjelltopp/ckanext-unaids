@@ -3,10 +3,9 @@ import logging
 import cStringIO
 import json
 import os
-from flask import Blueprint, Response, abort, request, jsonify
+from flask import Blueprint, Response
 import ckan.plugins.toolkit as t
 from ckanext.validation.jobs import _load_dataframe
-from ckanext.validation.helpers import validation_load_schemed_table
 
 log = logging.getLogger(__name__)
 
