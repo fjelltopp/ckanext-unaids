@@ -1,0 +1,13 @@
+{% ckan_extends %}
+
+{% block content_primary_nav %}
+  {{ h.build_nav_icon(group_type + '_read', _('Datasets'), id=c.group_dict.name) }}
+  <li>
+    <a  href="{{ h.url_for('/harvest', organization=c.group_dict.name) }}">
+      <i class="fa fa-database"></i>
+      {{ _('DHIS2 Sources') }}
+    </a>
+  </li>
+  {{ h.build_nav_icon(group_type + '_activity', _('Activity Stream'), id=c.group_dict.name, offset=0) }}
+  {{ h.build_nav_icon(group_type + '_about', _('About'), id=c.group_dict.name) }}
+{% endblock %}
