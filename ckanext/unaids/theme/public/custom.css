@@ -186,3 +186,11 @@ aside.secondary{
   line-height: 1.3333333;
   font-weight: bold;
 }
+
+section.resources H3{
+  margin-bottom: 30px;
+}
+
+.download-all{
+  margin-top: 5px;
+}

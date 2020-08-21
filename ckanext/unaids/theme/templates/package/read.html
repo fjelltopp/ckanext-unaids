@@ -18,14 +18,8 @@
       {% if pkg.state == 'deleted' %}
         [{{ _('Deleted') }}]
       {% endif %}
-      {% resource 'ckanext-unaids/download_all.js' %}
-      <button class="btn btn-primary dropdown-toggle pull-right hidden"
-         data-module="download_all" data-module-files='{{h.get_all_package_downloads(pkg)}}'>
-        <i class="fa fa-download"></i>
-        {{ _('Download All') }}
-      </button>
-    {% endblock %}
   </h1>
+  {% endblock %}
   {% block package_notes %}
     {% if pkg.notes %}
       <div class="notes embedded-content">
@@ -35,4 +29,10 @@
   {% endblock %}
   {# FIXME why is this here? seems wrong #}
   <span class="insert-comment-thread"></span>
+  {% resource 'ckanext-unaids/download_all.js' %}
+  <button class="download-all btn btn-primary dropdown-toggle pull-right hidden"
+     data-module="download_all" data-module-files='{{h.get_all_package_downloads(pkg)}}'>
+    <i class="fa fa-download"></i>
+    {{ _('Download All') }}
+  </button>
 {% endblock %}
