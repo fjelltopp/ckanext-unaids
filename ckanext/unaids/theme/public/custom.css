@@ -105,13 +105,16 @@ a.dropdown-item{
     min-height: 350px;
 }
 
-.template-button{
+.template-button,
+.pages-button{
   padding: 12px 30px 12px 80px;
   border-radius: 10px;
   position: relative;
+  width: 100%;
 }
 
-.template-button i{
+.template-button i,
+.pages-button i{
   font-size: 30px;
   position: absolute;
   left: 30px;

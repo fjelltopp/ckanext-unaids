@@ -8,17 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-03-25 11:31+0100\n"
+"POT-Creation-Date: 2020-08-24 14:57+0000\n"
 "PO-Revision-Date: 2020-03-26 12:17+0100\n"
 "Last-Translator: \n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
-"X-Generator: Poedit 2.3\n"
 
 #: ckanext/unaids/helpers.py:71
 msgid "Naomi Geographic Data Input"
@@ -80,6 +79,7 @@ msgstr "Entrées et sorties pour le modèle Naomi"
 
 #: ckanext/unaids/i18n/extra_translations.py:12
 #: ckanext/unaids/theme/templates/footer.html:10
+#: ckanext/unaids/theme/templates/organization/read_base.html:12
 msgid "About"
 msgstr "À propos"
 
@@ -195,25 +195,25 @@ msgstr "Description/Source"
 
 #: ckanext/unaids/i18n/extra_translations.py:40
 msgid ""
-"Inputs and corresponding outputs for the Naomi subnational "
-"estimation model."
+"Inputs and corresponding outputs for the Naomi subnational estimation "
+"model."
 msgstr "Entrées et sorties correspondantes pour le modèle Naomi"
 
 #: ckanext/unaids/i18n/extra_translations.py:41
 msgid ""
-"A ZIP file containing the input and output of the Naomi and "
-"Spectrum models"
+"A ZIP file containing the input and output of the Naomi and Spectrum "
+"models"
 msgstr ""
-"Un fichier ZIP contenant les entrées et sorties des modèles "
-"Naomi et Spectrum"
+"Un fichier ZIP contenant les entrées et sorties des modèles Naomi et "
+"Spectrum"
 
 #: ckanext/unaids/i18n/extra_translations.py:42
 msgid ""
 "The JSON file created by \"File Save\" in the top left corner of the "
 "Naomi UI."
 msgstr ""
-"Le fichier JSON créé par \"Fichier Sauvegarder\" dans le coin supérieur gauche "
-"de l'interface Naomi."
+"Le fichier JSON créé par \"Fichier Sauvegarder\" dans le coin supérieur "
+"gauche de l'interface Naomi."
 
 #: ckanext/unaids/i18n/extra_translations.py:43
 msgid "A validated Naomi ANC dataset."
@@ -244,8 +244,8 @@ msgid ""
 "License definitions and additional information can be found at "
 "http://opendefinition.org/"
 msgstr ""
-"Les définitions de licence et des informations supplémentaires peuvent être "
-"trouvées sur http://opendefinition.org/"
+"Les définitions de licence et des informations supplémentaires peuvent "
+"être trouvées sur http://opendefinition.org/"
 
 #: ckanext/unaids/i18n/extra_translations.py:50
 msgid "Reorder resources"
@@ -309,26 +309,26 @@ msgid "Find out more..."
 msgstr "Plus d’informations..."
 
 #: ckanext/unaids/theme/templates/home/layout1.html:36
-msgid ""
-"UNAIDS is asking all participating countries to submit their 2019/2020 "
-"Naomi Data"
-msgstr ""
-"L'ONUSIDA demande à tous les pays participants de soumettre leurs données Naomi "
-"2019/2020"
+msgid "Click below for more information on uploading data:"
+msgstr "Pour plus d'informations sur le téléchargement cliquez ci-dessous:"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:47
-msgid "Upload UNAIDS Naomi Inputs & Outputs"
-msgstr "Télécharger les entrées et sorties de Naomi"
+#: ckanext/unaids/theme/templates/home/layout1.html:53
+msgid "Inputs to UNAIDS Estimates"
+msgstr "Données pour les estimations VIH de ONUSIDA"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:55
+#: ckanext/unaids/theme/templates/home/layout1.html:61
+msgid "Voluntary Medical Male Circumcision (VMMC) Data"
+msgstr "Données de circoncision masculine médicale volontaire"
+
+#: ckanext/unaids/theme/templates/home/layout1.html:68
 msgid "Featured Organisations"
 msgstr "Organisations participantes"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:86
+#: ckanext/unaids/theme/templates/home/layout1.html:99
 msgid "The AIDS Data Repository is a project by"
 msgstr "Le fichier de données sur le sida (ADR) est un projet de"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:102
+#: ckanext/unaids/theme/templates/home/layout1.html:115
 msgid "With support from"
 msgstr "Avec l’aide de"
 
@@ -337,8 +337,9 @@ msgid ""
 "Add a ckan user to your organisation by searching for their username and "
 "assigning them a role. See the note on the left about role descriptions."
 msgstr ""
-"Ajoutez un utilisateur à votre organisation en recherchant son nom d'utilisateur "
-"et en lui attribuant un rôle. Voir la note à gauche sur les descriptions de rôle."
+"Ajoutez un utilisateur à votre organisation en recherchant son nom "
+"d'utilisateur et en lui attribuant un rôle. Voir la note à gauche sur les"
+" descriptions de rôle."
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:16
 #: ckanext/unaids/theme/templates/organization/member_new.html:25
@@ -364,6 +365,20 @@ msgstr "Mettre à jour le membre"
 #: ckanext/unaids/theme/templates/organization/member_new.html:44
 msgid "Add Member"
 msgstr "Ajouter le membre"
+
+#: ckanext/unaids/theme/templates/organization/read_base.html:4
+#, fuzzy
+msgid "Datasets"
+msgstr "Ajouter un ensemble de données"
+
+#: ckanext/unaids/theme/templates/organization/read_base.html:8
+#, fuzzy
+msgid "DHIS2 Sources"
+msgstr "Ajouter une ressource"
+
+#: ckanext/unaids/theme/templates/organization/read_base.html:11
+msgid "Activity Stream"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:3
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:4
@@ -398,13 +413,9 @@ msgstr "Brouillon"
 msgid "Deleted"
 msgstr "Supprimé"
 
-#: ckanext/unaids/theme/templates/package/read.html:25
+#: ckanext/unaids/theme/templates/package/read.html:36
 msgid "Download All"
 msgstr "Télécharger tout"
-
-#: ckanext/unaids/theme/templates/package/resource_edit_base.html:19
-msgid "Template"
-msgstr "Modèle"
 
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:10
 msgid "Last modified"
@@ -422,7 +433,7 @@ msgstr "Personnalisé"
 msgid "Autogenerated Resources"
 msgstr "Ressources générées automatiquement"
 
-#: ckanext/unaids/theme/templates/snippets/add_dataset.html:8
+#: ckanext/unaids/theme/templates/snippets/add_dataset.html:9
 msgid "General Data"
 msgstr "Données générales"
 
@@ -443,3 +454,18 @@ msgstr "Résultats du filtre"
 
 #~ msgid "UNAIDS Naomi Model Input Templates"
 #~ msgstr "Modèles de saisie du modèle Naomi de l’ONUSIDA"
+
+#~ msgid ""
+#~ "UNAIDS is asking all participating "
+#~ "countries to submit their 2019/2020 "
+#~ "Naomi Data"
+#~ msgstr ""
+#~ "L'ONUSIDA demande à tous les pays "
+#~ "participants de soumettre leurs données "
+#~ "Naomi 2019/2020"
+
+#~ msgid "Upload UNAIDS Naomi Inputs & Outputs"
+#~ msgstr "Télécharger les entrées et sorties de Naomi"
+
+#~ msgid "Template"
+#~ msgstr "Modèle"
