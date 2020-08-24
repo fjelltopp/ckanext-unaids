@@ -367,18 +367,16 @@ msgid "Add Member"
 msgstr "Ajouter le membre"
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:4
-#, fuzzy
 msgid "Datasets"
-msgstr "Ajouter un ensemble de données"
+msgstr "Jeux de données"
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:8
-#, fuzzy
 msgid "DHIS2 Sources"
-msgstr "Ajouter une ressource"
+msgstr "Sources DHIS2"
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:11
 msgid "Activity Stream"
-msgstr ""
+msgstr "Flux d'Activité"
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:3
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:4
@@ -448,24 +446,3 @@ msgstr "Supprimer"
 #: ckanext/unaids/theme/templates/snippets/search_form.html:23
 msgid "Filter Results"
 msgstr "Résultats du filtre"
-
-#~ msgid "Featured Dataset"
-#~ msgstr "Jeu de données disponible"
-
-#~ msgid "UNAIDS Naomi Model Input Templates"
-#~ msgstr "Modèles de saisie du modèle Naomi de l’ONUSIDA"
-
-#~ msgid ""
-#~ "UNAIDS is asking all participating "
-#~ "countries to submit their 2019/2020 "
-#~ "Naomi Data"
-#~ msgstr ""
-#~ "L'ONUSIDA demande à tous les pays "
-#~ "participants de soumettre leurs données "
-#~ "Naomi 2019/2020"
-
-#~ msgid "Upload UNAIDS Naomi Inputs & Outputs"
-#~ msgstr "Télécharger les entrées et sorties de Naomi"
-
-#~ msgid "Template"
-#~ msgstr "Modèle"
