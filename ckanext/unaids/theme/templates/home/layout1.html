@@ -47,7 +47,7 @@
           {% set vmmc_page = 'vmmc' %}
         {% endif %}
       <a class="btn btn-primary btn-lg pages-button"
-         href="/pages/{{inputs_page}}"
+         href="/{{h.lang()}}/pages/{{inputs_page}}"
          target="_blank">
         <i class="fa fa-info-circle"></i>
         <H3>{{_('Inputs to UNAIDS Estimates')}}</H3>
@@ -55,7 +55,7 @@
       </div>
       <div class="col-xs-12 col-md-6">
       <a class="btn btn-primary btn-lg pages-button"
-         href="/pages/{{vmmc_page}}"
+         href="/{{h.lang()}}/pages/{{vmmc_page}}"
          target="_blank">
          <i class="fa fa-info-circle"></i>
         <H3>{{_('Voluntary Medical Male Circumcision (VMMC) Data')}}</H3>
