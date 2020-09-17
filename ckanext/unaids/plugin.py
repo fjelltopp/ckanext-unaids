@@ -3,7 +3,7 @@ import logging
 import licenses
 import ckan.model.license as core_licenses
 import ckan.model.package as package
-from unaids_blueprint import unaids_blueprint
+from blueprints import blueprints
 from collections import OrderedDict
 from ckan.lib.plugins import DefaultTranslation
 from ckanext.unaids.helpers import (
@@ -52,7 +52,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         toolkit.add_resource('fanstatic', 'ckanext-unaids')
 
     def get_blueprint(self):
-        return unaids_blueprint
+        return blueprints
 
     def dataset_facets(self, facet_dict, package_type):
         new_fd = OrderedDict()
