@@ -10,7 +10,7 @@
         "form_snippet": "autocomplete.html",
         "classes": ["control-full"],
         "form_attrs": {
-          "data-module": "autocomplete",
+          "data-module": "autocomplete-without-creating-new-options",
           "data-module-tags": "",
           "data-module-source": "/api/2/util/user/autocomplete?q=?"
         }
@@ -22,7 +22,7 @@
         "form_snippet": "autocomplete.html",
         "classes": ["control-full"],
         "form_attrs": {
-      		"data-module": "autocomplete",
+      		"data-module": "autocomplete-without-creating-new-options",
       		"data-module-tags": "",
       		"data-module-source": "/api/2/util/organization/autocomplete?q=?"
         }
