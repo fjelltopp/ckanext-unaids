@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import sys, os
 
 version = '0.0'
 
@@ -8,7 +7,7 @@ setup(
     version=version,
     description="Styling for UNAIDS",
     long_description="""""",
-    classifiers=[], # Get strings from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[],
     keywords='',
     author='Fjelltopp',
     author_email='',
@@ -18,9 +17,7 @@ setup(
     namespace_packages=['ckanext'],
     include_package_data=True,
     zip_safe=False,
-    install_requires=[
-	# -*- Extra requirements: -*-
-    ],
+    install_requires=[],
     entry_points="""
     [ckan.plugins]
     # Add plugins here, eg
