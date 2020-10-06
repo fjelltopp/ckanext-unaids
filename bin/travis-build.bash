@@ -55,9 +55,12 @@ cd ckan
 paster db init -c test-core.ini
 cd -
 
+echo "Installing ckanext-validation."
+pip install --user "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
+
 echo "Installing ckanext-unaids and its requirements..."
 sudo python setup.py develop
-pip install --user -r dev-requirements.txt
+pip install --user -r requirements.txt
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir
