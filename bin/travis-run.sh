@@ -16,4 +16,4 @@ nosetests --ckan \
           ckanext/unaids
 
 # strict linting
-flake8 . --count --max-line-length=127 --statistics --exclude ckan
+flake8 . --count --max-line-length=127 --statistics --exclude ckan,src
