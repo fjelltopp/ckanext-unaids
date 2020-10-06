@@ -55,7 +55,9 @@ cd ckan
 paster db init -c test-core.ini
 cd -
 
-echo "Installing ckanext-validation."
+echo "Installing other extenions that unaids depends upon."
+pip install --user -e "git+https://github.com/fjelltopp/ckanext-scheming@development#egg=ckanext-scheming"
+pip install --user -r src/ckanext-scheming/requirements.txt
 pip install --user -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
 pip install --user -r src/ckanext-validation/requirements.txt
 paster --plugin=ckanext-validation validation init-db -c ckan/test-core.ini
