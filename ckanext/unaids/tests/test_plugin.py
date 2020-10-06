@@ -8,7 +8,7 @@ import ckan.plugins
 # import ckan.logic as logic
 
 
-class TestYTPRequestsPlugin(object):
+class TestPlugin(object):
     '''Tests for the ckanext.example_iauthfunctions.plugin module.
 
     Specifically tests that overriding parent auth functions will cause
@@ -19,7 +19,7 @@ class TestYTPRequestsPlugin(object):
         '''Nose runs this method once to setup our test class.'''
         # Test code should use CKAN's plugins.load() function to load plugins
         # to be tested.
-        ckan.plugins.load('ytp_request')
+        ckan.plugins.load('unaids')
 
     def teardown(self):
         '''Nose runs this method after each test method in our test class.'''
@@ -35,9 +35,9 @@ class TestYTPRequestsPlugin(object):
         '''
         # We have to unload the plugin we loaded, so it doesn't affect any
         # tests that run after ours.
-        ckan.plugins.unload('ytp_request')
+        ckan.plugins.unload('unaids')
 
-    def sample_test(self):
+    def test_geojson_format_guessed_correctly(self):
         '''
         Placeholder test.
         '''

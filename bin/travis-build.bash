@@ -56,7 +56,8 @@ paster db init -c test-core.ini
 cd -
 
 echo "Installing ckanext-validation."
-pip install --user "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
+pip install --user -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
+pip install --user -r src/ckanext-validation/requirements.txt
 
 echo "Installing ckanext-unaids and its requirements..."
 sudo python setup.py develop
