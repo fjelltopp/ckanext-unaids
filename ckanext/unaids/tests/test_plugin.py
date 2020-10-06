@@ -1,17 +1,12 @@
 """Tests for plugin.py."""
 # encoding: utf-8
 
-# from nose.tools import assert_raises
-import ckan.model as model
 import ckan.plugins
 from ckan.tests.helpers import call_action, reset_db
-from ckan.lib.helpers import url_for
 from ckan.tests import factories
 import ckan.tests.helpers as helpers
 from ckanext.validation.model import create_tables, tables_exist
 import logging
-# import ckan.tests.factories as factories
-# import ckan.logic as logic
 
 
 class TestPlugin(helpers.FunctionalTestBase):
