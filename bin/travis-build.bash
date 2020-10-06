@@ -58,6 +58,7 @@ cd -
 echo "Installing ckanext-validation."
 pip install --user -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
 pip install --user -r src/ckanext-validation/requirements.txt
+paster --plugin=ckanext-validation validation init-db -c ckan/test-core.ini
 
 echo "Installing ckanext-unaids and its requirements..."
 sudo python setup.py develop
