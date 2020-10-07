@@ -1,12 +1,9 @@
 """Tests for plugin.py."""
 # encoding: utf-8
 
-import ckan.plugins
-from ckan.tests.helpers import call_action, reset_db
+from ckan.tests.helpers import call_action
 from ckan.tests import factories
 import ckan.tests.helpers as helpers
-from ckanext.validation.model import create_tables, tables_exist
-import logging
 
 
 class TestPlugin(helpers.FunctionalTestBase):
