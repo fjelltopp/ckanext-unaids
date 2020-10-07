@@ -15,27 +15,12 @@ class TestPlugin(helpers.FunctionalTestBase):
     Specifically tests that overriding parent auth functions will cause
     child auth functions to use the overridden version.
     '''
-    def setup(self):
-        reset_db()
-        if not tables_exist():
-            create_tables()
-        self.app = self._get_test_app()
-        ckan.plugins.load('unaids')
-
-    def teardown(self):
-        '''
-        Nose runs this method once after all the test methods in our class
-        have been run.
-        '''
-        # We have to unload the plugin we loaded, so it doesn't affect any
-        # tests that run after ours.
-        ckan.plugins.unload('unaids')
+    _load_plugins = ['unaids']
 
     def test_geojson_format_guessed_correctly(self):
         '''
         Test that the format of a geojson file is guessed correctly.
         '''
-        logging.warning('RUNNING Test')
         dataset = factories.Dataset()
         resource = {
             'name': 'test',
