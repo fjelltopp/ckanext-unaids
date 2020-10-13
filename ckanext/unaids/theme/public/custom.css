@@ -197,3 +197,11 @@ section.resources H3{
 .download-all{
   margin-top: 5px;
 }
+
+.resource-item .description{
+  margin-bottom: 2px;
+}
+
+.resource-title{
+  margin-bottom: 10px;
+}
