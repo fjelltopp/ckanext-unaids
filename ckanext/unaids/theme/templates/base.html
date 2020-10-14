@@ -1,6 +1,6 @@
 {% ckan_extends %}
 
-{% block styles %}
+{% block custom_styles %}
   {{ super() }}
   <link rel="stylesheet" href="/unaids.css" />
   <link rel="stylesheet" href="/custom.css" />
@@ -10,5 +10,5 @@
 {% block scripts %}
   {{ super() }}
   {% asset 'ckanext-unaids/global_scripts' %}
-
+  
 {% endblock %}
