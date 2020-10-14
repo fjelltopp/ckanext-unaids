@@ -7,9 +7,8 @@
 
 {% endblock %}
 
-
 {% block scripts %}
   {{ super() }}
-  {% resource 'ckanext-unaids/autocomplete-without-creating-new-options.js' %}
+  {% asset 'ckanext-unaids/global_scripts' %}
   
 {% endblock %}
