@@ -4,6 +4,11 @@
   {{ super() }}
   <link rel="stylesheet" href="/unaids.css" />
   <link rel="stylesheet" href="/custom.css" />
-  {% resource 'ckanext-unaids/autocomplete-without-creating-new-options.js' %}
+
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% asset 'ckanext-unaids/global_scripts' %}
 
 {% endblock %}
