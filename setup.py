@@ -22,6 +22,7 @@ setup(
     [ckan.plugins]
     # Add plugins here, eg
     unaids=ckanext.unaids.plugin:UNAIDSPlugin
+    unaids_recline_view=ckanext.unaids.plugin:UNAIDSReclineView
     [babel.extractors]
     ckan = ckan.lib.extract:extract_ckan
     """,
