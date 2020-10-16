@@ -4,7 +4,7 @@ from ckan.common import g
 from ckan.lib import helpers as h
 from ckan.logic import get_action
 from ckan.views.user import before_request
-from flask import Blueprint, jsonify
+from flask import Blueprint
 
 log = logging.getLogger(__name__)
 

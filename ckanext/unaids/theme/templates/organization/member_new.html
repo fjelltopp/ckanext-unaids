@@ -23,7 +23,7 @@
             disabled="True" class="form-control">
           {% else %}
               <input id="username" type="text" name="username" placeholder="{{ _('Username') }}"
-            value="" class="control-medium" data-module="autocomplete"
+            value="" class="control-medium" data-module="autocomplete-without-creating-new-options"
             data-module-source="/api/2/util/user/autocomplete?q=?">
           {% endif %}
         </div>
