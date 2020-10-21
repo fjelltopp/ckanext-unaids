@@ -76,7 +76,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def dataset_facets(self, facet_dict, package_type):
         new_fd = OrderedDict()
-        new_fd['organization'] = p.toolkit._('Organizations')
+        new_fd['organization'] = p.toolkit._('Organization')
         new_fd['type_name'] = p.toolkit._('Data Type')
         new_fd['tags'] = p.toolkit._('Tags')
         new_fd["year"] = p.toolkit._('Year')
