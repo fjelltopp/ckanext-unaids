@@ -15,6 +15,7 @@ from ckanext.unaids.helpers import (
     get_user_obj
 )
 import ckan.plugins.toolkit as toolkit
+from ckanext.reclineview.plugin import ReclineViewBase
 
 log = logging.getLogger(__name__)
 
@@ -99,3 +100,32 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return{
             'if_empty_guess_format': if_empty_guess_format
         }
+
+
+class UNAIDSReclineView(ReclineViewBase):
+    '''
+    This override of the recline view plugin allows data explorers to be auto
+    created for geojson files.
+    '''
+
+    def info(self):
+        return {'name': 'unaids_recline_view',
+                'title': 'Data Explorer',
+                'filterable': True,
+                'icon': 'table',
+                'requires_datastore': False,
+                'default_title': p.toolkit._('Data Explorer'),
+                }
+
+    def can_view(self, data_dict):
+        resource = data_dict['resource']
+
+        if (resource.get('datastore_active') or
+                '_datastore_only_resource' in resource.get('url', '')):
+            return True
+        resource_format = resource.get('format', None)
+
+        if resource_format:
+            return resource_format.lower() in ['csv', 'xls', 'xlsx', 'tsv', 'geojson']
+        else:
+            return False
