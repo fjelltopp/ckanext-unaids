@@ -9311,9 +9311,6 @@ h4 small {
     padding-top: 10px;
     background: #eee url("../../../base/images/bg.png");
   }
-  .main .primary {
-    background: none;
-  }
 }
 [role=main] {
   min-height: 350px;
