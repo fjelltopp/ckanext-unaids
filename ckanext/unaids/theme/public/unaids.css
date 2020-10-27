@@ -8346,6 +8346,10 @@ fieldset[disabled] .control-custom.disabled .checkbox.btn.focus {
   position: absolute;
   top: 10px;
   left: 10px;
+  transform: None;
+  margin: 0px;
+  height: 35px;
+  width: 32px;
 }
 .resource-item .description {
   font-size: 12px;
@@ -9157,61 +9161,41 @@ h4 small {
 }
 .format-label[data-format=rdf],
 .format-label[data-format*=rdf] {
-  width: 32px;
-  height: 35px;
   background-position: -32px -62px;
 }
 .format-label[data-format=pdf],
 .format-label[data-format*=pdf] {
-  width: 32px;
-  height: 35px;
   background-position: -64px -62px;
 }
 .format-label[data-format=api],
 .format-label[data-format*=api] {
-  width: 32px;
-  height: 35px;
   background-position: -96px -62px;
 }
 .format-label[data-format=zip],
 .format-label[data-format*=zip] {
-  width: 32px;
-  height: 35px;
   background-position: -128px -62px;
 }
 .format-label[data-format=xls],
 .format-label[data-format*=xls] {
-  width: 32px;
-  height: 35px;
   background-position: -160px -62px;
 }
 .format-label[data-format=csv],
 .format-label[data-format*=csv] {
-  width: 32px;
-  height: 35px;
   background-position: -192px -62px;
 }
 .format-label[data-format=txt],
 .format-label[data-format*=txt] {
-  width: 32px;
-  height: 35px;
   background-position: -224px -62px;
 }
 .format-label[data-format=xml],
 .format-label[data-format*=xml] {
-  width: 32px;
-  height: 35px;
   background-position: -256px -62px;
 }
 .format-label[data-format=json]{
-  width: 32px;
-  height: 35px;
   background-position: -288px -62px;
 }
 .format-label[data-format=html],
 .format-label[data-format*=html] {
-  width: 32px;
-  height: 35px;
   background-position: -320px -62px;
 }
 [class^="icon-"],
