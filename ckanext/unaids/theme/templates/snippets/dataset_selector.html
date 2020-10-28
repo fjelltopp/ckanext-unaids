@@ -3,11 +3,7 @@
     <i class="fa fa-plus-square"></i> {{_('Add Dataset')}}
   </button>
   <div class="dropdown-menu" aria-labelledby="addDatasetMenuButton">
-    {% snippet 'snippets/add_dataset.html', dataset_type='spectrum-file' %}
-    {% snippet 'snippets/add_dataset.html', dataset_type='geographic-data-package' %}
-    {# snippet 'snippets/add_dataset.html', dataset_type='document-data-package' #}
-    {% snippet 'snippets/add_dataset.html', dataset_type='naomi-data-package' %}
-    {% snippet 'snippets/add_dataset.html', dataset_type='naomi-data-package-2' %}
+    {% snippet 'snippets/add_dataset.html', dataset_type='inputs-unaids-estimates' %}
     {% snippet 'snippets/add_dataset.html', dataset_type='dataset-2' %}
     {% link_for _('VMMC Data'), controller='package', action='new', named_route='dataset-2_new', class_='dropdown-item', tag_string='VMMC', notes='2020/21 Voluntary Medical Male Circumcision (VMMC) Data for use in the DMPPT2 model developed by Avenir Health to estimate VMMC coverage and set targets.'%}
   </div>
