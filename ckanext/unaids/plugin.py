@@ -17,6 +17,7 @@ from ckanext.unaids.helpers import (
 import ckanext.unaids.actions as actions
 import ckan.plugins.toolkit as toolkit
 from ckanext.reclineview.plugin import ReclineViewBase
+from ckanext.validation.interfaces import IDataValidation
 
 log = logging.getLogger(__name__)
 
@@ -61,6 +62,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.ITemplateHelpers)
     p.implements(p.IValidators)
     p.implements(p.IActions)
+    p.implements(IDataValidation)
 
     # IConfigurer
     def update_config(self, config):
@@ -105,6 +107,16 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return{
             'if_empty_guess_format': if_empty_guess_format
         }
+
+    def can_validate(self, context, data_dict):
+        if data_dict.get('validate_package'):
+            logging.warning("VALIDATING ENTIRE PACKAGE")
+            toolkit.get_action('resource_validation_run_batch')(
+                context,
+                {'dataset_ids': data_dict['package_id']}
+            )
+        if data_dict.get('schema'):
+            return True
 
 
 class UNAIDSReclineView(ReclineViewBase):
