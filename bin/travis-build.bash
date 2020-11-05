@@ -2,10 +2,15 @@
 set -e
 
 echo "This is travis-build.bash..."
+echo "Targetting CKAN $CKANVERSION on Python $TRAVIS_PYTHON_VERSION"
+if [ $CKANVERSION == 'master' ]
+then
+    export CKAN_MINOR_VERSION=100
+else
+    export CKAN_MINOR_VERSION=${CKANVERSION##*.}
+fi
 
-echo "Installing the packages that CKAN requires..."
-sudo apt-get update -qq
-sudo apt-get install solr-jetty
+export PYTHON_MAJOR_VERSION=${TRAVIS_PYTHON_VERSION%.*}
 
 echo "Installing CKAN and its Python dependencies..."
 git clone https://github.com/ckan/ckan
@@ -19,52 +24,67 @@ else
     echo "CKAN version: ${CKAN_TAG#ckan-}"
 fi
 
-# install the recommended version of setuptools
+echo "Installing the recommended setuptools requirement"
 if [ -f requirement-setuptools.txt ]
 then
-    echo "Sudo Updating setuptools..."
-    pip install --user -r requirement-setuptools.txt
-fi
-
-if [ $CKANVERSION == '2.7' ]
-then
-    echo "Installing setuptools"
-    pip install --user setuptools==39.0.1
+    pip install  -r requirement-setuptools.txt
 fi
 
 sudo python setup.py develop
-pip install --user -r requirements.txt
-pip install --user -r dev-requirements.txt
-pip install --user flake8
+
+if (( $CKAN_MINOR_VERSION >= 9 )) && (( $PYTHON_MAJOR_VERSION == 2 ))
+then
+    pip install -r requirements-py2.txt
+else
+    pip install -r requirements.txt
+fi
+
+pip install  -r dev-requirements.txt
 cd -
 
-echo "Creating the PostgreSQL user and database..."
-sudo -u postgres psql -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
-sudo -u postgres psql -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'
-
 echo "Setting up Solr..."
-# Solr is multicore for tests on ckan master, but it's easier to run tests on
-# Travis single-core. See https://github.com/ckan/ckan/issues/2972
-sed -i -e 's/solr_url.*/solr_url = http:\/\/127.0.0.1:8983\/solr/' ckan/test-core.ini
-printf "NO_START=0\nJETTY_HOST=127.0.0.1\nJETTY_PORT=8983\nJAVA_HOME=$JAVA_HOME" | sudo tee /etc/default/jetty
-sudo cp ckan/ckan/config/solr/schema.xml /etc/solr/conf/schema.xml
-sudo service jetty restart
+docker run --name ckan-solr -p 8983:8983 -d openknowledge/ckan-solr-dev:$CKANVERSION
+
+echo "Setting up Postgres..."
+export PG_VERSION="$(pg_lsclusters | grep online | awk '{print $1}')"
+export PG_PORT="$(pg_lsclusters | grep online | awk '{print $3}')"
+echo "Using Postgres $PGVERSION on port $PG_PORT"
+if [ $PG_PORT != "5432" ]
+then
+	echo "Using non-standard Postgres port, updating configuration..."
+	sed -i -e "s/postgresql:\/\/ckan_default:pass@localhost\/ckan_test/postgresql:\/\/ckan_default:pass@localhost:$PG_PORT\/ckan_test/" ckan/test-core.ini
+	sed -i -e "s/postgresql:\/\/ckan_default:pass@localhost\/datastore_test/postgresql:\/\/ckan_default:pass@localhost:$PG_PORT\/datastore_test/" ckan/test-core.ini
+	sed -i -e "s/postgresql:\/\/datastore_default:pass@localhost\/datastore_test/postgresql:\/\/datastore_default:pass@localhost:$PG_PORT\/datastore_test/" ckan/test-core.ini
+fi
+
+
+echo "Creating the PostgreSQL user and database..."
+sudo -u postgres psql -p $PG_PORT -c "CREATE USER ckan_default WITH PASSWORD 'pass';"
+sudo -u postgres psql -p $PG_PORT -c "CREATE USER datastore_default WITH PASSWORD 'pass';"
+sudo -u postgres psql -p $PG_PORT -c 'CREATE DATABASE ckan_test WITH OWNER ckan_default;'
+sudo -u postgres psql -p $PG_PORT -c 'CREATE DATABASE datastore_test WITH OWNER ckan_default;'
 
 echo "Initialising the database..."
 cd ckan
-paster db init -c test-core.ini
+if (( $CKAN_MINOR_VERSION >= 9 ))
+then
+    ckan -c test-core.ini db init
+else
+    paster db init -c test-core.ini
+fi
 cd -
 
+
 echo "Installing other extenions that unaids depends upon."
-pip install --user -e "git+https://github.com/fjelltopp/ckanext-scheming@development#egg=ckanext-scheming"
-pip install --user -r src/ckanext-scheming/requirements.txt
-pip install --user -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
-pip install --user -r src/ckanext-validation/requirements.txt
+pip install -e "git+https://github.com/fjelltopp/ckanext-scheming@development#egg=ckanext-scheming"
+pip install -r src/ckanext-scheming/requirements.txt
+pip install -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
+pip install -r src/ckanext-validation/requirements.txt
 paster --plugin=ckanext-validation validation init-db -c ckan/test-core.ini
 
 echo "Installing ckanext-unaids and its requirements..."
 sudo python setup.py develop
-pip install --user -r requirements.txt
+pip install -r requirements.txt
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir

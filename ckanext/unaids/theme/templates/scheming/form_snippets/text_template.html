@@ -1,5 +1,5 @@
 {% import 'macros/form.html' as form %}
-{% resource 'ckanext-unaids/text_template.js' %}
+{% asset 'ckanext-unaids/text_template' %}
 {% set error = errors[field.field_name] %}
 <div class="text-template form-group{{ " error" if error }}">
   <div class="controls control-full {{ " " ~ field.classes | join(' ') }}">
