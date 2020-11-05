@@ -35,11 +35,11 @@ def display_user_details(locale=None):
             u'class': u'btn btn-default btn-xs',
             u'data-module': u'copy-into-buffer',
             u'data-module-copy-value': ensure_str(apikey)
-       })
+        })
         h.flash_success(
             _('Your api key is: '
               '<code style=\"word-break:break-all;\"> {token}</code> {copy}'
-            ).format(token=apikey, copy=copy_btn),
+              ).format(token=apikey, copy=copy_btn),
             allow_html=True
         )
         return h.redirect_to(locale=locale, controller='user', action='read', id=g.user)

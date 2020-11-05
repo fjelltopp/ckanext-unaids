@@ -79,7 +79,10 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return blueprints
 
     def get_actions(self):
-        return {u'task_status_update': actions.task_status_update}
+        return {
+            u'task_status_update': actions.task_status_update,
+            u'get_table_schema': actions.get_table_schema
+        }
 
     def dataset_facets(self, facet_dict, package_type):
         new_fd = OrderedDict()

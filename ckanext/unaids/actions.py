@@ -3,13 +3,41 @@ import ckan.logic as logic
 import ckan.lib.navl.dictization_functions as dfunc
 import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
+import ckan.plugins.toolkit as t
+import ckanext.validation.helpers as validation_helpers
 from ckan.common import _
-import logging
+
 
 NotFound = logic.NotFound
 _check_access = logic.check_access
 _validate = dfunc.validate
 ValidationError = logic.ValidationError
+
+
+def get_table_schema(context, data_dict):
+    """
+    Returns the frictionless data table schema assigned to the resource.
+
+    :param resource_id: id of the resource
+    :type resource_id: string
+
+    :rtype: dictionary, empty if no schema specified
+
+    Raises not found if resource doesn't exist.
+    """
+    resource_id = data_dict.get("resource_id")
+    data_dict = {'id': resource_id}
+    _check_access('resource_show', context, data_dict)
+    resource = t.get_action('resource_show')(context, data_dict)
+    if not resource:
+        raise NotFound(_('Resource not found.'))
+    schema_name = resource.get('schema')
+    schema = False
+    if schema_name:
+        schema = validation_helpers.validation_load_json_schema(schema_name)
+    if not schema:
+        schema = {}
+    return schema
 
 
 def task_status_update(context, data_dict):
@@ -42,7 +70,6 @@ def task_status_update(context, data_dict):
     session = model.meta.create_local_session()
     context['session'] = session
 
-    user = context['user']
     id = data_dict.get("id")
     schema = context.get('schema') or schema_.default_task_status_schema()
 
