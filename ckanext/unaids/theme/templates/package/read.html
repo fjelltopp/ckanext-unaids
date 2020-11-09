@@ -9,6 +9,16 @@
       {{ _('Private') }}
     </span>
   {% endif %}
+  {% block package_archive_notice %}
+    {% if is_activity_archive %}
+      <div class="alert alert-danger">
+        {% trans url=h.url_for(pkg.type ~ '.read', id=pkg.id) %}
+        You're currently viewing an old version of this dataset. To see the
+        current version, click <a href="{{ url }}">here</a>.
+        {% endtrans %}
+      </div>
+    {% endif %}
+  {% endblock %}
   <h1>
     {% block page_heading %}
       {{ h.dataset_display_name(pkg) }}
@@ -29,7 +39,7 @@
   {% endblock %}
   {# FIXME why is this here? seems wrong #}
   <span class="insert-comment-thread"></span>
-  {% resource 'ckanext-unaids/download_all.js' %}
+  {% asset 'ckanext-unaids/download_all' %}
   <button class="download-all btn btn-primary dropdown-toggle pull-right hidden"
      data-module="download_all" data-module-files='{{h.get_all_package_downloads(pkg)}}'>
     <i class="fa fa-download"></i>

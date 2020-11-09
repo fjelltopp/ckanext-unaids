@@ -3,16 +3,18 @@
 
 from ckan.tests.helpers import call_action
 from ckan.tests import factories
-import ckan.tests.helpers as helpers
+import pytest
 
 
-class TestPlugin(helpers.FunctionalTestBase):
+@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.usefixtures('clean_db')
+class TestPlugin(object):
     '''Tests for the ckanext.example_iauthfunctions.plugin module.
 
     Specifically tests that overriding parent auth functions will cause
     child auth functions to use the overridden version.
     '''
-    _load_plugins = ['unaids']
 
     def test_geojson_format_guessed_correctly(self):
         '''
