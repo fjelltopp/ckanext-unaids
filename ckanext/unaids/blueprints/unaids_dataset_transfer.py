@@ -6,6 +6,7 @@ import os
 from flask import Blueprint, Response
 from ckan import model
 from ckan.plugins import toolkit
+from ckan.common import _
 import ckan.lib.helpers as h
 from ckanext.validation.jobs import _load_dataframe
 
@@ -28,6 +29,12 @@ def process_dataset_transfer(dataset_id):
         'session': model.Session,
         'user': toolkit.g.user
     }, dataset)
+    h.flash_success(
+        ' '.join([
+            _('Dataset moved to'),
+            h.get_organization(dataset['owner_org'])['display_name']
+        ])
+    )
     return h.redirect_to(controller='dataset', action='read', id=dataset_id)
 
 
