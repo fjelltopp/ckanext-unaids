@@ -18,8 +18,11 @@ unaids_dataset_transfer = Blueprint(
 
 
 def process_dataset_transfer(dataset_id):
-    toolkit.check_access('package_update', {'id': dataset_id})
     dataset = toolkit.get_action('package_show')({}, {'id': dataset_id})
+    toolkit.check_access(
+        'organization_update',
+        {'id': dataset['org_to_allow_transfer_to']}
+    )
     dataset.update({
         'owner_org': dataset['org_to_allow_transfer_to'],
         'org_to_allow_transfer_to': ''
@@ -27,7 +30,7 @@ def process_dataset_transfer(dataset_id):
     toolkit.get_action('package_update')({
         'model': model,
         'session': model.Session,
-        'user': toolkit.g.user
+        'ignore_auth': True
     }, dataset)
     h.flash_success(
         ' '.join([
