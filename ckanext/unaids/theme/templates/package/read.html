@@ -3,6 +3,18 @@
 {% set pkg = c.pkg_dict %}
 
 {% block package_description %}
+
+  {% if h.check_access('package_update', {'id':pkg.id }) and pkg.org_to_allow_transfer_to %}
+    <div class="alert alert-info" style="margin-top: -10px;">
+      <p>{{ pkg.organization.title + _(' would like to transfer this dataset to your organisation') }}</p>
+      <br> 
+      <a class="btn btn-default" href="{{ url_for('unaids_dataset_transfer.process_dataset_transfer', dataset_id=pkg.id) }}">
+        <i class="fa fa-refresh"></i>
+        <span> {{ _('Transfer dataset to ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name }}</span>
+      </a>  
+    </div>
+  {% endif %}
+
   {% if pkg.private %}
     <span class="dataset-private label label-inverse">
       <i class="fa fa-lock"></i>

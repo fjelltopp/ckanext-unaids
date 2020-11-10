@@ -1,3 +1,4 @@
 from unaids_blueprint import unaids_blueprint
+from unaids_dataset_transfer import unaids_dataset_transfer
 from user_info_blueprint import user_info_blueprint
-blueprints = [unaids_blueprint, user_info_blueprint]
+blueprints = [unaids_blueprint, unaids_dataset_transfer, user_info_blueprint]

@@ -18,6 +18,7 @@ import ckanext.unaids.actions as actions
 import ckan.plugins.toolkit as toolkit
 from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
+from ckan.common import _
 
 log = logging.getLogger(__name__)
 
@@ -37,6 +38,22 @@ def if_empty_guess_format(key, data, errors, context):
         if mimetype:
             data[key] = mimetype
 
+
+def organization_id_exists_validator(key, data, errors, context):
+    """
+    Make sure an field is a valid organization_id
+    """
+    value = data.get(key)
+    if not value: return
+    all_organizaions = toolkit.get_action('organization_list')\
+        ({}, {'all_fields': True})
+    is_valid = value in [
+        x['id']
+        for x in all_organizaions
+    ]
+    if not is_valid:
+        raise df.Invalid(_('Invalid organization'))
+   
 
 def add_licenses():
     package.Package._license_register = core_licenses.LicenseRegister()
@@ -108,7 +125,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def get_validators(self):
         return{
-            'if_empty_guess_format': if_empty_guess_format
+            'if_empty_guess_format': if_empty_guess_format,
+            'organization_id_exists': organization_id_exists_validator
         }
 
     def can_validate(self, context, data_dict):
