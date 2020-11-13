@@ -5,7 +5,7 @@
 {% block package_description %}
 
   {% if pkg.org_to_allow_transfer_to %}
-    {% if h.check_access('organization_update', {'id': pkg.org_to_allow_transfer_to }) %}
+    {% if h.check_organization_update_access(pkg.org_to_allow_transfer_to) %}
       <div class="alert alert-info" style="margin-top: -10px;">
         <p>{{ pkg.organization.title + _(' would like to transfer this dataset to your organisation') }}</p>
         <br>

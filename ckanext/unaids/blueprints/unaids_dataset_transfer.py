@@ -4,6 +4,7 @@ from ckan import model
 from ckan.plugins import toolkit
 from ckan.common import _, c
 import ckan.lib.helpers as h
+import ckanext.unaids.helpers as helpers
 import ckan.logic as logic
 import ckan.lib.base as base
 
@@ -18,14 +19,9 @@ def process_dataset_transfer(dataset_id):
     dataset = toolkit.get_action('package_show')({}, {'id': dataset_id})
     
     # validate user can transfer dataset
-    user_organizations = \
-        logic.get_action('organization_list_for_user')\
-        ({'user': c.user}, {})
-    valid = dataset['org_to_allow_transfer_to'] in [
-        str(org['id'])
-        for org in user_organizations
-        if org['capacity'] in ['admin', 'editor']
-    ]
+    valid = helpers.check_organization_update_access(
+        dataset['org_to_allow_transfer_to']
+    )
     if not valid:
         return base.abort(403, _(u'You cannot carry out this action'))
 

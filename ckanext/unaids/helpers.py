@@ -1,6 +1,7 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
-from ckan.common import _, g
+from ckan.common import _, g, c
+import ckan.logic as logic
 import logging
 import os
 import json
@@ -82,3 +83,15 @@ def get_user_obj(field=""):
     Returns an attribute of the user object, or returns the whole user object.
     """
     return getattr(g.userobj, field, g.userobj)
+
+
+def check_organization_update_access(organization_id):
+    user_organizations = \
+        logic.get_action('organization_list_for_user')\
+        ({'user': c.user}, {})
+    valid = str(organization_id) in [
+        str(org['id'])
+        for org in user_organizations
+        if org['capacity'] in ['admin', 'editor']
+    ]
+    return valid

@@ -41,7 +41,7 @@ class TestDatasetTransfer(object):
         )
 
         # user_1 and user_3 should not be able to accept
-        # the transfer as they are not members of org-2
+        # the transfer as they are not members of org_2
         for user in [user_1, user_3]:
             response = app.get(
                 url=transfer_dataset_url,
