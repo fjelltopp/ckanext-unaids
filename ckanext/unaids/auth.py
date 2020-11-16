@@ -2,7 +2,7 @@
 import ckan.logic as logic
 
 
-def organization_update_access(context, data_dict=None):
+def unaids_organization_update(context, data_dict=None):
     user_organizations = \
         logic.get_action('organization_list_for_user')(
             {'user': context['user']}, {}

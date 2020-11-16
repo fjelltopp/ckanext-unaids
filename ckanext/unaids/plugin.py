@@ -129,7 +129,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     # IAuthFunctions
     def get_auth_functions(self):
         return {
-            'organization_update': auth.organization_update_access
+            'unaids_organization_update': auth.unaids_organization_update
         }
 
     def get_validators(self):

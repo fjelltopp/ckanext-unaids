@@ -17,7 +17,7 @@ unaids_dataset_transfer = Blueprint(
 def process_dataset_transfer(dataset_id):
     dataset = toolkit.get_action('package_show')({}, {'id': dataset_id})
 
-    auth_validation = auth.organization_update_access(
+    auth_validation = auth.unaids_organization_update(
         {'user': c.user},
         {'id': dataset['org_to_allow_transfer_to']}
     )
