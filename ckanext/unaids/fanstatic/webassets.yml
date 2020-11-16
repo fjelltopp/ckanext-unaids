@@ -1,11 +1,14 @@
 global_scripts:
-    contents:
-        - autocomplete-without-creating-new-options.js
+  contents:
+    - autocomplete-without-creating-new-options.js
 
 download_all:
-    contents:
-      - download_all.js
+  contents:
+    - download_all.js
+  extra:
+    preload:
+      - base/main
 
 text_template:
-    contents:
-      - text_template.js
+  contents:
+    - text_template.js
