@@ -2,10 +2,8 @@
 # encoding: utf-8
 
 from ckan.tests import helpers
-import ckan.model as model
 from ckan.lib.helpers import url_for
 from ckan.tests import factories
-from ckan.plugins import toolkit
 import pytest
 import logging
 
@@ -43,14 +41,14 @@ class TestDatasetTransfer(object):
         # user_1 and user_3 should not be able to accept
         # the transfer as they are not members of org_2
         for user in [user_1, user_3]:
-            response = app.get(
+            app.get(
                 url=transfer_dataset_url,
                 extra_environ={'REMOTE_USER': user['name']},
-                status=403 # expect forbidden error
+                status=403  # expect forbidden error
             )
-        
+
         # user_2 should be able to accept the transfer
-        response = app.get(
+        app.get(
             url=transfer_dataset_url,
             extra_environ={'REMOTE_USER': user_2['name']},
             status=200
