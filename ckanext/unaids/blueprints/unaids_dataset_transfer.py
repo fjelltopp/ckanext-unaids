@@ -2,9 +2,9 @@
 from flask import Blueprint
 from ckan import model
 from ckan.plugins import toolkit
-from ckan.common import _, c
+from ckan.common import _
 import ckan.lib.helpers as h
-import ckanext.unaids.auth as auth
+import ckan.logic as logic
 import ckan.lib.base as base
 
 unaids_dataset_transfer = Blueprint(
@@ -17,12 +17,14 @@ unaids_dataset_transfer = Blueprint(
 def process_dataset_transfer(dataset_id):
     dataset = toolkit.get_action('package_show')({}, {'id': dataset_id})
 
-    auth_validation = auth.unaids_organization_update(
-        {'user': c.user},
-        {'id': dataset['org_to_allow_transfer_to']}
-    )
-    if not auth_validation['success']:
-        return base.abort(403, _(auth_validation['msg']))
+    try:
+        toolkit.check_access(
+            'unaids_organization_update',
+            {'user': toolkit.g.user},
+            {'id': dataset['org_to_allow_transfer_to']}
+        )
+    except logic.NotAuthorized:
+        return base.abort(403, _('You cannot carry out this action'))
 
     dataset.update({
         'owner_org': dataset['org_to_allow_transfer_to'],
