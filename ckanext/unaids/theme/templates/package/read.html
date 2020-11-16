@@ -6,14 +6,14 @@
 
   {% if pkg.org_to_allow_transfer_to %}
     <div class="alert alert-info" style="margin-top: -10px;">
-      {% if h.check_organization_update_access(pkg.org_to_allow_transfer_to) %}
+      {% if h.check_access('organization_update', {'id': pkg.org_to_allow_transfer_to}) %}
         <p>{{ pkg.organization.title + _(' would like to transfer this dataset to your organisation') }}</p>
         <br>
         <a class="btn btn-default" href="{{ url_for('unaids_dataset_transfer.process_dataset_transfer', dataset_id=pkg.id) }}">
           <i class="fa fa-refresh"></i>
           <span> {{ _('Transfer dataset to ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name }}</span>
         </a>
-      {% elif h.check_organization_update_access(pkg.owner_org) %}
+      {% elif h.check_access('organization_update', {'id': pkg.owner_org}) %}
         <p>{{ _('This dataset is pending transfer to ') + h.get_organization(pkg.org_to_allow_transfer_to).display_name + '.'}}</p>
         <p><u>{{ _('Please ask an admin or editor of ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name + _(' to accept the request.')}}</u></p>          
       {% else %}
