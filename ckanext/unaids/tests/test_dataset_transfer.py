@@ -39,13 +39,13 @@ class TestDatasetTransfer(object):
         )
 
         # user_1 and user_3 should not be able to accept
-        # the transfer as they are not members of org_2
+        # the transfer as they are not members of org_2        
         for user in [user_1, user_3]:
-            app.get(
+            response = app.get(
                 url=transfer_dataset_url,
                 extra_environ={'REMOTE_USER': user['name']},
-                status=403  # expect forbidden error
             )
+            assert response.status_code == 403
 
         # user_2 should be able to accept the transfer
         app.get(
