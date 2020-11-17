@@ -1,5 +1,6 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
+from ckan.plugins.toolkit import get_action
 from ckan.common import _, g
 import logging
 import os
@@ -85,3 +86,9 @@ def get_user_obj(field=""):
     Returns an attribute of the user object, or returns the whole user object.
     """
     return getattr(g.userobj, field, g.userobj)
+
+
+def get_all_organizations():
+    data_dict = {'all_fields': True}
+    results = get_action('organization_list')({}, data_dict)
+    return results
