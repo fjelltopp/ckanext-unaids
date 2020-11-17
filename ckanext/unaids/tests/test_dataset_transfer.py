@@ -1,34 +1,15 @@
 'Tests for plugin.py.'
 # encoding: utf-8
-from ckanext.unaids.validators import organization_id_exists_validator
-from ckanext.unaids.auth import unaids_organization_update
 from ckan.tests import helpers
 from ckan.lib.helpers import url_for
 from ckan.tests import factories
 import pytest
-import logging
-
-log = logging.getLogger(__name__)
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.usefixtures('clean_db')
 class TestDatasetTransfer(object):
-
-    def test_organisation_update_authorization(self):
-        user = factories.User()
-        org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        unaids_organization_update({'user': user['id']}, {'id': org['id']})
-
-    def test_organisation_id_exists_validator(self):
-        org = factories.Organization()
-        organization_id_exists_validator(
-            'organization_to_allow_transfer_to',
-            {'organization_to_allow_transfer_to': org['id']},
-            {},
-            {}
-        )
 
     def test_dataset_transfer_request(self, app):
 
