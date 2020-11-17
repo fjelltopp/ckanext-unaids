@@ -93,7 +93,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         log.info("UNAIDS Plugin is enabled")
         p.toolkit.add_template_directory(config, 'theme/templates')
         p.toolkit.add_public_directory(config, 'theme/public')
-        toolkit.add_resource('fanstatic', 'ckanext-unaids')
+        toolkit.add_resource('assets', 'ckanext-unaids')
 
     def get_blueprint(self):
         return blueprints
