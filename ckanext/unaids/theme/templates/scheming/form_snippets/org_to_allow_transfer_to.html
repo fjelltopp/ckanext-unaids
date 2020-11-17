@@ -1,0 +1,80 @@
+{% import 'macros/form.html' as form %}
+
+{% macro render_field() -%}
+  <style>
+    #transfer_dataset_collapse .well{
+      margin: 0;
+    }
+    #transfer_dataset_collapse ul{
+      margin: 0;
+    }
+  </style>
+
+  {%- set options = [{
+    'value': '',
+    'text': _('No organisation')
+  }] -%}
+  {% for organization in h.get_all_organizations() %}
+    {% if organization.id != data.organization.id %}
+      {%- do options.append({
+        'value': organization.id,
+        'text': organization.display_name
+      }) -%}
+    {% endif %}
+  {% endfor %}
+
+  <div>
+    <a
+      class="btn btn-default"
+      data-toggle="collapse"
+      href="#transfer_dataset_collapse"
+      role="button"
+      aria-expanded="false"
+      aria-controls="transfer_dataset_collapse"
+    >
+      <span>{{_('Transfer Dataset')}}</span>
+    </a>
+  </div>
+
+  <br>
+
+  <div class="panel panel-default collapse" id="transfer_dataset_collapse">      
+      <div class="panel-body" style="margin: 0;">
+        <div class="row">
+            <div class="col-md-6">
+              <div class="well">
+                <p>{{_('How dataset transfers work:')}}</p>
+                <ul>
+                  {% for bullet_point in [
+                    'This tool allows you to transfer ownership of this dataset to another organisation for which you do not have data editing rights.',
+                    'Once an organisation is set, admins of the desired organisation will be able to see a transfer button when viewing this dataset.',
+                    'Clicking the transfer button will move the dataset into the desired organization and they will gain full control over it.'
+                    ] %}
+                      <li>{{ _(bullet_point) }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-6">
+              {% call form.select(
+                field.field_name,
+                id='field-' + field.field_name,
+                label=h.scheming_language_text(field.label),
+                options=options,
+                selected=data.org_to_allow_transfer_to,
+                error=errors[field.field_name],
+                classes=['control-medium'],
+                attrs={'data-module':'autocomplete'},
+                is_required=h.scheming_field_required(field)
+                )
+              %}
+              {% endcall %}
+            </div>
+        </div>  
+      </div>
+  </div>  
+{%- endmacro %}
+
+{% if data.organization %}
+  {{ render_field() }}
+{% endif %}

@@ -3,6 +3,25 @@
 {% set pkg = c.pkg_dict %}
 
 {% block package_description %}
+
+  {% if pkg.org_to_allow_transfer_to %}
+    <div class="alert alert-info" style="margin-top: -10px;">
+      {% if h.check_access('unaids_organization_update', {'id': pkg.org_to_allow_transfer_to}) %}
+        <p>{{ pkg.organization.title + _(' would like to transfer this dataset to your organisation') }}</p>
+        <br>
+        <a class="btn btn-default" href="{{ url_for('unaids_dataset_transfer.process_dataset_transfer', dataset_id=pkg.id) }}">
+          <i class="fa fa-refresh"></i>
+          <span> {{ _('Transfer dataset to ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name }}</span>
+        </a>
+      {% elif h.check_access('unaids_organization_update', {'id': pkg.owner_org}) %}
+        <p>{{ _('This dataset is pending transfer to ') + h.get_organization(pkg.org_to_allow_transfer_to).display_name + '.'}}</p>
+        <p><u>{{ _('Please ask an admin or editor of ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name + _(' to accept the request.')}}</u></p>          
+      {% else %}
+        <p>{{ _('This dataset is pending transfer to ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name }}</p>
+      {% endif %}
+    </div>
+  {% endif %}
+
   {% if pkg.private %}
     <span class="dataset-private label label-inverse">
       <i class="fa fa-lock"></i>
@@ -39,7 +58,6 @@
   {% endblock %}
   {# FIXME why is this here? seems wrong #}
   <span class="insert-comment-thread"></span>
-  {% asset 'ckanext-unaids/download_all' %}
   <button class="download-all btn btn-primary dropdown-toggle pull-right hidden"
      data-module="download_all" data-module-files='{{h.get_all_package_downloads(pkg)}}'>
     <i class="fa fa-download"></i>
