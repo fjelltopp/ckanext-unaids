@@ -39,7 +39,6 @@
   {% endblock %}
   {# FIXME why is this here? seems wrong #}
   <span class="insert-comment-thread"></span>
-  {% asset 'ckanext-unaids/download_all' %}
   <button class="download-all btn btn-primary dropdown-toggle pull-right hidden"
      data-module="download_all" data-module-files='{{h.get_all_package_downloads(pkg)}}'>
     <i class="fa fa-download"></i>
