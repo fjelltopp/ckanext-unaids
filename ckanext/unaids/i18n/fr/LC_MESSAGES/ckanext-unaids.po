@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-08-24 14:57+0000\n"
+"POT-Creation-Date: 2020-11-19 14:00+0000\n"
 "PO-Revision-Date: 2020-03-26 12:17+0100\n"
 "Last-Translator: \n"
 "Language: fr\n"
@@ -17,41 +17,88 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
+"Generated-By: Babel 2.7.0\n"
 
-#: ckanext/unaids/helpers.py:71
+#: ckanext/unaids/actions.py:33
+msgid "Resource not found."
+msgstr ""
+
+#: ckanext/unaids/actions.py:81
+msgid "TaskStatus was not found."
+msgstr ""
+
+#: ckanext/unaids/helpers.py:75
 msgid "Naomi Geographic Data Input"
 msgstr "Entrée de données géographiques pour le modèle Naomi"
 
-#: ckanext/unaids/helpers.py:72
+#: ckanext/unaids/helpers.py:76
 msgid "Geographic data formatted for the Naomi model."
 msgstr "Données géographiques formatées pour le modèle Naomi."
 
-#: ckanext/unaids/licenses.py:15
+#: ckanext/unaids/licenses.py:13
 msgid "Creative Commons Attribution for Intergovernmental Organisations"
 msgstr ""
 "Licence Creative Commons Attribution pour les organisations "
 "intergouvernementales"
 
-#: ckanext/unaids/plugin.py:59
-msgid "Organizations"
+#: ckanext/unaids/plugin.py:79
+#, fuzzy
+msgid "Organization"
 msgstr "Organisations"
 
-#: ckanext/unaids/plugin.py:60
+#: ckanext/unaids/plugin.py:80
 msgid "Data Type"
 msgstr "Type de donnés"
 
-#: ckanext/unaids/plugin.py:61
+#: ckanext/unaids/plugin.py:81
 msgid "Tags"
 msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:62
+#: ckanext/unaids/plugin.py:82
 msgid "Year"
 msgstr "Année"
 
-#: ckanext/unaids/plugin.py:63
+#: ckanext/unaids/plugin.py:83
 msgid "Location"
 msgstr "Lieu"
+
+#: ckanext/unaids/plugin.py:135
+msgid "Data Explorer"
+msgstr ""
+
+#: ckanext/unaids/validators.py:37
+#, fuzzy
+msgid "Invalid organization"
+msgstr "Organisations"
+
+#: ckanext/unaids/assets/autocomplete-without-creating-new-options.js:198
+msgid "Start typing…"
+msgstr ""
+
+#: ckanext/unaids/assets/autocomplete-without-creating-new-options.js:198
+msgid "No matches found"
+msgstr ""
+
+#: ckanext/unaids/assets/autocomplete-without-creating-new-options.js:207
+#, python-format
+msgid "Input is too short, must be at least one character"
+msgid_plural "Input is too short, must be at least %(num)d characters"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ckanext/unaids/blueprints/unaids_dataset_transfer.py:27
+msgid "You cannot carry out this action"
+msgstr ""
+
+#: ckanext/unaids/blueprints/unaids_dataset_transfer.py:41
+msgid "Dataset moved to"
+msgstr ""
+
+#: ckanext/unaids/blueprints/user_info_blueprint.py:40
+msgid ""
+"Your api key is: <code style=\"word-break:break-all;\"> {token}</code> "
+"{copy}"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:6
 msgid "Programmatic Data"
@@ -308,29 +355,54 @@ msgstr ""
 msgid "Find out more..."
 msgstr "Plus d’informations..."
 
-#: ckanext/unaids/theme/templates/home/layout1.html:36
-msgid "Click below for more information on uploading data:"
-msgstr "Pour plus d'informations sur le téléchargement cliquez ci-dessous:"
+#: ckanext/unaids/theme/templates/home/layout1.html:46
+msgid "Instructions to upload your<br />Inputs to UNAIDS Estimates"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/home/layout1.html:53
-msgid "Inputs to UNAIDS Estimates"
-msgstr "Données pour les estimations VIH de ONUSIDA"
+#: ckanext/unaids/theme/templates/home/layout1.html:54
+msgid "Instructions to upload your<br /> VMMC Data"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/home/layout1.html:61
-msgid "Voluntary Medical Male Circumcision (VMMC) Data"
-msgstr "Données de circoncision masculine médicale volontaire"
-
-#: ckanext/unaids/theme/templates/home/layout1.html:68
 msgid "Featured Organisations"
 msgstr "Organisations participantes"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:99
+#: ckanext/unaids/theme/templates/home/layout1.html:92
 msgid "The AIDS Data Repository is a project by"
 msgstr "Le fichier de données sur le sida (ADR) est un projet de"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:115
+#: ckanext/unaids/theme/templates/home/layout1.html:108
 msgid "With support from"
 msgstr "Avec l’aide de"
+
+#: ckanext/unaids/theme/templates/organization/bulk_process.html:15
+#: ckanext/unaids/theme/templates/organization/member_new.html:38
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
+msgid "Delete"
+msgstr "Supprimer"
+
+#: ckanext/unaids/theme/templates/organization/bulk_process.html:33
+msgid "Edit"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/organization/bulk_process.html:38
+#: ckanext/unaids/theme/templates/package/read.html:45
+msgid "Draft"
+msgstr "Brouillon"
+
+#: ckanext/unaids/theme/templates/organization/bulk_process.html:40
+#: ckanext/unaids/theme/templates/package/read.html:48
+msgid "Deleted"
+msgstr "Supprimé"
+
+#: ckanext/unaids/theme/templates/organization/bulk_process.html:43
+#: ckanext/unaids/theme/templates/package/read.html:28
+msgid "Private"
+msgstr "Privée"
+
+#: ckanext/unaids/theme/templates/organization/bulk_process.html:56
+msgid "This organization has no datasets associated to it"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:8
 msgid ""
@@ -343,20 +415,18 @@ msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:16
 #: ckanext/unaids/theme/templates/organization/member_new.html:25
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:18
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:33
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:27
 msgid "Role"
 msgstr "Rôle"
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:38
 msgid "Are you sure you want to delete this member?"
 msgstr "Etes-vous sûr de vouloir supprimer ce membre?"
-
-#: ckanext/unaids/theme/templates/organization/member_new.html:38
-msgid "Delete"
-msgstr "Supprimer"
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:40
 msgid "Update Member"
@@ -375,6 +445,7 @@ msgid "DHIS2 Sources"
 msgstr "Sources DHIS2"
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:11
+#: ckanext/unaids/theme/templates/package/read_base.html:5
 msgid "Activity Stream"
 msgstr "Flux d'Activité"
 
@@ -391,39 +462,90 @@ msgstr "Ajouter une nouvelle ressource"
 msgid "New resource"
 msgstr "Nouvelle ressource"
 
-#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:32
+#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:30
 msgid "Bulk Upload"
 msgstr "Transfert groupé"
 
-#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:33
+#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:31
 msgid "Bulk upload is not possible for this resource."
 msgstr "Cette ressource ne permet pas le transfert groupé."
 
-#: ckanext/unaids/theme/templates/package/read.html:9
-msgid "Private"
-msgstr "Privée"
+#: ckanext/unaids/theme/templates/package/read.html:10
+msgid " would like to transfer this dataset to your organisation"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read.html:16
-msgid "Draft"
-msgstr "Brouillon"
+#: ckanext/unaids/theme/templates/package/read.html:14
+msgid "Transfer dataset to "
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read.html:19
-msgid "Deleted"
-msgstr "Supprimé"
+#: ckanext/unaids/theme/templates/package/read.html:17
+#: ckanext/unaids/theme/templates/package/read.html:20
+msgid "This dataset is pending transfer to "
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read.html:36
+#: ckanext/unaids/theme/templates/package/read.html:18
+msgid "Please ask an admin or editor of "
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/read.html:18
+msgid " to accept the request."
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/read.html:34
+#, python-format
+msgid ""
+"You're currently viewing an old version of this dataset. To see the "
+"current version, click <a href=\"%(url)s\">here</a>."
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/read.html:64
 msgid "Download All"
 msgstr "Télécharger tout"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:10
+#: ckanext/unaids/theme/templates/package/read_base.html:4
+#, fuzzy
+msgid "Dataset"
+msgstr "Jeux de données"
+
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:9
+msgid "Existing User"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
+#, fuzzy
+msgid "Are you sure you want to delete this collaborator?"
+msgstr "Etes-vous sûr de vouloir supprimer ce membre?"
+
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:36
+msgid "Update Collaborator"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:40
+msgid "Add Collaborator"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:12
 msgid "Last modified"
 msgstr "Dernière modification"
 
-#: ckanext/unaids/theme/templates/scheming/form_snippets/text_template.html:8
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:13
+#, fuzzy
+msgid "No organisation"
+msgstr "Organisations"
+
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:32
+msgid "Transfer Dataset"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:43
+msgid "How dataset transfers work:"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/scheming/form_snippets/text_template.html:7
 msgid "This field is required"
 msgstr "Ce champ est requis"
 
-#: ckanext/unaids/theme/templates/scheming/form_snippets/text_template.html:10
+#: ckanext/unaids/theme/templates/scheming/form_snippets/text_template.html:9
 msgid "Custom"
 msgstr "Personnalisé"
 
@@ -439,10 +561,42 @@ msgstr "Données générales"
 msgid "Add Dataset"
 msgstr "Ajouter un ensemble de données"
 
-#: ckanext/unaids/theme/templates/snippets/search_form.html:17
+#: ckanext/unaids/theme/templates/snippets/dataset_selector.html:8
+msgid "VMMC Data"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/snippets/search_form.html:14
 msgid "Remove"
 msgstr "Supprimer"
 
-#: ckanext/unaids/theme/templates/snippets/search_form.html:23
+#: ckanext/unaids/theme/templates/snippets/search_form.html:20
 msgid "Filter Results"
 msgstr "Résultats du filtre"
+
+#: ckanext/unaids/theme/templates/user/dashboard.html:5
+msgid "Profile settings"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/user/dashboard.html:8
+msgid "News feed"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/user/dashboard.html:9
+#, fuzzy
+msgid "My Datasets"
+msgstr "Jeux de données"
+
+#: ckanext/unaids/theme/templates/user/dashboard.html:10
+#, fuzzy
+msgid "My Organizations"
+msgstr "Organisations"
+
+#~ msgid "Click below for more information on uploading data:"
+#~ msgstr "Pour plus d'informations sur le téléchargement cliquez ci-dessous:"
+
+#~ msgid "Inputs to UNAIDS Estimates"
+#~ msgstr "Données pour les estimations VIH de ONUSIDA"
+
+#~ msgid "Voluntary Medical Male Circumcision (VMMC) Data"
+#~ msgstr "Données de circoncision masculine médicale volontaire"
+
