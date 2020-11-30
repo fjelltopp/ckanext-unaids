@@ -3,6 +3,8 @@ import logging
 
 from ckan import model, logic, authz
 import ckan.plugins.toolkit as toolkit
+from ckan.lib import mailer
+from ckan.lib.base import render_jinja2
 from ckanext.unaids.dataset_transfer.model import (
     DatasetTransferRequest,
     STATUS_EMAILED,
@@ -12,43 +14,69 @@ from ckanext.unaids.dataset_transfer.model import (
 log = logging.getLogger(__name__)
 
 
-def send_dataset_transfer_emails(dataset_id, recipient_org_id):
-
-    recipient_org = toolkit.get_action('organization_show')(
-        context, {'id': recipient_org_id}
-    )
+def _get_users_to_email(recipient_org, exclude_user_ids):    
     recipient_org_admin_ids = [
         user['id']
         for user in recipient_org['users']
         if user['capacity'] == 'admin'
     ]
-    recipient_org_admins = model.Session.query(model.User).filter(
+    return model.Session.query(model.User).filter(
             model.User.id.in_(recipient_org_admin_ids),
+            ~model.User.id.in_(exclude_user_ids),
             model.User.email.isnot(None)
     ).all()
-    user_ids_already_emailed = \
-        model.Session.query(DatasetTransferRequest.recipient_user_id).filter(
-            model.DatasetTransferRequest.dataset_id == dataset_id,
-            model.DatasetTransferRequest.recipient_org_id == recipient_org_id
-        ).all()
-    users_to_email = filter(
-        lambda user: user.id not in user_ids_already_emailed,
-        recipient_org_admins
+
+
+def send_dataset_transfer_emails(dataset_id, recipient_org_id):
+    
+    dataset = toolkit.get_action('package_show')(
+        {'ignore_auth': True}, {'id': dataset_id}
+    )
+    dataset_org = toolkit.get_action('organization_show')(
+        {'ignore_auth': True}, {'id': dataset['owner_org']}
+    )
+    recipient_org = toolkit.get_action('organization_show')(
+        {'ignore_auth': True}, {'id': recipient_org_id}
+    )
+    dataset_url = toolkit.url_for(
+        controller='package',
+        action='read',
+        id=dataset['id']
     )
 
+    user_ids_already_emailed = \
+        model.Session.query(DatasetTransferRequest.recipient_user_id).filter(
+            DatasetTransferRequest.dataset_id == dataset_id,
+            DatasetTransferRequest.recipient_org_id == recipient_org_id
+        ).all()    
+    users_to_email = _get_users_to_email(
+        recipient_org=recipient_org,
+        exclude_user_ids=user_ids_already_emailed
+    )    
+
     for user in users_to_email:
-        log.warn('Emailing {} - {}'.format(user.name, user.email))
         try:
-            # TODO: send email
+            subject = 'testing123'
+            body = render_jinja2(
+                'email/dataset_transfer.html',
+                extra_vars={
+                    'user': user,
+                    'dataset': 'dataset',
+                    'dataset_org': dataset_org,
+                    'recipient_org': recipient_org,
+                    'dataset_url': dataset_url
+                }
+            )
+            mailer.mail_user(user, subject, body)
             status = STATUS_EMAILED
-        except:
-            # TODO: failed
-            status = STATUS_EMAIL_FAILED
+        except mailer.MailerException, e:
+            log.debug(e.message)
+            status = STATUS_EMAIL_FAILED            
 
         model.Session.add(DatasetTransferRequest(
             dataset_id=dataset_id,
             recipient_org_id=recipient_org_id,
-            recipient_user=user.id,
+            recipient_user_id=user.id,
             status=status
         ))
         model.repo.commit()

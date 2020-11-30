@@ -20,12 +20,12 @@ class DatasetTransferRequest(Base):
     """
     __tablename__ = 'dataset_transfer_request'
 
-    id = Column(types.Integer, primary_key=True)
-    dataset_id = Column(types.UnicodeText)
-    recipient_org_id = Column(types.UnicodeText)
-    recipient_user_id = Column(types.UnicodeText)
-    status = Column(types.UnicodeText, required=True)
-    status_last_changed_timestamp = Column(types.DateTime, onupdate=func.now())
+    id = Column(types.Integer, primary_key=True, nullable=False)
+    dataset_id = Column(types.UnicodeText, nullable=False)
+    recipient_org_id = Column(types.UnicodeText, nullable=False)
+    recipient_user_id = Column(types.UnicodeText, nullable=False)
+    status = Column(types.UnicodeText, nullable=False)
+    status_last_changed_timestamp = Column(types.DateTime, default=func.now(), onupdate=func.now(), nullable=False)
 
 
 def init_tables():
