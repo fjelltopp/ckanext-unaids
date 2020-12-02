@@ -5,6 +5,7 @@ from ckan import model, logic, authz
 import ckan.plugins.toolkit as toolkit
 from ckan.lib import mailer
 from ckan.lib.base import render_jinja2
+from ckan.common import config
 from ckanext.unaids.dataset_transfer.model import (
     DatasetTransferRequest,
     STATUS_EMAILED,
@@ -41,7 +42,11 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
     dataset_url = toolkit.url_for(
         controller='package',
         action='read',
-        id=dataset['id']
+        id=dataset['name']
+    )
+    accept_transfer_url = toolkit.url_for(
+        'unaids_dataset_transfer.process_dataset_transfer',
+        dataset_id=dataset['name']
     )
 
     user_ids_already_emailed = \
@@ -52,7 +57,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
     users_to_email = _get_users_to_email(
         recipient_org=recipient_org,
         exclude_user_ids=user_ids_already_emailed
-    )    
+    )
 
     for user in users_to_email:
         try:
@@ -64,7 +69,8 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
                     'dataset': 'dataset',
                     'dataset_org': dataset_org,
                     'recipient_org': recipient_org,
-                    'dataset_url': dataset_url
+                    'dataset_url': config.get('ckan.site_url') + dataset_url,
+                    'accept_transfer_url': config.get('ckan.site_url') + accept_transfer_url
                 }
             )
             mailer.mail_user(user, subject, body)
