@@ -34,19 +34,26 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
         {'ignore_auth': True}, {'id': dataset_id}
     )
     dataset_org = toolkit.get_action('organization_show')(
-        {'ignore_auth': True}, {'id': dataset['owner_org']}
+        {'ignore_auth': True},
+        {
+            'id': dataset['owner_org'],
+            'include_users': True
+        }
     )
     recipient_org = toolkit.get_action('organization_show')(
-        {'ignore_auth': True}, {'id': recipient_org_id}
+        {'ignore_auth': True},
+        {
+            'id': recipient_org_id,
+            'include_users': True
+        }
     )
     dataset_url = toolkit.url_for(
-        controller='package',
-        action='read',
+        'dataset.read',
         id=dataset['name']
     )
     accept_transfer_url = toolkit.url_for(
         'unaids_dataset_transfer.process_dataset_transfer',
-        dataset_id=dataset['name']
+        dataset_id=dataset['id']
     )
 
     user_ids_already_emailed = \

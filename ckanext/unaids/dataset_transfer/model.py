@@ -26,7 +26,7 @@ class DatasetTransferRequest(Base):
     recipient_user_id = Column(types.UnicodeText, nullable=False)
     status = Column(types.UnicodeText, nullable=False)
     status_last_changed_timestamp = Column(types.DateTime, default=func.now(), onupdate=func.now(), nullable=False)
-
+    extend_existing=True
 
 def init_tables():
     Base.metadata.create_all(model.meta.engine)

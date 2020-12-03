@@ -122,16 +122,17 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     # IPackageController
     def after_update(self, context, pkg_dict):
-        org_to_allow_transfer_to = [
-            item['value']
-            for item in pkg_dict['extras']
-            if item['key'] == 'org_to_allow_transfer_to'
-        ]
-        if org_to_allow_transfer_to:
-            send_dataset_transfer_emails(
-                dataset_id=pkg_dict['id'],
-                recipient_org_id=org_to_allow_transfer_to[0]
-            )
+        if 'extras' in pkg_dict:
+            org_to_allow_transfer_to = [
+                item['value']
+                for item in pkg_dict['extras']
+                if item['key'] == 'org_to_allow_transfer_to'
+            ]
+            if org_to_allow_transfer_to:
+                send_dataset_transfer_emails(
+                    dataset_id=pkg_dict['id'],
+                    recipient_org_id=org_to_allow_transfer_to[0]
+                )
 
 
 class UNAIDSReclineView(ReclineViewBase):
