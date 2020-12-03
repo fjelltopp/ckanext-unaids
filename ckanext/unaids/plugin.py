@@ -34,7 +34,7 @@ def add_licenses():
             licenses.LicenseCreativeCommonsIntergovernmentalOrgs()),
         core_licenses.License(
             core_licenses.LicenseNotSpecified())
-        ]
+    ]
 
 
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):

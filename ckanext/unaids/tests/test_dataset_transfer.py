@@ -1,4 +1,3 @@
-'Tests for plugin.py.'
 # encoding: utf-8
 import ckan.model as model
 from ckan.tests import helpers
@@ -7,20 +6,19 @@ from ckan.tests import factories
 import pytest
 import mock
 
-from ckanext.unaids.dataset_transfer.model import (
-    DatasetTransferRequest,
-    init_tables
-)
+from ckanext.unaids.dataset_transfer.model import init_tables
 from ckanext.unaids.dataset_transfer.logic import (
     _get_users_to_email,
     send_dataset_transfer_emails
 )
+
 
 @pytest.fixture
 def initdb():
     model.Session.remove()
     model.Session.configure(bind=model.meta.engine)
     init_tables()
+
 
 @pytest.mark.usefixtures('initdb')
 @pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
@@ -79,7 +77,7 @@ class TestDatasetTransfer(object):
         for user in [editor, member, admin_2]:
             assert user['id'] not in user_ids_to_email, \
                 'Dataset org {} should NOT be emailed'.format(user['name'])
-                
+
     def test_dataset_transfer_request(self, app):
 
         # create 3 users and orgs

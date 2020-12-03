@@ -1,7 +1,6 @@
-from datetime import datetime
 import logging
 
-from ckan import model, logic, authz
+from ckan import model
 import ckan.plugins.toolkit as toolkit
 from ckan.lib import mailer
 from ckan.lib.base import render_jinja2
@@ -15,21 +14,21 @@ from ckanext.unaids.dataset_transfer.model import (
 log = logging.getLogger(__name__)
 
 
-def _get_users_to_email(recipient_org, exclude_user_ids):    
+def _get_users_to_email(recipient_org, exclude_user_ids):
     recipient_org_admin_ids = [
         user['id']
         for user in recipient_org['users']
         if user['capacity'] == 'admin'
     ]
     return model.Session.query(model.User).filter(
-            model.User.id.in_(recipient_org_admin_ids),
-            ~model.User.id.in_(exclude_user_ids),
-            model.User.email.isnot(None)
+        model.User.id.in_(recipient_org_admin_ids),
+        ~model.User.id.in_(exclude_user_ids),
+        model.User.email.isnot(None)
     ).all()
 
 
 def send_dataset_transfer_emails(dataset_id, recipient_org_id):
-    
+
     dataset = toolkit.get_action('package_show')(
         {'ignore_auth': True}, {'id': dataset_id}
     )
@@ -60,7 +59,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
         model.Session.query(DatasetTransferRequest.recipient_user_id).filter(
             DatasetTransferRequest.dataset_id == dataset_id,
             DatasetTransferRequest.recipient_org_id == recipient_org_id
-        ).all()    
+        ).all()
     users_to_email = _get_users_to_email(
         recipient_org=recipient_org,
         exclude_user_ids=user_ids_already_emailed
@@ -82,9 +81,9 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
             )
             mailer.mail_user(user, subject, body)
             status = STATUS_EMAILED
-        except mailer.MailerException, e:
+        except mailer.MailerException as e:
             log.debug(e.message)
-            status = STATUS_EMAIL_FAILED            
+            status = STATUS_EMAIL_FAILED
 
         model.Session.add(DatasetTransferRequest(
             dataset_id=dataset_id,
