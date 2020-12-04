@@ -69,7 +69,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
         try:
             subject = _('Dataset Transfer')
             body = render_jinja2(
-                'email/dataset_transfer.html',
+                'email/dataset_transfer.txt',
                 extra_vars={
                     'user': user,
                     'dataset': 'dataset',
