@@ -8,7 +8,7 @@ import mock
 
 from ckanext.unaids.dataset_transfer.model import init_tables
 from ckanext.unaids.dataset_transfer.logic import (
-    _get_users_to_email,
+    get_org_admins_with_email_addresses,
     send_dataset_transfer_emails
 )
 
@@ -25,6 +25,69 @@ def initdb():
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.usefixtures('clean_db')
 class TestDatasetTransfer(object):
+
+    def test_get_org_admins_with_email_addresses_two_admins(self, app):
+        user_1 = factories.User(email='user_1@example.com')
+        user_2 = factories.User(email='user_2@example.com')
+        organization = factories.Organization(
+            users=[
+                {'name': user_1['name'], 'capacity': 'admin'},
+                {'name': user_2['name'], 'capacity': 'admin'}
+            ]
+        )
+        returned_users = get_org_admins_with_email_addresses(
+            org=organization,
+            exclude_user_ids=[user_1['id']]
+        )
+        returned_user_ids = [x.id for x in returned_users]
+        assert returned_user_ids == [user_2['id']]
+
+    def test_get_org_admins_with_email_addresses_one_admin(self, app):
+        user_1 = factories.User(email='user_1@example.com')
+        user_2 = factories.User(email='user_2@example.com')
+        organization = factories.Organization(
+            users=[
+                {'name': user_1['name'], 'capacity': 'admin'},
+                {'name': user_2['name'], 'capacity': 'member'}
+            ]
+        )
+        returned_users = get_org_admins_with_email_addresses(
+            org=organization,
+            exclude_user_ids=[]
+        )
+        returned_user_ids = [x.id for x in returned_users]
+        assert returned_user_ids == [user_1['id']]
+
+    def test_get_org_admins_with_email_addresses_no_admins(self, app):
+        user_1 = factories.User(email='user_1@example.com')
+        user_2 = factories.User(email='user_2@example.com')
+        organization = factories.Organization(
+            users=[
+                {'name': user_1['name'], 'capacity': 'member'},
+                {'name': user_2['name'], 'capacity': 'member'}
+            ]
+        )
+        returned_users = get_org_admins_with_email_addresses(
+            org=organization,
+            exclude_user_ids=[]
+        )
+        assert returned_users == []
+
+    def test_get_org_admins_with_email_addresses_two_orgs(self, app):
+        user_1 = factories.User(email='user_1@example.com')
+        user_2 = factories.User(email='user_2@example.com')
+        organization_1 = factories.Organization(
+            users=[{'name': user_1['name'], 'capacity': 'admin'}]
+        )
+        factories.Organization(
+            users=[{'name': user_2['name'], 'capacity': 'admin'}]
+        )
+        returned_users = get_org_admins_with_email_addresses(
+            org=organization_1,
+            exclude_user_ids=[]
+        )
+        returned_user_ids = [x.id for x in returned_users]
+        assert returned_user_ids == [user_1['id']]
 
     @mock.patch('ckan.lib.mailer.mail_user')
     def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
@@ -52,41 +115,20 @@ class TestDatasetTransfer(object):
         ]
         assert emailed_user_ids == [user_2['id']]
 
-    def test_get_users_to_email(self, app):
-        owner, admin_1, admin_2, editor, member = [
-            factories.User(name=name)
-            for name in ['owner', 'admin_1', 'admin_2', 'editor', 'member']
-        ]
-        organization = factories.Organization(
-            user=owner,
-            users=[
-                {'name': admin_1['id'], 'capacity': 'admin'},
-                {'name': admin_2['id'], 'capacity': 'admin'},
-                {'name': editor['id'], 'capacity': 'editor'},
-                {'name': member['id'], 'capacity': 'member'}
-            ]
-        )
-        all_users_to_email = _get_users_to_email(
-            recipient_org=organization,
-            exclude_user_ids=[admin_2['id']]
-        )
-        user_ids_to_email = [x.id for x in all_users_to_email]
-        for user in [owner, admin_1]:
-            assert user['id'] in user_ids_to_email, \
-                'Dataset org {} should be emailed'.format(user['name'])
-        for user in [editor, member, admin_2]:
-            assert user['id'] not in user_ids_to_email, \
-                'Dataset org {} should NOT be emailed'.format(user['name'])
-
     def test_dataset_transfer_request(self, app):
 
         # create 3 users and orgs
         user_1, user_2, user_3 = [
-            factories.User()
+            factories.User(
+                email='user_{}_@example.com'.format(x)
+            )
             for x in range(3)
         ]
         org_1, org_2, org_3 = [
-            factories.Organization(user=user)
+            factories.Organization(
+                owner=user,
+                users=[{'name': user['name'], 'capacity': 'admin'}]
+            )
             for user in [user_1, user_2, user_3]
         ]
 

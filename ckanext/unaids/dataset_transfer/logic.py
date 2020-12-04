@@ -14,14 +14,14 @@ from ckanext.unaids.dataset_transfer.model import (
 log = logging.getLogger(__name__)
 
 
-def _get_users_to_email(recipient_org, exclude_user_ids):
-    recipient_org_admin_ids = [
+def get_org_admins_with_email_addresses(org, exclude_user_ids):
+    org_admin_ids = [
         user['id']
-        for user in recipient_org['users']
+        for user in org['users']
         if user['capacity'] == 'admin'
     ]
     return model.Session.query(model.User).filter(
-        model.User.id.in_(recipient_org_admin_ids),
+        model.User.id.in_(org_admin_ids),
         ~model.User.id.in_(exclude_user_ids),
         model.User.email.isnot(None)
     ).all()
@@ -60,8 +60,8 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
             DatasetTransferRequest.dataset_id == dataset_id,
             DatasetTransferRequest.recipient_org_id == recipient_org_id
         ).all()
-    users_to_email = _get_users_to_email(
-        recipient_org=recipient_org,
+    users_to_email = get_org_admins_with_email_addresses(
+        org=recipient_org,
         exclude_user_ids=user_ids_already_emailed
     )
 
