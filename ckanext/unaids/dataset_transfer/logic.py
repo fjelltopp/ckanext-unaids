@@ -4,7 +4,7 @@ from ckan import model
 import ckan.plugins.toolkit as toolkit
 from ckan.lib import mailer
 from ckan.lib.base import render_jinja2
-from ckan.common import config
+from ckan.common import config, _
 from ckanext.unaids.dataset_transfer.model import (
     DatasetTransferRequest,
     STATUS_EMAILED,
@@ -67,7 +67,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
 
     for user in users_to_email:
         try:
-            subject = 'testing123'
+            subject = _('Dataset Transfer')
             body = render_jinja2(
                 'email/dataset_transfer.html',
                 extra_vars={
