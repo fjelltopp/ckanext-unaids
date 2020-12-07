@@ -102,7 +102,8 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
             status=status
         ))
         model.repo.commit()
-        assert emails_succeeded, \
+    if not emails_succeeded:
+        log.error(
             'All DatasetTransferRequest emails failed for dataset {}'.format(
                 dataset['id']
             )
