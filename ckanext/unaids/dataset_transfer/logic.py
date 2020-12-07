@@ -15,11 +15,18 @@ log = logging.getLogger(__name__)
 
 
 def get_org_admins_with_email_addresses(org, exclude_user_ids):
-    org_admin_ids = [
-        user['id']
-        for user in org['users']
-        if user['capacity'] == 'admin'
-    ]
+    try:
+        org_admin_ids = [
+            user['id']
+            for user in org['users']
+            if user['capacity'] == 'admin'
+        ]
+    except KeyError:
+        raise ValueError('{} {} {}'.format(
+            _('Organization'),
+            org['name'],
+            _('has no users to accept this transfer')
+        ))    
     return model.Session.query(model.User).filter(
         model.User.id.in_(org_admin_ids),
         ~model.User.id.in_(exclude_user_ids),

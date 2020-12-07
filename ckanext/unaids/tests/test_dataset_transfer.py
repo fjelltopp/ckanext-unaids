@@ -89,6 +89,13 @@ class TestDatasetTransfer(object):
         returned_user_ids = [x.id for x in returned_users]
         assert returned_user_ids == [user_1['id']]
 
+    def test_get_org_admins_with_no_users_in_org(self, app):
+        with pytest.raises(ValueError):
+            get_org_admins_with_email_addresses(
+                org={'name': 'org_with_no_users'},
+                exclude_user_ids=[]
+            )
+
     @mock.patch('ckan.lib.mailer.mail_user')
     def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
         user_1, user_2 = [
