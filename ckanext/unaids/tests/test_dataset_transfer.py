@@ -122,6 +122,27 @@ class TestDatasetTransfer(object):
         ]
         assert emailed_user_ids == [user_2['id']]
 
+    def test_send_dataset_transfer_emails_errors(self, app):
+        user_1, user_2 = [
+            factories.User()
+            for x in range(2)
+        ]
+        org_1, org_2 = [
+            factories.Organization(user=user)
+            for user in [user_1, user_2]
+        ]
+        dataset = factories.Dataset(
+            owner_org=org_1['id'],
+            type='test-schema',
+            org_to_allow_transfer_to=org_2['id']
+        )
+        expected_error = r'All DatasetTransferRequest emails failed *'
+        with pytest.raises(AssertionError, match=expected_error):
+            send_dataset_transfer_emails(
+                dataset_id=dataset['id'],
+                recipient_org_id=org_2['id']
+            )
+
     def test_dataset_transfer_request(self, app):
 
         # create 3 users and orgs

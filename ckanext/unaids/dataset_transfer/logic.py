@@ -26,7 +26,7 @@ def get_org_admins_with_email_addresses(org, exclude_user_ids):
             _('Organization'),
             org['name'],
             _('has no users to accept this transfer')
-        ))    
+        ))
     return model.Session.query(model.User).filter(
         model.User.id.in_(org_admin_ids),
         ~model.User.id.in_(exclude_user_ids),
@@ -72,9 +72,10 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
         exclude_user_ids=user_ids_already_emailed
     )
 
+    emails_succeeded = []
     for user in users_to_email:
         try:
-            subject = '{} {}'.format(dataset['title'], _('Dataset Transfer'))            
+            subject = '{} {}'.format(dataset['title'], _('Dataset Transfer'))
             body = render_jinja2(
                 'email/dataset_transfer.txt',
                 extra_vars={
@@ -88,10 +89,12 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
             )
             mailer.mail_user(user, subject, body)
             status = STATUS_EMAILED
-        except mailer.MailerException as e:
-            log.debug(e.message)
+            emails_succeeded.append(user)
+        except mailer.MailerException:
             status = STATUS_EMAIL_FAILED
-
+            log.error('Sending email for DatasetTransferRequest failed for user {} dataset_id {}'.format(
+                user.id, dataset['id']
+            ))
         model.Session.add(DatasetTransferRequest(
             dataset_id=dataset_id,
             recipient_org_id=recipient_org_id,
@@ -99,3 +102,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
             status=status
         ))
         model.repo.commit()
+        assert emails_succeeded, \
+            'All DatasetTransferRequest emails failed for dataset {}'.format(
+                dataset['id']
+            )
