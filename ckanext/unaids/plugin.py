@@ -126,7 +126,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             org_to_allow_transfer_to = [
                 item['value']
                 for item in pkg_dict['extras']
-                if item['key'] == 'org_to_allow_transfer_to'
+                if item['key'] == 'org_to_allow_transfer_to' \
+                    and item['value']
             ]
             if org_to_allow_transfer_to:
                 send_dataset_transfer_emails(

@@ -166,4 +166,4 @@ class TestDatasetTransfer(object):
             context={'user': user_2['name']},
         )
         assert result['owner_org'] == org_2['id']
-        assert not result['org_to_allow_transfer_to']
+        assert 'org_to_allow_transfer_to' not in result
