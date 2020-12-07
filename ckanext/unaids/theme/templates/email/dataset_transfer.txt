@@ -1,6 +1,6 @@
 Dear {{ user.name }},
 
-    The {{ dataset_org.name }} administrator has requested a transfer of dataset {{ dataset.name }} to your organisation {{ recipient_org.name }}.
+    The {{ dataset_org.name }} administrator has requested a transfer of dataset {{ dataset.title }} to your organisation {{ recipient_org.name }}.
     You can view the dataset with the following link: {{ dataset_url }}
     
     If you would like to accept the transfer click the "Transfer dataset to {{ recipient_org.name }}" while viewing the dataset.
