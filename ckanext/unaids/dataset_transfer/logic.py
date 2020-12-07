@@ -80,7 +80,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
                 'email/dataset_transfer.txt',
                 extra_vars={
                     'user': user,
-                    'dataset': 'dataset',
+                    'dataset': dataset,
                     'dataset_org': dataset_org,
                     'recipient_org': recipient_org,
                     'dataset_url': config.get('ckan.site_url') + dataset_url,
@@ -106,3 +106,4 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
             'All DatasetTransferRequest emails failed for dataset {}'.format(
                 dataset['id']
             )
+        )
