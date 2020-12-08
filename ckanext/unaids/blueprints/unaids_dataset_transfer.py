@@ -28,7 +28,7 @@ def process_dataset_transfer(dataset_id):
 
     dataset.update({
         'owner_org': dataset['org_to_allow_transfer_to'],
-        'org_to_allow_transfer_to': ''
+        'org_to_allow_transfer_to': None
     })
     toolkit.get_action('package_update')({
         'model': model,
