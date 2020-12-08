@@ -207,12 +207,12 @@ section.resources H3{
 }
 
 /* make footer sticky */
-.main {
+.main{
   display: flex;
   min-height: 75vh;
   flex-direction: column;
 }
 
-footer {
+footer{
   flex: 1;
 }
