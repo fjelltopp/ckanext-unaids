@@ -22,11 +22,7 @@ def get_org_admins_with_email_addresses(org, exclude_user_ids):
             if user['capacity'] == 'admin'
         ]
     except KeyError:
-        raise ValueError('{} {} {}'.format(
-            _('Organization'),
-            org['name'],
-            _('has no users to accept this transfer')
-        ))
+        raise ValueError('Organization {} has no users to accept this transfer'.format(org['name']))
     return model.Session.query(model.User).filter(
         model.User.id.in_(org_admin_ids),
         ~model.User.id.in_(exclude_user_ids),
