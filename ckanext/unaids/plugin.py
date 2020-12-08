@@ -22,7 +22,7 @@ from ckanext.unaids import auth
 import ckan.plugins.toolkit as toolkit
 from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
-
+from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
 
 log = logging.getLogger(__name__)
 
@@ -34,7 +34,7 @@ def add_licenses():
             licenses.LicenseCreativeCommonsIntergovernmentalOrgs()),
         core_licenses.License(
             core_licenses.LicenseNotSpecified())
-        ]
+    ]
 
 
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
@@ -50,6 +50,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IConfigurer)
     p.implements(p.ITemplateHelpers)
     p.implements(p.IAuthFunctions)
+    p.implements(p.IPackageController, inherit=True)
     p.implements(p.IValidators)
     p.implements(p.IActions)
     p.implements(IDataValidation)
@@ -118,6 +119,20 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             )
         if data_dict.get('schema'):
             return True
+
+    # IPackageController
+    def after_update(self, context, pkg_dict):
+        if 'extras' in pkg_dict:
+            org_to_allow_transfer_to = [
+                item['value']
+                for item in pkg_dict['extras']
+                if item['key'] == 'org_to_allow_transfer_to' and item['value']
+            ]
+            if org_to_allow_transfer_to:
+                send_dataset_transfer_emails(
+                    dataset_id=pkg_dict['id'],
+                    recipient_org_id=org_to_allow_transfer_to[0]
+                )
 
 
 class UNAIDSReclineView(ReclineViewBase):
