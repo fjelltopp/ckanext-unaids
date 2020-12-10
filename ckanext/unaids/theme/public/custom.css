@@ -205,3 +205,14 @@ section.resources H3{
 .resource-title{
   margin-bottom: 10px;
 }
+
+/* make footer sticky */
+.main{
+  display: flex;
+  min-height: 60vh;
+  flex-direction: column;
+}
+
+footer{
+  flex: 1;
+}
