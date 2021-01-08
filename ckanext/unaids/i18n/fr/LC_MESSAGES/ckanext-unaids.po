@@ -83,7 +83,7 @@ msgstr "Aucun résultat"
 msgid "Input is too short, must be at least one character"
 msgid_plural "Input is too short, must be at least %(num)d characters"
 msgstr[0] "L'entrée est trop courte, doit contenir au moins un caractère"
-msgstr[1] "L'entrée est trop courte, doit contenir au moins un caractère"
+msgstr[1] "L’entrée est trop courte, doit être au moins %(num)d caractères"
 
 #: ckanext/unaids/blueprints/unaids_dataset_transfer.py:27
 msgid "You cannot carry out this action"
