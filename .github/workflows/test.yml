@@ -47,9 +47,9 @@ jobs:
       run: |
         pip install -r dev-requirements.txt
         pip install ckantoolkit
-        pip install -e https://github.com/fjelltopp/ckanext-validation/archive/development.zip
-        pip install -e https://github.com/fjelltopp/ckanext-scheming/archive/development.zip
+        pip install -e "git+https://github.com/fjelltopp/ckanext-scheming@development#egg=ckanext-scheming"
         pip install -r src/ckanext-scheming/requirements.txt
+        pip install -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
         pip install -r src/ckanext-validation/requirements.txt
 
         pip install -e .
