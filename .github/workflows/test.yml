@@ -47,8 +47,11 @@ jobs:
       run: |
         pip install -r dev-requirements.txt
         pip install ckantoolkit
-        pip install https://github.com/fjelltopp/ckanext-validation/archive/development.zip
-        pip install https://github.com/fjelltopp/ckanext-scheming/archive/development.zip
+        pip install -e https://github.com/fjelltopp/ckanext-validation/archive/development.zip
+        pip install -e https://github.com/fjelltopp/ckanext-scheming/archive/development.zip
+        pip install -r src/ckanext-scheming/requirements.txt
+        pip install -r src/ckanext-validation/requirements.txt
+
         pip install -e .
         # Replace default path to CKAN core config file with the one on the container
         sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini

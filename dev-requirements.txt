@@ -1,5 +1,6 @@
 pytest-ckan
 pytest-cov
-pandas
-goodtables
-pyshp
+# pandas
+# goodtables
+# pyshp
+# pycountry
