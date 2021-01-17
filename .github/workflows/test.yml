@@ -44,13 +44,10 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install requirements
       run: |
+        pip install -r requirements.txt
         pip install -r dev-requirements.txt
-        pip install ckantoolkit
-        pip install -e "git+https://github.com/fjelltopp/ckanext-scheming@development#egg=ckanext-scheming"
-        pip install -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
-
-        # pip install https://github.com/fjelltopp/ckanext-scheming/archive/development.zip
-        # pip install https://github.com/fjelltopp/ckanext-validation/archive/development.zip
+        pip install https://github.com/fjelltopp/ckanext-scheming/archive/development.zip
+        pip install https://github.com/fjelltopp/ckanext-validation/archive/development.zip
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.txt
 
@@ -60,6 +57,5 @@ jobs:
     - name: Setup extension
       run: |
         ckan -c test.ini db init
-        sudo find / -type f -name pytest
     - name: Run tests
       run: pytest --ckan-ini=test.ini --cov=ckanext.unaids --disable-warnings ckanext/unaids/tests
