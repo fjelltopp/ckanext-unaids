@@ -2,7 +2,7 @@ import logging
 
 from ckan import model
 import ckan.plugins.toolkit as toolkit
-from ckan.lib import mailer
+import ckan.lib.mailer as mailer
 from ckan.lib.base import render_jinja2
 from ckan.common import config, _
 from ckanext.unaids.dataset_transfer.model import (
@@ -104,3 +104,4 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
                 dataset['id']
             )
         )
+    return emails_succeeded

@@ -97,7 +97,8 @@ class TestDatasetTransfer(object):
             )
 
     @mock.patch('ckan.lib.mailer.mail_user')
-    def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
+    @mock.patch('ckan.lib.mailer._mail_recipient')
+    def test_send_dataset_transfer_emails(self, mocked_mail_recipient, mocked_mail_user, app):
         user_1, user_2 = [
             factories.User()
             for x in range(2)
@@ -112,10 +113,11 @@ class TestDatasetTransfer(object):
             title=u"Côte d'Ivoire Test Dataset",
             org_to_allow_transfer_to=org_2['id']
         )
-        send_dataset_transfer_emails(
+        emails_succeeded = send_dataset_transfer_emails(
             dataset_id=dataset['id'],
             recipient_org_id=org_2['id']
         )
+        assert emails_succeeded
         mocked_mail_user.assert_called()
         emailed_user_ids = [
             x[0][0].id  # recipient_user_id
@@ -137,12 +139,11 @@ class TestDatasetTransfer(object):
             type='test-schema',
             org_to_allow_transfer_to=org_2['id']
         )
-        expected_error = r'All DatasetTransferRequest emails failed *'
-        with pytest.raises(AssertionError, match=expected_error):
-            send_dataset_transfer_emails(
-                dataset_id=dataset['id'],
-                recipient_org_id=org_2['id']
-            )
+        emails_succeeded = send_dataset_transfer_emails(
+            dataset_id=dataset['id'],
+            recipient_org_id=org_2['id']
+        )
+        assert not emails_succeeded
 
     def test_dataset_transfer_request(self, app):
 
