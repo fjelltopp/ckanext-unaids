@@ -71,7 +71,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
     emails_succeeded = []
     for user in users_to_email:
         try:
-            subject = dataset['title'] + ' ' + _('Dataset Transfer')
+            subject = u'{} {}'.format(dataset['title'], _('Dataset Transfer'))
             body = render_jinja2(
                 'email/dataset_transfer.txt',
                 extra_vars={
