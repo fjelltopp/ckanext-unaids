@@ -109,7 +109,7 @@ class TestDatasetTransfer(object):
         dataset = factories.Dataset(
             owner_org=org_1['id'],
             type='test-schema',
-            name="Côte d'Ivoire Inputs UNAIDS Estimates 2021",
+            title=u"Côte d'Ivoire Test Dataset",
             org_to_allow_transfer_to=org_2['id']
         )
         send_dataset_transfer_emails(
