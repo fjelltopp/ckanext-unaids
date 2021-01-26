@@ -97,8 +97,7 @@ class TestDatasetTransfer(object):
             )
 
     @mock.patch('ckan.lib.mailer.mail_user')
-    @mock.patch('ckan.lib.mailer._mail_recipient')
-    def test_send_dataset_transfer_emails(self, mocked_mail_recipient, mocked_mail_user, app):
+    def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
         user_1 = factories.User(email='user_1@example.com')
         user_2 = factories.User(email='user_2@example.com')
         org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
