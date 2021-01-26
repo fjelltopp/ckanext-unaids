@@ -98,29 +98,46 @@ class TestDatasetTransfer(object):
 
     @mock.patch('ckan.lib.mailer.mail_user')
     def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
-        user_1, user_2 = [
-            factories.User()
-            for x in range(2)
-        ]
-        org_1, org_2 = [
-            factories.Organization(user=user)
-            for user in [user_1, user_2]
-        ]
+        user_1 = factories.User(email='user_1@example.com')
+        user_2 = factories.User(email='user_2@example.com')
+        org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
+        org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
         dataset = factories.Dataset(
             owner_org=org_1['id'],
             type='test-schema',
             org_to_allow_transfer_to=org_2['id']
         )
-        send_dataset_transfer_emails(
+        emails_succeeded = send_dataset_transfer_emails(
             dataset_id=dataset['id'],
             recipient_org_id=org_2['id']
         )
+        assert emails_succeeded
         mocked_mail_user.assert_called()
         emailed_user_ids = [
             x[0][0].id  # recipient_user_id
             for x in mocked_mail_user.call_args_list
         ]
         assert emailed_user_ids == [user_2['id']]
+
+    @mock.patch('ckan.lib.mailer._mail_recipient')
+    def test_send_dataset_transfer_email_subject(self, mocked_mail_recipient, app):
+        user_1 = factories.User(email='user_1@example.com')
+        user_2 = factories.User(email='user_2@example.com')
+        org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
+        org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
+        dataset_name = u"Côte d'Ivoire Test Dataset"
+        dataset = factories.Dataset(
+            owner_org=org_1['id'],
+            type='test-schema',
+            title=dataset_name,
+            org_to_allow_transfer_to=org_2['id']
+        )
+        send_dataset_transfer_emails(
+            dataset_id=dataset['id'],
+            recipient_org_id=org_2['id']
+        )
+        email_subject = mocked_mail_recipient.call_args_list[0][0][4]
+        assert dataset_name in email_subject
 
     def test_send_dataset_transfer_emails_errors(self, app):
         user_1, user_2 = [
@@ -136,12 +153,11 @@ class TestDatasetTransfer(object):
             type='test-schema',
             org_to_allow_transfer_to=org_2['id']
         )
-        expected_error = r'All DatasetTransferRequest emails failed *'
-        with pytest.raises(AssertionError, match=expected_error):
-            send_dataset_transfer_emails(
-                dataset_id=dataset['id'],
-                recipient_org_id=org_2['id']
-            )
+        emails_succeeded = send_dataset_transfer_emails(
+            dataset_id=dataset['id'],
+            recipient_org_id=org_2['id']
+        )
+        assert not emails_succeeded
 
     def test_dataset_transfer_request(self, app):
 
