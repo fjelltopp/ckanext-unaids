@@ -1,2 +1,4 @@
-Disallow: /*/organization/*
-Disallow: /*/dataset/*
+User-agent: *
+Disallow: /*
+Allow: /*/pages/
+Crawl-Delay: 10
