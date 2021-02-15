@@ -1,2 +1,2 @@
-Disallow: /*
-Allow: /*/pages/*
+Disallow: /*/organization/*
+Disallow: /*/dataset/*
