@@ -1,6 +1,6 @@
 # encoding: utf-8
 import logging
-import io
+from six import StringIO
 import json
 import os
 from flask import Blueprint, Response
@@ -60,7 +60,7 @@ def download_naomi_geodata(package_id):
     else:
         raise RuntimeError("Failed to fetch proper geographic package resources")
 
-    output = io.StringIO()
+    output = StringIO()
     output.write(json.dumps(area_gejson))
     output.seek(0)
     return Response(
