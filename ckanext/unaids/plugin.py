@@ -1,10 +1,9 @@
 import ckan.plugins as p
 import logging
-import licenses
+from collections import OrderedDict
 import ckan.model.license as core_licenses
 import ckan.model.package as package
-from blueprints import blueprints
-from collections import OrderedDict
+import ckan.plugins.toolkit as toolkit
 from ckan.lib.plugins import DefaultTranslation
 from ckanext.unaids.validators import (
     if_empty_guess_format,
@@ -18,8 +17,11 @@ from ckanext.unaids.helpers import (
     get_all_organizations
 )
 import ckanext.unaids.actions as actions
-from ckanext.unaids import auth
-import ckan.plugins.toolkit as toolkit
+from ckanext.unaids import (
+    auth,
+    licenses
+)
+from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
 from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
