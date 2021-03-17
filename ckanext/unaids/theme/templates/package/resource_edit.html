@@ -1,0 +1,8 @@
+{% ckan_extends %}
+
+{% set package_id = pkg_dict.id %}
+
+{% block form %}
+  <h1>test: resource_edit</h1>
+  {% snippet 'external_storage/snippets/upload_module.html', pkg_id=package_id, api_key=c.userobj.apikey, base_url=g.site_url, parent=super %}
+{% endblock %}
