@@ -32,6 +32,7 @@ setup(
         'ckanext': [
             ('**.py', 'python', None),
             ('**.js', 'javascript', None),
+            ('**/react/components/**.js', 'javascript', None),
             ('**/templates/**.html', 'ckan', None),
         ]}
 )
