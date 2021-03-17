@@ -3,6 +3,5 @@
 {% set package_id = pkg_dict.id %}
 
 {% block form %}
-  <h1>test: new_resource</h1>
-  {% snippet 'external_storage/snippets/upload_module.html', pkg_id=package_id, api_key=c.userobj.apikey, base_url=g.site_url, parent=super %}
+  {% snippet resource_form_snippet, data=data, errors=errors, error_summary=error_summary, include_metadata=false, pkg_name=pkg_name, stage=stage, allow_upload=g.ofs_impl and logged_in, dataset_type=dataset_type %}
 {% endblock %}
