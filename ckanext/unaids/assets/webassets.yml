@@ -7,3 +7,14 @@ main:
   extra:
     preload:
       - base/main
+
+FileInputComponentStyles:
+    contents:
+        - FileInputComponentStyles.css
+    output: unaids/FileInputComponentStyles.css
+
+FileInputComponentScripts:
+    contents:
+        - frictionless-js.js
+        - FileInputComponent.js
+    output: unaids/FileInputComponent.js

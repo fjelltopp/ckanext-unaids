@@ -1,8 +1,15 @@
-<pre>
-    data-dataset-id="{{ data.package_id }}"
-    data-api="{{ g.site_url }}"	
-    data-lfs="{{ h.extstorage_server_url() }}"	
-    data-auth-token="{{ c.userobj.apikey }}"	
-    data-organization-id="{{ h.extstorage_storage_namespace() }}"	
-    data-resource-id="{{ data.id }}">	
-</pre>
+{% asset 'ckanext-unaids/FileInputComponentStyles' %}
+
+<div
+    id="FileInputComponent"
+    data-lfsServer="{{ h.extstorage_server_url() }}"
+    data-orgId="{{ h.extstorage_resource_storage_prefix(pkg_name).split('/')[0] }}"
+    data-datasetId="{{ pkg_name }}"
+    data-existingUrlType="{{ data.url_type if data else None }}"
+    data-existingUrl="{{ data.url if data else None }}"
+    data-existingSha256="{{ data.sha256 if data else None }}"
+    data-existingFileName="{{ h.extstorage_resource_filename(data) if data else None }}"
+    data-existingSize="{{ data.size if data else None }}"
+></div>
+
+{% asset 'ckanext-unaids/FileInputComponentScripts' %}
