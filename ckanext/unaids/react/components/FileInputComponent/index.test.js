@@ -6,7 +6,7 @@ import * as giftless from "giftless-client";
 jest.mock('axios');
 giftless.Client = jest.fn(() => ({
   default: jest.fn(),
-  upload: jest.fn()
+  upload: jest.fn(() => Promise.resolve())
 }));
 
 async function renderAppComponent(existingResourceData) {

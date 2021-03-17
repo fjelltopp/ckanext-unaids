@@ -18,3 +18,4 @@ FileInputComponentScripts:
         - frictionless-js.js
         - FileInputComponent.js
     output: unaids/FileInputComponent.js
+  
