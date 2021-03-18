@@ -1,5 +1,5 @@
 import { render, act, fireEvent, screen } from '@testing-library/react';
-import App from './src/app';
+import App from './src/App';
 import axios from 'axios';
 import * as giftless from "giftless-client";
 
