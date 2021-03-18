@@ -10,8 +10,8 @@ main:
 
 FileInputComponentStyles:
     contents:
-        - FileInputComponentStyles.css
-    output: unaids/%(version)s_FileInputComponentStyles.css
+        - FileInputComponent.css
+    output: unaids/%(version)s_FileInputComponent.css
 
 FileInputComponentScripts:
     contents:
