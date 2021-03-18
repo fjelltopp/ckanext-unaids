@@ -69,5 +69,5 @@ jobs:
       - name: Setup extension
         run: |
           cd ./ckanext/unaids/react
-      - run: yarn
-      - run: yarn test
+          yarn
+          yarn test
