@@ -68,6 +68,6 @@ jobs:
             node-version: 12
       - name: Setup extension
         run: |
-          cd ckanext/unaids/react
+          cd ./ckanext/unaids/react
       - run: yarn
       - run: yarn test
