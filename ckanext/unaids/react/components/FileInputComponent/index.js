@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
-import App from './src/app';
+import App from './src/App';
 
 const componentElement =
   document.getElementById('FileInputComponent');

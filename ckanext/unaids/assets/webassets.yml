@@ -11,11 +11,10 @@ main:
 FileInputComponentStyles:
     contents:
         - FileInputComponentStyles.css
-    output: unaids/FileInputComponentStyles.css
+    output: unaids/%(version)s_FileInputComponentStyles.css
 
 FileInputComponentScripts:
     contents:
         - frictionless-js.js
-        - FileInputComponent.js
-    output: unaids/FileInputComponent.js
-  
+        - react_components/FileInputComponent.js
+    output: unaids/%(version)s_FileInputComponent.js

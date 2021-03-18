@@ -1,5 +1,6 @@
 const path = require('path')
 
+const outputPath = path.resolve('../assets/react_components/');
 const components = {
     'FileInputComponent':
         path.resolve(__dirname, 'components', 'FileInputComponent/index.js')
@@ -10,7 +11,7 @@ module.exports = {
     target:'web',
     entry: components,
     output: {
-        path: path.resolve('../assets/'),
+        path: outputPath,
         filename: '[name].js'
     },
     devtool: 'eval-source-map',

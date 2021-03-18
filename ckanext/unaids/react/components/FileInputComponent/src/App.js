@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
-import ProgressBar from "../components/ProgressBar";
-import DisplayUploadedFile from "../components/DisplayUploadedFile";
-import UrlUploader from "../components/UrlUploader";
-import FileUploader from "../components/FileUploader";
-import HiddenFormInputs from "../components/HiddenFormInputs";
+import axios from 'axios';
+import ProgressBar from './ProgressBar';
+import DisplayUploadedFile from './DisplayUploadedFile';
+import UrlUploader from './UrlUploader';
+import FileUploader from './FileUploader';
+import HiddenFormInputs from './HiddenFormInputs';
 
 export default function App({ lfsServer, orgId, datasetId, existingResourceData }) {
 
