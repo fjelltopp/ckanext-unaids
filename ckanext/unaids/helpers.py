@@ -4,7 +4,7 @@ from ckan.plugins.toolkit import get_action
 import ckan.plugins.toolkit as toolkit
 from ckan.common import _, g
 from six.moves.urllib.parse import urlparse
-from typing import Dict, Optional
+from typing import Optional
 import logging
 import os
 from os import path
