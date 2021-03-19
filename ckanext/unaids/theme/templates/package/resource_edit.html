@@ -3,5 +3,5 @@
 {% set package_id = pkg_dict.id %}
 
 {% block form %}
-  {% snippet resource_form_snippet, data=data, errors=errors, error_summary=error_summary, include_metadata=false, pkg_name=pkg_name, stage=stage, allow_upload=g.ofs_impl and logged_in, dataset_type=dataset_type %}
+  {% snippet 'package/snippets/resource_edit_form.html', data=data, errors=errors, error_summary=error_summary, include_metadata=false, pkg_name=pkg_name, stage=stage, allow_upload=g.ofs_impl and logged_in, dataset_type=dataset_type, resource_form_snippet=resource_form_snippet %}
 {% endblock %}
