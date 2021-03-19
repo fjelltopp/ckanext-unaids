@@ -1,6 +1,6 @@
 const path = require('path')
 
-const outputPath = path.resolve('../assets/react_components/');
+const outputPath = path.resolve('../assets/build/');
 const components = {
     'FileInputComponent':
         path.resolve(__dirname, 'components', 'FileInputComponent/index.js')

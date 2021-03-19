@@ -1,3 +1,0 @@
-# add a "yarn build" to your ckan entrypoint.py
-# to compile js binaries to this dir at runtime
-*.js

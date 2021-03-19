@@ -16,5 +16,5 @@ FileInputComponentStyles:
 FileInputComponentScripts:
     contents:
         - frictionless-js.js
-        - react_components/FileInputComponent.js
+        - build/FileInputComponent.js
     output: unaids/%(version)s_FileInputComponent.js
