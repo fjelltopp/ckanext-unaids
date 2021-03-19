@@ -13,6 +13,6 @@
     margin-bottom: 20px;
 }
 
-#FileInputComponent #urlInputField{
+#FileInputComponent .field-url-input-group{
     margin-bottom: 30px;
 }

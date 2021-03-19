@@ -7,7 +7,7 @@ export default function UrlUploader({ linkUrl, resetComponent }) {
             <label className="control-label" htmlFor="field-url">
                 {ckan.i18n._('URL')}
             </label>
-            <div className="input-group">
+            <div className="input-group field-url-input-group">
                 <input
                     id="field-url"
                     data-testid="UrlInputField"
