@@ -4,12 +4,12 @@
     id="FileInputComponent"
     data-lfsServer="{{ h.extstorage_server_url() }}"
     data-orgId="{{ h.extstorage_resource_storage_prefix(pkg_name).split('/')[0] }}"
-    data-datasetId="{{ pkg_name or (data.package_id if data else None) }}"
-    data-existingUrlType="{{ data.url_type if data else None }}"
-    data-existingUrl="{{ data.url if data else None }}"
-    data-existingSha256="{{ data.sha256 if data else None }}"
-    data-existingFileName="{{ h.extstorage_resource_filename(data) if data else None }}"
-    data-existingSize="{{ data.size if data else None }}"
+    data-datasetId="{{ pkg_name or (data.package_id if data else '') }}"
+    data-existingUrlType="{{ data.url_type if data else '' }}"
+    data-existingUrl="{{ data.url if data else '' }}"
+    data-existingSha256="{{ data.sha256 if data else '' }}"
+    data-existingFileName="{{ h.extstorage_resource_filename(data) if data else '' }}"
+    data-existingSize="{{ data.size if data else '' }}"
 ></div>
 
 {% asset 'ckanext-unaids/FileInputComponentScripts' %}
