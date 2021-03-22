@@ -31,8 +31,9 @@ setup(
     message_extractors={
         'ckanext': [
             ('**.py', 'python', None),
+            ('**/node_modules/**.js', 'ignore', None),
+            ('**/react/jest/**.js', 'ignore', None),
             ('**.js', 'javascript', None),
-            ('**/react/components/**.js', 'javascript', None),
             ('**/templates/**.html', 'ckan', None),
         ]}
 )
