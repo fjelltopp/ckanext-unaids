@@ -311,7 +311,7 @@ msgstr "Réorganiser les ressources"
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:89
 #: ckanext/unaids/react/components/FileInputComponent/src/ProgressBar.js:18
 msgid "Loading"
-msgstr ""
+msgstr "Chargement"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:91
 msgid "Authentication Error: Failed to load file uploader"
@@ -325,11 +325,11 @@ msgstr "Supprimer"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:46
 msgid "Upload a file"
-msgstr ""
+msgstr "Télécharger un fichier"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:55
 msgid "Link"
-msgstr ""
+msgstr "Lien"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:67
 msgid "Drag a file into this box or"
