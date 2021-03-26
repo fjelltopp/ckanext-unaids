@@ -5,6 +5,7 @@
     "@babel/preset-react": "^7.12.13",
     "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
+    "bluebird": "^3.7.2",
     "core-js": "^3.9.1",
     "giftless-client": "git+https://github.com/datopian/giftless-client-js.git#ce1e6606a36ea8a2debaa523dc752e9248a0b060",
     "react": "^17.0.1",

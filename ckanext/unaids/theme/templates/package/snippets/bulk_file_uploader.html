@@ -1,0 +1,21 @@
+<section class="module module-narrow module-shallow drag-and-drop">
+    <h2 class="module-heading">
+        <i class="fa fa-upload"></i>
+        <span> {{ _('Bulk Upload') }}</span>
+    </h2>
+    <div class="module-content">
+
+        {% asset 'ckanext-unaids/BulkFileUploaderComponentStyles' %}
+        <div
+            id="BulkFileUploaderComponent"
+            data-lfsServer="{{ h.extstorage_server_url() }}"
+            data-orgId="{{ h.extstorage_resource_storage_prefix(pkg_name).split('/')[0] }}"
+            data-datasetId="{{ pkg.id }}"
+            data-defaultFields="{{ h.bulk_file_uploader_default_fields() }}"
+        >
+        <span class="text-muted">{{ _('Loading') }}</span>
+    </div>
+        {% asset 'ckanext-unaids/BulkFileUploaderComponentScripts' %}   
+
+    </div>
+</section>

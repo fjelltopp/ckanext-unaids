@@ -1,5 +1,6 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
+from ckanext.scheming.helpers import scheming_get_dataset_schema
 from ckan.plugins.toolkit import get_action
 import ckan.plugins.toolkit as toolkit
 from ckan.common import _, g
@@ -13,7 +14,7 @@ import json
 
 log = logging.getLogger()
 STORAGE_NAMESPACE_CONF_KEY = 'ckanext.external_storage.storage_namespace'
-
+BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
 
 def get_all_package_downloads(pkg_dict):
     """
@@ -139,3 +140,7 @@ def get_extstorage_resource_filename(resource):
         url_path = urlparse(resource['url']).path
         return path.basename(url_path)
     return resource['url']
+
+
+def get_bulk_file_uploader_default_fields():
+    return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})
