@@ -11,7 +11,7 @@ In brief:
     ```
     adx bash ckan
     source ../../bin/activate
-    cd /usr/lib/adx/ckanext-unaids/
+    cd /usr/lib/adx/ckanext-extension-name/
     ```
 
 1. Generate the `.pot` file to extract the strings from your extension
