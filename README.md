@@ -7,6 +7,13 @@ Read the docs:
 - https://docs.ckan.org/en/2.9/extensions/translating-extensions.html
 
 In brief:
+0. SSH into the ckan container
+    ```
+    adx bash ckan
+    source ../../bin/activate
+    cd /usr/lib/adx/ckanext-extension-name/
+    ```
+
 1. Generate the `.pot` file to extract the strings from your extension
     ```
     python setup.py extract_messages
