@@ -17,7 +17,8 @@ from ckanext.unaids.helpers import (
     get_all_organizations,
     get_extstorage_resource_authz_scope,
     get_extstorage_resource_storage_prefix,
-    get_extstorage_resource_filename
+    get_extstorage_resource_filename,
+    get_max_resource_size
 )
 import ckanext.unaids.actions as actions
 from ckanext.unaids import (
@@ -103,7 +104,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'get_all_organizations': get_all_organizations,
             u'extstorage_resource_authz_scope': get_extstorage_resource_authz_scope,
             u'extstorage_resource_storage_prefix': get_extstorage_resource_storage_prefix,
-            u'extstorage_resource_filename': get_extstorage_resource_filename
+            u'extstorage_resource_filename': get_extstorage_resource_filename,
+            u'max_resource_size': get_max_resource_size
         }
 
     # IAuthFunctions

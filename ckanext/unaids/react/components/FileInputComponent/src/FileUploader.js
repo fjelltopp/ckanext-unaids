@@ -3,9 +3,9 @@ import { useDropzone } from 'react-dropzone'
 import { Client } from "giftless-client";
 
 export default function FileUploader({
-    lfsServer, orgId, datasetId, authToken,
+    maxResourceSize, lfsServer, orgId, datasetId, authToken,
     setUploadProgress, setUploadFileName, setHiddenInputs,
-    setUploadFailed
+    setUploadError
 }) {
 
     const handleFileSelected = async inputFile => {
@@ -19,7 +19,10 @@ export default function FileUploader({
                 total: progress.total
             });
         }).catch(error => {
-            setUploadFailed(true);
+            setUploadError({
+                error: ckan.i18n._('Server Error'),
+                description: ckan.i18n._('An unknown server error has occurred.')
+            });
             throw error;
         });
         setUploadProgress({ loaded: 100, total: 100 });
@@ -34,10 +37,28 @@ export default function FileUploader({
     const { getRootProps, getInputProps, open } = useDropzone({
         multiple: false,
         noClick: true,
+        maxSize: maxResourceSize * 1000000,
         onDrop: acceptedFiles =>
             handleFileSelected(acceptedFiles[0]),
-        onDropRejected: rejectedFiles =>
-            handleFileSelected(rejectedFiles[0].file),
+        onDropRejected: rejectedFiles => {
+            if (rejectedFiles.length > 1) {
+                setUploadError({
+                    error: ckan.i18n._('Too many files'),
+                    description: ckan.i18n._('You can only upload one file for each resource.')
+                });
+            } else if (JSON.stringify(rejectedFiles).includes('file-too-large')) {
+                setUploadError({
+                    error: ckan.i18n._('File Too Large'),
+                    description: ckan.i18n._(`Resources cannot be larger than ${maxResourceSize} megabytes.`)
+                });
+            } else {
+                setUploadError({
+                    error: ckan.i18n._('Unknown Error'),
+                    description: ckan.i18n._('An unknown error has occurred.')
+                });
+                throw rejectedFiles;
+            };
+        },
     })
 
     const uploadOptions = [

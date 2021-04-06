@@ -6,7 +6,7 @@ import UrlUploader from './UrlUploader';
 import FileUploader from './FileUploader';
 import HiddenFormInputs from './HiddenFormInputs';
 
-export default function App({ lfsServer, orgId, datasetId, existingResourceData }) {
+export default function App({ maxResourceSize, lfsServer, orgId, datasetId, existingResourceData }) {
 
     const defaultUploadProgress = { loaded: 0, total: 0 };
     const [authToken, setAuthToken] = useState();
@@ -15,7 +15,7 @@ export default function App({ lfsServer, orgId, datasetId, existingResourceData 
     const [uploadfileName, setUploadFileName] = useState();
     const [linkUrl, setLinkUrl] = useState();
     const [hiddenInputs, _setHiddenInputs] = useState();
-    const [uploadFailed, setUploadFailed] = useState(false);
+    const [uploadError, setUploadError] = useState(false);
 
     const setHiddenInputs = (newUploadMode, metadata) => {
         setUploadMode(newUploadMode);
@@ -91,10 +91,14 @@ export default function App({ lfsServer, orgId, datasetId, existingResourceData 
         return ckan.i18n._('Authentication Error: Failed to load file uploader');
     }
 
-    if (uploadFailed) return (
+    if (uploadError) return (
         <div className="alert alert-danger">
-            <p><i className="fa fa-exclamation-triangle"></i> Upload Error</p>
-            <p>Please refresh this page and try again</p>
+            <p><i className="fa fa-exclamation-triangle"></i> {uploadError.error}</p>
+            <p>
+                <span>{uploadError.description}</span>
+                <br />
+                <span>{ckan.i18n._('Please refresh this page and try again.')}</span>
+            </p>
         </div>
     )
 
@@ -120,9 +124,9 @@ export default function App({ lfsServer, orgId, datasetId, existingResourceData 
         return (
             [null, 'file'].includes(uploadMode)
                 ? <FileUploader {...{
-                    lfsServer, orgId, datasetId, authToken,
-                    setUploadProgress, setUploadFileName, setHiddenInputs,
-                    setUploadFailed
+                    maxResourceSize, lfsServer, orgId, datasetId,
+                    authToken, setUploadProgress, setUploadFileName,
+                    setHiddenInputs, setUploadError
                 }} />
                 : <UrlUploader {...{ linkUrl, resetComponent }} />
         )

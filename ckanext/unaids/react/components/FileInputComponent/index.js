@@ -8,14 +8,11 @@ const getAttr = key => {
   const val = componentElement.getAttribute(`data-${key}`);
   return ['None', ''].includes(val) ? null : val;
 };
-const requiredString = str => {
-  console.assert(str.length);
-  return str;
-}
 const
-  lfsServer = requiredString(getAttr('lfsServer')),
-  orgId = requiredString(getAttr('orgId')),
-  datasetId = requiredString(getAttr('datasetId'));
+  maxResourceSize = parseInt(getAttr('maxResourceSize')),
+  lfsServer = getAttr('lfsServer'),
+  orgId = getAttr('orgId'),
+  datasetId = getAttr('datasetId');
 
 const existingResourceData = {
   urlType: getAttr('existingUrlType'),
@@ -29,8 +26,8 @@ const existingResourceData = {
 window.addEventListener('load', function () {
   ReactDOM.render(
     <App {...{
-      lfsServer, orgId, datasetId,
-      existingResourceData
+      maxResourceSize, lfsServer, orgId,
+      datasetId, existingResourceData
     }} />,
     componentElement
   );

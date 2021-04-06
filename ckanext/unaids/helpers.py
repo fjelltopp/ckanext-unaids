@@ -13,6 +13,7 @@ import json
 
 log = logging.getLogger()
 STORAGE_NAMESPACE_CONF_KEY = 'ckanext.external_storage.storage_namespace'
+MAX_RESOURCE_SIZE = 'ckan.max_resource_size'
 
 
 def get_all_package_downloads(pkg_dict):
@@ -139,3 +140,9 @@ def get_extstorage_resource_filename(resource):
         url_path = urlparse(resource['url']).path
         return path.basename(url_path)
     return resource['url']
+
+
+def get_max_resource_size():
+    """Get the max resource size for this CKAN instance
+    """
+    return toolkit.config.get(MAX_RESOURCE_SIZE)
