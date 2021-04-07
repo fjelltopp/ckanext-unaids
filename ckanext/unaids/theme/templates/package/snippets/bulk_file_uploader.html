@@ -5,17 +5,42 @@
     </h2>
     <div class="module-content">
 
-        {% asset 'ckanext-unaids/BulkFileUploaderComponentStyles' %}
-        <div
-            id="BulkFileUploaderComponent"
-            data-lfsServer="{{ h.extstorage_server_url() }}"
-            data-orgId="{{ h.extstorage_resource_storage_prefix(pkg_name).split('/')[0] }}"
-            data-datasetId="{{ pkg.id }}"
-            data-defaultFields="{{ h.bulk_file_uploader_default_fields() }}"
-        >
-        <span class="text-muted">{{ _('Loading') }}</span>
-    </div>
-        {% asset 'ckanext-unaids/BulkFileUploaderComponentScripts' %}   
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#BulkFileUploaderComponentModal">
+            <i className="fa fa-plus"></i>
+            <span>{{ _('Add files') }}</span>
+        </button>
+
+        <div class="modal fade" id="BulkFileUploaderComponentModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h4 class="modal-title">{{ _('Bulk Upload') }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% asset 'ckanext-unaids/BulkFileUploaderComponentStyles' %}
+                        <div
+                            id="BulkFileUploaderComponent"
+                            data-lfsServer="{{ h.extstorage_server_url() }}"
+                            data-orgId="{{ h.extstorage_resource_storage_prefix(pkg_name).split('/')[0] }}"
+                            data-datasetId="{{ pkg.id }}"
+                            data-defaultFields="{{ h.bulk_file_uploader_default_fields() }}"
+                        >
+                            <span class="text-muted">{{ _('Loading') }}</span>
+                        </div>
+                        {% asset 'ckanext-unaids/BulkFileUploaderComponentScripts' %}  
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // fix https://stackoverflow.com/q/10636667/2068836
+            var modal = document.getElementById('BulkFileUploaderComponentModal');
+            document.body.appendChild(modal);
+        </script>
 
     </div>
 </section>

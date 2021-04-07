@@ -8,15 +8,11 @@ const getAttr = key => {
   const val = componentElement.getAttribute(`data-${key}`);
   return ['None', ''].includes(val) ? null : val;
 };
-const requiredString = str => {
-  console.assert(str.length);
-  return str;
-}
 const
-  lfsServer = requiredString(getAttr('lfsServer')),
-  orgId = requiredString(getAttr('orgId')),
-  datasetId = requiredString(getAttr('datasetId')),
-  defaultFields = JSON.parse(requiredString(getAttr('defaultFields')));
+  lfsServer = getAttr('lfsServer'),
+  orgId = getAttr('orgId'),
+  datasetId = getAttr('datasetId'),
+  defaultFields = JSON.parse(getAttr('defaultFields'));
 
 const loadCkan = callback => {
   if (
