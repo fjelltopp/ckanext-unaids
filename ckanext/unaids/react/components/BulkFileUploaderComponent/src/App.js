@@ -10,10 +10,10 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
     const [pendingFiles, setPendingFiles] = useState([]);
     const [uploadInProgress, setUploadInProgress] = useState(false);
     const [uploadsComplete, setUploadsComplete] = useState(false);
-    const [uploadError, setUploadError] = useState(false);
+    const [networkError, setNetworkError] = useState(false);
 
-    const handleError = (errorType, error) => {
-        setUploadError(errorType);
+    const handleNetworkError = (errorType, error) => {
+        setNetworkError(errorType);
         throw error;
     };
 
@@ -36,36 +36,39 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
             { withCredentials: true }
         )
             .then(res => res.data.result.token)
-            .catch(error => handleError(ckan.i18n._('Authorisation Error'), error));
+            .catch(error => handleNetworkError(ckan.i18n._('Authorisation Error'), error));
         const client = new Client(lfsServer, authToken, ['basic']);
         Promise.mapSeries(pendingFiles, async (file, index) => {
-            const localFile = data.open(file);
-            setFileProgress(index, 0, 100);
-            await client.upload(
-                localFile, orgId, datasetId,
-                ({ loaded, total }) =>
-                    setFileProgress(index, loaded, total + 1)
-            ).catch(error =>
-                handleError(ckan.i18n._('File Upload Error'), error)
-            );
-            await axios({
-                method: 'POST',
-                url: '/api/3/action/resource_create',
-                data: {
-                    package_id: datasetId,
-                    url_type: 'upload',
-                    name: localFile._descriptor.name,
-                    sha256: localFile._computedHashes.sha256,
-                    size: localFile._descriptor.size,
-                    url: localFile._descriptor.name,
-                    lfs_prefix: `${orgId}/${datasetId}`,
-                    ...defaultFields
-                },
-                withCredentials: true
-            }).catch(error =>
-                handleError(ckan.i18n._('Resource Create Error'), error)
-            );
-            setFileProgress(index, 100, 100);
+            if (!file.error) {
+                const localFile = data.open(file);
+                setFileProgress(index, 0, 100);
+                await client.upload(
+                    localFile, orgId, datasetId,
+                    ({ loaded, total }) =>
+                        setFileProgress(index, loaded, total + 1)
+                ).catch(error =>
+                    handleNetworkError(ckan.i18n._('File Upload Error'), error)
+                );
+                await axios({
+                    method: 'POST',
+                    url: '/api/3/action/resource_create',
+                    data: {
+                        package_id: datasetId,
+                        url_type: 'upload',
+                        name: localFile._descriptor.name,
+                        sha256: localFile._computedHashes.sha256,
+                        size: localFile._descriptor.size,
+                        url: localFile._descriptor.name,
+                        lfs_prefix: `${orgId}/${datasetId}`,
+                        ...defaultFields
+                    },
+                    withCredentials: true
+                }).catch(error =>
+                    handleNetworkError(ckan.i18n._('Resource Create Error'), error)
+                );
+                setFileProgress(index, 100, 100);
+            }
+
         }).then(() => {
             setUploadInProgress(false);
             setUploadsComplete(true);
@@ -75,16 +78,21 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
     function PendingFilesTable() {
         const label = (file, index) => (
             <>
-                <span>{file.name}</span>
-                {!file.progress &&
-                    <i
-                        className="fa fa-close text-danger remove-file-btn"
-                        onClick={() => removeFileFromPendingFiles(index)}
-                    ></i>
+                <div>
+                    <span>{file.name}</span>
+                    {!file.progress &&
+                        <i
+                            className="fa fa-close text-danger remove-file-btn"
+                            onClick={() => removeFileFromPendingFiles(index)}
+                        ></i>
+                    }
+                </div>
+                {file.error &&
+                    <p className="label label-danger">{file.error}</p>
                 }
             </>
         )
-        const progressBar = file => file.progress &&
+        const progressBar = file => !file.error && file.progress &&
             <ProgressBar uploadProgress={file.progress} />
         return (
             <table className="table">
@@ -134,11 +142,11 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
         </h1>
     )
 
-    if (uploadError) {
+    if (networkError) {
         return (
             <>
                 {Header(
-                    uploadError,
+                    networkError,
                     'text-danger',
                     'fa-exclamation-triangle'
                 )}
