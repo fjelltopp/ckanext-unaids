@@ -9,14 +9,19 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
 
     const [pendingFiles, setPendingFiles] = useState([]);
     const [uploadInProgress, setUploadInProgress] = useState(false);
-    const [uploadsComplete, setUploadsComplete] = useState(false)
+    const [uploadsComplete, setUploadsComplete] = useState(false);
+    const [uploadError, setUploadError] = useState(false);
+
+    const handleError = (errorType, error) => {
+        setUploadError(errorType);
+        throw error;
+    };
 
     const setFileProgress = (pendingFileIndex, loaded, total) => {
         let _pendingFiles = [...pendingFiles];
         _pendingFiles[pendingFileIndex].progress = { loaded, total };
         setPendingFiles(_pendingFiles);
     }
-
     const removeFileFromPendingFiles = index => {
         let _pendingFiles = [...pendingFiles];
         _pendingFiles.splice(index, 1)
@@ -29,7 +34,9 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
             '/api/3/action/authz_authorize',
             { scopes: `obj:ckan/${datasetId}/*:write` },
             { withCredentials: true }
-        ).then(res => res.data.result.token);
+        )
+            .then(res => res.data.result.token)
+            .catch(error => handleError(ckan.i18n._('Authorisation Error'), error));
         const client = new Client(lfsServer, authToken, ['basic']);
         Promise.mapSeries(pendingFiles, async (file, index) => {
             const localFile = data.open(file);
@@ -38,6 +45,8 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
                 localFile, orgId, datasetId,
                 ({ loaded, total }) =>
                     setFileProgress(index, loaded, total + 1)
+            ).catch(error =>
+                handleError(ckan.i18n._('File Upload Error'), error)
             );
             await axios({
                 method: 'POST',
@@ -53,7 +62,9 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
                     ...defaultFields
                 },
                 withCredentials: true
-            });
+            }).catch(error =>
+                handleError(ckan.i18n._('Resource Create Error'), error)
+            );
             setFileProgress(index, 100, 100);
         }).then(() => {
             setUploadInProgress(false);
@@ -123,7 +134,21 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
         </h1>
     )
 
-    if (uploadsComplete) {
+    if (uploadError) {
+        return (
+            <>
+                {Header(
+                    uploadError,
+                    'text-danger',
+                    'fa-exclamation-triangle'
+                )}
+                <hr />
+                <h3 className="text-center">
+                    {ckan.i18n._('Please refresh this page and try again')}
+                </h3>
+            </>
+        )
+    } else if (uploadsComplete) {
         return (
             <>
                 {Header(
