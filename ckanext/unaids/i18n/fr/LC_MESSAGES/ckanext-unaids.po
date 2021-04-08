@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2021-03-22 10:43+0000\n"
+"POT-Creation-Date: 2021-04-06 13:45+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: \n"
 "Language: fr\n"
@@ -27,11 +27,11 @@ msgstr "Ressource introuvable."
 msgid "TaskStatus was not found."
 msgstr "l'état actuel de la tâche est introuvable."
 
-#: ckanext/unaids/helpers.py:81
+#: ckanext/unaids/helpers.py:82
 msgid "Naomi Geographic Data Input"
 msgstr "Entrée de données géographiques pour le modèle Naomi"
 
-#: ckanext/unaids/helpers.py:82
+#: ckanext/unaids/helpers.py:83
 msgid "Geographic data formatted for the Naomi model."
 msgstr "Données géographiques formatées pour le modèle Naomi."
 
@@ -41,27 +41,27 @@ msgstr ""
 "Licence Creative Commons Attribution pour les organisations "
 "intergouvernementales"
 
-#: ckanext/unaids/plugin.py:85
+#: ckanext/unaids/plugin.py:86
 msgid "Organization"
 msgstr "Organisation"
 
-#: ckanext/unaids/plugin.py:86
+#: ckanext/unaids/plugin.py:87
 msgid "Data Type"
 msgstr "Type de donnés"
 
-#: ckanext/unaids/plugin.py:87
+#: ckanext/unaids/plugin.py:88
 msgid "Tags"
 msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:88
+#: ckanext/unaids/plugin.py:89
 msgid "Year"
 msgstr "Année"
 
-#: ckanext/unaids/plugin.py:89
+#: ckanext/unaids/plugin.py:90
 msgid "Location"
 msgstr "Lieu"
 
-#: ckanext/unaids/plugin.py:158
+#: ckanext/unaids/plugin.py:160
 msgid "Data Explorer"
 msgstr "Explorateur de données"
 
@@ -317,21 +317,58 @@ msgstr "Chargement"
 msgid "Authentication Error: Failed to load file uploader"
 msgstr ""
 
+#: ckanext/unaids/react/components/FileInputComponent/src/App.js:100
+msgid "Please refresh this page and try again."
+msgstr ""
+
 #: ckanext/unaids/react/components/FileInputComponent/src/DisplayUploadedFile.js:14
 #: ckanext/unaids/react/components/FileInputComponent/src/UrlUploader.js:26
 #: ckanext/unaids/theme/templates/snippets/search_form.html:14
 msgid "Remove"
 msgstr "Supprimer"
 
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:23
+msgid "Server Error"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:24
+msgid "An unknown server error has occurred."
+msgstr ""
+
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:46
+msgid "Too many files"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:47
+#, fuzzy
+msgid "You can only upload one file for each resource."
+msgstr "Cette ressource ne permet pas le transfert groupé."
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:51
+msgid "File Too Large"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:52
+msgid "Resources cannot be larger than ${maxResourceSize} megabytes."
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:56
+msgid "Unknown Error"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:57
+msgid "An unknown error has occurred."
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:67
 msgid "Upload a file"
 msgstr "Télécharger un fichier"
 
-#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:55
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:76
 msgid "Link"
 msgstr "Lien"
 
-#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:67
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:88
 msgid "Drag a file into this box or"
 msgstr ""
 
@@ -608,59 +645,6 @@ msgstr "Données VMMC"
 msgid "Filter Results"
 msgstr "Résultats du filtre"
 
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:21
-msgid ""
-"Added field <q>{key}</q> with value <q>{value}</q> to resource "
-"{resource_link} in {pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:30
-msgid "Added field <q>{key}</q> to resource {resource_link} in {pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:38
-msgid "Added the following fields to resource {resource_link} in {pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:45
-msgid "{key} with value {value}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:50
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:73
-msgid "{key}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:59
-msgid "Removed field <q>{key}</q> from resource {resource_link} in {pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:67
-msgid "Removed the following fields from resource {resource_link} in {pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:81
-msgid ""
-"Changed value of field <q>{key}</q> of resource {resource_link} to "
-"<q>{new_val}</q> (previously <q>{old_val}</q>) in {pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:91
-msgid ""
-"Changed value of field <q>{key}</q> to <q>{new_val}</q> in resource "
-"{resource_link} in {pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:100
-msgid ""
-"Removed the value of field <q>{key}</q> in resource {resource_link} in "
-"{pkg_link}"
-msgstr ""
-
-#: ckanext/unaids/theme/templates/snippets/changes/resource_extras.html:108
-msgid "No fields were updated. See the metadata diff for more details."
-msgstr ""
-
 #: ckanext/unaids/theme/templates/user/dashboard.html:5
 msgid "Profile settings"
 msgstr "Paramètres de profil"
@@ -685,4 +669,3 @@ msgstr "Mes inscriptions"
 
 #~ msgid "Voluntary Medical Male Circumcision (VMMC) Data"
 #~ msgstr "Données de circoncision masculine médicale volontaire"
-
