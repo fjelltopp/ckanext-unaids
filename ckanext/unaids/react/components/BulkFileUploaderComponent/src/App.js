@@ -5,7 +5,7 @@ import FileUploader from './FileUploader';
 import { Client } from 'giftless-client';
 import ProgressBar from './ProgressBar';
 
-export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
+export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defaultFields }) {
 
     const [pendingFiles, setPendingFiles] = useState([]);
     const [uploadInProgress, setUploadInProgress] = useState(false);
@@ -183,7 +183,7 @@ export default function App({ lfsServer, orgId, datasetId, defaultFields }) {
     } else {
         return (
             <>
-                <FileUploader {...{ setPendingFiles }} />
+                <FileUploader {...{ maxResourceSize, setPendingFiles }} />
                 <PendingFilesTable />
                 <UploadButton />
             </>

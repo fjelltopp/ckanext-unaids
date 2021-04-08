@@ -1,8 +1,7 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone'
 
-export default function FileUploader({ setPendingFiles }) {
-    const maxResourceSize = 5; // TODO: set up correctly
+export default function FileUploader({ maxResourceSize, setPendingFiles }) {
 
     const { getRootProps, getInputProps, open } = useDropzone({
         noClick: true,
