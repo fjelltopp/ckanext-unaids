@@ -2,6 +2,7 @@
 from ckan.lib.helpers import url_for_static_or_external, check_access
 from ckan.plugins.toolkit import get_action
 import ckan.plugins.toolkit as toolkit
+import ckan.lib.uploader as uploader
 from ckan.common import _, g
 from six.moves.urllib.parse import urlparse
 from typing import Optional
@@ -13,7 +14,6 @@ import json
 
 log = logging.getLogger()
 STORAGE_NAMESPACE_CONF_KEY = 'ckanext.external_storage.storage_namespace'
-MAX_RESOURCE_SIZE = 'ckan.max_resource_size'
 
 
 def get_all_package_downloads(pkg_dict):
@@ -145,4 +145,4 @@ def get_extstorage_resource_filename(resource):
 def get_max_resource_size():
     """Get the max resource size for this CKAN instance
     """
-    return toolkit.config.get(MAX_RESOURCE_SIZE)
+    return uploader.get_max_resource_size()
