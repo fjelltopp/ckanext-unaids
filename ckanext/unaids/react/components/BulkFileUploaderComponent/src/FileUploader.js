@@ -28,8 +28,8 @@ export default function FileUploader({ maxResourceSize, setPendingFiles }) {
     });
 
     return (
-        <div {...getRootProps({ className: 'dropzone' })}>
-            <input {...getInputProps()} />
+        <div {...getRootProps({ className: 'dropzone' })} data-testid="BulkFileUploaderComponent">
+            <input {...getInputProps()} data-testid="BulkFileUploaderInput" />
             <p>{ckan.i18n._('Drag & Drop files here to initiate bulk upload')}</p>
             <div className="btn-group">
                 <button

@@ -12,11 +12,6 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
     const [uploadsComplete, setUploadsComplete] = useState(false);
     const [networkError, setNetworkError] = useState(false);
 
-    const handleNetworkError = (errorType, error) => {
-        setNetworkError(errorType);
-        throw error;
-    };
-
     const setFileProgress = (pendingFileIndex, loaded, total) => {
         let _pendingFiles = [...pendingFiles];
         _pendingFiles[pendingFileIndex].progress = { loaded, total };
@@ -27,52 +22,63 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
         _pendingFiles.splice(index, 1)
         setPendingFiles(_pendingFiles);
     }
+    const handleNetworkError = (errorType, error) => {
+        setNetworkError(errorType);
+        console.error(error);
+    };
 
-    const uploadFiles = async () => {
-        setUploadInProgress(true);
-        const authToken = await axios.post(
+    const getAuthToken = () =>
+        axios.post(
             '/api/3/action/authz_authorize',
             { scopes: `obj:ckan/${datasetId}/*:write` },
             { withCredentials: true }
         )
-            .then(res => res.data.result.token)
-            .catch(error => handleNetworkError(ckan.i18n._('Authorisation Error'), error));
-        const client = new Client(lfsServer, authToken, ['basic']);
-        Promise.mapSeries(pendingFiles, async (file, index) => {
-            if (!file.error) {
-                const localFile = data.open(file);
-                setFileProgress(index, 0, 100);
-                await client.upload(
-                    localFile, orgId, datasetId,
-                    ({ loaded, total }) =>
-                        setFileProgress(index, loaded, total + 1)
-                ).catch(error =>
-                    handleNetworkError(ckan.i18n._('File Upload Error'), error)
-                );
-                await axios({
-                    method: 'POST',
-                    url: '/api/3/action/resource_create',
-                    data: {
-                        package_id: datasetId,
-                        url_type: 'upload',
-                        name: localFile._descriptor.name,
-                        sha256: localFile._computedHashes.sha256,
-                        size: localFile._descriptor.size,
-                        url: localFile._descriptor.name,
-                        lfs_prefix: `${orgId}/${datasetId}`,
-                        ...defaultFields
-                    },
-                    withCredentials: true
-                }).catch(error =>
-                    handleNetworkError(ckan.i18n._('Resource Create Error'), error)
-                );
-                setFileProgress(index, 100, 100);
-            }
+    const uploadFile = (client, localFile, setFileProgress) =>
+        client.upload(
+            localFile, orgId, datasetId,
+            ({ loaded, total }) =>
+                setFileProgress(index, loaded, total + 1)
+        ).catch(error => handleNetworkError(
+            ckan.i18n._('File Upload Error'), error
+        ));
+    const createResource = localFile =>
+        axios.post(
+            '/api/3/action/resource_create',
+            {
+                package_id: datasetId,
+                url_type: 'upload',
+                name: localFile._descriptor.name,
+                sha256: localFile._computedHashes.sha256,
+                size: localFile._descriptor.size,
+                url: localFile._descriptor.name,
+                lfs_prefix: `${orgId}/${datasetId}`,
+                ...defaultFields
+            },
+            { withCredentials: true }
+        ).catch(error => handleNetworkError(
+            ckan.i18n._('Resource Create Error'), error
+        ));
 
-        }).then(() => {
-            setUploadInProgress(false);
-            setUploadsComplete(true);
-        })
+    const uploadFiles = () => {
+        setUploadInProgress(true);
+        getAuthToken()
+            .then(authToken => {
+                const client = new Client(lfsServer, authToken, ['basic']);
+                Promise.mapSeries(pendingFiles, async (file, index) => {
+                    if (!file.error) {
+                        const localFile = data.open(file);
+                        setFileProgress(index, 0, 100);
+                        await uploadFile(client, localFile, setFileProgress);
+                        await createResource(localFile);
+                        setFileProgress(index, 100, 100);
+                        setUploadInProgress(false);
+                        setUploadsComplete(true);
+                    }
+                })
+            })
+            .catch(error => handleNetworkError(
+                ckan.i18n._('Authorisation Error'), error
+            ))
     }
 
     function PendingFilesTable() {
@@ -114,6 +120,7 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
             <button
                 type="button"
                 className={classes}
+                data-testid="UploadFilesButton"
                 onClick={pendingFiles.length ? uploadFiles : null}
             >
                 <i className="fa fa-upload"></i>
