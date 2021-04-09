@@ -70,4 +70,4 @@ jobs:
         run: |
           cd ./ckanext/unaids/react
           yarn
-          yarn test
+          yarn test --silent
