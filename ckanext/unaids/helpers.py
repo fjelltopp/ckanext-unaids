@@ -1,6 +1,5 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
-from ckanext.scheming.helpers import scheming_get_dataset_schema
 from ckan.plugins.toolkit import get_action
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
