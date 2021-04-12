@@ -32,7 +32,7 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
             '/api/3/action/authz_authorize',
             { scopes: `obj:ckan/${datasetId}/*:write` },
             { withCredentials: true }
-        )
+        ).then(res => res.data.result.token)
     const uploadFile = (client, localFile, setFileProgress) =>
         client.upload(
             localFile, orgId, datasetId,
@@ -63,6 +63,7 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
         setUploadInProgress(true);
         getAuthToken()
             .then(authToken => {
+                console.log(authToken);
                 const client = new Client(lfsServer, authToken, ['basic']);
                 Promise.mapSeries(pendingFiles, async (file, index) => {
                     if (!file.error) {
