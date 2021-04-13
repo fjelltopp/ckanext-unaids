@@ -3,7 +3,7 @@
 <div
     id="FileInputComponent"
     data-lfsServer="{{ h.extstorage_server_url() }}"
-    data-maxResourceSize="{{ h.max_resource_size }}"
+    data-maxResourceSize="{{ h.max_resource_size() }}"
     data-orgId="{{ h.extstorage_resource_storage_prefix(pkg_name).split('/')[0] }}"
     data-datasetId="{{ pkg_name or (data.package_id if data else '') }}"
     data-existingUrlType="{{ data.url_type if data else '' }}"

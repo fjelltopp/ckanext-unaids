@@ -103,7 +103,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'extstorage_resource_authz_scope': extstorage_helpers.resource_authz_scope,
             u'extstorage_resource_storage_prefix': extstorage_helpers.resource_storage_prefix,
             u'extstorage_resource_filename': extstorage_helpers.resource_filename,
-            u'max_resource_size': uploader.get_max_resource_size()
+            u'max_resource_size': uploader.get_max_resource_size
         }
 
     # IAuthFunctions
