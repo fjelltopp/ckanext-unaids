@@ -2,11 +2,8 @@
 from ckan.lib.helpers import url_for_static_or_external, check_access
 from ckan.plugins.toolkit import get_action
 from ckan.common import _, g
-from six.moves.urllib.parse import urlparse
-from typing import Optional
 import logging
 import os
-from os import path
 import json
 
 
