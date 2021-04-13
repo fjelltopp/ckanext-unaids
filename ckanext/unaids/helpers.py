@@ -2,7 +2,6 @@
 from ckan.lib.helpers import url_for_static_or_external, check_access
 from ckan.plugins.toolkit import get_action
 import ckan.plugins.toolkit as toolkit
-import ckan.lib.uploader as uploader
 from ckan.common import _, g
 from six.moves.urllib.parse import urlparse
 from typing import Optional
@@ -13,7 +12,6 @@ import json
 
 
 log = logging.getLogger()
-STORAGE_NAMESPACE_CONF_KEY = 'ckanext.external_storage.storage_namespace'
 
 
 def get_all_package_downloads(pkg_dict):
@@ -99,50 +97,3 @@ def get_all_organizations():
     data_dict = {'all_fields': True}
     results = get_action('organization_list')({}, data_dict)
     return results
-
-
-def storage_namespace():
-    """Get the storage namespace for this CKAN instance
-    """
-    ns = toolkit.config.get(STORAGE_NAMESPACE_CONF_KEY)
-    if ns:
-        return ns
-    return 'ckan'
-
-
-def get_extstorage_resource_storage_prefix(package_name, org_name=None):
-    # type: (str, Optional[str]) -> str
-    """Get the resource storage prefix for a package name
-    """
-    if org_name is None:
-        org_name = storage_namespace()
-    return '{}/{}'.format(org_name, package_name)
-
-
-def get_extstorage_resource_authz_scope(package_name, actions=None, org_name=None, resource_id=None):
-    # type: (str, Optional[str], Optional[str], Optional[str]) -> str
-    """Get the authorization scope for package resources
-    """
-    if actions is None:
-        actions = 'read,write'
-    if resource_id is None:
-        resource_id = '*'
-    return 'obj:{}/{}:{}'.format(get_extstorage_resource_storage_prefix(package_name, org_name), resource_id, actions)
-
-
-def get_extstorage_resource_filename(resource):
-    """Get original file name from resource
-    """
-    if 'url' not in resource:
-        return resource['name']
-
-    if resource['url'][0:6] in {'http:/', 'https:'}:
-        url_path = urlparse(resource['url']).path
-        return path.basename(url_path)
-    return resource['url']
-
-
-def get_max_resource_size():
-    """Get the max resource size for this CKAN instance
-    """
-    return uploader.get_max_resource_size()
