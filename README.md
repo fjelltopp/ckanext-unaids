@@ -6,8 +6,15 @@ CKAN Extension for UNADS Styling and custom features
 ## Docs
 - https://docs.ckan.org/en/2.9/extensions/translating-extensions.html
 
-## Steps
-1. SSH into your container:
+In brief:
+0. SSH into the ckan container
+    ```
+    adx bash ckan
+    source ../../bin/activate
+    cd /usr/lib/adx/ckanext-extension-name/
+    ```
+
+1. Generate the `.pot` file to extract the strings from your extension
     ```
     $ adx bash ckan
     $ cd /usr/lib/ckan/venv/
