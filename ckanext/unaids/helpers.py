@@ -1,7 +1,7 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
 from ckan.plugins.toolkit import get_action
-from ckan.plugins import toolkit
+from ckan.plugins import toolkit as toolkit
 from ckan.common import _, g
 import logging
 import os
