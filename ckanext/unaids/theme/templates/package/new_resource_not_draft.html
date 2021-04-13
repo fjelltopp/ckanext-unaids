@@ -24,4 +24,17 @@
   {% else %}
     {% set resource_type = request.args.get("resource_type") %}
   {% endif %}
+
+  {%- set schema = h.scheming_get_dataset_schema(dataset_type) -%}
+  {%- set resource_schema = schema.get("resource_schemas",{}).get(resource_type, {}) -%}
+  {% if not resource_schema.get('bulk_upload', False) %}
+  <section class="module module-narrow module-shallow">
+      <h2 class="module-heading"><i class="fa fa-upload"></i> {{ _('Bulk Upload') }}</h2>
+      <div class="module-content"><p>{{ _('Bulk upload is not possible for this resource.') }}</p></div>
+  </section>
+  {% else %}
+    {% if h.check_access('package_update', {'id':pkg.id }) %}
+      {% snippet 'package/snippets/bulk_file_uploader.html', pkg=pkg %}
+    {% endif %}
+  {% endif %}
 {% endblock %}
