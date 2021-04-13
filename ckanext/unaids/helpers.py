@@ -14,6 +14,7 @@ import json
 
 log = logging.getLogger()
 STORAGE_NAMESPACE_CONF_KEY = 'ckanext.external_storage.storage_namespace'
+BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
 
 
 def get_all_package_downloads(pkg_dict):
@@ -140,6 +141,10 @@ def get_extstorage_resource_filename(resource):
         url_path = urlparse(resource['url']).path
         return path.basename(url_path)
     return resource['url']
+
+
+def get_bulk_file_uploader_default_fields():
+    return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})
 
 
 def get_max_resource_size():

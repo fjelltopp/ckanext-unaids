@@ -33,6 +33,8 @@
       <div class="module-content"><p>{{ _('Bulk upload is not possible for this resource.') }}</p></div>
   </section>
   {% else %}
-    {% include 'ckanext-file_uploader_ui/upload.html' %}
+    {% if h.check_access('package_update', {'id':pkg.id }) %}
+      {% snippet 'package/snippets/bulk_file_uploader.html', pkg=pkg %}
+    {% endif %}
   {% endif %}
 {% endblock %}

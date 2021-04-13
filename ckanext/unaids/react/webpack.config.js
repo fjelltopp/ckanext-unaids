@@ -3,12 +3,14 @@ const path = require('path')
 const outputPath = path.resolve('../assets/build/');
 const components = {
     'FileInputComponent':
-        path.resolve(__dirname, 'components', 'FileInputComponent/index.js')
+        path.resolve(__dirname, 'components', 'FileInputComponent/index.js'),
+    'BulkFileUploaderComponent':
+        path.resolve(__dirname, 'components', 'BulkFileUploaderComponent/index.js')
 }
 
 module.exports = {
     mode: 'development',
-    target:'web',
+    target: 'web',
     entry: components,
     output: {
         path: outputPath,
@@ -35,5 +37,5 @@ module.exports = {
                 }]
             }
         ]
-    }    
+    }
 }
