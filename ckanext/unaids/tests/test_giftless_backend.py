@@ -12,15 +12,14 @@ from ckan.tests.helpers import call_action
 class TestGiftlessBackend(object):
 
     def test_resource_update(self, create_with_upload):
-        dataset = factories.Dataset()
+        user = factories.User()
+        dataset = factories.Dataset(user=user)
         file_name = 'file.csv'
         resource = create_with_upload(
             data='hello,world',
             filename=file_name,
             package_id=dataset['id']
         )
-        assert 'upload' not in resource, \
-            'The resource should no longer have a file attached to it'
         assert 'sha256' in resource
         assert 'lfs_prefix' in resource
         assert resource.get('name', None) == file_name
