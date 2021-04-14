@@ -149,51 +149,51 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                 )
 
     # IResourceController
-    def before_create(self, context, data_dict):
-        print('~'*50)
-        print('before_create')
-        print(data_dict)
-        print('~'*50)
-        return data_dict
+    # def before_create(self, context, data_dict):
+    #     print('~'*50)
+    #     print('before_create')
+    #     print(data_dict)
+    #     print('~'*50)
+    #     return data_dict
 
-    def before_update(self, context, current, data_dict):
-        print('~'*50)
-        print('before_update')
-        print('data_dict')
-        print(data_dict)
-        print('current')
-        print(current)
+    # def before_update(self, context, current, data_dict):
+    #     print('~'*50)
+    #     print('before_update')
+    #     print('data_dict')
+    #     print(data_dict)
+    #     print('current')
+    #     print(current)
 
-        attached_file = data_dict.get('upload', None)
-        if attached_file:
-            if type(attached_file) == FlaskFileStorage:
-                print('~'*50)
-                print(attached_file.headers)
-                lfs_client = LfsClient(
-                    lfs_server_url=extstorage_helpers.server_url(),
-                    auth_token='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZXMiOiJvYmo6Y2thbi9hbGdlcmlhLWlucHV0cy11bmFpZHMtZXN0aW1hdGVzLTIwMjEvKjp3cml0ZSIsIm5hbWUiOiJBZG1pbiIsImlzcyI6Imh0dHA6Ly9kZXYtYWRyIiwiZXhwIjoxNjE4MzI3MzA1LCJuYmYiOjE2MTgzMjY0MDUsInN1YiI6ImFkbWluIn0.IfZB77nZAz69gs3xIUGuCchw6JHCCmBSt_RovG7NBKw-ld6tcGJG1qPdBAX9KFr-cNtxrfxDLpxoSuG5_yB9luIZy7pdpzSYD653C2xRdBQmJAcV9mfKZX_FMXHponDoQx7JUlWphdUUFDdu5yibg_ZSG3s7g3RmUTXhHxOkL0Cmn_OhCNKg3mL7ikqw3-NGn01Pu-b6R7dq8-ypv-Stmd1TMTjRmVN62_om5MNSYqopG8zxpD5Qeee1nV8--GN24sDk8i_9soN4aMU3Qq8c9vPfEaxvM4k-CFhdCbV5J_CFXZcip_Kj8yaM0L8vxFXVDa0A8i2T9_A3RXyRJf6s1w',
-                    transfer_adapters=['basic']
-                )
-                dataset = get_action('package_show')(context, {'id': current['package_id']})
-                lfs_prefix = extstorage_helpers.resource_storage_prefix(current['package_id'])
-                uploaded_file = lfs_client.upload(
-                    file_obj=attached_file,
-                    organization=lfs_prefix.split('/')[0],
-                    repo=dataset['name']
-                )
-                print(uploaded_file)
-                data_dict.pop('upload', None)
-                data_dict.update({
-                    'url_type': 'upload',
-                    'name': attached_file.filename,
-                    'sha256': uploaded_file['oid'],
-                    'size': uploaded_file['size'],
-                    'url': attached_file.filename,
-                    'lfs_prefix': lfs_prefix
-                })
+    #     attached_file = data_dict.get('upload', None)
+    #     if attached_file:
+    #         if type(attached_file) == FlaskFileStorage:
+    #             print('~'*50)
+    #             print(attached_file.headers)
+    #             lfs_client = LfsClient(
+    #                 lfs_server_url=extstorage_helpers.server_url(),
+    #                 auth_token='eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzY29wZXMiOiJvYmo6Y2thbi9hbGdlcmlhLWlucHV0cy11bmFpZHMtZXN0aW1hdGVzLTIwMjEvKjp3cml0ZSIsIm5hbWUiOiJBZG1pbiIsImlzcyI6Imh0dHA6Ly9kZXYtYWRyIiwiZXhwIjoxNjE4MzI3MzA1LCJuYmYiOjE2MTgzMjY0MDUsInN1YiI6ImFkbWluIn0.IfZB77nZAz69gs3xIUGuCchw6JHCCmBSt_RovG7NBKw-ld6tcGJG1qPdBAX9KFr-cNtxrfxDLpxoSuG5_yB9luIZy7pdpzSYD653C2xRdBQmJAcV9mfKZX_FMXHponDoQx7JUlWphdUUFDdu5yibg_ZSG3s7g3RmUTXhHxOkL0Cmn_OhCNKg3mL7ikqw3-NGn01Pu-b6R7dq8-ypv-Stmd1TMTjRmVN62_om5MNSYqopG8zxpD5Qeee1nV8--GN24sDk8i_9soN4aMU3Qq8c9vPfEaxvM4k-CFhdCbV5J_CFXZcip_Kj8yaM0L8vxFXVDa0A8i2T9_A3RXyRJf6s1w',
+    #                 transfer_adapters=['basic']
+    #             )
+    #             dataset = get_action('package_show')(context, {'id': current['package_id']})
+    #             lfs_prefix = extstorage_helpers.resource_storage_prefix(current['package_id'])
+    #             uploaded_file = lfs_client.upload(
+    #                 file_obj=attached_file,
+    #                 organization=lfs_prefix.split('/')[0],
+    #                 repo=dataset['name']
+    #             )
+    #             print(uploaded_file)
+    #             data_dict.pop('upload', None)
+    #             data_dict.update({
+    #                 'url_type': 'upload',
+    #                 'name': attached_file.filename,
+    #                 'sha256': uploaded_file['oid'],
+    #                 'size': uploaded_file['size'],
+    #                 'url': attached_file.filename,
+    #                 'lfs_prefix': lfs_prefix
+    #             })
 
-                print('~'*50)
-                return data_dict
+    #             print('~'*50)
+    #             return data_dict
 
 
 class UNAIDSReclineView(ReclineViewBase):
