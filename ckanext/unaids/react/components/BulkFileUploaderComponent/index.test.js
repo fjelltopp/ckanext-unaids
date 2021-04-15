@@ -53,36 +53,38 @@ const selectFilesToUpload = async (elementTestId, files) => {
     fireEvent.drop(component);
   });
 }
-const uploadFilesAndCreateResources = async successfulFileUploads => {
+const uploadFilesAndCreateResources = async (validFileUploads, invalidFileUpload) => {
   fireEvent.click(screen.getByTestId('UploadFilesButton'));
   await screen.findByText('Uploads Complete');
   const filesUploaded = await screen.findAllByText('Uploaded');
-  expect(filesUploaded).toHaveLength(successfulFileUploads.length);
+  expect(filesUploaded).toHaveLength(validFileUploads.length);
+  const requestsForAuthToken = validFileUploads.length + invalidFileUpload.length;
+  const requestsForUploadFile = requestsForAuthToken - invalidFileUpload.length;
   expect(mockedAxiosPost).toHaveBeenCalledTimes(
-    // 2 requests as we want to getAuthToken and then uploadFile
-    successfulFileUploads.length * 2
+    requestsForAuthToken + requestsForUploadFile
   );
 }
 
 const testSuccessfulUpload = async elementTestId => {
-  const files = [
+  const validFiles = [
     new File(['file'], 'file_1.json'),
     new File(['file'], 'file_2.json'),
   ];
-  await selectFilesToUpload(elementTestId, files);
+  const invalidFiles = [];
+  await selectFilesToUpload(elementTestId, validFiles);
   await screen.findByText('file_1.json');
   await screen.findByText('file_2.json');
-  await uploadFilesAndCreateResources(files);
+  await uploadFilesAndCreateResources(validFiles, invalidFiles);
 };
 const testUploadWithFileTooLarge = async elementTestId => {
-  const files = [
-    new File(['file'], 'file_1.json'),
-    new File([new ArrayBuffer(maxResourceSize * 10000000)], 'file_2.json'),
-  ];
-  await selectFilesToUpload(elementTestId, files);
+  const validFile = new File(['file'], 'file_1.json');
+  const invalidFile = new File(
+    [new ArrayBuffer(maxResourceSize * 10000000)], 'file_2.json'
+  );
+  await selectFilesToUpload(elementTestId, [validFile, invalidFile]);
   await screen.findByText('file_1.json');
   await screen.findByText('file_2.json');
-  await uploadFilesAndCreateResources([files[0]]);
+  await uploadFilesAndCreateResources([validFile], [invalidFile]);
 };
 
 describe('test without network issues', () => {
