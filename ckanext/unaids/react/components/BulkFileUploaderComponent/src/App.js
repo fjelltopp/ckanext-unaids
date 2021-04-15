@@ -63,7 +63,6 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
         setUploadInProgress(true);
         getAuthToken()
             .then(authToken => {
-                console.log(authToken);
                 const client = new Client(lfsServer, authToken, ['basic']);
                 Promise.mapSeries(pendingFiles, async (file, index) => {
                     if (!file.error) {
