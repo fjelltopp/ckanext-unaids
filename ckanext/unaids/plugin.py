@@ -172,8 +172,21 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             # scope = extstorage_helpers.resource_authz_scope(
             #     package_name, org_name=org_name, actions='write', resource_id=resource_id)
             scope = 'obj:ckan/{}/*:write '.format(package_name)
+            
             print('---> {}'.format(scope))
+            
             authz_result = authorize(context, {"scopes": [scope]})
+
+            print('~'*50)
+            print('context')
+            for key in context.keys():
+                print('{} = {}'.format(key, context[key]))
+            print('~'*50)
+            print('authz_result')
+            for key in authz_result.keys():
+                print('{} = {}'.format(key, authz_result[key]))
+            print('~'*50)
+
             if not authz_result or not authz_result.get('token', False):
                 raise RuntimeError("Failed to get authorization token for LFS server")
             if len(authz_result['granted_scopes']) == 0:
