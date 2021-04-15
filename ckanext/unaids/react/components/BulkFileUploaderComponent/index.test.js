@@ -59,7 +59,8 @@ const uploadFilesAndCreateResources = async successfulFileUploads => {
   const filesUploaded = await screen.findAllByText('Uploaded');
   expect(filesUploaded).toHaveLength(successfulFileUploads.length);
   expect(mockedAxiosPost).toHaveBeenCalledTimes(
-    ['get authToken', ...successfulFileUploads].length
+    // 2 requests as we want to getAuthToken and then uploadFile
+    successfulFileUploads.length * 2
   );
 }
 
