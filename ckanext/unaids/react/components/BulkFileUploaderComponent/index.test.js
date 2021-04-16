@@ -5,6 +5,8 @@ import * as giftless from "giftless-client";
 
 jest.mock('axios');
 const maxResourceSize = 1
+const requestAuthTokenUrl = '/api/3/action/authz_authorize';
+const requestCreateResourceUrl = '/api/3/action/resource_create';
 let mockedAxiosPost = undefined;
 
 function setupMocks({ applyNetworkIssue }) {
@@ -17,13 +19,13 @@ function setupMocks({ applyNetworkIssue }) {
   }));
   mockedAxiosPost = axios.post.mockImplementation(url => {
     switch (url) {
-      case '/api/3/action/authz_authorize':
+      case requestAuthTokenUrl:
         return applyNetworkIssue == 'ckan.api.authz_authorize'
           ? Promise.reject('Mocked Promise Rejection')
           : Promise.resolve({
             data: { result: { token: 'MockedToken' } }
           })
-      case '/api/3/action/resource_create':
+      case requestCreateResourceUrl:
         return applyNetworkIssue == 'ckan.api.resource_create'
           ? Promise.reject('Mocked Promise Rejection')
           : Promise.resolve()
@@ -58,11 +60,16 @@ const uploadFilesAndCreateResources = async (validFileUploads, invalidFileUpload
   await screen.findByText('Uploads Complete');
   const filesUploaded = await screen.findAllByText('Uploaded');
   expect(filesUploaded).toHaveLength(validFileUploads.length);
-  const requestsForAuthToken = validFileUploads.length + invalidFileUpload.length;
-  const requestsForUploadFile = requestsForAuthToken - invalidFileUpload.length;
-  expect(mockedAxiosPost).toHaveBeenCalledTimes(
-    requestsForAuthToken + requestsForUploadFile
-  );
+  const expectedAuthTokenRequests =
+    validFileUploads.length + invalidFileUpload.length;
+  const expectedCreateResourceRequests =
+    expectedAuthTokenRequests - invalidFileUpload.length;
+  const authTokenRequests = mockedAxiosPost.mock.calls
+    .filter(mock => mock[0] === requestAuthTokenUrl).length;
+  const createResourceRequests = mockedAxiosPost.mock.calls
+    .filter(mock => mock[0] === requestCreateResourceUrl).length;
+    expect(expectedAuthTokenRequests).toEqual(authTokenRequests);
+    expect(expectedCreateResourceRequests).toEqual(createResourceRequests);
 }
 
 const testSuccessfulUpload = async elementTestId => {
