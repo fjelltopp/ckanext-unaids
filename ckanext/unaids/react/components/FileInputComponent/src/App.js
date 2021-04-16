@@ -9,12 +9,11 @@ import HiddenFormInputs from './HiddenFormInputs';
 export default function App({ maxResourceSize, lfsServer, orgId, datasetId, existingResourceData }) {
 
     const defaultUploadProgress = { loaded: 0, total: 0 };
-    const [authToken, setAuthToken] = useState();
     const [uploadMode, setUploadMode] = useState();
     const [uploadProgress, setUploadProgress] = useState(defaultUploadProgress);
     const [uploadfileName, setUploadFileName] = useState();
     const [linkUrl, setLinkUrl] = useState();
-    const [hiddenInputs, _setHiddenInputs] = useState();
+    const [hiddenInputs, _setHiddenInputs] = useState({});
     const [uploadError, setUploadError] = useState(false);
 
     const setHiddenInputs = (newUploadMode, metadata) => {
@@ -85,12 +84,6 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetId, exis
         };
     }, []);
 
-    if (!authToken) {
-        return ckan.i18n._('Loading');
-    } else if (authToken === 'error') {
-        return ckan.i18n._('Authentication Error: Failed to load file uploader');
-    }
-
     if (uploadError) return (
         <div className="alert alert-danger">
             <p><i className="fa fa-exclamation-triangle"></i> {uploadError.error}</p>
@@ -125,7 +118,7 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetId, exis
             [null, 'file'].includes(uploadMode)
                 ? <FileUploader {...{
                     maxResourceSize, lfsServer, orgId, datasetId,
-                    authToken, setUploadProgress, setUploadFileName,
+                    setUploadProgress, setUploadFileName,
                     setHiddenInputs, setUploadError
                 }} />
                 : <UrlUploader {...{ linkUrl, resetComponent }} />
