@@ -75,10 +75,8 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
                 await uploadFile(client, index, localFile, setFileProgress);
                 await createResource(localFile);
                 setFileProgress(index, 100, 100);
-                setUploadInProgress(false);
-                setUploadsComplete(true);
             }
-        })
+        }).then(() => setUploadsComplete(true));
     }
 
     function PendingFilesTable() {
