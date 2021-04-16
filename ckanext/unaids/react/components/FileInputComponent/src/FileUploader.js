@@ -14,42 +14,44 @@ export default function FileUploader({
             '/api/3/action/authz_authorize',
             { scopes: `obj:ckan/${datasetId}/*:write` },
             { withCredentials: true }
-        ).then(res => res.data.result.token)
-
-    const handleFileSelected = async inputFile => {
-        if (!inputFile) return;
-        setUploadProgress({ loaded: 0, total: 1 });
-        const file = data.open(inputFile);
-        getAuthToken()
-            .then(async authToken => {
-                const client = new Client(lfsServer, authToken, ['basic']);
-                await client.upload(file, orgId, datasetId, progress => {
-                    setUploadProgress({
-                        loaded: progress.loaded,
-                        total: progress.total
-                    });
-                }).catch(error => {
-                    setUploadError({
-                        error: ckan.i18n._('Authentication Error'),
-                        description: ckan.i18n._('You are not authorized to upload this resource.')
-                    });
-                    throw error;
-                });
-                setUploadProgress({ loaded: 100, total: 100 });
-                setUploadFileName(file._descriptor.name);
-                setHiddenInputs('file', {
-                    sha256: file._computedHashes.sha256,
-                    size: file._descriptor.size,
-                    url: file._descriptor.name
-                })
-            })
+        )
+            .then(res => res.data.result.token)
             .catch(error => {
+                setUploadError({
+                    error: ckan.i18n._('Authorisation Error'),
+                    description: ckan.i18n._('You are not authorized to upload this resource.')
+                });
+                throw error;
+            });
+    const uploadFile = (client, file) =>
+        client.upload(file, orgId, datasetId, progress =>
+            setUploadProgress({
+                loaded: progress.loaded,
+                total: progress.total
+            })
+        )
+            .catch(error => handleNetworkError(() => {
                 setUploadError({
                     error: ckan.i18n._('Server Error'),
                     description: ckan.i18n._('An unknown server error has occurred.')
                 });
                 throw error;
-            })
+            }));
+
+    const handleFileSelected = async inputFile => {
+        if (!inputFile) return;
+        setUploadProgress({ loaded: 0, total: 1 });
+        const file = data.open(inputFile);
+        const authToken = await getAuthToken();
+        const client = new Client(lfsServer, authToken, ['basic']);
+        await uploadFile(client, file);
+        setUploadProgress({ loaded: 100, total: 100 });
+        setUploadFileName(file._descriptor.name);
+        setHiddenInputs('file', {
+            sha256: file._computedHashes.sha256,
+            size: file._descriptor.size,
+            url: file._descriptor.name
+        })
     }
 
     const { getRootProps, getInputProps, open } = useDropzone({
