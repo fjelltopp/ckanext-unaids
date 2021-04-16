@@ -30,13 +30,13 @@ export default function FileUploader({
                 total: progress.total
             })
         )
-            .catch(error => handleNetworkError(() => {
+            .catch(error => {
                 setUploadError({
                     error: ckan.i18n._('Server Error'),
                     description: ckan.i18n._('An unknown server error has occurred.')
                 });
                 throw error;
-            }));
+            });
 
     const handleFileSelected = async inputFile => {
         if (!inputFile) return;
