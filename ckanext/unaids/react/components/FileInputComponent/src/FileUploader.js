@@ -1,30 +1,50 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone'
+import axios from 'axios';
 import { Client } from "giftless-client";
 
 export default function FileUploader({
-    maxResourceSize, lfsServer, orgId, datasetId, authToken,
+    maxResourceSize, lfsServer, orgId, datasetId,
     setUploadProgress, setUploadFileName, setHiddenInputs,
     setUploadError
 }) {
+
+    const getAuthToken = () =>
+        axios.post(
+            '/api/3/action/authz_authorize',
+            { scopes: `obj:ckan/${datasetId}/*:write` },
+            { withCredentials: true }
+        )
+            .then(res => res.data.result.token)
+            .catch(error => {
+                setUploadError({
+                    error: ckan.i18n._('Authorisation Error'),
+                    description: ckan.i18n._('You are not authorized to upload this resource.')
+                });
+                throw error;
+            });
+    const uploadFile = (client, file) =>
+        client.upload(file, orgId, datasetId, progress =>
+            setUploadProgress({
+                loaded: progress.loaded,
+                total: progress.total
+            })
+        )
+            .catch(error => handleNetworkError(() => {
+                setUploadError({
+                    error: ckan.i18n._('Server Error'),
+                    description: ckan.i18n._('An unknown server error has occurred.')
+                });
+                throw error;
+            }));
 
     const handleFileSelected = async inputFile => {
         if (!inputFile) return;
         setUploadProgress({ loaded: 0, total: 1 });
         const file = data.open(inputFile);
+        const authToken = await getAuthToken();
         const client = new Client(lfsServer, authToken, ['basic']);
-        await client.upload(file, orgId, datasetId, progress => {
-            setUploadProgress({
-                loaded: progress.loaded,
-                total: progress.total
-            });
-        }).catch(error => {
-            setUploadError({
-                error: ckan.i18n._('Server Error'),
-                description: ckan.i18n._('An unknown server error has occurred.')
-            });
-            throw error;
-        });
+        await uploadFile(client, file);
         setUploadProgress({ loaded: 100, total: 100 });
         setUploadFileName(file._descriptor.name);
         setHiddenInputs('file', {
