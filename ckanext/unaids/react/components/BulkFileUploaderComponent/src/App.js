@@ -32,8 +32,12 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
             '/api/3/action/authz_authorize',
             { scopes: `obj:ckan/${datasetId}/*:write` },
             { withCredentials: true }
-        ).then(res => res.data.result.token)
-    const uploadFile = (client, localFile, setFileProgress) =>
+        )
+            .then(res => res.data.result.token)
+            .catch(error => handleNetworkError(
+                ckan.i18n._('Authorisation Error'), error
+            ))
+    const uploadFile = (client, index, localFile, setFileProgress) =>
         client.upload(
             localFile, orgId, datasetId,
             ({ loaded, total }) =>
@@ -61,24 +65,20 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
 
     const uploadFiles = () => {
         setUploadInProgress(true);
-        getAuthToken()
-            .then(authToken => {
-                const client = new Client(lfsServer, authToken, ['basic']);
-                Promise.mapSeries(pendingFiles, async (file, index) => {
-                    if (!file.error) {
-                        const localFile = data.open(file);
-                        setFileProgress(index, 0, 100);
-                        await uploadFile(client, localFile, setFileProgress);
-                        await createResource(localFile);
-                        setFileProgress(index, 100, 100);
-                        setUploadInProgress(false);
-                        setUploadsComplete(true);
-                    }
-                })
-            })
-            .catch(error => handleNetworkError(
-                ckan.i18n._('Authorisation Error'), error
-            ))
+        Promise.mapSeries(pendingFiles, async (file, index) => {
+            if (networkError) return;
+            const authToken = await getAuthToken();
+            const client = new Client(lfsServer, authToken, ['basic']);
+            if (!file.error) {
+                const localFile = data.open(file);
+                setFileProgress(index, 0, 100);
+                await uploadFile(client, index, localFile, setFileProgress);
+                await createResource(localFile);
+                setFileProgress(index, 100, 100);
+                setUploadInProgress(false);
+                setUploadsComplete(true);
+            }
+        })
     }
 
     function PendingFilesTable() {
