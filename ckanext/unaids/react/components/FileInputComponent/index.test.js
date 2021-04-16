@@ -4,7 +4,7 @@ import axios from 'axios';
 import * as giftless from "giftless-client";
 
 jest.mock('axios');
-let mockedAxiosPost = undefined;
+let mockedAuthTokenRequest = undefined;
 
 function setupMocks() {
   jest.clearAllMocks();
@@ -12,9 +12,11 @@ function setupMocks() {
     default: jest.fn(),
     upload: jest.fn(() => Promise.resolve())
   }));
-  mockedAxiosPost = axios.post.mockImplementation(url => Promise.resolve({
-    data: { result: { token: 'MockedToken' } }
-  }));
+  mockedAuthTokenRequest = axios.post.mockImplementation(
+    () => Promise.resolve({
+      data: { result: { token: 'MockedToken' } }
+    })
+  );
 }
 
 async function renderAppComponent(existingResourceData) {
@@ -62,7 +64,7 @@ describe('upload a new resource', () => {
       Object.defineProperty(component, 'files', { value: [file] });
       fireEvent.drop(component);
       await screen.findByText('data.json');
-      expect(mockedAxiosPost).toHaveBeenCalledTimes(1);
+      expect(mockedAuthTokenRequest).toHaveBeenCalledTimes(1);
       expect(screen.getByTestId('url_type')).toHaveValue('upload');
       expect(screen.getByTestId('lfs_prefix')).toHaveValue('mockedOrgId/mockedDatasetId');
       expect(screen.getByTestId('sha256')).toHaveValue('mockedSha256');
