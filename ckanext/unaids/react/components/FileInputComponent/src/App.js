@@ -54,7 +54,7 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetId, exis
     useEffect(() => {
         axios.post(
             '/api/3/action/authz_authorize',
-            { scopes: `obj:ckan/${datasetId}/*:write` },
+            { scopes: `obj:${orgId}/${datasetId}/*:write` },
             { withCredentials: true }
         )
             .then(res => setAuthToken(res.data.result.token))
