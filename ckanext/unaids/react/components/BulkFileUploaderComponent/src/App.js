@@ -30,7 +30,7 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
     const getAuthToken = () =>
         axios.post(
             '/api/3/action/authz_authorize',
-            { scopes: `obj:ckan/${datasetId}/*:write` },
+            { scopes: `obj:${orgId}/${datasetId}/*:write` },
             { withCredentials: true }
         )
             .then(res => res.data.result.token)
