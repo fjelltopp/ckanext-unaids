@@ -1,4 +1,5 @@
 {% ckan_extends %}
+
 {% block resource_item_title %}
   <div class="resource-title">
     {{ super() }}
@@ -16,5 +17,17 @@
     <p class="description" title="{{ h.render_datetime(res.last_modified, with_hours=True) }}">
       {{ _('Last modified') + ": "}}{{ h.time_ago_from_timestamp(res.last_modified) }}
     </p>
+  {% endif %}
+{% endblock %}
+
+{% block resource_item_explore_links %}
+  {{ super() }}
+  {% if can_edit %}
+    <li>
+      <a href="{{ h.url_for(pkg.type ~ '_resource.delete', id=pkg.name, resource_id=res.id) }}">
+        <i class="fa fa-trash"></i>
+        {{ _('Delete') }}
+      </a>
+    </li>
   {% endif %}
 {% endblock %}
