@@ -2,7 +2,6 @@ import ckan.plugins as p
 import logging
 from collections import OrderedDict
 from giftless_client import LfsClient
-from ckan import model
 import ckan.model.license as core_licenses
 import ckan.model.package as package
 import ckan.plugins.toolkit as toolkit
@@ -151,67 +150,16 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     # IResourceController
     def before_create(self, context, data_dict):
-        print('~'*50)
-        print('before_create')
-        print(data_dict)
-        print('~'*50)
-        return data_dict
-
-    def before_update(self, context, current, data_dict):
-        print('~'*50)
-        print('before_update')
-        print('data_dict')
-        print(data_dict)
-        print('current')
-        print(current)
-
-        def get_upload_authz_token(context, org_name, package_name, resource_id):
-            authorize = toolkit.get_action('authz_authorize')
-            if not authorize:
-                raise RuntimeError("Cannot find authz_authorize; Is ckanext-authz-service installed?")
-            # scope = extstorage_helpers.resource_authz_scope(
-            #     package_name, org_name=org_name, actions='write', resource_id=resource_id)
-            scope = 'obj:ckan/{}/*:write '.format(package_name)
-            
-            print('---> {}'.format(scope))
-            
-            authz_result = authorize(context, {"scopes": [scope]})
-
-            print('~'*50)
-            print('context')
-            for key in context.keys():
-                print('{} = {}'.format(key, context[key]))
-            print('~'*50)
-            print('authz_result')
-            for key in authz_result.keys():
-                print('{} = {}'.format(key, authz_result[key]))
-            print('~'*50)
-
-            if not authz_result or not authz_result.get('token', False):
-                raise RuntimeError("Failed to get authorization token for LFS server")
-            if len(authz_result['granted_scopes']) == 0:
-                error = "You are not authorized to upload this resource"
-                log.error(error)
-                raise toolkit.NotAuthorized(error)
-            return authz_result['token']
-
         attached_file = data_dict.get('upload', None)
         if attached_file:
             if type(attached_file) == FlaskFileStorage:
 
                 dataset = get_action('package_show')(
-                    context, {'id': current['package_id']})
-                authz_context = {
-                    'model': model,
-                    'user': toolkit.c.user,
-                    'auth_user_obj': toolkit.c.userobj,
-                }
-                print(authz_context)
+                    context, {'id': data_dict['package_id']})
                 authz_token = get_upload_authz_token(
-                    authz_context,
-                    dataset['organization']['name'],
+                    context,
                     dataset['name'],
-                    data_dict['id']
+                    dataset.get('organization', {}).get('name')
                 )
                 lfs_client = LfsClient(
                     lfs_server_url=extstorage_helpers.server_url(),
@@ -235,7 +183,41 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     'lfs_prefix': lfs_prefix
                 })
 
-                print('~'*50)
+        return data_dict
+
+    def before_update(self, context, current, data_dict):
+
+        attached_file = data_dict.get('upload', None)
+        if attached_file:
+            if type(attached_file) == FlaskFileStorage:
+
+                dataset = get_action('package_show')(
+                    context, {'id': current['package_id']})
+                authz_token = get_upload_authz_token(
+                    context,
+                    dataset['name'],
+                    dataset.get('organization', {}).get('name')
+                )
+                lfs_client = LfsClient(
+                    lfs_server_url=extstorage_helpers.server_url(),
+                    auth_token=authz_token,
+                    transfer_adapters=['basic']
+                )
+                lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['id'])
+                uploaded_file = lfs_client.upload(
+                    file_obj=attached_file,
+                    organization=lfs_prefix.split('/')[0],
+                    repo=dataset['name']
+                )
+                data_dict.pop('upload', None)
+                data_dict.update({
+                    'url_type': 'upload',
+                    'name': attached_file.filename,
+                    'sha256': uploaded_file['oid'],
+                    'size': uploaded_file['size'],
+                    'url': attached_file.filename,
+                    'lfs_prefix': lfs_prefix
+                })
         return data_dict
 
 
@@ -268,3 +250,18 @@ class UNAIDSReclineView(ReclineViewBase):
             ]
         else:
             return False
+
+def get_upload_authz_token(context, dataset_name, org_name):
+    authorize = toolkit.get_action('authz_authorize')
+    if not authorize:
+        raise RuntimeError("Cannot find authz_authorize; Is ckanext-authz-service installed?")
+    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_name)
+    authz_result = authorize(context, {"scopes": [scope]})
+
+    if not authz_result or not authz_result.get('token', False):
+        raise RuntimeError("Failed to get authorization token for LFS server")
+    if len(authz_result['granted_scopes']) == 0:
+        error = "You are not authorized to upload this resource."
+        log.error(error)
+        raise toolkit.NotAuthorized(error)
+    return authz_result['token']
