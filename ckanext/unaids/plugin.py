@@ -238,8 +238,8 @@ def _giftless_upload(context, resource, current=None):
             })
 
 
-def get_upload_authz_token(context, dataset_name, org_name):
-    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_name)
+def get_upload_authz_token(context, dataset_id, org_name):
+    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_id)
     user = model.User.by_name(context['user'])
     user_apikey = user.apikey
     site_url = config.get('ckan.site_url')
