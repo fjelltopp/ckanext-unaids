@@ -8,7 +8,6 @@ import ckan.model.package as package
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan import model
-from ckan.common import config
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
@@ -245,16 +244,19 @@ def _get_upload_authz_token(context, dataset_id, org_name):
     scope = 'obj:{}/{}/*:write'.format(org_name, dataset_id)
     user = model.User.by_name(context['user'])
     user_apikey = user.apikey
-    site_url = config.get('ckan.site_url')
-    auth_path = '/api/3/action/authz_authorize'
+    auth_url = toolkit.url_for(
+        'api.action',
+        ver=3,
+        logic_function='authz_authorize',
+        _external=True
+    )
     payload = {
         'scopes': scope
     }
     headers = {
         'Authorization': str(user_apikey)
     }
-    url = "{}{}".format(site_url, auth_path)
-    auth_r = requests.post(url, headers=headers, data=payload)
+    auth_r = requests.post(auth_url, headers=headers, data=payload)
     authz_result = auth_r.json()['result']
     log.error(authz_result)
     if not authz_result or not authz_result.get('token', False):
