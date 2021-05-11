@@ -1,11 +1,16 @@
 import ckan.plugins as p
 import logging
+import requests
 from collections import OrderedDict
+from giftless_client import LfsClient
 import ckan.model.license as core_licenses
 import ckan.model.package as package
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
+from ckan import model
 from ckan.lib.plugins import DefaultTranslation
+from ckan.logic import get_action
+from werkzeug.datastructures import FileStorage as FlaskFileStorage
 from ckanext.unaids.validators import (
     if_empty_guess_format,
     organization_id_exists_validator
@@ -56,6 +61,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.ITemplateHelpers)
     p.implements(p.IAuthFunctions)
     p.implements(p.IPackageController, inherit=True)
+    p.implements(p.IResourceController, inherit=True)
     p.implements(p.IValidators)
     p.implements(p.IActions)
     p.implements(IDataValidation)
@@ -115,7 +121,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         }
 
     def get_validators(self):
-        return{
+        return {
             'if_empty_guess_format': if_empty_guess_format,
             'organization_id_exists': organization_id_exists_validator
         }
@@ -143,6 +149,17 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     dataset_id=pkg_dict['id'],
                     recipient_org_id=org_to_allow_transfer_to[0]
                 )
+
+    # IResourceController
+    def before_create(self, context, resource):
+        if _data_dict_is_resource(resource):
+            _giftless_upload(context, resource)
+        return resource
+
+    def before_update(self, context, current, resource):
+        if _data_dict_is_resource(resource):
+            _giftless_upload(context, resource, current=current)
+        return resource
 
 
 class UNAIDSReclineView(ReclineViewBase):
@@ -174,3 +191,78 @@ class UNAIDSReclineView(ReclineViewBase):
             ]
         else:
             return False
+
+
+def _data_dict_is_resource(data_dict):
+    return not (
+            u'creator_user_id' in data_dict
+            or u'owner_org' in data_dict
+            or u'resources' in data_dict
+            or data_dict.get(u'type') == u'dataset')
+
+
+def _giftless_upload(context, resource, current=None):
+    attached_file = resource.pop('upload', None)
+    if attached_file:
+        if type(attached_file) == FlaskFileStorage:
+            dataset_id = resource.get('package_id')
+            if not dataset_id:
+                dataset_id = current['package_id']
+            dataset = get_action('package_show')(
+                context, {'id': dataset_id})
+            org_name = dataset.get('organization', {}).get('name')
+            authz_token = _get_upload_authz_token(
+                context,
+                dataset_id,
+                org_name
+            )
+            lfs_client = LfsClient(
+                lfs_server_url=extstorage_helpers.server_url(),
+                auth_token=authz_token,
+                transfer_adapters=['basic']
+            )
+            uploaded_file = lfs_client.upload(
+                file_obj=attached_file,
+                organization=org_name,
+                repo=dataset_id
+            )
+
+            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['name'])
+            resource.update({
+                'url_type': 'upload',
+                'sha256': uploaded_file['oid'],
+                'size': uploaded_file['size'],
+                'url': attached_file.filename,
+                'lfs_prefix': lfs_prefix
+            })
+
+
+def _get_upload_authz_token(context, dataset_id, org_name):
+    # this should be done with toolkit.get_action('authz_authorize')
+    # but authz_authorize ignored user information passed inside `context`
+    # more: https://github.com/datopian/ckanext-authz-service/issues/24
+    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_id)
+    user = model.User.by_name(context['user'])
+    user_apikey = user.apikey
+    auth_url = toolkit.url_for(
+        'api.action',
+        ver=3,
+        logic_function='authz_authorize',
+        _external=True
+    )
+    payload = {
+        'scopes': scope
+    }
+    headers = {
+        'Authorization': str(user_apikey)
+    }
+    auth_r = requests.post(auth_url, headers=headers, data=payload)
+    authz_result = auth_r.json()['result']
+    log.error(authz_result)
+    if not authz_result or not authz_result.get('token', False):
+        raise RuntimeError("Failed to get authorization token for LFS server")
+    if len(authz_result['granted_scopes']) == 0:
+        error = "You are not authorized to upload this resource."
+        log.error(error)
+        raise toolkit.NotAuthorized(error)
+    return authz_result['token']
