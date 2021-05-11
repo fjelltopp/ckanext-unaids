@@ -216,3 +216,19 @@ section.resources H3{
 footer{
   flex: 1;
 }
+
+#ReleasesListView .list-group-item{
+    min-height: 120px;
+}
+
+#ReleasesListView h4{
+  margin-top: 15px;
+  margin-left: 0px;
+  margin-right: 0;
+  margin-bottom: -10px;
+}
+
+#ReleasesListView .release-notes,
+#ReleasesListView .release-author{
+  margin-left: 25px;
+}
