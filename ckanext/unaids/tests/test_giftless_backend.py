@@ -13,10 +13,11 @@ from werkzeug.datastructures import FileStorage as FlaskFileStorage
 @pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service external_storage')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.usefixtures('clean_db')
-@pytest.mark.usefixtures('create_with_upload')
+# @pytest.mark.usefixtures('create_with_upload')
 class TestGiftlessBackend(object):
 
-    def test_resource_update(self, create_with_upload):
+    @pytest.mark.skip("doesn't work as long as HTTP auth is used. Wait for https://github.com/datopian/ckanext-authz-service/issues/24")
+    def test_giftless_resource_create(self):
         user = factories.User()
         org = factories.Organization(
             users=[
@@ -30,7 +31,6 @@ class TestGiftlessBackend(object):
             "name": 'Test',
             "description": "Test resource",
             "url_type": "upload",
-            ### old way of passing the file
             "upload": FlaskFileStorage(
                 stream=csv_stream,
                 content_type="text/csv",

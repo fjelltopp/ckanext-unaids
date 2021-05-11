@@ -212,7 +212,7 @@ def _giftless_upload(context, resource, current=None):
             dataset = get_action('package_show')(
                 context, {'id': dataset_id})
             org_name = dataset.get('organization', {}).get('name')
-            authz_token = get_upload_authz_token(
+            authz_token = _get_upload_authz_token(
                 context,
                 dataset_id,
                 org_name
@@ -238,7 +238,10 @@ def _giftless_upload(context, resource, current=None):
             })
 
 
-def get_upload_authz_token(context, dataset_id, org_name):
+def _get_upload_authz_token(context, dataset_id, org_name):
+    # this should be done with toolkit.get_action('authz_authorize')
+    # but authz_authorize ignored user information passed inside `context`
+    # more: https://github.com/datopian/ckanext-authz-service/issues/24
     scope = 'obj:{}/{}/*:write'.format(org_name, dataset_id)
     user = model.User.by_name(context['user'])
     user_apikey = user.apikey
