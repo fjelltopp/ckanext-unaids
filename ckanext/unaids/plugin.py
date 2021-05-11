@@ -1,11 +1,14 @@
 import ckan.plugins as p
 import logging
+import requests
 from collections import OrderedDict
 from giftless_client import LfsClient
 import ckan.model.license as core_licenses
 import ckan.model.package as package
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
+from ckan import model
+from ckan.common import config
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
@@ -119,7 +122,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         }
 
     def get_validators(self):
-        return{
+        return {
             'if_empty_guess_format': if_empty_guess_format,
             'organization_id_exists': organization_id_exists_validator
         }
@@ -150,74 +153,13 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     # IResourceController
     def before_create(self, context, data_dict):
-        attached_file = data_dict.get('upload', None)
-        if attached_file:
-            if type(attached_file) == FlaskFileStorage:
-
-                dataset = get_action('package_show')(
-                    context, {'id': data_dict['package_id']})
-                authz_token = get_upload_authz_token(
-                    context,
-                    dataset['name'],
-                    dataset.get('organization', {}).get('name')
-                )
-                lfs_client = LfsClient(
-                    lfs_server_url=extstorage_helpers.server_url(),
-                    auth_token=authz_token,
-                    transfer_adapters=['basic']
-                )
-                lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['id'])
-                uploaded_file = lfs_client.upload(
-                    file_obj=attached_file,
-                    organization=lfs_prefix.split('/')[0],
-                    repo=dataset['name']
-                )
-
-                data_dict.pop('upload', None)
-                data_dict.update({
-                    'url_type': 'upload',
-                    'name': attached_file.filename,
-                    'sha256': uploaded_file['oid'],
-                    'size': uploaded_file['size'],
-                    'url': attached_file.filename,
-                    'lfs_prefix': lfs_prefix
-                })
-
+        if _data_dict_is_resource(data_dict):
+            _giftless_upload(context, data_dict)
         return data_dict
 
     def before_update(self, context, current, data_dict):
-
-        attached_file = data_dict.get('upload', None)
-        if attached_file:
-            if type(attached_file) == FlaskFileStorage:
-
-                dataset = get_action('package_show')(
-                    context, {'id': current['package_id']})
-                authz_token = get_upload_authz_token(
-                    context,
-                    dataset['name'],
-                    dataset.get('organization', {}).get('name')
-                )
-                lfs_client = LfsClient(
-                    lfs_server_url=extstorage_helpers.server_url(),
-                    auth_token=authz_token,
-                    transfer_adapters=['basic']
-                )
-                lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['id'])
-                uploaded_file = lfs_client.upload(
-                    file_obj=attached_file,
-                    organization=lfs_prefix.split('/')[0],
-                    repo=dataset['name']
-                )
-                data_dict.pop('upload', None)
-                data_dict.update({
-                    'url_type': 'upload',
-                    'name': attached_file.filename,
-                    'sha256': uploaded_file['oid'],
-                    'size': uploaded_file['size'],
-                    'url': attached_file.filename,
-                    'lfs_prefix': lfs_prefix
-                })
+        if _data_dict_is_resource(data_dict):
+            _giftless_upload(context, data_dict)
         return data_dict
 
 
@@ -251,13 +193,66 @@ class UNAIDSReclineView(ReclineViewBase):
         else:
             return False
 
-def get_upload_authz_token(context, dataset_name, org_name):
-    authorize = toolkit.get_action('authz_authorize')
-    if not authorize:
-        raise RuntimeError("Cannot find authz_authorize; Is ckanext-authz-service installed?")
-    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_name)
-    authz_result = authorize(context, {"scopes": [scope]})
 
+def _data_dict_is_resource(data_dict):
+    return not (
+            u'creator_user_id' in data_dict
+            or u'owner_org' in data_dict
+            or u'resources' in data_dict
+            or data_dict.get(u'type') == u'dataset')
+
+
+def _giftless_upload(context, data_dict):
+    attached_file = data_dict.get('upload', None)
+    if attached_file:
+        if type(attached_file) == FlaskFileStorage:
+            dataset = get_action('package_show')(
+                context, {'id': data_dict['package_id']})
+            org_name = dataset.get('organization', {}).get('name')
+            authz_token = get_upload_authz_token(
+                context,
+                dataset['id'],
+                org_name
+            )
+            lfs_client = LfsClient(
+                lfs_server_url=extstorage_helpers.server_url(),
+                auth_token=authz_token,
+                transfer_adapters=['basic']
+            )
+            uploaded_file = lfs_client.upload(
+                file_obj=attached_file,
+                organization=org_name,
+                repo=dataset['id']
+            )
+
+            data_dict.pop('upload', None)
+            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['id'])
+            data_dict.update({
+                'url_type': 'upload',
+                'name': attached_file.filename,
+                'sha256': uploaded_file['oid'],
+                'size': uploaded_file['size'],
+                'url': attached_file.filename,
+                'lfs_prefix': lfs_prefix
+            })
+
+
+def get_upload_authz_token(context, dataset_name, org_name):
+    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_name)
+    user = model.User.by_name(context['user'])
+    user_apikey = user.apikey
+    site_url = config.get('ckan.site_url')
+    auth_path = '/api/3/action/authz_authorize'
+    payload = {
+        'scopes': scope
+    }
+    headers = {
+        'Authorization': str(user_apikey)
+    }
+    url = "{}{}".format(site_url, auth_path)
+    auth_r = requests.post(url, headers=headers, data=payload)
+    authz_result = auth_r.json()['result']
+    log.error(authz_result)
     if not authz_result or not authz_result.get('token', False):
         raise RuntimeError("Failed to get authorization token for LFS server")
     if len(authz_result['granted_scopes']) == 0:
