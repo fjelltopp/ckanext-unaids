@@ -159,7 +159,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def before_update(self, context, current, data_dict):
         if _data_dict_is_resource(data_dict):
-            _giftless_upload(context, data_dict)
+            _giftless_upload(context, data_dict, current=current)
         return data_dict
 
 
@@ -202,16 +202,19 @@ def _data_dict_is_resource(data_dict):
             or data_dict.get(u'type') == u'dataset')
 
 
-def _giftless_upload(context, data_dict):
+def _giftless_upload(context, data_dict, current=None):
     attached_file = data_dict.get('upload', None)
     if attached_file:
         if type(attached_file) == FlaskFileStorage:
+            dataset_id = data_dict.get('package_id')
+            if not dataset_id:
+                dataset_id = current['package_id']
             dataset = get_action('package_show')(
-                context, {'id': data_dict['package_id']})
+                context, {'id': dataset_id})
             org_name = dataset.get('organization', {}).get('name')
             authz_token = get_upload_authz_token(
                 context,
-                dataset['id'],
+                dataset_id,
                 org_name
             )
             lfs_client = LfsClient(
@@ -222,11 +225,11 @@ def _giftless_upload(context, data_dict):
             uploaded_file = lfs_client.upload(
                 file_obj=attached_file,
                 organization=org_name,
-                repo=dataset['id']
+                repo=dataset_id
             )
 
             data_dict.pop('upload', None)
-            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['id'])
+            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset_id)
             data_dict.update({
                 'url_type': 'upload',
                 'name': attached_file.filename,
