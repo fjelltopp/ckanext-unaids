@@ -152,15 +152,15 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                 )
 
     # IResourceController
-    def before_create(self, context, data_dict):
-        if _data_dict_is_resource(data_dict):
-            _giftless_upload(context, data_dict)
-        return data_dict
+    def before_create(self, context, resource):
+        if _data_dict_is_resource(resource):
+            _giftless_upload(context, resource)
+        return resource
 
-    def before_update(self, context, current, data_dict):
-        if _data_dict_is_resource(data_dict):
-            _giftless_upload(context, data_dict, current=current)
-        return data_dict
+    def before_update(self, context, current, resource):
+        if _data_dict_is_resource(resource):
+            _giftless_upload(context, resource, current=current)
+        return resource
 
 
 class UNAIDSReclineView(ReclineViewBase):
@@ -202,11 +202,11 @@ def _data_dict_is_resource(data_dict):
             or data_dict.get(u'type') == u'dataset')
 
 
-def _giftless_upload(context, data_dict, current=None):
-    attached_file = data_dict.get('upload', None)
+def _giftless_upload(context, resource, current=None):
+    attached_file = resource.pop('upload', None)
     if attached_file:
         if type(attached_file) == FlaskFileStorage:
-            dataset_id = data_dict.get('package_id')
+            dataset_id = resource.get('package_id')
             if not dataset_id:
                 dataset_id = current['package_id']
             dataset = get_action('package_show')(
@@ -228,11 +228,9 @@ def _giftless_upload(context, data_dict, current=None):
                 repo=dataset_id
             )
 
-            data_dict.pop('upload', None)
             lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset_id)
-            data_dict.update({
+            resource.update({
                 'url_type': 'upload',
-                'name': attached_file.filename,
                 'sha256': uploaded_file['oid'],
                 'size': uploaded_file['size'],
                 'url': attached_file.filename,
