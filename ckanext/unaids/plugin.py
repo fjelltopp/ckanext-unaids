@@ -228,7 +228,7 @@ def _giftless_upload(context, resource, current=None):
                 repo=dataset_id
             )
 
-            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset_id)
+            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['name'])
             resource.update({
                 'url_type': 'upload',
                 'sha256': uploaded_file['oid'],
