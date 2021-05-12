@@ -217,18 +217,19 @@ footer{
   flex: 1;
 }
 
-#ReleasesListView .list-group-item{
-    min-height: 120px;
+.vertical-align-top{
+  vertical-align: top !important;
 }
 
-#ReleasesListView h4{
-  margin-top: 15px;
-  margin-left: 0px;
-  margin-right: 0;
-  margin-bottom: -10px;
+#ReleasesTable .fixed-table-container{
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
 
-#ReleasesListView .release-notes,
-#ReleasesListView .release-author{
-  margin-left: 25px;
+#ReleasesTable .small-column{
+  max-width: 150px;
 }
+
+#ReleasesTable tbody tr:first-child td{
+  border-top: none !important;
+}    

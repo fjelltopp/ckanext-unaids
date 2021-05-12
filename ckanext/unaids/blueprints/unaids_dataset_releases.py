@@ -30,7 +30,7 @@ def list_releases(dataset_type, id):
             'author': 'Manoj Nathwani',
             'created': datetime.now().strftime('%d/%m/%Y %H:%M'),
         }
-        for x in range(1, 6)
+        for x in range(1, 16)
     ]
     return toolkit.render(
         'package/releases/list.html',
