@@ -210,10 +210,11 @@ def _giftless_upload(context, resource, current=None):
                 dataset_id = current['package_id']
             dataset = get_action('package_show')(
                 context, {'id': dataset_id})
+            dataset_name = dataset['name']
             org_name = dataset.get('organization', {}).get('name')
             authz_token = _get_upload_authz_token(
                 context,
-                dataset_id,
+                dataset_name,
                 org_name
             )
             lfs_client = LfsClient(
@@ -224,10 +225,10 @@ def _giftless_upload(context, resource, current=None):
             uploaded_file = lfs_client.upload(
                 file_obj=attached_file,
                 organization=org_name,
-                repo=dataset_id
+                repo=dataset_name
             )
 
-            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset['name'])
+            lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset_name, org_name=org_name)
             resource.update({
                 'url_type': 'upload',
                 'sha256': uploaded_file['oid'],
@@ -237,11 +238,11 @@ def _giftless_upload(context, resource, current=None):
             })
 
 
-def _get_upload_authz_token(context, dataset_id, org_name):
+def _get_upload_authz_token(context, dataset_name, org_name):
     # this should be done with toolkit.get_action('authz_authorize')
     # but authz_authorize ignored user information passed inside `context`
     # more: https://github.com/datopian/ckanext-authz-service/issues/24
-    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_id)
+    scope = 'obj:{}/{}/*:write'.format(org_name, dataset_name)
     user = model.User.by_name(context['user'])
     user_apikey = user.apikey
     auth_url = toolkit.url_for(
