@@ -25,7 +25,7 @@
                             id="BulkFileUploaderComponent"
                             data-lfsServer="{{ h.extstorage_server_url() }}"
                             data-maxResourceSize="{{ h.max_resource_size() }}"
-                            data-orgId="{{ h.get_package_from_id(pkg.id).organization.name }}"
+                            data-orgId="{{ pkg.organization.name }}"
                             data-datasetId="{{ pkg.name }}"
                             data-defaultFields="{{ h.bulk_file_uploader_default_fields() }}"
                         >
