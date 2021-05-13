@@ -1,3 +1,5 @@
+import datetime
+
 import ckan.plugins as p
 import logging
 import requests
@@ -231,6 +233,7 @@ def _giftless_upload(context, resource, current=None):
             lfs_prefix = extstorage_helpers.resource_storage_prefix(dataset_name, org_name=org_name)
             resource.update({
                 'url_type': 'upload',
+                'last_modified': datetime.datetime.utcnow(),
                 'sha256': uploaded_file['oid'],
                 'size': uploaded_file['size'],
                 'url': attached_file.filename,
