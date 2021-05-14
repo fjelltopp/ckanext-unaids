@@ -1,0 +1,33 @@
+#BulkFileUploaderComponent h1 {
+    margin-top: 30px;
+    margin-bottom: 35px;
+}
+
+#BulkFileUploaderComponent .dropzone {
+    text-align: center;
+    padding: 20px;
+    border-width: 3px;
+    border-radius: 2px;
+    border-color: #ebebeb;
+    border-style: dashed;
+    background-color: #fafafa;
+    margin-bottom: 20px;
+}
+
+#BulkFileUploaderComponent .table td {
+    overflow-wrap: break-word;
+}
+
+#BulkFileUploaderComponent .remove-file-btn {
+    cursor: pointer;
+    margin: 0;
+    margin-left: 5px;
+}
+
+#BulkFileUploaderComponent .fa {
+    margin-right: 5px;
+}
+
+#BulkFileUploaderComponent .label-danger {
+    padding: 5px;
+}

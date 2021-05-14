@@ -7,3 +7,25 @@ main:
   extra:
     preload:
       - base/main
+
+FileInputComponentStyles:
+    contents:
+        - FileInputComponent.css
+    output: unaids/%(version)s_FileInputComponent.css
+
+FileInputComponentScripts:
+    contents:
+        - frictionless-js.js
+        - build/FileInputComponent.js
+    output: unaids/%(version)s_FileInputComponent.js
+
+BulkFileUploaderComponentStyles:
+    contents:
+        - BulkFileUploaderComponent.css
+    output: unaids/%(version)s_BulkFileUploaderComponent.css
+
+BulkFileUploaderComponentScripts:
+    contents:
+        - frictionless-js.js
+        - build/BulkFileUploaderComponent.js
+    output: unaids/%(version)s_BulkFileUploaderComponent.js

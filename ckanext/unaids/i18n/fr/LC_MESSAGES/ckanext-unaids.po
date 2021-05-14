@@ -8,17 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-11-19 14:00+0000\n"
+"POT-Creation-Date: 2021-05-13 10:03+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: \n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
-"X-Generator: Poedit 2.4.2\n"
 
 #: ckanext/unaids/actions.py:33
 msgid "Resource not found."
@@ -28,11 +27,11 @@ msgstr "Ressource introuvable."
 msgid "TaskStatus was not found."
 msgstr "l'état actuel de la tâche est introuvable."
 
-#: ckanext/unaids/helpers.py:75
+#: ckanext/unaids/helpers.py:78
 msgid "Naomi Geographic Data Input"
 msgstr "Entrée de données géographiques pour le modèle Naomi"
 
-#: ckanext/unaids/helpers.py:76
+#: ckanext/unaids/helpers.py:79
 msgid "Geographic data formatted for the Naomi model."
 msgstr "Données géographiques formatées pour le modèle Naomi."
 
@@ -42,27 +41,27 @@ msgstr ""
 "Licence Creative Commons Attribution pour les organisations "
 "intergouvernementales"
 
-#: ckanext/unaids/plugin.py:79
+#: ckanext/unaids/plugin.py:85
 msgid "Organization"
 msgstr "Organisation"
 
-#: ckanext/unaids/plugin.py:80
+#: ckanext/unaids/plugin.py:86
 msgid "Data Type"
 msgstr "Type de donnés"
 
-#: ckanext/unaids/plugin.py:81
+#: ckanext/unaids/plugin.py:87
 msgid "Tags"
 msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:82
+#: ckanext/unaids/plugin.py:88
 msgid "Year"
 msgstr "Année"
 
-#: ckanext/unaids/plugin.py:83
+#: ckanext/unaids/plugin.py:89
 msgid "Location"
 msgstr "Lieu"
 
-#: ckanext/unaids/plugin.py:135
+#: ckanext/unaids/plugin.py:160
 msgid "Data Explorer"
 msgstr "Explorateur de données"
 
@@ -85,6 +84,10 @@ msgid_plural "Input is too short, must be at least %(num)d characters"
 msgstr[0] "L'entrée est trop courte, doit contenir au moins un caractère"
 msgstr[1] "L’entrée est trop courte, doit être au moins %(num)d caractères"
 
+#: ckanext/unaids/assets/frictionless-js.js:19
+msgid ",m[42]="
+msgstr ""
+
 #: ckanext/unaids/blueprints/unaids_dataset_transfer.py:27
 msgid "You cannot carry out this action"
 msgstr "Vous ne pouvez pas effectuer cette action"
@@ -95,10 +98,16 @@ msgstr "Ensemble de données déplacé vers"
 
 #: ckanext/unaids/blueprints/user_info_blueprint.py:40
 msgid ""
-"Your api key is: <code style=\"word-break:break-all;\"> {token}</code> {copy}"
-msgstr ""
-"Votre clé API est: <code style = \"word-break: break-all;\"> {token} </code> "
+"Your api key is: <code style=\"word-break:break-all;\"> {token}</code> "
 "{copy}"
+msgstr ""
+"Votre clé API est: <code style = \"word-break: break-all;\"> {token} "
+"</code> {copy}"
+
+#: ckanext/unaids/dataset_transfer/logic.py:74
+#, fuzzy
+msgid "Dataset Transfer"
+msgstr "Comment fonctionnent les transferts de jeux de données:"
 
 #: ckanext/unaids/i18n/extra_translations.py:6
 msgid "Programmatic Data"
@@ -209,8 +218,8 @@ msgstr "Identifiants de zones"
 #: ckanext/unaids/i18n/extra_translations.py:32
 msgid "Crosswalk table between area IDs and other systems e.g. dhis2."
 msgstr ""
-"Tableau de correspondance entre les identifiants de zones et d’autres systèmes, "
-"par exemple dhis2."
+"Tableau de correspondance entre les identifiants de zones et d’autres "
+"systèmes, par exemple dhis2."
 
 #: ckanext/unaids/i18n/extra_translations.py:33
 msgid "A validated population data file."
@@ -225,6 +234,7 @@ msgid "General"
 msgstr "Général"
 
 #: ckanext/unaids/i18n/extra_translations.py:36
+#: ckanext/unaids/react/components/FileInputComponent/src/UrlUploader.js:8
 msgid "URL"
 msgstr "URL"
 
@@ -297,6 +307,119 @@ msgstr ""
 #: ckanext/unaids/i18n/extra_translations.py:50
 msgid "Reorder resources"
 msgstr "Réorganiser les ressources"
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/App.js:38
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:21
+msgid "Authorisation Error"
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/App.js:46
+msgid "File Upload Error"
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/App.js:63
+msgid "Resource Create Error"
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/App.js:125
+#, fuzzy
+msgid "Upload Files"
+msgstr "Télécharger un fichier"
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/App.js:139
+msgid "Finish"
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/App.js:160
+msgid "Please refresh this page and try again"
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:15
+msgid "Error: Resources cannot be larger than ${maxResourceSize} megabytes."
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:18
+msgid "Error: Unable To Load File."
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:33
+msgid "Drag & Drop files here to initiate bulk upload"
+msgstr ""
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:40
+#: ckanext/unaids/theme/templates/package/snippets/bulk_file_uploader.html:10
+#, fuzzy
+msgid "Add files"
+msgstr "Télécharger un fichier"
+
+#: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ProgressBar.js:17
+#, fuzzy
+msgid "Uploaded"
+msgstr "Transfert groupé"
+
+#: ckanext/unaids/react/components/FileInputComponent/src/App.js:83
+msgid "Please refresh this page and try again."
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/DisplayUploadedFile.js:14
+#: ckanext/unaids/react/components/FileInputComponent/src/UrlUploader.js:26
+#: ckanext/unaids/theme/templates/snippets/search_form.html:14
+msgid "Remove"
+msgstr "Supprimer"
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:22
+msgid "You are not authorized to upload this resource."
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:35
+msgid "Server Error"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:36
+msgid "An unknown server error has occurred."
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:66
+msgid "Too many files"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:67
+#, fuzzy
+msgid "You can only upload one file for each resource."
+msgstr "Cette ressource ne permet pas le transfert groupé."
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:71
+msgid "File Too Large"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:72
+msgid "Resources cannot be larger than ${maxResourceSize} megabytes."
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:76
+msgid "Unknown Error"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:77
+msgid "An unknown error has occurred."
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:87
+msgid "Upload a file"
+msgstr "Télécharger un fichier"
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:96
+msgid "Link"
+msgstr "Lien"
+
+#: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:108
+msgid "Drag a file into this box or"
+msgstr ""
+
+#: ckanext/unaids/react/components/FileInputComponent/src/ProgressBar.js:18
+#: ckanext/unaids/theme/templates/package/snippets/bulk_file_uploader.html:32
+msgid "Loading"
+msgstr "Chargement"
 
 #: ckanext/unaids/theme/templates/footer.html:16
 msgid "Terms and Conditions"
@@ -380,6 +503,7 @@ msgstr "Avec l’aide de"
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:15
 #: ckanext/unaids/theme/templates/organization/member_new.html:38
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:29
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -465,6 +589,8 @@ msgid "New resource"
 msgstr "Nouvelle ressource"
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:30
+#: ckanext/unaids/theme/templates/package/snippets/bulk_file_uploader.html:4
+#: ckanext/unaids/theme/templates/package/snippets/bulk_file_uploader.html:20
 msgid "Bulk Upload"
 msgstr "Transfert groupé"
 
@@ -499,8 +625,9 @@ msgid ""
 "You're currently viewing an old version of this dataset. To see the "
 "current version, click <a href=\"%(url)s\">here</a>."
 msgstr ""
-"Vous consultez actuellement une ancienne version de cet ensemble de données. "
-"Pour voir la version actuelle, cliquez <a href=\"%(url)s\">ici</a>."
+"Vous consultez actuellement une ancienne version de cet ensemble de "
+"données. Pour voir la version actuelle, cliquez <a "
+"href=\"%(url)s\">ici</a>."
 
 #: ckanext/unaids/theme/templates/package/read.html:64
 msgid "Download All"
@@ -526,9 +653,14 @@ msgstr "Mettre à jour le collaborateur"
 msgid "Add Collaborator"
 msgstr "Ajouter un collaborateur"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:12
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:18
 msgid "Last modified"
 msgstr "Dernière modification"
+
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:27
+#, fuzzy
+msgid "Are you sure you want to delete this resource?"
+msgstr "Etes-vous sûr de vouloir supprimer ce membre?"
 
 #: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:13
 msgid "No organisation"
@@ -565,10 +697,6 @@ msgstr "Ajouter un ensemble de données"
 #: ckanext/unaids/theme/templates/snippets/dataset_selector.html:8
 msgid "VMMC Data"
 msgstr "Données VMMC"
-
-#: ckanext/unaids/theme/templates/snippets/search_form.html:14
-msgid "Remove"
-msgstr "Supprimer"
 
 #: ckanext/unaids/theme/templates/snippets/search_form.html:20
 msgid "Filter Results"

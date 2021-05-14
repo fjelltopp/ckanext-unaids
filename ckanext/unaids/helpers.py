@@ -1,12 +1,15 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
 from ckan.plugins.toolkit import get_action
+from ckan.plugins import toolkit as toolkit
 from ckan.common import _, g
 import logging
 import os
 import json
 
+
 log = logging.getLogger()
+BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
 
 
 def get_all_package_downloads(pkg_dict):
@@ -92,3 +95,7 @@ def get_all_organizations():
     data_dict = {'all_fields': True}
     results = get_action('organization_list')({}, data_dict)
     return results
+
+
+def get_bulk_file_uploader_default_fields():
+    return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})

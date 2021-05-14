@@ -1,0 +1,49 @@
+{
+  "dependencies": {
+    "@babel/core": "^7.12.16",
+    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-react": "^7.12.13",
+    "axios": "^0.21.1",
+    "babel-loader": "^8.2.2",
+    "bluebird": "^3.7.2",
+    "core-js": "^3.9.1",
+    "giftless-client": "git+https://github.com/datopian/giftless-client-js.git#ce1e6606a36ea8a2debaa523dc752e9248a0b060",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-dropzone": "^11.3.1",
+    "react-script": "^2.0.5",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "scripts": {
+    "start": "webpack --config webpack.config.js --watch",
+    "build": "webpack --config webpack.config.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^7.30.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^12.8.1",
+    "@testing-library/react-hooks": "^5.1.0",
+    "axios-mock-adapter": "^1.19.0",
+    "path-browserify": "^1.0.1",
+    "react-scripts": "3.4.1",
+    "webpack": "^5.22.0",
+    "webpack-cli": "^4.5.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ]
+  },
+  "jest": {
+    "setupFiles": [
+      "./jest/globals.js"
+    ],
+    "setupFilesAfterEnv": [
+      "./jest/setupTests.js"
+    ]
+  }
+}

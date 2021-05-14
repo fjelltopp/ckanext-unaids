@@ -4,3 +4,10 @@
   {{ h.build_nav_icon(dataset_type ~ '.read', _('Dataset'), id=pkg.id if is_activity_archive else pkg.name, icon='sitemap') }}
   {{ h.build_nav_icon(dataset_type ~ '.activity', _('Activity Stream'), id=pkg.id if is_activity_archive else pkg.name, icon='clock-o') }}
 {% endblock %}
+
+{% block secondary_content %}
+  {{ super() }}
+  {% if h.check_access('package_update', {'id':pkg.id }) %}
+    {% snippet 'package/snippets/bulk_file_uploader.html', pkg=pkg %}
+  {% endif %}
+{% endblock %}

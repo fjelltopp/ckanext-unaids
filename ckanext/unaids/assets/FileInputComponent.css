@@ -1,0 +1,18 @@
+.dropzone{
+    text-align: center;
+    padding: 20px;
+    border-width: 3px;
+    border-radius: 2px;
+    border-color: #ebebeb;
+    border-style: dashed;
+    background-color: #fafafa;
+    margin-bottom: 20px;
+}
+
+#FileInputComponent h3{
+    margin-bottom: 20px;
+}
+
+#FileInputComponent .field-url-input-group{
+    margin-bottom: 30px;
+}
