@@ -221,15 +221,19 @@ footer{
   vertical-align: top !important;
 }
 
-#ReleasesTable .fixed-table-container{
-  border: 1px solid #ddd;
-  border-radius: 4px;
+#ReleasesTableContainer{
+  display: none;
 }
 
-#ReleasesTable .small-column{
+#ReleasesTableContainer .fixed-table-container{
+  border: 1px solid #ddd;
+  border-radius: 4px;  
+}
+
+#ReleasesTableContainer .small-column{
   max-width: 150px;
 }
 
-#ReleasesTable tbody tr:first-child td{
+#ReleasesTableContainer tbody tr:first-child td{
   border-top: none !important;
 }    

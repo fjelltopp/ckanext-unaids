@@ -2,8 +2,6 @@
 
 {% block primary_content_inner %}
 
-<link rel="stylesheet" href="/bootstrap-table.css" />
-
 <div class="btn-group">
     <a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id) }}" class="btn btn-danger">Add a new Release</a>
     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
@@ -17,68 +15,96 @@
 
 <br /><br />
 
-<div id="ReleasesTable">
-    <table
-        data-toggle="table"
-        data-classes="table table-borderless"
-        data-show-header="false"
-        data-pagination="true"
-        data-page-size="5"
-        data-pagination-parts="pageList"
-    >
-        <thead style="display: none">
-            <tr>
-                <th data-field="1" data-width="50"></th>
-                <th data-field="2">Release</th>
-                <th data-field="3" class="small-column text-right">Created</th>
-                <th data-field="4" class="small-column text-right">Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for release in dataset_releases %}
-            <tr>
-                <td class="text-right vertical-align-top">
-                    <h4><i class="fa fa-tag text-muted"></i></h4>
-                </td>
-                <td class="vertical-align-top">
-                    <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.id) }}">{{ release.name }}</a></h4> 
-                    <div class="text-muted">{{ release.notes }}</div>
-                    <div class="text-muted">Created by <a href="#">{{ release.author }}</a></div>
-                    <br>
-                </td>
-                <td>{{ release.created }}</td>
-                <td>
-                    <div class="btn-group pull-right btn-group-xs">
-                        {% if loop.index == 1 %}
-                            <button
-                                class="btn btn-default disabled"
-                                title="{{ _('Disabled') }}"
-                            >
-                            <i class="fa fa-refresh"></i>
-                            </button>
-                        {% else %}
+{% if dataset_releases %}
+    <link rel="stylesheet" href="/bootstrap-table.css" />
+    <ul id="ReleasesLoading" class="list-group">
+        <li class="list-group-item text-center text-muted">
+            <h2><i class="fa fa-spinner fa-spin"></i> Loading</h2>
+        </li>
+    </ul>
+    <div id="ReleasesTableContainer">
+        <table>
+            <thead>
+                <tr>
+                    <th data-width="50"></th>
+                    <th></th>
+                    <th class="small-column text-right"></th>
+                    <th class="small-column text-right"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for release in dataset_releases %}
+                <tr>
+                    <td class="text-right vertical-align-top">
+                        <h4><i class="fa fa-tag text-muted"></i></h4>
+                    </td>
+                    <td class="vertical-align-top">
+                        <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.id) }}">{{ release.name }}</a></h4> 
+                        <div class="text-muted">{{ release.notes }}</div>
+                        <div class="text-muted">Created by <a href="#">{{ release.author }}</a></div>
+                        <br>
+                    </td>
+                    <td>{{ release.created }}</td>
+                    <td>
+                        <div class="btn-group pull-right btn-group-xs">
+                            {% if loop.index == 1 %}
+                                <button
+                                    class="btn btn-default disabled"
+                                    title="{{ _('Disabled') }}"
+                                >
+                                <i class="fa fa-refresh"></i>
+                                </button>
+                            {% else %}
+                                <a
+                                    href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
+                                    class="btn btn-default"
+                                    title="{{ _('Make release the latest version') }}"
+                                ><i class="fa fa-refresh"></i></a>
+                            {% endif %}
                             <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
+                                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
                                 class="btn btn-default"
-                                title="{{ _('Make release the latest version') }}"
-                            ><i class="fa fa-refresh"></i></a>
-                        {% endif %}
-                        <a
-                            href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
-                            class="btn btn-default"
-                            title="{{ _('Make release the latest version') }}"
-                        ><i class="fa fa-pencil"></i></a>
-                        <a
-                            href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
-                            class="btn btn-default"
-                            title="{{ _('Delete Release') }}"
-                        ><i class="fa fa-trash"></i></a>
-                    </div>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
+                                title="{{ _('Edit Release') }}"
+                            ><i class="fa fa-pencil"></i></a>
+                            <a
+                                href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
+                                class="btn btn-default"
+                                title="{{ _('Delete Release') }}"
+                            ><i class="fa fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script>
+        window.onload = function() {
+            $('#ReleasesTableContainer table').bootstrapTable({
+                classes: 'table table-borderless',
+                showHeader: false,
+                pagination: true,
+                pageSize: 5,
+                paginationParts: "pageList"
+            });        
+            $('#ReleasesLoading').remove();
+            $('#ReleasesTableContainer')
+                .css('opacity', 0)
+                .slideDown()
+                .animate(
+                    { opacity: 1 },
+                    { queue: false }
+                );
+        };
+     </script>
+{% else %}
+    <ul id="ReleasesLoading" class="list-group">
+        <li class="list-group-item text-center text-muted">
+            <h3>No releases have been created yet</h3>
+        </li>
+    </ul>
+{% endif %}
 
 {% endblock %}
+
+
