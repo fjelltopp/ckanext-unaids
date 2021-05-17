@@ -1,11 +1,13 @@
 {% asset 'ckanext-unaids/FileInputComponentStyles' %}
 
+{% set dataset = h.get_package_from_id(pkg_name) %}
+
 <div
     id="FileInputComponent"
     data-lfsServer="{{ h.extstorage_server_url() }}"
     data-maxResourceSize="{{ h.max_resource_size() }}"
-    data-orgId="{{ h.get_package_from_id(data.package_id).organization.name }}"
-    data-datasetId="{{ pkg_name or (data.package_id if data else '') }}"
+    data-orgId="{{ dataset.organization.name }}"
+    data-datasetId="{{ dataset.id }}"
     data-existingUrlType="{{ data.url_type if data else '' }}"
     data-existingUrl="{{ data.url if data else '' }}"
     data-existingSha256="{{ data.sha256 if data else '' }}"
