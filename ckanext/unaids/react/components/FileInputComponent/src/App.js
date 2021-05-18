@@ -6,7 +6,7 @@ import UrlUploader from './UrlUploader';
 import FileUploader from './FileUploader';
 import HiddenFormInputs from './HiddenFormInputs';
 
-export default function App({ maxResourceSize, lfsServer, orgId, datasetId, existingResourceData }) {
+export default function App({ maxResourceSize, lfsServer, orgId, datasetName, existingResourceData }) {
 
     const defaultUploadProgress = { loaded: 0, total: 0 };
     const [uploadMode, setUploadMode] = useState();
@@ -23,7 +23,7 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetId, exis
                 case 'file':
                     return {
                         url_type: 'upload',
-                        lfs_prefix: [orgId, datasetId].join('/'),
+                        lfs_prefix: `${orgId}/${datasetName}`,
                         sha256: metadata.sha256,
                         size: metadata.size,
                         url: metadata.url
@@ -107,7 +107,7 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetId, exis
         return (
             [null, 'file'].includes(uploadMode)
                 ? <FileUploader {...{
-                    maxResourceSize, lfsServer, orgId, datasetId,
+                    maxResourceSize, lfsServer, orgId, datasetName,
                     setUploadProgress, setUploadFileName,
                     setHiddenInputs, setUploadError
                 }} />
