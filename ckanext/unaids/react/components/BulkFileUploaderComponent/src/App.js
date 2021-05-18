@@ -5,7 +5,7 @@ import FileUploader from './FileUploader';
 import { Client } from 'giftless-client';
 import ProgressBar from './ProgressBar';
 
-export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defaultFields }) {
+export default function App({ lfsServer, maxResourceSize, orgId, datasetName, defaultFields }) {
 
     const [pendingFiles, setPendingFiles] = useState([]);
     const [uploadInProgress, setUploadInProgress] = useState(false);
@@ -30,7 +30,7 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
     const getAuthToken = () =>
         axios.post(
             '/api/3/action/authz_authorize',
-            { scopes: `obj:${orgId}/${datasetId}/*:write` },
+            { scopes: `obj:${orgId}/${datasetName}/*:write` },
             { withCredentials: true }
         )
             .then(res => res.data.result.token)
@@ -39,7 +39,7 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
             ))
     const uploadFile = (client, index, localFile, setFileProgress) =>
         client.upload(
-            localFile, orgId, datasetId,
+            localFile, orgId, datasetName,
             ({ loaded, total }) =>
                 setFileProgress(index, loaded, total + 1)
         ).catch(error => handleNetworkError(
@@ -49,13 +49,13 @@ export default function App({ lfsServer, maxResourceSize, orgId, datasetId, defa
         axios.post(
             '/api/3/action/resource_create',
             {
-                package_id: datasetId,
+                package_id: datasetName,
                 url_type: 'upload',
                 name: localFile._descriptor.name,
                 sha256: localFile._computedHashes.sha256,
                 size: localFile._descriptor.size,
                 url: localFile._descriptor.name,
-                lfs_prefix: `${orgId}/${datasetId}`,
+                lfs_prefix: `${orgId}/${datasetName}`,
                 ...defaultFields
             },
             { withCredentials: true }

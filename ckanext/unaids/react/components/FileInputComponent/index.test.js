@@ -24,7 +24,7 @@ async function renderAppComponent(existingResourceData) {
     const mockedAppProps = {
       lfsServer: 'mockedLfsServer',
       orgId: 'mockedOrgId',
-      datasetId: 'mockedDatasetId',
+      datasetName: 'mockedDatasetName',
       existingResourceData: existingResourceData
     };
     render(<App {...mockedAppProps} />);
@@ -66,7 +66,7 @@ describe('upload a new resource', () => {
       await screen.findByText('data.json');
       expect(mockedAuthTokenRequest).toHaveBeenCalledTimes(1);
       expect(screen.getByTestId('url_type')).toHaveValue('upload');
-      expect(screen.getByTestId('lfs_prefix')).toHaveValue('mockedOrgId/mockedDatasetId');
+      expect(screen.getByTestId('lfs_prefix')).toHaveValue('mockedOrgId/mockedDatasetName');
       expect(screen.getByTestId('sha256')).toHaveValue('mockedSha256');
       expect(screen.getByTestId('size')).toHaveValue('1337');
     }
@@ -120,7 +120,7 @@ describe('view/edit an existing file upload', () => {
   test('view resource', async () => {
     await renderAppComponent(existingResourceData);
     expect(screen.getByTestId('url_type')).toHaveValue(existingResourceData.urlType);
-    expect(screen.getByTestId('lfs_prefix')).toHaveValue('mockedOrgId/mockedDatasetId');
+    expect(screen.getByTestId('lfs_prefix')).toHaveValue('mockedOrgId/mockedDatasetName');
     expect(screen.getByTestId('sha256')).toHaveValue(existingResourceData.sha256);
     expect(screen.getByTestId('size')).toHaveValue(existingResourceData.size);
   });

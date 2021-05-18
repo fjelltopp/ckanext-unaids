@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Client } from "giftless-client";
 
 export default function FileUploader({
-    maxResourceSize, lfsServer, orgId, datasetId,
+    maxResourceSize, lfsServer, orgId, datasetName,
     setUploadProgress, setUploadFileName, setHiddenInputs,
     setUploadError
 }) {
@@ -12,7 +12,7 @@ export default function FileUploader({
     const getAuthToken = () =>
         axios.post(
             '/api/3/action/authz_authorize',
-            { scopes: `obj:${orgId}/${datasetId}/*:write` },
+            { scopes: `obj:${orgId}/${datasetName}/*:write` },
             { withCredentials: true }
         )
             .then(res => res.data.result.token)
@@ -24,7 +24,7 @@ export default function FileUploader({
                 throw error;
             });
     const uploadFile = (client, file) =>
-        client.upload(file, orgId, datasetId, progress =>
+        client.upload(file, orgId, datasetName, progress =>
             setUploadProgress({
                 loaded: progress.loaded,
                 total: progress.total

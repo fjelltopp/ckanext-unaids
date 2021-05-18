@@ -12,7 +12,7 @@ const
   maxResourceSize = parseInt(getAttr('maxResourceSize')),
   lfsServer = getAttr('lfsServer'),
   orgId = getAttr('orgId'),
-  datasetId = getAttr('datasetId');
+  datasetName = getAttr('datasetName');
 
 const existingResourceData = {
   urlType: getAttr('existingUrlType'),
@@ -27,7 +27,7 @@ window.addEventListener('load', function () {
   ReactDOM.render(
     <App {...{
       maxResourceSize, lfsServer, orgId,
-      datasetId, existingResourceData
+      datasetName, existingResourceData
     }} />,
     componentElement
   );
