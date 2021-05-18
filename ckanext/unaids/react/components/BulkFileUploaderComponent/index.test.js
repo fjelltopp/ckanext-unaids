@@ -41,7 +41,7 @@ async function renderAppComponent(defaultFields) {
       lfsServer: 'mockedLfsServer',
       maxResourceSize: maxResourceSize,
       orgId: 'mockedOrgId',
-      datasetId: 'mockedDatasetId',
+      datasetName: 'mockedDatasetName',
       defaultFields: defaultFields
     };
     render(<App {...mockedAppProps} />);

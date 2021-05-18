@@ -12,7 +12,7 @@ const
   lfsServer = getAttr('lfsServer'),
   maxResourceSize = getAttr('maxResourceSize'),
   orgId = getAttr('orgId'),
-  datasetId = getAttr('datasetId'),
+  datasetName = getAttr('datasetName'),
   defaultFields = JSON.parse(getAttr('defaultFields'));
 
 const loadCkan = callback => {
@@ -30,7 +30,7 @@ loadCkan(() => {
   return (
     ReactDOM.render(
       <App {...{
-        lfsServer, maxResourceSize, orgId, datasetId, defaultFields
+        lfsServer, maxResourceSize, orgId, datasetName, defaultFields
       }} />,
       componentElement
     )
