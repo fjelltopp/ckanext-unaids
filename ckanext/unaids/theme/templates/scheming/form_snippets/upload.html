@@ -13,6 +13,14 @@
     data-existingSha256="{{ data.sha256 if data else '' }}"
     data-existingFileName="{{ h.extstorage_resource_filename(data) if data else '' }}"
     data-existingSize="{{ data.size if data else '' }}"
-></div>
+>       
+    {% if data.url %}
+        <h3 class="text-muted"><i class="fa fa-spinner fa-spin"></i> {{ _('Loading') }}</h3>
+    {% else %}
+        <div class="dropzone text-muted">
+            <h3><i class="fa fa-spinner fa-spin"></i> {{ _('Loading') }}</h3>
+        </div>        
+    {% endif %}
+</div>
 
 {% asset 'ckanext-unaids/FileInputComponentScripts' %}
