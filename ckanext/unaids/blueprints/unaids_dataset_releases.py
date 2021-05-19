@@ -28,7 +28,7 @@ def list_releases(dataset_type, id):
             'name': 'Release {}'.format(x),
             'notes': 'Notes for release {}'.format(x),
             'author': 'Manoj Nathwani',
-            'created': datetime.now().strftime('%d/%m/%Y %H:%M'),
+            'created': datetime.now(),
         }
         for x in range(1, 16)
     ]

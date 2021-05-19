@@ -61,7 +61,7 @@
                         <div class="text-muted">Created by <a href="#">{{ release.author }}</a></div>
                         <br>
                     </td>
-                    <td>{{ release.created }}</td>
+                    <td>{{ release.created.strftime('%d/%m/%Y %H:%M') }}</td>
                     <td>
                         <div class="btn-group pull-right btn-group-xs">
                             {% if loop.index == 1 %}
