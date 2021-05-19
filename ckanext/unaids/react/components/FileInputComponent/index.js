@@ -9,6 +9,7 @@ const getAttr = key => {
   return ['None', ''].includes(val) ? null : val;
 };
 const
+  loadingHtml = componentElement.innerHTML,
   maxResourceSize = parseInt(getAttr('maxResourceSize')),
   lfsServer = getAttr('lfsServer'),
   orgId = getAttr('orgId'),
@@ -26,6 +27,7 @@ const existingResourceData = {
 window.addEventListener('load', function () {
   ReactDOM.render(
     <App {...{
+      loadingHtml,
       maxResourceSize, lfsServer, orgId,
       datasetName, existingResourceData
     }} />,

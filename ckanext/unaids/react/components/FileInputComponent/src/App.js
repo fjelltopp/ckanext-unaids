@@ -6,7 +6,7 @@ import UrlUploader from './UrlUploader';
 import FileUploader from './FileUploader';
 import HiddenFormInputs from './HiddenFormInputs';
 
-export default function App({ maxResourceSize, lfsServer, orgId, datasetName, existingResourceData }) {
+export default function App({ loadingHtml, maxResourceSize, lfsServer, orgId, datasetName, existingResourceData }) {
 
     const defaultUploadProgress = { loaded: 0, total: 0 };
     const [uploadMode, setUploadMode] = useState();
@@ -15,6 +15,7 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetName, ex
     const [linkUrl, setLinkUrl] = useState();
     const [hiddenInputs, _setHiddenInputs] = useState({});
     const [uploadError, setUploadError] = useState(false);
+    const [useEffectCompleted, setUseEffectCompleted] = useState(false);
 
     const setHiddenInputs = (newUploadMode, metadata) => {
         setUploadMode(newUploadMode);
@@ -72,7 +73,12 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetName, ex
             // resource has no file or link
             setHiddenInputs(null, {});
         };
+        setUseEffectCompleted(true);
     }, []);
+
+    if (!useEffectCompleted) {
+        return <div dangerouslySetInnerHTML={{ __html: loadingHtml }}></div>
+    }
 
     if (uploadError) return (
         <div className="alert alert-danger">
@@ -105,7 +111,7 @@ export default function App({ maxResourceSize, lfsServer, orgId, datasetName, ex
             )
         }
         return (
-            [null, 'file'].includes(uploadMode)
+            [undefined, null, 'file'].includes(uploadMode)
                 ? <FileUploader {...{
                     maxResourceSize, lfsServer, orgId, datasetName,
                     setUploadProgress, setUploadFileName,
