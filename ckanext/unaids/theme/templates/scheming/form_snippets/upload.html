@@ -1,0 +1,26 @@
+{% asset 'ckanext-unaids/FileInputComponentStyles' %}
+
+{% set dataset = h.get_package_from_id(pkg_name) %}
+
+<div
+    id="FileInputComponent"
+    data-lfsServer="{{ h.extstorage_server_url() }}"
+    data-maxResourceSize="{{ h.max_resource_size() }}"
+    data-orgId="{{ dataset.organization.name }}"
+    data-datasetName="{{ dataset.name }}"
+    data-existingUrlType="{{ data.url_type if data else '' }}"
+    data-existingUrl="{{ data.url if data else '' }}"
+    data-existingSha256="{{ data.sha256 if data else '' }}"
+    data-existingFileName="{{ h.extstorage_resource_filename(data) if data else '' }}"
+    data-existingSize="{{ data.size if data else '' }}"
+>       
+    {% if data.url %}
+        <h3 class="text-muted"><i class="fa fa-spinner fa-spin"></i> {{ _('Loading') }}</h3>
+    {% else %}
+        <div class="dropzone text-muted">
+            <h3><i class="fa fa-spinner fa-spin"></i> {{ _('Loading') }}</h3>
+        </div>        
+    {% endif %}
+</div>
+
+{% asset 'ckanext-unaids/FileInputComponentScripts' %}
