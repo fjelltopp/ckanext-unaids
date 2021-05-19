@@ -3,13 +3,27 @@
 {% block primary_content_inner %}
 
 <div class="btn-group">
-    <a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id) }}" class="btn btn-danger">Add a new Release</a>
+    <a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id) }}" class="btn btn-danger">
+        <span>{{ _('Add Release') }}</span>
+    </a>
     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
         <span class="caret"></span>
     </button>
     <ul class="dropdown-menu">
-        <li><a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id) }}">From the <u>latest version</u> of the dataset</a></li>
-        <li><a href="{{ h.url_for('dataset.activity', id=pkg.id, create_release=True) }}">From a <u>past version</u> of the dataset</a></li>
+        <li>
+            <a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id) }}">
+                <span>{{ _('From the') }} </span>
+                <u>{{ _('latest version') }} </u>
+                <span>{{ _('of the dataset') }}</span>
+            </a>
+        </li>
+        <li>
+            <a href="{{ h.url_for('dataset.activity', id=pkg.id, create_release=True) }}">
+                <span>{{ _('From a') }} </span>
+                <u>{{ _('past version') }} </u>
+                <span>{{ _('of the dataset') }}</span>
+            </a>
+        </li>
     </ul>
 </div>
 
@@ -19,7 +33,10 @@
     <link rel="stylesheet" href="/bootstrap-table.css" />
     <ul id="ReleasesLoading" class="list-group">
         <li class="list-group-item text-center text-muted">
-            <h2><i class="fa fa-spinner fa-spin"></i> Loading</h2>
+            <h2>
+                <i class="fa fa-spinner fa-spin"></i>
+                <span> {{ _('Loading') }}</span>
+            </h2>
         </li>
     </ul>
     <div id="ReleasesTableContainer">
@@ -100,7 +117,7 @@
 {% else %}
     <ul id="ReleasesLoading" class="list-group">
         <li class="list-group-item text-center text-muted">
-            <h3>No releases have been created yet</h3>
+            <h3>{{ _('No releases have been created yet') }}</h3>
         </li>
     </ul>
 {% endif %}
