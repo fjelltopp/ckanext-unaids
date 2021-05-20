@@ -260,7 +260,6 @@ def _get_upload_authz_token(context, dataset_name, org_name):
     }
     auth_r = requests.post(auth_url, headers=headers, data=payload)
     authz_result = auth_r.json()['result']
-    log.error(authz_result)
     if not authz_result or not authz_result.get('token', False):
         raise RuntimeError("Failed to get authorization token for LFS server")
     if len(authz_result['granted_scopes']) == 0:
