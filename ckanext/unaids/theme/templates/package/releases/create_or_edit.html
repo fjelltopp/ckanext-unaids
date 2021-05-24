@@ -13,14 +13,20 @@
                     </div>
                     <div class="modal-body">
                         <label for="basic-url">{{ _('Name') }}</label>
-                        <input type="text" class="form-control" required="required" value="{{ release.name if release }}">
+                        <input
+                            type="text"
+                            name="name"
+                            class="form-control"
+                            required="required"
+                            value="{{ release.name if release }}"
+                        >
                         <br />
-                        <label for="basic-url">{{ _('Notes') }}</label>
-                        <textarea class="form-control" rows="3">{{ release.notes if release }}</textarea>
+                        <label for="basic-url">{{ _('Description') }}</label>
+                        <textarea class="form-control" rows="3" name="description">{{ release.description if release }}</textarea>
                         <br />
                         <div class="text-right">
                             <a
-                                href="{{ h.url_for('dataset.read', id=pkg.id) }}"
+                                href="{{ h.url_for('dataset.read', id=pkg.name) }}"
                                 class="btn btn-default">
                                 <span>{{ _('Close') }}</span>
                             </a>

@@ -2,8 +2,12 @@
 
 {% block primary_content_inner %}
 
+{% set urls = {
+    'create_from_latest_version': h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.name),
+    'create_from_an_older_version': h.url_for('dataset.activity', id=pkg.id, create_release=True)
+} %}
 <div class="btn-group">
-    <a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id) }}" class="btn btn-danger">
+    <a href="{{ urls.create_from_latest_version }}" class="btn btn-danger">
         <span>{{ _('Add Release') }}</span>
     </a>
     <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
@@ -11,14 +15,14 @@
     </button>
     <ul class="dropdown-menu">
         <li>
-            <a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id) }}">
+            <a href="{{ urls.create_from_latest_version }}">
                 <span>{{ _('From the') }} </span>
                 <u>{{ _('latest version') }} </u>
                 <span>{{ _('of the dataset') }}</span>
             </a>
         </li>
         <li>
-            <a href="{{ h.url_for('dataset.activity', id=pkg.id, create_release=True) }}">
+            <a href="{{ urls.create_from_an_older_version }}">
                 <span>{{ _('From a') }} </span>
                 <u>{{ _('past version') }} </u>
                 <span>{{ _('of the dataset') }}</span>
@@ -56,9 +60,9 @@
                         <h4><i class="fa fa-tag text-muted"></i></h4>
                     </td>
                     <td class="vertical-align-top">
-                        <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.id) }}">{{ release.name }}</a></h4> 
-                        <div class="text-muted">{{ release.notes }}</div>
-                        <div class="text-muted">Created by <a href="#">{{ release.author }}</a></div>
+                        <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, release_id=release.id) }}">{{ release.name }}</a></h4> 
+                        <div class="text-muted">{{ release.description }}</div>
+                        <div class="text-muted">Created by <a href="#">{{ release.creator_user_id }}</a></div>
                         <br>
                     </td>
                     <td>{{ release.created.strftime('%d/%m/%Y %H:%M') }}</td>
@@ -73,18 +77,18 @@
                                 </button>
                             {% else %}
                                 <a
-                                    href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
+                                    href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, id=pkg.name, release_id=release.id) }}"
                                     class="btn btn-default"
                                     title="{{ _('Make release the latest version') }}"
                                 ><i class="fa fa-refresh"></i></a>
                             {% endif %}
                             <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
+                                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.name, release_id=release.id) }}"
                                 class="btn btn-default"
                                 title="{{ _('Edit Release') }}"
                             ><i class="fa fa-pencil"></i></a>
                             <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, id=pkg.id, release_id='TODO') }}"
+                                href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, id=pkg.name, release_id=release.id) }}"
                                 class="btn btn-default"
                                 title="{{ _('Delete Release') }}"
                             ><i class="fa fa-trash"></i></a>

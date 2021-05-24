@@ -20,7 +20,7 @@
           {{ _('Changes') }}
         </a>
         &nbsp;|&nbsp;
-        <a href="#">
+        <a href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=activity.object_id, activity_id=activity.id) }}">
           {{ _('Create Release') }}
         </a>
       {% endif %}

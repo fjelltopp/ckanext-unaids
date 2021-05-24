@@ -17,12 +17,12 @@ is_activity_archive else pkg.name, icon='code-fork') }}
     <span> {{ _('Release') }}</span>
   </h2>
   <div class="module-content">
-    {% if 'activity_id' in request.args %}
-    {% set release = {'name': 'Q1-2020', 'notes': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor'} %}
+    {% if 'release_id' in request.args %}
+    {% set release = h.get_release(request.args.release_id) %}
     <h2 style="margin: 0;"><u>{{ release.name }}</u></h2>
     <p class="text-muted">
-      <span>{{ _('Notes') }}: </span>
-      <span>{{ release.notes or _('None set') }}</span>
+      <span>{{ _('Description') }}: </span>
+      <span>{{ release.description or _('None set') }}</span>
     </p>
     {% else %}
     <p>{{ _('There is no release associated with this version of the dataset yet.') }}</p>

@@ -16,7 +16,7 @@
                         <br />
                         <div class="text-right">
                             <a
-                                href="{{ h.url_for('dataset.read', id=pkg.id) }}"
+                                href="{{ h.url_for('dataset.read', id=pkg.name, release_id=release.id) }}"
                                 class="btn btn-default">
                                 <span>{{ _('Close') }}</span>
                             </a>

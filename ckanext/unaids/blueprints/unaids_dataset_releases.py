@@ -1,11 +1,11 @@
 from datetime import datetime
 from flask import Blueprint
 from flask.views import MethodView
+from ckan import model
 from ckan.plugins import toolkit
 from ckan.common import _
 import ckan.lib.helpers as h
 from ckan.plugins.toolkit import request
-
 
 unaids_dataset_releases = Blueprint(
     u'unaids_dataset_releases',
@@ -13,40 +13,68 @@ unaids_dataset_releases = Blueprint(
 )
 
 
-# TODO: fetch this from the db using request.args['release_id']
-TEMP_RELEASE = {
-    'name': 'TODO',
-    'notes': 'TODO'
-}
+def _get_context():
+    return {
+        'model': model,
+        'session': model.Session,
+        'user': toolkit.c.user,
+        'for_view': True,
+        'auth_user_obj': toolkit.c.userobj
+    }
 
 
-def list_releases(dataset_type, id):
-    dataset = toolkit.get_action('package_show')({}, {'id': id})
-    dataset_releases = [
+def get_dataset_releases():
+    # TODO: replace with database request
+    return [
         {
-            'id': 'release_{}'.format(x),
-            'name': 'Release {}'.format(x),
-            'notes': 'Notes for release {}'.format(x),
-            'author': 'Manoj Nathwani',
-            'created': datetime.now(),
+            'id': 'resource-id-{}'.format(x),
+            'dataset_id': 'dataset-id-{}'.format(x),
+            'activity_id': 'activity-id-{}'.format(x),
+            'name': 'V{}.0'.format(x),
+            'description': 'Notes about release {}'.format(x),
+            'creator_user': toolkit.c.user,
+            'created': datetime.now()
         }
         for x in range(1, 16)
     ]
+
+
+def get_dataset_release(id):
+    # TODO: replace with database request
+    return [
+        x for x in get_dataset_releases()
+        if x['id'] == id
+    ][0]
+
+
+def create_release(activity_id, name, description):
+    # TODO: replace with database request
+    return get_dataset_releases()[0]
+
+
+def list_releases(dataset_type, id):
+    dataset = toolkit.get_action('package_show')(
+        _get_context(), {'id': id}
+    )
     return toolkit.render(
         'package/releases/list.html',
         {
             'pkg_dict': dataset,
-            'dataset_releases': dataset_releases
+            'dataset_releases': get_dataset_releases()
         }
     )
 
 
 class ReleaseView(MethodView):
     def get(self, dataset_type, id):
-        dataset = toolkit.get_action('package_show')({}, {'id': id})
+        dataset = toolkit.get_action('package_show')(
+            _get_context(), {'id': id}
+        )
         release = {}
         if 'release_id' in request.args:
-            release.update(TEMP_RELEASE)
+            release_id = request.args['release_id']
+            release = get_dataset_release(release_id)
+            release.update(release)
         return toolkit.render(
             'package/releases/create_or_edit.html',
             {
@@ -56,32 +84,45 @@ class ReleaseView(MethodView):
         )
 
     def post(self, dataset_type, id):
+        dataset = toolkit.get_action('package_show')(
+            _get_context(), {'id': id}
+        )
         if 'release_id' in request.args:
-            release = TEMP_RELEASE  # TODO
+            release_id = request.args['release_id']
+            release = get_dataset_release(release_id)
             h.flash_success(_(
                 'Release {} updated'.format(release['name'])
             ))
-            return h.redirect_to(
-                controller='dataset',
-                action='read',
-                id=id
-            )
         else:
-            release = TEMP_RELEASE  # TODO
+            if 'activity_id' in request.args:
+                activity_id = request.args['activity_id']
+            else:
+                activity_id = toolkit.get_action(
+                    'package_activity_list')(
+                    _get_context(), {'id': dataset['id']}
+                )[0]['id']
+            name = request.form['name']
+            assert len(name), 'Name must be set'
+            description = request.form.get('description', None)
+            release = create_release(activity_id, name, description)
             h.flash_success(_(
                 'Release {} added'.format(release['name'])
             ))
-            return h.redirect_to(
-                controller='dataset',
-                action='read',
-                id=id
-            )
+        return h.redirect_to(
+            controller='dataset',
+            action='read',
+            id=dataset['name'],
+            release_id=release['id']
+        )
 
 
 class ReleaseDelete(MethodView):
     def get(self, dataset_type, id):
-        dataset = toolkit.get_action('package_show')({}, {'id': id})
-        release = TEMP_RELEASE  # TODO
+        dataset = toolkit.get_action('package_show')(
+            _get_context(), {'id': id}
+        )
+        release_id = request.args['release_id']
+        release = get_dataset_release(release_id)
         return toolkit.render(
             'package/releases/delete.html',
             {
@@ -91,21 +132,28 @@ class ReleaseDelete(MethodView):
         )
 
     def post(self, dataset_type, id):
-        release = TEMP_RELEASE  # TODO
+        dataset = toolkit.get_action('package_show')(
+            _get_context(), {'id': id}
+        )
+        release_id = request.args['release_id']
+        release = get_dataset_release(release_id)
         h.flash_success(_(
             'Release {} deleted'.format(release['name'])
         ))
         return h.redirect_to(
             controller='dataset',
             action='read',
-            id=id
+            id=dataset['name']
         )
 
 
 class ReleaseRestore(MethodView):
     def get(self, dataset_type, id):
-        dataset = toolkit.get_action('package_show')({}, {'id': id})
-        release = TEMP_RELEASE  # TODO
+        dataset = toolkit.get_action('package_show')(
+            _get_context(), {'id': id}
+        )
+        release_id = request.args['release_id']
+        release = get_dataset_release(release_id)
         return toolkit.render(
             'package/releases/restore.html',
             {
@@ -115,14 +163,19 @@ class ReleaseRestore(MethodView):
         )
 
     def post(self, dataset_type, id):
-        release = TEMP_RELEASE  # TODO
+        dataset = toolkit.get_action('package_show')(
+            _get_context(), {'id': id}
+        )
+        release_id = request.args['release_id']
+        release = get_dataset_release(release_id)
         h.flash_success(_(
             'Release {} restored'.format(release['name'])
         ))
         return h.redirect_to(
             controller='dataset',
             action='read',
-            id=id
+            id=dataset['name'],
+            release_id=release['id']
         )
 
 

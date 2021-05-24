@@ -25,6 +25,7 @@ from ckanext.unaids.helpers import (
     get_all_organizations,
     get_bulk_file_uploader_default_fields,
 )
+from ckanext.unaids.blueprints.unaids_dataset_releases import get_dataset_release
 import ckanext.external_storage.helpers as extstorage_helpers
 import ckanext.unaids.actions as actions
 from ckanext.unaids import (
@@ -112,6 +113,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'extstorage_resource_filename': extstorage_helpers.resource_filename,
             u'max_resource_size': uploader.get_max_resource_size,
             u'bulk_file_uploader_default_fields': get_bulk_file_uploader_default_fields,
+            u'get_dataset_release': get_dataset_release,
         }
 
     # IAuthFunctions
