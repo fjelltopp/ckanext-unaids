@@ -22,7 +22,7 @@
             <input id="username" name="username" type="text" value="{{ user.name }}"
             disabled="True" class="form-control">
           {% else %}
-              <input id="username" type="text" name="username" placeholder="{{ _('Username') }}"
+              <input id="username" type="text" name="username" placeholder="{{ _('Username / Email')}}"
             value="" class="control-medium" data-module="autocomplete-without-creating-new-options"
             data-module-source="/api/2/util/user/autocomplete?q=?">
           {% endif %}
