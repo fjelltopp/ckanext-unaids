@@ -48,5 +48,5 @@ extra_translations = [
     _('A spectrum file used to run the Naomi model'),
     _('License definitions and additional information can be found at http://opendefinition.org/'),
     _('Reorder resources'),
-
+    _('Organisation Name / ID')
 ]
