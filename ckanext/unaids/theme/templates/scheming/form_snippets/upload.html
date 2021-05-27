@@ -11,7 +11,7 @@
     data-existingUrlType="{{ data.url_type if data else '' }}"
     data-existingUrl="{{ data.url if data else '' }}"
     data-existingSha256="{{ data.sha256 if data else '' }}"
-    data-existingFileName="{{ h.extstorage_resource_filename(data) if data else '' }}"
+    data-existingFileName="{{ h.blob_storage_resource_filename(data) if data else '' }}"
     data-existingSize="{{ data.size if data else '' }}"
 >       
     {% if data.url %}
