@@ -1,5 +1,15 @@
 {% ckan_extends %}
 
+{% block resource %}
+    {% set activity_id = request.args['activity_id'] %}
+    {% if activity_id and res.url_type == 'upload' %}
+        {# res.url is used quite deep in the template blocks, to avoid #}
+        {# duplication I update the param field #}
+        {% set _ = res.update({'url': "%s?activity_id=%s" % (res.url, activity_id)}) %}
+    {% endif %}
+    {{ super() }}
+{% endblock %}
+
 {% block resource_read_url %}
 
     <p class="text-muted break-word">{{ _('Resource ID:') }} <span style="color: #e31837">{{ res.id }}</span></p>
@@ -16,5 +26,12 @@
         {% elif res.url %}
             <p class="text-muted break-word">{{ _('URL:') }} {{ res.url }}</p>
         {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block download_resource_button %}
+    {# Datastore is avaiable only for the current version #}
+    {% if not activity_id %}
+        {{ super() }}
     {% endif %}
 {% endblock %}
