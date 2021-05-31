@@ -43,6 +43,8 @@
             "label": "Public"
           }
         ],
+        "placeholder_users": "Username / Email",
+        "placeholder_orgs": "Organisation Name / ID",
         "form_attrs_users": {
           "data-module": "autocomplete-without-creating-new-options",
           "data-module-tags": "",
