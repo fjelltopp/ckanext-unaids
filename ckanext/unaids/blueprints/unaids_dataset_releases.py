@@ -23,82 +23,75 @@ def _get_context():
     }
 
 
-def get_dataset_releases():
-    # TODO: replace with ckan action
-    return [
-        {
-            'id': 'resource-id-{}'.format(x),
-            'dataset_id': 'dataset-id-{}'.format(x),
-            'activity_id': 'activity-id-{}'.format(x),
-            'name': 'V{}.0'.format(x),
-            'description': 'Notes about release {}'.format(x),
-            'creator_user': toolkit.c.user,
-            'created': datetime.now()
-        }
-        for x in range(1, 16)
-    ]
-
-
-def get_dataset_release(id):
-    # TODO: replace with ckan action
-    return [
-        x for x in get_dataset_releases()
-        if x['id'] == id
-    ][0]
-
-
-def create_release(activity_id, name, description):
-    # TODO: replace with ckan action
-    return get_dataset_releases()[0]
-
-
 def list_releases(dataset_type, id):
     dataset = toolkit.get_action('package_show')(
         _get_context(), {'id': id}
+    )
+    releases = toolkit.get_action('dataset_version_list')(
+        _get_context(), {'dataset_id': id}
     )
     return toolkit.render(
         'package/releases/list.html',
         {
             'pkg_dict': dataset,
-            'dataset_releases': get_dataset_releases()
+            'dataset_releases': releases
         }
+    )
+
+
+def _dataset_release_view(dataset_id, template):
+    dataset = toolkit.get_action('package_show')(
+        _get_context(), {'id': dataset_id}
+    )
+    if request.args.get('release_id'):
+        release_id = request.args.get('release_id')
+        release = toolkit.get_action('version_show')(
+            _get_context(), {'version_id': release_id}
+        )
+    else:
+        release = None
+    return toolkit.render(
+        'package/releases/{}'.format(template),
+        {'pkg_dict': dataset, 'release': release}
     )
 
 
 class ReleaseView(MethodView):
     def get(self, dataset_type, id):
-        dataset = toolkit.get_action('package_show')(
-            _get_context(), {'id': id}
-        )
-        release = {}
-        if 'release_id' in request.args:
-            release_id = request.args['release_id']
-            release = get_dataset_release(release_id)
-            release.update(release)
-        return toolkit.render(
-            'package/releases/create_or_edit.html',
-            {
-                'pkg_dict': dataset,
-                'release': release
-            }
+        return _dataset_release_view(
+            id, 'create_or_edit.html'
         )
 
     def post(self, dataset_type, id):
         dataset = toolkit.get_action('package_show')(
             _get_context(), {'id': id}
         )
+        name = request.form['name']
+        notes = request.form.get('notes')
         if 'release_id' in request.args:
             release_id = request.args['release_id']
-            release = get_dataset_release(release_id)
+            release = toolkit.get_action('version_update')(
+                _get_context(),
+                {
+                    'package_id': id,
+                    'version_id': release_id,
+                    'name': name,
+                    'notes': notes
+                })
             h.flash_success(
                 _('Release {} updated').format(release['name'])
             )
         else:
-            activity_id = request.args.get('activity_id', None)
-            name = request.form['name']
-            assert len(name), 'Name must be set'
-            description = request.form.get('description', None)
-            release = create_release(activity_id, name, description)
+            activity_id = request.args.get('activity_id')
+            release = toolkit.get_action('dataset_version_create')(
+                _get_context(),
+                {
+                    'dataset_id': dataset['id'],
+                    'activity_id': activity_id,
+                    'name': name,
+                    'notes': notes
+                }
+            )
             h.flash_success(
                 _('Release {} added').format(release['name'])
             )
@@ -112,25 +105,16 @@ class ReleaseView(MethodView):
 
 class ReleaseDelete(MethodView):
     def get(self, dataset_type, id):
-        dataset = toolkit.get_action('package_show')(
-            _get_context(), {'id': id}
-        )
-        release_id = request.args['release_id']
-        release = get_dataset_release(release_id)
-        return toolkit.render(
-            'package/releases/delete.html',
-            {
-                'pkg_dict': dataset,
-                'release': release
-            }
-        )
+        return _dataset_release_view(id, 'delete.html')
 
     def post(self, dataset_type, id):
         dataset = toolkit.get_action('package_show')(
             _get_context(), {'id': id}
         )
         release_id = request.args['release_id']
-        release = get_dataset_release(release_id)
+        release = toolkit.get_action('version_delete')(
+            _get_context(), {'version_id': release_id}
+        )
         h.flash_success(
             _('Release {} deleted').format(release['name'])
         )
@@ -143,25 +127,16 @@ class ReleaseDelete(MethodView):
 
 class ReleaseRestore(MethodView):
     def get(self, dataset_type, id):
-        dataset = toolkit.get_action('package_show')(
-            _get_context(), {'id': id}
-        )
-        release_id = request.args['release_id']
-        release = get_dataset_release(release_id)
-        return toolkit.render(
-            'package/releases/restore.html',
-            {
-                'pkg_dict': dataset,
-                'release': release
-            }
-        )
+        return _dataset_release_view(id, 'restore.html')
 
     def post(self, dataset_type, id):
         dataset = toolkit.get_action('package_show')(
             _get_context(), {'id': id}
         )
         release_id = request.args['release_id']
-        release = get_dataset_release(release_id)
+        release = toolkit.get_action('version_show')(
+            _get_context(), {'version_id': release_id}
+        )
         h.flash_success(
             _('Release {} restored').format(release['name'])
         )

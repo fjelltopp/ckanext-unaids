@@ -60,12 +60,14 @@
                         <h4><i class="fa fa-tag text-muted"></i></h4>
                     </td>
                     <td class="vertical-align-top">
-                        <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, release_id=release.id) }}">{{ release.name }}</a></h4> 
-                        <div class="text-muted">{{ release.description }}</div>
+                        <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, activity_id=release.activity_id) }}">{{ release.name }}</a></h4> 
+                        <div class="text-muted">{{ release.notes }}</div>
                         <div class="text-muted">Created by <a href="#">{{ release.creator_user_id }}</a></div>
                         <br>
                     </td>
-                    <td>{{ release.created.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        <p title="{{ h.render_datetime(release.created, with_hours=True) }}">{{ h.time_ago_from_timestamp(release.created) }}</p>
+                    </td>
                     <td>
                         <div class="btn-group pull-right btn-group-xs">
                             {% if loop.index == 1 %}
