@@ -24,7 +24,7 @@ def _get_context():
 
 
 def get_dataset_releases():
-    # TODO: replace with database request
+    # TODO: replace with ckan action
     return [
         {
             'id': 'resource-id-{}'.format(x),
@@ -40,7 +40,7 @@ def get_dataset_releases():
 
 
 def get_dataset_release(id):
-    # TODO: replace with database request
+    # TODO: replace with ckan action
     return [
         x for x in get_dataset_releases()
         if x['id'] == id
@@ -48,7 +48,7 @@ def get_dataset_release(id):
 
 
 def create_release(activity_id, name, description):
-    # TODO: replace with database request
+    # TODO: replace with ckan action
     return get_dataset_releases()[0]
 
 
@@ -90,24 +90,18 @@ class ReleaseView(MethodView):
         if 'release_id' in request.args:
             release_id = request.args['release_id']
             release = get_dataset_release(release_id)
-            h.flash_success(_(
-                'Release {} updated'.format(release['name'])
-            ))
+            h.flash_success(
+                _('Release {} updated').format(release['name'])
+            )
         else:
-            if 'activity_id' in request.args:
-                activity_id = request.args['activity_id']
-            else:
-                activity_id = toolkit.get_action(
-                    'package_activity_list')(
-                    _get_context(), {'id': dataset['id']}
-                )[0]['id']
+            activity_id = request.args.get('activity_id', None)
             name = request.form['name']
             assert len(name), 'Name must be set'
             description = request.form.get('description', None)
             release = create_release(activity_id, name, description)
-            h.flash_success(_(
-                'Release {} added'.format(release['name'])
-            ))
+            h.flash_success(
+                _('Release {} added').format(release['name'])
+            )
         return h.redirect_to(
             controller='dataset',
             action='read',
@@ -137,9 +131,9 @@ class ReleaseDelete(MethodView):
         )
         release_id = request.args['release_id']
         release = get_dataset_release(release_id)
-        h.flash_success(_(
-            'Release {} deleted'.format(release['name'])
-        ))
+        h.flash_success(
+            _('Release {} deleted').format(release['name'])
+        )
         return h.redirect_to(
             controller='dataset',
             action='read',
@@ -168,9 +162,9 @@ class ReleaseRestore(MethodView):
         )
         release_id = request.args['release_id']
         release = get_dataset_release(release_id)
-        h.flash_success(_(
-            'Release {} restored'.format(release['name'])
-        ))
+        h.flash_success(
+            _('Release {} restored').format(release['name'])
+        )
         return h.redirect_to(
             controller='dataset',
             action='read',
