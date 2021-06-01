@@ -9,7 +9,7 @@ from ckan import model
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service external_storage')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.usefixtures('clean_db')
 class TestGiftlessBackend(object):
