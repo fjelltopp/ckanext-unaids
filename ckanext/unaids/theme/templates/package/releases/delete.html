@@ -1,33 +1,13 @@
-{% extends "package/read_base.html" %}
+{% extends "package/releases/base.html" %}
 
-{% block primary_content_inner %}
-<form method="POST">
-    <div class="modal-dialog">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            {{ _('Delete Release') }}
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <p>{{ _('Are you sure you want to delete this release?') }}</p>
-                        <br />
-                        <div class="text-right">
-                            <a
-                                href="{{ h.url_for('dataset.read', id=pkg.name, release_id=release.id) }}"
-                                class="btn btn-default">
-                                <span>{{ _('Close') }}</span>
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                {{ _('Yes') }}
-                            </button>                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+{% block modal_title %}
+    {{ _('Delete Release') }}
+{% endblock %}
+
+{% block modal_body %}
+    <p>{{ _('Are you sure you want to delete this release?') }}</p>
+{% endblock %}
+
+{% block submit_label %}
+    {{ _('Yes') }}
 {% endblock %}

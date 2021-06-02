@@ -1,0 +1,33 @@
+{% extends "package/read_base.html" %}
+
+{% block primary_content_inner %}
+<form method="POST">
+    <div class="modal-dialog">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">
+                            {% block modal_title %}{% endblock %}
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        {% block modal_body %}{% endblock %}
+                        <br />
+                        <div class="text-right">
+                            <a
+                                href="javascript:history.back()"
+                                class="btn btn-default">
+                                <span>{{ _('Close') }}</span>
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                {% block submit_label %}{% endblock %}                                
+                            </button>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}

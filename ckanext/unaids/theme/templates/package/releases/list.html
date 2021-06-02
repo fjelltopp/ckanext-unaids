@@ -3,7 +3,7 @@
 {% block primary_content_inner %}
 
 {% set urls = {
-    'create_from_latest_version': h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.name),
+    'create_from_latest_version': h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name),
     'create_from_an_older_version': h.url_for('dataset.activity', id=pkg.id, create_release=True)
 } %}
 <div class="btn-group">
@@ -62,7 +62,7 @@
                     <td class="vertical-align-top">
                         <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, activity_id=release.activity_id) }}">{{ release.name }}</a></h4> 
                         <div class="text-muted">{{ release.notes }}</div>
-                        <div class="text-muted">Created by <a href="#">{{ release.creator_user_id }}</a></div>
+                        <div class="text-muted">Created by{{ h.linked_user(release.creator_user_id, 0, 0) }}</a></div>
                         <br>
                     </td>
                     <td>
@@ -79,18 +79,18 @@
                                 </button>
                             {% else %}
                                 <a
-                                    href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, id=pkg.name, release_id=release.id) }}"
+                                    href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
                                     class="btn btn-default"
                                     title="{{ _('Make release the latest version') }}"
                                 ><i class="fa fa-refresh"></i></a>
                             {% endif %}
                             <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, id=pkg.name, release_id=release.id) }}"
+                                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
                                 class="btn btn-default"
                                 title="{{ _('Edit Release') }}"
                             ><i class="fa fa-pencil"></i></a>
                             <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, id=pkg.name, release_id=release.id) }}"
+                                href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
                                 class="btn btn-default"
                                 title="{{ _('Delete Release') }}"
                             ><i class="fa fa-trash"></i></a>

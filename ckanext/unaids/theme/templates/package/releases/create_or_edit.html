@@ -1,43 +1,27 @@
-{% extends "package/read_base.html" %}
+{% extends "package/releases/base.html" %}
 
-{% block primary_content_inner %}
-<form method="POST">
-    <div class="modal-dialog">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">
-                            {{ _('Edit Release') if release else _('Create Release') }}
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <label for="basic-url">{{ _('Name') }}</label>
-                        <input
-                            type="text"
-                            name="name"
-                            class="form-control"
-                            required="required"
-                            value="{{ release.name if release }}"
-                        >
-                        <br />
-                        <label for="basic-url">{{ _('Description') }}</label>
-                        <textarea class="form-control" rows="3" name="notes">{{ release.notes if release }}</textarea>
-                        <br />
-                        <div class="text-right">
-                            <a
-                                href="{{ h.url_for('dataset.read', id=pkg.name) }}"
-                                class="btn btn-default">
-                                <span>{{ _('Close') }}</span>
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                {{ _('Save') if release else _('Create') }}
-                            </button>                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</form>
+{% block modal_title %}
+    {{ _('Edit Release') if release else _('Create Release') }}
+{% endblock %}
+
+{% block modal_body %}
+
+    <label for="basic-url">{{ _('Name') }}</label>
+    <input
+        type="text"
+        name="name"
+        class="form-control"
+        required="required"
+        value="{{ release.name if release }}"
+    >
+
+    <br />
+
+    <label for="basic-url">{{ _('Description') }}</label>
+    <textarea class="form-control" rows="3" name="notes">{{ release.notes if release }}</textarea>
+    
+{% endblock %}
+
+{% block submit_label %}
+    {{ _('Save') if release else _('Create') }}
 {% endblock %}
