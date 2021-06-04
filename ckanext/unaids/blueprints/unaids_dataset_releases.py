@@ -1,4 +1,3 @@
-from datetime import datetime
 from flask import Blueprint
 from flask.views import MethodView
 from ckan import model
@@ -109,8 +108,10 @@ class ReleaseView(MethodView):
             h.flash_error(SOMETHING_WENT_WRONG_ERROR)
             return h.redirect_to(request.url)
         else:
-            flash_message = _('Release {} updated').format(release['name']) \
-                if release else _('Release {} added').format(release['name'])
+            if request.args.get('release_id'):
+                flash_message = _('Release {} updated').format(release['name'])
+            else:
+                flash_message = _('Release {} added').format(release['name'])
             h.flash_success(flash_message)
         # TODO: update redirect so activity_id isn't removed
         return h.redirect_to(
@@ -133,7 +134,7 @@ class ReleaseDelete(MethodView):
             toolkit.get_action('version_delete')(
                 _get_context(), {'version_id': release['id']}
             )
-        except toolkit.ObjectNotFound:
+        except Exception:
             h.flash_error(SOMETHING_WENT_WRONG_ERROR)
             return h.redirect_to(request.url)
         else:
@@ -162,7 +163,7 @@ class ReleaseRestore(MethodView):
                     'version_id': release['id']
                 }
             )
-        except toolkit.ObjectNotFound:
+        except Exception:
             h.flash_error(SOMETHING_WENT_WRONG_ERROR)
             return h.redirect_to(request.url)
         else:

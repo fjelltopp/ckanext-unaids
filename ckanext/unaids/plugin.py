@@ -23,7 +23,6 @@ from ckanext.unaids.helpers import (
     get_all_organizations,
     get_bulk_file_uploader_default_fields,
 )
-import ckanext.external_storage.helpers as extstorage_helpers
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
 from ckanext.unaids import (
