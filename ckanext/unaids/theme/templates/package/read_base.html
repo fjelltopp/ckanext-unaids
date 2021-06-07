@@ -12,13 +12,13 @@ icon='clock-o') }}
 {% block package_info %}
 {% set dataset_id = pkg.id if is_activity_archive else pkg.name %}
 {{ super() }}
-<section class="module module-narrow module-shallow">
+<section id="ReleasesSidebar" class="module module-narrow module-shallow">
   <h2 class="module-heading">
     <i class="fa fa-code-fork"></i>
     <span> {{ _('Release') }}</span>
   </h2>
   <div class="module-content">
-  {% set release = h.dataset_version_for_activity_id(dataset_id, request.args.activity_id) %}
+  {% set release = h.get_current_dataset_release(dataset_id, request.args.activity_id) %}
   {% if release %}
     <h2 style="margin: 0;"><u>{{ release.name }}</u></h2>
     <p class="text-muted">

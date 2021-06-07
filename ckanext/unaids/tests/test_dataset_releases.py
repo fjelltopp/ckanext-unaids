@@ -277,3 +277,56 @@ class TestDatasetReleaseListView(object):
         dataset, releases = create_dataset_with_releases(user_1)
         response = get_listview(app, user_2, dataset)
         assert_not_in('Add Release', response.body)
+
+
+@pytest.mark.usefixtures('clean_db', 'versions_setup')
+@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions')
+class TestDatasetRead(object):
+
+    def _get_dataset_release_sidebar(self, app, user, dataset, activity_id=None):
+        response = app.get(
+            url=url_for(
+                'dataset.read',
+                id=dataset['name'],
+                activity_id=activity_id
+            ),
+            extra_environ={'REMOTE_USER': user['name']}
+        )
+        assert response.status_code == 200
+        soup = BeautifulSoup(response.body)
+        return soup.find(id='ReleasesSidebar').text
+
+    def test_activity_id_query_param(self, app):
+        user = factories.User()
+        dataset, releases = create_dataset_with_releases(user)
+        release = releases[0]
+        response = self._get_dataset_release_sidebar(
+            app, user, dataset, activity_id=release['activity_id']
+        )
+        assert_in(release['name'], response)
+        assert_in(release['notes'], response)
+        assert_not_in('Create Release', response)
+
+    def test_when_no_release_for_dataset(self, app):
+        user = factories.User()
+        dataset, releases = create_dataset_with_releases(user)
+        response = self._get_dataset_release_sidebar(app, user, dataset)
+        assert_in('no release associated', response)
+        assert_in('Create Release', response)
+
+    def test_when_on_latest_version_of_dataset_has_release(self, app):
+        user = factories.User()
+        dataset, releases = create_dataset_with_releases(user)
+        release = dataset_version_create(
+            get_context(user),
+            {
+                'dataset_id': dataset['id'],
+                'name': 'my-new-release',
+                'notes': 'example',
+            }
+        )
+        response = self._get_dataset_release_sidebar(app, user, dataset)
+        assert_in(release['name'], response)
+        assert_in(release['notes'], response)
+        assert_not_in('Create Release', response)
