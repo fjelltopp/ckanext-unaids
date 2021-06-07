@@ -1,3 +1,4 @@
+import logging
 from flask import Blueprint
 from flask.views import MethodView
 from ckan import model
@@ -6,12 +7,15 @@ from ckan.common import _
 import ckan.lib.helpers as h
 from ckan.plugins.toolkit import request
 
+log = logging.getLogger(__name__)
 unaids_dataset_releases = Blueprint(
     u'unaids_dataset_releases',
     __name__
 )
-SOMETHING_WENT_WRONG_ERROR = toolkit._(
-    'Something went wrong. Please try again.')
+SOMETHING_WENT_WRONG_ERROR = \
+    _('Something went wrong. Please try again.')
+AUTHORIZATION_ERROR = \
+    _('You are not authorized to carry out this action')
 
 
 def _get_context():
@@ -99,27 +103,36 @@ class ReleaseView(MethodView):
                         'name': name,
                         'notes': notes
                     })
-        except toolkit.ValidationError:
-            h.flash_error(toolkit._(
-                'A release with the name {} already exists.'.format(name)
-            ))
-            return h.redirect_to(request.url)
-        except Exception:
+        except toolkit.NotAuthorized:
+            h.flash_error(AUTHORIZATION_ERROR)
+        except toolkit.ValidationError as e:
+            if 'Version already exists for this activity' in e:
+                error = _(
+                    'A release already exists for this version of the dataset')
+            elif e == 'Version names must be unique per dataset':
+                error = _('Release names must be unique per dataset')
+            else:
+                error = SOMETHING_WENT_WRONG_ERROR
+            h.flash_error(error)
+        except Exception as e:
+            log.error(e)
             h.flash_error(SOMETHING_WENT_WRONG_ERROR)
-            return h.redirect_to(request.url)
         else:
             if request.args.get('release_id'):
-                flash_message = _('Release {} updated').format(release['name'])
+                h.flash_success(
+                    _('Release {} updated').format(release['name'])
+                )
             else:
-                flash_message = _('Release {} added').format(release['name'])
-            h.flash_success(flash_message)
-        # TODO: update redirect so activity_id isn't removed
-        return h.redirect_to(
-            controller='dataset',
-            action='read',
-            id=dataset['id'],
-            activity_id=activity_id
-        )
+                h.flash_success(
+                    _('Release {} added').format(release['name'])
+                )
+            return h.redirect_to(
+                controller='dataset',
+                action='read',
+                id=dataset['id'],
+                activity_id=activity_id
+            )
+        return h.redirect_to(request.url)
 
 
 class ReleaseDelete(MethodView):
@@ -134,9 +147,11 @@ class ReleaseDelete(MethodView):
             toolkit.get_action('version_delete')(
                 _get_context(), {'version_id': release['id']}
             )
-        except Exception:
+        except toolkit.NotAuthorized:
+            h.flash_error(AUTHORIZATION_ERROR)
+        except Exception as e:
+            log.error(e)
             h.flash_error(SOMETHING_WENT_WRONG_ERROR)
-            return h.redirect_to(request.url)
         else:
             h.flash_success(
                 _('Release {} deleted').format(release['name'])
@@ -146,6 +161,7 @@ class ReleaseDelete(MethodView):
                 action='read',
                 id=dataset['name']
             )
+        return h.redirect_to(request.url)
 
 
 class ReleaseRestore(MethodView):
@@ -163,9 +179,11 @@ class ReleaseRestore(MethodView):
                     'version_id': release['id']
                 }
             )
-        except Exception:
+        except toolkit.NotAuthorized:
+            h.flash_error(AUTHORIZATION_ERROR)
+        except Exception as e:
+            log.error(e)
             h.flash_error(SOMETHING_WENT_WRONG_ERROR)
-            return h.redirect_to(request.url)
         else:
             h.flash_success(
                 _('Release {} restored').format(release['name'])
@@ -176,6 +194,7 @@ class ReleaseRestore(MethodView):
                 id=dataset['name'],
                 release_id=release['id']
             )
+        return h.redirect_to(request.url)
 
 
 unaids_dataset_releases.add_url_rule(

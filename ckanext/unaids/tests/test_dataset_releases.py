@@ -11,7 +11,9 @@ from ckanext.versions.logic.dataset_version_action import (
 from ckanext.versions.tests.fixtures import versions_setup  # noqa
 from ckanext.versions.tests import get_context
 from nose.tools import assert_equals, assert_in, assert_not_in
-from ckanext.unaids.blueprints.unaids_dataset_releases import SOMETHING_WENT_WRONG_ERROR
+from ckanext.unaids.blueprints.unaids_dataset_releases import (
+    SOMETHING_WENT_WRONG_ERROR, AUTHORIZATION_ERROR
+)
 
 
 def create_dataset_with_releases(user, number_of_releases=5):
@@ -101,7 +103,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         flash_message = self._create_or_edit(
             app, user_2, dataset, release
         )
-        assert_in(SOMETHING_WENT_WRONG_ERROR, flash_message)
+        assert_in(AUTHORIZATION_ERROR, flash_message)
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
     def test_edit_with_valid_user(self, app):
@@ -123,7 +125,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         flash_message = self._create_or_edit(
             app, user_2, dataset, updated_release
         )
-        assert_in(SOMETHING_WENT_WRONG_ERROR, flash_message)
+        assert_in(AUTHORIZATION_ERROR, flash_message)
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
@@ -165,7 +167,7 @@ class TestDatasetReleaseDelete(object):
         flash_message = self._delete(
             app, user_2, dataset, deleted_release
         )
-        assert_in(SOMETHING_WENT_WRONG_ERROR, flash_message)
+        assert_in(AUTHORIZATION_ERROR, flash_message)
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
@@ -210,7 +212,7 @@ class TestDatasetReleaseRestore(object):
         flash_message = self._restore(
             app, user_2, dataset, restored_release
         )
-        assert_in(SOMETHING_WENT_WRONG_ERROR, flash_message)
+        assert_in(AUTHORIZATION_ERROR, flash_message)
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
