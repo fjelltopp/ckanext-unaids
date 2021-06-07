@@ -8,7 +8,7 @@ from ckan.plugins import toolkit
 from ckanext.versions.logic.dataset_version_action import (
     dataset_version_create, dataset_version_list
 )
-from ckanext.versions.tests.fixtures import versions_setup # noqa
+from ckanext.versions.tests.fixtures import versions_setup  # noqa
 from ckanext.versions.tests import get_context
 from nose.tools import assert_equals, assert_in, assert_not_in
 from ckanext.unaids.blueprints.unaids_dataset_releases import SOMETHING_WENT_WRONG_ERROR
@@ -17,22 +17,28 @@ from ckanext.unaids.blueprints.unaids_dataset_releases import SOMETHING_WENT_WRO
 def create_dataset_with_releases(user, number_of_releases=5):
     org = factories.Organization(user=user)
     dataset = factories.Dataset(user=user, owner_org=org['id'])
-    activities = toolkit.get_action('package_activity_list')(
-        get_context(user),
-        {'id': dataset['id']}
-    )
-    releases = [
-        dataset_version_create(
+    releases = []
+    for x in range(number_of_releases):
+        activities = toolkit.get_action('package_activity_list')(
+            get_context(user),
+            {'id': dataset['id']}
+        )
+        releases.append(dataset_version_create(
             get_context(user),
             {
                 'dataset_id': dataset['id'],
                 'activity_id': activities[0]['id'],
-                'name': 'test-release-name-{}'.format(x),
+                'name': 'release-{}'.format(x),
                 'notes': 'Test Notes'
             }
+        ))
+        toolkit.get_action('package_patch')(
+            get_context(user),
+            {
+                'id': dataset['id'],
+                'title': 'updated-title-{}'.format(x)
+            }
         )
-        for x in range(number_of_releases)
-    ]
     return dataset, releases
 
 
