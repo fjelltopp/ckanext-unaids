@@ -16,6 +16,10 @@ SOMETHING_WENT_WRONG_ERROR = \
     _('Something went wrong. Please try again.')
 AUTHORIZATION_ERROR = \
     _('You are not authorized to carry out this action')
+RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR = \
+    _('A release already exists for this version of the dataset')
+RELEASE_NAME_NOT_UNIQUE_ERROR = \
+    _('Release names must be unique per dataset')
 
 
 def _get_context():
@@ -106,11 +110,11 @@ class ReleaseView(MethodView):
         except toolkit.NotAuthorized:
             h.flash_error(AUTHORIZATION_ERROR)
         except toolkit.ValidationError as e:
-            if 'Version already exists for this activity' in e:
-                error = _(
-                    'A release already exists for this version of the dataset')
-            elif e == 'Version names must be unique per dataset':
-                error = _('Release names must be unique per dataset')
+            validation_error = e.error_dict['message']
+            if 'Version already exists for this activity' in validation_error:
+                error = RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR
+            elif 'Version names must be unique per dataset' in validation_error:
+                error = RELEASE_NAME_NOT_UNIQUE_ERROR
             else:
                 error = SOMETHING_WENT_WRONG_ERROR
             h.flash_error(error)
@@ -126,13 +130,12 @@ class ReleaseView(MethodView):
                 h.flash_success(
                     _('Release {} added').format(release['name'])
                 )
-            return h.redirect_to(
-                controller='dataset',
-                action='read',
-                id=dataset['id'],
-                activity_id=activity_id
-            )
-        return h.redirect_to(request.url)
+        return h.redirect_to(
+            controller='unaids_dataset_releases',
+            action='list_releases',
+            dataset_type=dataset['type'],
+            dataset_id=dataset['id']
+        )
 
 
 class ReleaseDelete(MethodView):
@@ -156,12 +159,12 @@ class ReleaseDelete(MethodView):
             h.flash_success(
                 _('Release {} deleted').format(release['name'])
             )
-            return h.redirect_to(
-                controller='dataset',
-                action='read',
-                id=dataset['name']
-            )
-        return h.redirect_to(request.url)
+        return h.redirect_to(
+            controller='unaids_dataset_releases',
+            action='list_releases',
+            dataset_type=dataset['type'],
+            dataset_id=dataset['id']
+        )
 
 
 class ReleaseRestore(MethodView):
@@ -188,13 +191,12 @@ class ReleaseRestore(MethodView):
             h.flash_success(
                 _('Release {} restored').format(release['name'])
             )
-            return h.redirect_to(
-                controller='dataset',
-                action='read',
-                id=dataset['name'],
-                release_id=release['id']
-            )
-        return h.redirect_to(request.url)
+        return h.redirect_to(
+            controller='unaids_dataset_releases',
+            action='list_releases',
+            dataset_type=dataset['type'],
+            dataset_id=dataset['id']
+        )
 
 
 unaids_dataset_releases.add_url_rule(

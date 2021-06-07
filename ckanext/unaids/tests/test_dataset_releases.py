@@ -12,7 +12,9 @@ from ckanext.versions.tests.fixtures import versions_setup  # noqa
 from ckanext.versions.tests import get_context
 from nose.tools import assert_equals, assert_in, assert_not_in
 from ckanext.unaids.blueprints.unaids_dataset_releases import (
-    SOMETHING_WENT_WRONG_ERROR, AUTHORIZATION_ERROR
+    AUTHORIZATION_ERROR,
+    RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR,
+    RELEASE_NAME_NOT_UNIQUE_ERROR
 )
 
 
@@ -72,13 +74,14 @@ def assert_releases_are_exactly(user, dataset_id, expected_releases):
 @pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions')
 class TestDatasetReleaseCreateAndEdit(object):
 
-    def _create_or_edit(self, app, user, dataset, release):
+    def _create_or_edit(self, app, user, dataset, release, activity_id=None):
         response = app.post(
             url=url_for(
                 'unaids_dataset_releases.release_view',
                 dataset_type=dataset['type'],
                 dataset_id=dataset['id'],
-                release_id=release.get('id')
+                release_id=release.get('id'),
+                activity_id=activity_id
             ),
             data=release,
             extra_environ={'REMOTE_USER': user['name']}
@@ -105,6 +108,27 @@ class TestDatasetReleaseCreateAndEdit(object):
         )
         assert_in(AUTHORIZATION_ERROR, flash_message)
         assert_releases_are_exactly(user_1, dataset['id'], releases)
+
+    def test_create_with_existing_activity_id(self, app):
+        user = factories.User()
+        dataset, releases = create_dataset_with_releases(user)
+        release = {'name': 'my-new-release', 'notes': 'example'}
+        flash_message = self._create_or_edit(
+            app, user, dataset, release,
+            activity_id=releases[0]['activity_id']
+        )
+        assert_in(RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR, flash_message)
+        assert_releases_are_exactly(user, dataset['id'], releases)
+
+    def test_create_with_existing_release_name(self, app):
+        user = factories.User()
+        dataset, releases = create_dataset_with_releases(user)
+        release = {'name': releases[0]['name'], 'notes': 'example'}
+        flash_message = self._create_or_edit(
+            app, user, dataset, release
+        )
+        assert_in(RELEASE_NAME_NOT_UNIQUE_ERROR, flash_message)
+        assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_edit_with_valid_user(self, app):
         user = factories.User()
