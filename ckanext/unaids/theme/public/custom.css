@@ -236,4 +236,8 @@ footer{
 
 #ReleasesTableContainer tbody tr:first-child td{
   border-top: none !important;
-}    
+}
+
+#RestoreOrDeleteReleaseContainer h3{
+  margin: 0;
+}

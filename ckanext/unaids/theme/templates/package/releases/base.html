@@ -13,17 +13,16 @@
                     </div>
                     <div class="modal-body">
                         {% block modal_body %}{% endblock %}
-                        <br />
-                        <div class="text-right">
-                            <a
-                                href="javascript:history.back()"
-                                class="btn btn-default">
-                                <span>{{ _('Close') }}</span>
-                            </a>
-                            <button type="submit" class="btn btn-primary">
-                                {% block submit_label %}{% endblock %}                                
-                            </button>                            
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a
+                            href="javascript:history.back()"
+                            class="btn btn-default">
+                            <span>{{ _('Cancel') }}</span>
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            {% block submit_label %}{% endblock %}
+                        </button>
                     </div>
                 </div>
             </div>

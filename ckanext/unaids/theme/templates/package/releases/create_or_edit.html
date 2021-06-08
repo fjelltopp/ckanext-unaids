@@ -1,7 +1,7 @@
 {% extends "package/releases/base.html" %}
 
 {% block modal_title %}
-    {{ _('Edit Release') if release else _('Create Release') }}
+    {{ _('Edit Release') if release else _('Add Release') }}
 {% endblock %}
 
 {% block modal_body %}
@@ -23,5 +23,5 @@
 {% endblock %}
 
 {% block submit_label %}
-    {{ _('Save') if release else _('Create') }}
+    {{ _('Edit') if release else _('Add') }}
 {% endblock %}
