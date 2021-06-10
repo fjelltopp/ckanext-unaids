@@ -65,11 +65,12 @@ def _get_dataset_and_release(dataset_id):
     return dataset, release
 
 
-def _dataset_release_view(dataset_id, template):
+def _dataset_release_view(dataset_id, template, context={}):
     dataset, release = _get_dataset_and_release(dataset_id)
+    _context = {'pkg_dict': dataset, 'release': release}
+    _context.update(context)
     return toolkit.render(
-        'package/releases/{}.html'.format(template),
-        {'pkg_dict': dataset, 'release': release}
+        'package/releases/{}.html'.format(template), _context
     )
 
 
@@ -111,13 +112,21 @@ class ReleaseView(MethodView):
             h.flash_error(AUTHORIZATION_ERROR)
         except toolkit.ValidationError as e:
             validation_error = e.error_dict['message']
+            if 'Version names must be unique per dataset' in validation_error:
+                context = {
+                    'release_name_error': RELEASE_NAME_NOT_UNIQUE_ERROR,
+                    'release': {
+                        'name': name,
+                        'notes': notes
+                    }
+                }
+                return _dataset_release_view(
+                    dataset_id, 'create_or_edit', context
+                )
             if 'Version already exists for this activity' in validation_error:
-                error = RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR
-            elif 'Version names must be unique per dataset' in validation_error:
-                error = RELEASE_NAME_NOT_UNIQUE_ERROR
+                h.flash_error(RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR)
             else:
-                error = SOMETHING_WENT_WRONG_ERROR
-            h.flash_error(error)
+                h.flash_error(SOMETHING_WENT_WRONG_ERROR)
         except Exception as e:
             log.error(e)
             h.flash_error(SOMETHING_WENT_WRONG_ERROR)

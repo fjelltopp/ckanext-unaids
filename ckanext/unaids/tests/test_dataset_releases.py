@@ -87,15 +87,22 @@ class TestDatasetReleaseCreateAndEdit(object):
             extra_environ={'REMOTE_USER': user['name']}
         )
         assert response.status_code == 200
-        soup = BeautifulSoup(response.body)
-        flash_messages = soup.find('div', {'class': 'flash-messages'}).text
-        return flash_messages
+        return response.body
+
+    def _get_flash_message(self, response):
+        soup = BeautifulSoup(response)
+        return soup.find('div', {'class': 'flash-messages'}).text
+
+    def _get_form_errors(self, response):
+        soup = BeautifulSoup(response)
+        return soup.find('span', {'class': 'error-block'}).text
 
     def test_create_with_valid_user(self, app):
         user = factories.User()
         dataset, releases = create_dataset_with_releases(user)
         release = {'name': 'my-new-release', 'notes': 'example'}
-        flash_message = self._create_or_edit(app, user, dataset, release)
+        response = self._create_or_edit(app, user, dataset, release)
+        flash_message = self._get_flash_message(response)
         assert_in('Release {} added'.format(release['name']), flash_message)
         assert_releases_are_exactly(user, dataset['id'], releases + [release])
 
@@ -103,9 +110,10 @@ class TestDatasetReleaseCreateAndEdit(object):
         user_1, user_2 = factories.User(), factories.User()
         dataset, releases = create_dataset_with_releases(user_1)
         release = {'name': 'my-new-release', 'notes': 'example'}
-        flash_message = self._create_or_edit(
+        response = self._create_or_edit(
             app, user_2, dataset, release
         )
+        flash_message = self._get_flash_message(response)
         assert_in(AUTHORIZATION_ERROR, flash_message)
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
@@ -113,10 +121,11 @@ class TestDatasetReleaseCreateAndEdit(object):
         user = factories.User()
         dataset, releases = create_dataset_with_releases(user)
         release = {'name': 'my-new-release', 'notes': 'example'}
-        flash_message = self._create_or_edit(
+        response = self._create_or_edit(
             app, user, dataset, release,
             activity_id=releases[0]['activity_id']
         )
+        flash_message = self._get_flash_message(response)
         assert_in(RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR, flash_message)
         assert_releases_are_exactly(user, dataset['id'], releases)
 
@@ -124,10 +133,11 @@ class TestDatasetReleaseCreateAndEdit(object):
         user = factories.User()
         dataset, releases = create_dataset_with_releases(user)
         release = {'name': releases[0]['name'], 'notes': 'example'}
-        flash_message = self._create_or_edit(
+        response = self._create_or_edit(
             app, user, dataset, release
         )
-        assert_in(RELEASE_NAME_NOT_UNIQUE_ERROR, flash_message)
+        form_errors = self._get_form_errors(response)
+        assert_in(RELEASE_NAME_NOT_UNIQUE_ERROR, form_errors)
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_edit_with_valid_user(self, app):
@@ -135,8 +145,10 @@ class TestDatasetReleaseCreateAndEdit(object):
         dataset, releases = create_dataset_with_releases(user)
         updated_release = releases[0]
         updated_release['name'] = 'updated-release-name'
-        flash_message = self._create_or_edit(
-            app, user, dataset, updated_release)
+        response = self._create_or_edit(
+            app, user, dataset, updated_release
+        )
+        flash_message = self._get_flash_message(response)
         assert_in('Release {} updated'.format(
             updated_release['name']), flash_message)
         assert_releases_are_exactly(user, dataset['id'], releases)
@@ -146,9 +158,10 @@ class TestDatasetReleaseCreateAndEdit(object):
         dataset, releases = create_dataset_with_releases(user_1)
         updated_release = releases[0].copy()
         updated_release['name'] = 'updated-release-name'
-        flash_message = self._create_or_edit(
+        response = self._create_or_edit(
             app, user_2, dataset, updated_release
         )
+        flash_message = self._get_flash_message(response)
         assert_in(AUTHORIZATION_ERROR, flash_message)
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
