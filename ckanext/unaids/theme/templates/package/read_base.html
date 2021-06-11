@@ -29,7 +29,7 @@ icon='clock-o') }}
     <p>{{ _('There is no release associated with this version of the dataset yet.') }}</p>
     <a class="btn btn-default btn-xs"
       href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.id) }}">
-      <span>{{ _('Create Release') }}</span>
+      <span>{{ _('Add Release') }}</span>
     </a>
   {% endif %}
   </div>
