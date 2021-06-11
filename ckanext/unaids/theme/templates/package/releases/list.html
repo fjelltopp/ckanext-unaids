@@ -7,32 +7,42 @@
     'create_from_an_older_version': h.url_for('dataset.activity', id=pkg.id, create_release=True)
 } %}
 
-{% if h.check_access('version_create', {'package_id': pkg.id}) %}
-    <div class="btn-group">
-        <a href="{{ urls.create_from_latest_version }}" class="btn btn-danger">
-            <span>{{ _('Add Release') }}</span>
-        </a>
-        <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li>
-                <a href="{{ urls.create_from_latest_version }}">
-                    <span>{{ _('From the') }} </span>
-                    <u>{{ _('latest version') }} </u>
-                    <span>{{ _('of the dataset') }}</span>
-                </a>
-            </li>
-            <li>
-                <a href="{{ urls.create_from_an_older_version }}">
-                    <span>{{ _('From a') }} </span>
-                    <u>{{ _('past version') }} </u>
-                    <span>{{ _('of the dataset') }}</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <br /><br />
+{% if h.check_access('version_create', {'package_id': }) %}
+    {% set release = h.get_current_dataset_release(pkg.id, request.args.activity_id) %}
+    {% if release %}
+        <p class="empty">
+            <span>{{ _('The current version of the dataset is already used by release') }} {{ release.name }},</span>
+            <br />
+            <span>{{ _('You can create a release from another version') }} <a href="{{ urls.create_from_an_older_version }}">{{ _('here') }}</a></span>
+        </p>
+    {% else %}
+        <div class="btn-group">
+            <a href="{{ urls.create_from_latest_version }}" class="btn btn-danger">
+                <span>{{ _('Add Release') }}</span>
+            </a>
+            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a href="{{ urls.create_from_latest_version }}">
+                        <span>{{ _('From the') }} </span>
+                        <u>{{ _('latest version') }} </u>
+                        <span>{{ _('of the dataset') }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ urls.create_from_an_older_version }}">
+                        <span>{{ _('From a') }} </span>
+                        <u>{{ _('past version') }} </u>
+                        <span>{{ _('of the dataset') }}</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <br />
+    {% endif %}
+    <br />
 {% endif %}
 
 {% if dataset_releases %}
