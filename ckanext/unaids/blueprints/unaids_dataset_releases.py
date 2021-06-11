@@ -143,7 +143,7 @@ class ReleaseView(MethodView):
             controller='unaids_dataset_releases',
             action='list_releases',
             dataset_type=dataset['type'],
-            dataset_id=dataset['id']
+            dataset_id=dataset['name']
         )
 
 
@@ -172,7 +172,7 @@ class ReleaseDelete(MethodView):
             controller='unaids_dataset_releases',
             action='list_releases',
             dataset_type=dataset['type'],
-            dataset_id=dataset['id']
+            dataset_id=dataset['name']
         )
 
 
@@ -204,7 +204,7 @@ class ReleaseRestore(MethodView):
             controller='unaids_dataset_releases',
             action='list_releases',
             dataset_type=dataset['type'],
-            dataset_id=dataset['id']
+            dataset_id=dataset['name']
         )
 
 
