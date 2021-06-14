@@ -9,7 +9,6 @@ from ckanext.unaids.validators import organization_id_exists_validator
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.usefixtures('clean_db')
 class TestValidators(object):
 
     def test_organisation_id_exists_validator(self):
