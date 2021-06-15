@@ -35,3 +35,18 @@ class TestGetTableSchema(object):
         response = call_action('get_table_schema', {}, resource_id=resource['id'])
         log.debug("Table schema: {}".format(pformat(response)))
         assert response == {}
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids versions')
+@pytest.mark.usefixtures('with_plugins')
+class TestDatasetShowForRelease(object):
+    def test_package_show_displays_release(self):
+        pass
+
+    def test_package_show_accepts_release_name(self):
+        pass
+
+    def test_package_show_raises_when_incorrect_release(self):
+        pass
+
+

@@ -1,3 +1,5 @@
+import logging
+
 import ckan.logic.schema as schema_
 import ckan.logic as logic
 import ckan.lib.navl.dictization_functions as dfunc
@@ -13,6 +15,7 @@ _check_access = logic.check_access
 _validate = dfunc.validate
 ValidationError = logic.ValidationError
 
+log = logging.getLogger(__name__)
 
 def get_table_schema(context, data_dict):
     """
@@ -92,3 +95,15 @@ def task_status_update(context, data_dict):
     session.commit()
     session.close()
     return model_dictize.task_status_dictize(task_status, context)
+
+@t.chained_action
+@t.side_effect_free
+def dataset_version_show(original_action, context, data_dict):
+    version_id_or_name = data_dict.get('release_id')
+    if version_id_or_name:
+        #get version
+        # get dataset for activity_id
+        # update resource download links with ?activity_id=xxxxx
+        return {}
+    else:
+        return original_action(context, data_dict)
