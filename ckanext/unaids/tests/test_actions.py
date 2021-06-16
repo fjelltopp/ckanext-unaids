@@ -66,7 +66,7 @@ class TestDatasetShowForRelease(object):
 
     def test_package_show_raises_when_incorrect_release(self, test_dataset, org_editor):
         context = get_context(org_editor)
-        with pytest.raises(toolkit.NotFound, match='Release for this dataset not found'):
+        with pytest.raises(toolkit.ObjectNotFound, match='Release not found for this dataset'):
             call_action('package_show',
                         context,
                         id=test_dataset['id'],

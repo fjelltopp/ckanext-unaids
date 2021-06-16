@@ -7,8 +7,9 @@ import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
+from ckan.authz import is_authorized
 from ckan.common import _
-
+from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 
 NotFound = logic.NotFound
 _check_access = logic.check_access
@@ -101,9 +102,26 @@ def task_status_update(context, data_dict):
 def dataset_version_show(original_action, context, data_dict):
     version_id_or_name = data_dict.get('release_id')
     if version_id_or_name:
-        #get version
-        # get dataset for activity_id
+        t.check_access('package_show', context, data_dict)
+        dataset_id = t.get_or_bust(data_dict, 'id')
+        try:
+            activity_id = get_activity_id_from_dataset_version_name(
+                context,
+                {
+                    'dataset_id': dataset_id,
+                    'version': version_id_or_name
+                }
+            )
+        except t.ObjectNotFound:
+            raise t.ObjectNotFound("Release not found for this dataset")
+        dataset = activity_dataset_show(
+            context,
+            {
+                'activity_id': activity_id,
+                'dataset_id': dataset_id
+            }
+        )
         # update resource download links with ?activity_id=xxxxx
-        return original_action(context, data_dict)
+        return dataset
     else:
         return original_action(context, data_dict)
