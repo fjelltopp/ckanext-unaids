@@ -7,7 +7,7 @@
     'create_from_an_older_version': h.url_for('dataset.activity', id=pkg.id, create_release=True)
 } %}
 
-{% if h.check_access('version_create', {'package_id': }) %}
+{% if h.check_access('version_create', {'package_id': pkg.id}) %}
     {% set release = h.get_current_dataset_release(pkg.id, request.args.activity_id) %}
     {% if release %}
         <p class="empty">
