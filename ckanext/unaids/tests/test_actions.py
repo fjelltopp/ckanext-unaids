@@ -73,6 +73,52 @@ class TestDatasetShowForRelease(object):
                         release_id='fake-release-id'
                         )
 
+    def test_package_show_returns_updated_resource_download_links(self, test_dataset, org_editor):
+        context = get_context(org_editor)
+        toolkit.get_action('resource_create')(
+            context,
+            {
+                "name": 'Test',
+                "description": "Test resource",
+                "url_type": "upload",
+                "lfs_prefix": "test/prefix",
+                "filename": "test.csv",
+                "sha256": "123123123",
+                "package_id": test_dataset["id"]
+            }
+        )
+        version = toolkit.get_action('dataset_version_create')(
+            context,
+            {
+                "dataset_id": test_dataset['id'],
+                "name": "V1.0"
+            }
+        )
+
+        dataset = call_action('package_show',
+                              context,
+                              id=test_dataset['id'],
+                              release_id=version['name']
+                              )
+        assert 'activity_id={}'.format(version['activity_id']) in dataset['resources'][0]['url']
+
+    def test_package_show_only_returns_updated_resource_download_links_for_uploads(self, test_dataset, org_editor, test_resource):
+        context = get_context(org_editor)
+        version = toolkit.get_action('dataset_version_create')(
+            context,
+            {
+                "dataset_id": test_dataset['id'],
+                "name": "V1.0"
+            }
+        )
+        dataset = call_action('package_show',
+                              context,
+                              id=test_dataset['id'],
+                              release_id=version['name']
+                              )
+        assert 'activity_id={}'.format(version['activity_id']) not in dataset['resources'][0]['url']
+
+
     @pytest.mark.parametrize("user_role, is_authorized", [
         ('admin', True),
         ('editor', True),

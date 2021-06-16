@@ -121,7 +121,9 @@ def dataset_version_show(original_action, context, data_dict):
                 'dataset_id': dataset_id
             }
         )
-        # update resource download links with ?activity_id=xxxxx
+        for resource in dataset['resources']:
+            if resource['url_type'] == 'upload':
+                resource['url'] = "{}?activity_id={}".format(resource['url'], activity_id)
         return dataset
     else:
         return original_action(context, data_dict)
