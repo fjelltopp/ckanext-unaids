@@ -8,7 +8,6 @@ from ckan.plugins import toolkit
 from ckanext.versions.logic.dataset_version_action import (
     dataset_version_create, dataset_version_list
 )
-from ckanext.versions.tests.fixtures import versions_setup  # noqa
 from ckanext.versions.tests import get_context
 from nose.tools import assert_equals, assert_in, assert_not_in
 from ckanext.unaids.blueprints.unaids_dataset_releases import (
@@ -69,7 +68,6 @@ def assert_releases_are_exactly(user, dataset_id, expected_releases):
     )
 
 
-@pytest.mark.usefixtures('clean_db', 'versions_setup')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions')
 class TestDatasetReleaseCreateAndEdit(object):
@@ -166,7 +164,6 @@ class TestDatasetReleaseCreateAndEdit(object):
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
-@pytest.mark.usefixtures('clean_db', 'versions_setup')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions')
 class TestDatasetReleaseDelete(object):
@@ -208,7 +205,6 @@ class TestDatasetReleaseDelete(object):
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
-@pytest.mark.usefixtures('clean_db', 'versions_setup')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions')
 class TestDatasetReleaseRestore(object):
@@ -253,7 +249,6 @@ class TestDatasetReleaseRestore(object):
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
-@pytest.mark.usefixtures('clean_db', 'versions_setup')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions')
 class TestDatasetReleaseListView(object):
@@ -292,7 +287,6 @@ class TestDatasetReleaseListView(object):
         assert_not_in('Add Release', response.body)
 
 
-@pytest.mark.usefixtures('clean_db', 'versions_setup')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions')
 class TestDatasetRead(object):

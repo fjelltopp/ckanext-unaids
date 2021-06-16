@@ -1,12 +1,10 @@
-from sqlalchemy import Column, MetaData, types
+from sqlalchemy import Column, types
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
-from ckan.lib.base import model
+from ckan.model.meta import metadata
 
-Base = declarative_base()
-metadata = MetaData()
-
+Base = declarative_base(metadata=metadata)
 
 STATUS_EMAILED = "emailed"
 STATUS_EMAIL_FAILED = "email_failed"
@@ -31,4 +29,8 @@ class DatasetTransferRequest(Base):
 
 
 def init_tables():
-    Base.metadata.create_all(model.meta.engine)
+    DatasetTransferRequest.__table__.create()
+
+
+def tables_exists():
+    return DatasetTransferRequest.__table__.exists()
