@@ -104,6 +104,6 @@ def dataset_version_show(original_action, context, data_dict):
         #get version
         # get dataset for activity_id
         # update resource download links with ?activity_id=xxxxx
-        return {}
+        return original_action(context, data_dict)
     else:
         return original_action(context, data_dict)
