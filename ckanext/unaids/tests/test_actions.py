@@ -63,7 +63,6 @@ class TestDatasetShowForRelease(object):
         assert test_dataset['id'] == dataset['id']
         assert new_title != dataset['title']
 
-
     def test_package_show_raises_when_incorrect_release(self, test_dataset, org_editor):
         context = get_context(org_editor)
         with pytest.raises(toolkit.ObjectNotFound, match='Release not found for this dataset'):
@@ -102,7 +101,8 @@ class TestDatasetShowForRelease(object):
                               )
         assert 'activity_id={}'.format(version['activity_id']) in dataset['resources'][0]['url']
 
-    def test_package_show_only_returns_updated_resource_download_links_for_uploads(self, test_dataset, org_editor, test_resource):
+    def test_package_show_only_returns_updated_resource_download_links_for_uploads(
+            self, test_dataset, org_editor, test_resource):
         context = get_context(org_editor)
         version = toolkit.get_action('dataset_version_create')(
             context,
@@ -117,7 +117,6 @@ class TestDatasetShowForRelease(object):
                               release_id=version['name']
                               )
         assert 'activity_id={}'.format(version['activity_id']) not in dataset['resources'][0]['url']
-
 
     @pytest.mark.parametrize("user_role, is_authorized", [
         ('admin', True),
@@ -144,5 +143,3 @@ class TestDatasetShowForRelease(object):
                                     )
                     return
         pytest.fail("Couldn't find user with required role %s", user_role)
-
-

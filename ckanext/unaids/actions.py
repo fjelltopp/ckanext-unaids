@@ -7,7 +7,6 @@ import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
-from ckan.authz import is_authorized
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 
@@ -17,6 +16,7 @@ _validate = dfunc.validate
 ValidationError = logic.ValidationError
 
 log = logging.getLogger(__name__)
+
 
 def get_table_schema(context, data_dict):
     """
@@ -96,6 +96,7 @@ def task_status_update(context, data_dict):
     session.commit()
     session.close()
     return model_dictize.task_status_dictize(task_status, context)
+
 
 @t.chained_action
 @t.side_effect_free
