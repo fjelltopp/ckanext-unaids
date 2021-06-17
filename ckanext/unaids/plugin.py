@@ -11,6 +11,8 @@ import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
+
+from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
     if_empty_guess_format,
     organization_id_exists_validator
@@ -28,7 +30,7 @@ import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
 from ckanext.unaids import (
     auth,
-    licenses
+    licenses, command
 )
 from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
@@ -54,6 +56,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     """
 
+    p.implements(p.IClick)
     p.implements(p.IConfigurer)
     p.implements(p.IFacets, inherit=True)
     p.implements(p.IBlueprint)
@@ -67,11 +70,20 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IActions)
     p.implements(IDataValidation)
 
+    # IClick
+    def get_commands(self):
+        return command.get_commands()
+
     # IConfigurer
     def update_config(self, config):
-        '''
-        This method allows to access and modify the CKAN configuration object
-        '''
+        if not tables_exists():
+            log.critical(
+                "The unaids extension requires a database setup. Please run "
+                "the following to create the database tables: \n"
+                "ckan unaids initdb"
+            )
+        else:
+            log.debug("UNAIDS tables verified to exist")
         add_licenses()
         log.info("UNAIDS Plugin is enabled")
         p.toolkit.add_template_directory(config, 'theme/templates')
