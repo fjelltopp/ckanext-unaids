@@ -1,46 +1,27 @@
-import logging
+import click
+from ckanext.unaids.dataset_transfer.model import init_tables, tables_exists
 
-from ckan.lib.cli import CkanCommand
+
+@click.group()
+def unaids():
+    '''unaids commands
+    '''
+    pass
 
 
-class InitDBCommand(CkanCommand):
+@unaids.command()
+@click.pass_context
+def initdb(ctx):
+    """Creates the necessary tables for dataset transfer in the database.
     """
-    Initialises the database with the required tables
-    Connects to the CKAN database and creates the dataset transfer request tables
-    Usage:
-        paster initdb
-           - Creates the database table dataset transfer request
-    """
-    summary = __doc__.split('\n')[0]
-    usage = __doc__
-    max_args = 0
-    min_args = 0
+    if tables_exists():
+        click.secho('Dataset versions tables already exist', fg="green")
+        ctx.exit(0)
 
-    def __init__(self, name):
-        super(InitDBCommand, self).__init__(name)
+    init_tables()
+    click.secho('Dataset versions tables created', fg="green")
 
-    def command(self):
-        """
-        Parse command line arguments and call appropriate method.
-        """
-        # if not self.args or self.args[0] in ['--help', '-h', 'help']:
-        #    print self.usage
-        #    sys.exit(1)
 
-        # cmd = self.args[0]
-        self._load_config()
+def get_commands():
+    return [unaids]
 
-        # Initialise logger after the config is loaded, so it is not disabled.
-        self.log = logging.getLogger(__name__)
-
-        # if cmd == 'initdb':
-        import ckan.model as model
-        model.Session.remove()
-        model.Session.configure(bind=model.meta.engine)
-
-        import ckanext.unaids.dataset_transfer.model as rmodel
-        self.log.info("Initializing tables")
-        rmodel.init_tables()
-        self.log.info("DB tables are setup")
-        # else:
-        #    self.log.error('Command %s not recognized' % (cmd,))
