@@ -4,7 +4,7 @@ import pytest
 from bs4 import BeautifulSoup
 from ckan.lib.helpers import url_for
 import ckan.tests.factories as factories
-from ckan.plugins import toolkit
+from ckanext.unaids.tests import create_dataset_with_releases
 from ckanext.versions.logic.dataset_version_action import (
     dataset_version_create, dataset_version_list
 )
@@ -15,34 +15,6 @@ from ckanext.unaids.blueprints.unaids_dataset_releases import (
     RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR,
     RELEASE_NAME_NOT_UNIQUE_ERROR
 )
-
-
-def create_dataset_with_releases(user, number_of_releases=5):
-    org = factories.Organization(user=user)
-    dataset = factories.Dataset(user=user, owner_org=org['id'])
-    releases = []
-    for x in range(number_of_releases):
-        activities = toolkit.get_action('package_activity_list')(
-            get_context(user),
-            {'id': dataset['id']}
-        )
-        releases.append(dataset_version_create(
-            get_context(user),
-            {
-                'dataset_id': dataset['id'],
-                'activity_id': activities[0]['id'],
-                'name': 'release-{}'.format(x),
-                'notes': 'Test Notes'
-            }
-        ))
-        toolkit.get_action('package_patch')(
-            get_context(user),
-            {
-                'id': dataset['id'],
-                'title': 'updated-title-{}'.format(x)
-            }
-        )
-    return dataset, releases
 
 
 def get_listview(app, user, dataset):

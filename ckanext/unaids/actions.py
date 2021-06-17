@@ -128,3 +128,20 @@ def dataset_version_show(original_action, context, data_dict):
         return dataset
     else:
         return original_action(context, data_dict)
+
+
+@t.chained_action
+@t.side_effect_free
+def package_activity_list(original_action, context, data_dict):
+    activity_list = original_action(context, data_dict)
+    dataset_id = data_dict['id']
+    releases_list = t.get_action('dataset_version_list')(
+        context,
+        {
+            'dataset_id': dataset_id,
+        }
+    )
+    activity_to_release_name = {r['activity_id']: r['name'] for r in releases_list}
+    for activity in activity_list:
+        activity['release_name'] = activity_to_release_name.get(activity['id'])
+    return activity_list

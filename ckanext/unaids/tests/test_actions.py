@@ -7,7 +7,8 @@ import pytest
 import logging
 from pprint import pformat
 
-from ckanext.unaids.tests import get_context
+from ckanext.unaids.actions import package_activity_list
+from ckanext.unaids.tests import get_context, create_dataset_with_releases
 
 log = logging.getLogger(__name__)
 
@@ -143,3 +144,15 @@ class TestDatasetShowForRelease(object):
                                     )
                     return
         pytest.fail("Couldn't find user with required role %s", user_role)
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids versions')
+@pytest.mark.usefixtures('with_plugins')
+class TestPackageActivityList(object):
+
+    def test_package_activity_list_containes_releases_names(self, org_editor):
+        context = get_context(org_editor)
+        dataset, releases = create_dataset_with_releases(org_editor)
+        activity_list = call_action('package_activity_list', context, id=dataset['id'])
+        for release, activity in zip(releases, reversed(activity_list)):
+            assert release['name'] == activity.get('release_name')
+        pass
