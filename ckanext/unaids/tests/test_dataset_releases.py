@@ -320,7 +320,7 @@ class TestDatasetRead(object):
         dataset, releases = create_dataset_with_releases(user)
         response = self._get_dataset_release_sidebar(app, user, dataset)
         assert_in('no release associated', response)
-        assert_in('Create Release', response)
+        assert_in('Add Release', response)
 
     def test_when_on_latest_version_of_dataset_has_release(self, app):
         user = factories.User()
