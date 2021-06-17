@@ -1,7 +1,8 @@
 {% ckan_extends %}
 
 {% block activity_stream %}
-    {% if request.args.create_release %}
+    {% set can_create_version = h.check_access('version_create', {'package_id': id}) if 'package' in object_type %}
+    {% if can_create_version and request.args.create_release %}
         <div class="alert alert-info" style="margin-top: -15px; margin-bottom: 20px;">
             <p>{{ _('Use the "Add Release" button to select a version of this dataset') }}</p>
         </div>
@@ -12,7 +13,9 @@
             {%- snippet "snippets/activities/{}.html".format(
       activity.activity_type.replace(' ', '_')
       ), "snippets/activities/fallback.html",
-      activity=activity, can_show_activity_detail=can_show_activity_detail, ah={
+      activity=activity,
+      can_create_version=can_create_version,
+      can_show_activity_detail=can_show_activity_detail, ah={
         'actor': actor,
         'dataset': dataset,
         'organization': organization,

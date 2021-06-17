@@ -15,20 +15,22 @@
           {{ _('View this version') }}
         </a>
       {% endif %}
-      &nbsp;|&nbsp;
-      {% if activity.release_name %}
-        <span>{{ _('Release') }}: </span>
-        <a href="{{ h.url_for(dataset_type ~ '.read', id=activity.object_id, activity_id=activity.id) }}">
-              {{ activity.release_name }}
-          </a>
-      {% else %}
-        <a href="{{ h.url_for(
-              'unaids_dataset_releases.release_view',
-              dataset_type=dataset_type,
-              dataset_id=activity.object_id,
-              activity_id=activity.id
-            )}}"> {{ _('Add Release') }}
-          </a>
+      {% if can_create_version %}
+          &nbsp;|&nbsp;
+        {% if activity.release_name %}
+          <span>{{ _('Release') }}: </span>
+          <a href="{{ h.url_for(dataset_type ~ '.read', id=activity.object_id, activity_id=activity.id) }}">
+                  {{ activity.release_name }}
+              </a>
+        {% else %}
+          <a href="{{ h.url_for(
+                  'unaids_dataset_releases.release_view',
+                  dataset_type=dataset_type,
+                  dataset_id=activity.object_id,
+                  activity_id=activity.id
+                )}}"> {{ _('Add Release') }}
+              </a>
+        {% endif %}
       {% endif %}
     </span>
   </p>
