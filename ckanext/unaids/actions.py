@@ -101,7 +101,7 @@ def task_status_update(context, data_dict):
 @t.chained_action
 @t.side_effect_free
 def dataset_version_show(original_action, context, data_dict):
-    version_id_or_name = data_dict.get('release_id')
+    version_id_or_name = data_dict.get('release')
     if version_id_or_name:
         t.check_access('package_show', context, data_dict)
         dataset_id = t.get_or_bust(data_dict, 'id')

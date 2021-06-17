@@ -58,7 +58,7 @@ class TestDatasetShowForRelease(object):
         dataset = call_action('package_show',
                               context,
                               id=test_dataset['id'],
-                              release_id=test_version[object_ref]
+                              release=test_version[object_ref]
                               )
         assert test_dataset['id'] == dataset['id']
         assert new_title != dataset['title']
@@ -69,7 +69,7 @@ class TestDatasetShowForRelease(object):
             call_action('package_show',
                         context,
                         id=test_dataset['id'],
-                        release_id='fake-release-id'
+                        release='fake-release-id'
                         )
 
     def test_package_show_returns_updated_resource_download_links(self, test_dataset, org_editor):
@@ -97,7 +97,7 @@ class TestDatasetShowForRelease(object):
         dataset = call_action('package_show',
                               context,
                               id=test_dataset['id'],
-                              release_id=version['name']
+                              release=version['name']
                               )
         assert 'activity_id={}'.format(version['activity_id']) in dataset['resources'][0]['url']
 
@@ -114,7 +114,7 @@ class TestDatasetShowForRelease(object):
         dataset = call_action('package_show',
                               context,
                               id=test_dataset['id'],
-                              release_id=version['name']
+                              release=version['name']
                               )
         assert 'activity_id={}'.format(version['activity_id']) not in dataset['resources'][0]['url']
 
@@ -131,7 +131,7 @@ class TestDatasetShowForRelease(object):
                     call_action('package_show',
                                 context,
                                 id=test_dataset['id'],
-                                release_id=test_version['id']
+                                release=test_version['id']
                                 )
                     return
                 else:
@@ -139,7 +139,7 @@ class TestDatasetShowForRelease(object):
                         call_action('package_show',
                                     context,
                                     id=test_dataset['id'],
-                                    release_id=test_version['id']
+                                    release=test_version['id']
                                     )
                     return
         pytest.fail("Couldn't find user with required role %s", user_role)
