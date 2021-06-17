@@ -1,0 +1,36 @@
+{% set dataset = h.get_package_from_id(activity.object_id) %}
+{% set dataset_type = dataset.type or 'dataset' %}
+{% set release = h.get_current_dataset_release(dataset.id, activity.id) %}
+
+<li class="item {{ activity.activity_type|replace(' ', '-')|lower }}">
+    <i class="fa icon fa-sitemap"></i>
+    <p>
+        {{ _('{actor} {action} the dataset {dataset}').format(
+            actor=ah.actor(activity),
+            action=action,
+            dataset=ah.dataset(activity)
+        )|safe }}
+        <br />
+        <span class="date">
+            {{ h.time_ago_from_timestamp(activity.timestamp) }}
+            {% if can_show_activity_detail %}
+            &nbsp;|&nbsp;
+            <a href="{{ h.url_for(dataset_type ~ '.read', id=dataset.name, activity_id=activity.id) }}">
+                {{ _('View this version') }}
+            </a>
+            &nbsp;|&nbsp;
+            {% if release %}
+            <span>{{ _('Release') }}: </span>
+            <a href="{{ h.url_for(dataset_type ~ '.read', id=dataset.name, activity_id=release.activity_id) }}">
+                {{ release.name }}
+            </a>
+            {% else %}
+            <a
+                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=dataset.id, activity_id=activity.id) }}">
+                {{ _('Add Release') }}
+            </a>
+            {% endif %}
+            {% endif %}
+        </span>
+    </p>
+</li>

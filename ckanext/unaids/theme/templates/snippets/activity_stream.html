@@ -1,0 +1,10 @@
+{% ckan_extends %}
+
+{% block activity_stream %}
+    {% if request.args.create_release %}        
+        <div class="alert alert-info" style="margin-top: -15px; margin-bottom: 20px;">
+            <p>{{ _('Use the "Add Release" button to select a version of this dataset') }}</p>
+        </div>        
+    {% endif %}
+    {{ super() }}
+{% endblock %}

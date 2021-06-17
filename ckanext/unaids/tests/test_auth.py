@@ -13,7 +13,6 @@ log = logging.getLogger(__name__)
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.usefixtures('clean_db')
 class TestAuth(object):
 
     def test_unaids_organization_update_valid(self, app):

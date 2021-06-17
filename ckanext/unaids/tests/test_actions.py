@@ -12,7 +12,6 @@ log = logging.getLogger(__name__)
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids')
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.usefixtures('clean_db')
 class TestGetTableSchema(object):
 
     def test_schema_returned_successfully(self, ):

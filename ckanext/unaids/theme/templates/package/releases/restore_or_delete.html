@@ -1,0 +1,19 @@
+{% extends "package/releases/base.html" %}
+
+{% block modal_body %}
+    <div>
+        {% block modal_text %}{% endblock %}
+    </div>
+    <br>
+    <div id="RestoreOrDeleteReleaseContainer" class="thumbnail alert-info">
+        <div class="row">
+            <div class="col-md-3 text-right">
+                <i class="fa fa-code-fork fa-3x"></i>
+            </div>
+            <div class="col-md-9">
+                <h3>{{ release.name }}</h3>
+                <div>Description: {{ release.notes or _('Not Set') }}</div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

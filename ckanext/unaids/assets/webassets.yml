@@ -4,6 +4,7 @@ main:
     - autocomplete-without-creating-new-options.js
     - download_all.js
     - text_template.js
+    - bootstrap_table.js
   extra:
     preload:
       - base/main
