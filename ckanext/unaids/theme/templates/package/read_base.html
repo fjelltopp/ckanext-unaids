@@ -27,10 +27,12 @@ icon='clock-o') }}
     </p>
     {% else %}
     <p>{{ _('There is no release associated with this version of the dataset yet.') }}</p>
-    <a class="btn btn-default btn-xs"
-      href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.id) }}">
-      <span>{{ _('Add Release') }}</span>
-    </a>
+    {% if h.check_access('version_create', {'package_id': pkg.id}) %}
+        <a class="btn btn-default btn-xs"
+          href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.id) }}">
+          <span>{{ _('Add Release') }}</span>
+        </a>
+    {% endif %}
   {% endif %}
   </div>
 </section>
