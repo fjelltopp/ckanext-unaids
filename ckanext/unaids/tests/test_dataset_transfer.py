@@ -1,12 +1,10 @@
 # encoding: utf-8
-import ckan.model as model
 from ckan.tests import helpers
 from ckan.lib.helpers import url_for
 from ckan.tests import factories
 import pytest
 import mock
 
-from ckanext.unaids.dataset_transfer.model import init_tables, tables_exists
 from ckanext.unaids.dataset_transfer.logic import (
     get_org_admins_with_email_addresses,
     send_dataset_transfer_emails

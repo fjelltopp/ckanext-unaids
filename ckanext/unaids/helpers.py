@@ -124,4 +124,3 @@ def get_current_dataset_release(dataset_id, activity_id=None):
     for release in releases:
         if release['activity_id'] == activity_id:
             return release
-
