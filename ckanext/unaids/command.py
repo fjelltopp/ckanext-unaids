@@ -24,4 +24,3 @@ def initdb(ctx):
 
 def get_commands():
     return [unaids]
-

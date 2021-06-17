@@ -3,7 +3,6 @@ from ckan.plugins import toolkit
 from ckan.tests import factories as factories
 from ckanext.unaids.dataset_transfer.model import tables_exists, init_tables
 from ckanext.versions.logic.dataset_version_action import dataset_version_create
-from ckanext.versions.tests import get_context
 
 
 def unaids_db_setup():
