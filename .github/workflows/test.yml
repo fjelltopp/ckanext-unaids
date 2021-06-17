@@ -49,9 +49,11 @@ jobs:
         pip install -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
         pip install -e "git+https://github.com/datopian/ckanext-authz-service@bd4c80f55a714c1117a0e130d07463e383c494c7#egg=ckanext-authz-service"
         pip install -e "git+https://github.com/fjelltopp/ckanext-blob-storage@development#egg=ckanext-blob-storage"
+        pip install -e "git+https://github.com/fjelltopp/ckanext-versions@development#egg=ckanext-versions"
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.txt
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py2.txt
+        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
 
         pip install -e .
         # Replace default path to CKAN core config file with the one on the container

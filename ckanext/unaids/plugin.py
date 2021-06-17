@@ -84,7 +84,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     def get_actions(self):
         return {
             u'task_status_update': actions.task_status_update,
-            u'get_table_schema': actions.get_table_schema
+            u'get_table_schema': actions.get_table_schema,
+            u'package_show': actions.dataset_version_show
         }
 
     def dataset_facets(self, facet_dict, package_type):
