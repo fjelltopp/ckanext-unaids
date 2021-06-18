@@ -41,6 +41,12 @@ jobs:
       CKAN_REDIS_URL: redis://redis:6379/1
     steps:
     - uses: actions/checkout@v2
+    - uses: borales/actions-yarn@v2.3.0
+      with:
+        cmd: --cwd ckanext/unaids/react/ install
+    - uses: borales/actions-yarn@v2.3.0
+      with:
+        cmd: --cwd ckanext/unaids/react/ build
     - name: Install requirements
       run: |
         pip install -r requirements.txt
@@ -49,16 +55,19 @@ jobs:
         pip install -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
         pip install -e "git+https://github.com/datopian/ckanext-authz-service@bd4c80f55a714c1117a0e130d07463e383c494c7#egg=ckanext-authz-service"
         pip install -e "git+https://github.com/fjelltopp/ckanext-blob-storage@development#egg=ckanext-blob-storage"
+        pip install -e "git+https://github.com/fjelltopp/ckanext-versions@development#egg=ckanext-versions"
+        pip install -e "git+https://github.com/fjelltopp/ckanext-restricted@development#egg=ckanext-restricted"
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.txt
         pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py2.txt
+        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
+        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-restricted/development/requirements.txt
 
         pip install -e .
         # Replace default path to CKAN core config file with the one on the container
         sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
-    - name: Setup extension
-      run: |
-        ckan -c test.ini db init
+    - name: Setup ckan db
+      run: ckan -c test.ini db init
     - name: Run tests
       run: pytest --ckan-ini=test.ini --cov=ckanext.unaids --disable-warnings ckanext/unaids/tests
 

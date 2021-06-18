@@ -1,5 +1,5 @@
 {% ckan_extends %}
-
+{% set activity_id = request.args['activity_id'] %}
 {% block resource_item_title %}
   <div class="resource-title">
     {{ super() }}
@@ -21,7 +21,41 @@
 {% endblock %}
 
 {% block resource_item_explore_links %}
-  {{ super() }}
+  <li>
+    <a href="{{ url }}">
+      {% if not is_activity_archive and res.has_views %}
+        <i class="fa fa-bar-chart-o"></i>
+        {{ _('Preview') }}
+      {% else %}
+        <i class="fa fa-info-circle"></i>
+        {{ _('More information') }}
+      {% endif %}
+    </a>
+  </li>
+  {% if res.url and h.is_url(res.url) %}
+    <li>
+      {% if res.has_views or res.url_type == 'upload' %}
+        {% set url_activity = "?activity_id=" ~ activity_id if activity_id else '' %}
+        <a href="{{ res.url ~ url_activity }}" class="resource-url-analytics" target="_blank">
+          <i class="fa fa-arrow-circle-o-down"></i>
+          {{ _('Download') }}
+        </a>
+      {% else %}
+        <a href="{{ res.url }}" class="resource-url-analytics" target="_blank">
+          <i class="fa fa-external-link"></i>
+          {{ _('Go to resource') }}
+        </a>
+      {% endif %}
+    </li>
+  {% endif %}
+  {% if can_edit %}
+    <li>
+      <a href="{{ h.url_for(pkg.type ~ '_resource.edit', id=pkg.name, resource_id=res.id) }}">
+        <i class="fa fa-pencil-square-o"></i>
+        {{ _('Edit') }}
+      </a>
+    </li>
+  {% endif %}
   {% if h.check_access('resource_delete', {'id': res.id})  %}
     <li>
       <a href="{% url_for pkg.type ~ '_resource.delete', id=pkg.name, resource_id=res.id %}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this resource?') }}">

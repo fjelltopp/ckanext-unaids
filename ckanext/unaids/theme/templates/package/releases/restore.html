@@ -1,0 +1,13 @@
+{% extends "package/releases/restore_or_delete.html" %}
+
+{% block modal_title %}
+    {{ _('Restore Release') }}
+{% endblock %}
+
+{% block modal_text %}  
+    {{ _('Are you sure you want to restore the following release?') }}
+{% endblock %}
+
+{% block submit_label %}
+    {{ _('Restore') }}
+{% endblock %}

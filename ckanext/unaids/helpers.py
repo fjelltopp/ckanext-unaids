@@ -99,3 +99,28 @@ def get_all_organizations():
 
 def get_bulk_file_uploader_default_fields():
     return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})
+
+
+def get_current_dataset_release(dataset_id, activity_id=None):
+    """Return version linked to either the most recent activity_id
+        of the dataset or the one explicitly requested
+
+    :param dataset_id: the id or name of the dataset
+    :type dataset_id: string
+    :param activity_id: the id of the activity
+    :type activity_id: string
+    :returns: version, None if no version created for the given activity.
+    :rtype: dictionary
+    """
+    context = {'user': toolkit.g.user}
+    if not activity_id:
+        activities = toolkit.get_action('package_activity_list')(
+            context, {'id': dataset_id}
+        )
+        activity_id = activities[0]['id']
+    releases = toolkit.get_action('dataset_version_list')(
+        context, {'dataset_id': dataset_id}
+    )
+    for release in releases:
+        if release['activity_id'] == activity_id:
+            return release

@@ -8,7 +8,6 @@ import pytest
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids')
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.usefixtures('clean_db')
 class TestPlugin(object):
     '''Tests for the ckanext.example_iauthfunctions.plugin module.
 

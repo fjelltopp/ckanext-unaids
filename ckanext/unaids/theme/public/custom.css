@@ -216,3 +216,28 @@ section.resources H3{
 footer{
   flex: 1;
 }
+
+.vertical-align-top{
+  vertical-align: top !important;
+}
+
+#ReleasesTableContainer{
+  display: none;
+}
+
+#ReleasesTableContainer .fixed-table-container{
+  border: 1px solid #ddd;
+  border-radius: 4px;  
+}
+
+#ReleasesTableContainer .small-column{
+  max-width: 150px;
+}
+
+#ReleasesTableContainer tbody tr:first-child td{
+  border-top: none !important;
+}
+
+#RestoreOrDeleteReleaseContainer h3{
+  margin: 0;
+}
