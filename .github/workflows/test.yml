@@ -41,9 +41,12 @@ jobs:
       CKAN_REDIS_URL: redis://redis:6379/1
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
+    - uses: borales/actions-yarn@v2.0.0
       with:
-        node-version: 12
+        cmd: --cwd ckanext/unaids/react/ install
+    - uses: borales/actions-yarn@v2.0.0
+      with:
+        cmd: --cwd ckanext/unaids/react/ build
     - name: Install requirements
       run: |
         pip install -r requirements.txt
@@ -63,10 +66,6 @@ jobs:
         sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
     - name: Setup ckan db
       run: ckan -c test.ini db init
-    - name: Setup yarn
-      run: |
-        yarn --cwd ckanext/unaids/react/
-        yarn --cwd ckanext/unaids/react/ build
     - name: Run tests
       run: pytest --ckan-ini=test.ini --cov=ckanext.unaids --disable-warnings ckanext/unaids/tests
 
