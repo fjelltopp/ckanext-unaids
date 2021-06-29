@@ -1,29 +1,18 @@
 # encoding: utf-8
-import ckan.model as model
 from ckan.tests import helpers
 from ckan.lib.helpers import url_for
 from ckan.tests import factories
 import pytest
 import mock
 
-from ckanext.unaids.dataset_transfer.model import init_tables
 from ckanext.unaids.dataset_transfer.logic import (
     get_org_admins_with_email_addresses,
     send_dataset_transfer_emails
 )
 
 
-@pytest.fixture
-def initdb():
-    model.Session.remove()
-    model.Session.configure(bind=model.meta.engine)
-    init_tables()
-
-
-@pytest.mark.usefixtures('initdb')
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.usefixtures('clean_db')
 class TestDatasetTransfer(object):
 
     def test_get_org_admins_with_email_addresses_two_admins(self, app):

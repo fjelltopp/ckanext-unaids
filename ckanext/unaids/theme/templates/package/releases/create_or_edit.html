@@ -1,0 +1,32 @@
+{% extends "package/releases/base.html" %}
+{% import 'macros/form.html' as form %}
+
+{% set edit_mode = release != None %}
+
+{% block modal_title %}
+    {{ _('Edit Release') if edit_mode else _('Add Release') }}
+{% endblock %}
+
+{% block modal_body %}
+
+    {{ form.input(
+        'name',
+        label=_('Name'),
+        placeholder=_('Version 1.1'),
+        value=release.name if edit_mode,
+        error=[release_name_error] if release_name_error,
+        is_required=True,
+        attrs={"required": "required", "class": "form-control" }
+    )}}
+    {{ form.textarea(
+        'notes',
+        label=_('Description'),
+        value=release.notes if edit_mode,
+        rows=3
+    )}}
+
+{% endblock %}
+
+{% block submit_label %}
+    {{ _('Edit') if edit_mode else _('Add') }}
+{% endblock %}

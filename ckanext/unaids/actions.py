@@ -1,3 +1,5 @@
+import logging
+
 import ckan.logic.schema as schema_
 import ckan.logic as logic
 import ckan.lib.navl.dictization_functions as dfunc
@@ -6,12 +8,14 @@ import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
 from ckan.common import _
-
+from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 
 NotFound = logic.NotFound
 _check_access = logic.check_access
 _validate = dfunc.validate
 ValidationError = logic.ValidationError
+
+log = logging.getLogger(__name__)
 
 
 def get_table_schema(context, data_dict):
@@ -92,3 +96,52 @@ def task_status_update(context, data_dict):
     session.commit()
     session.close()
     return model_dictize.task_status_dictize(task_status, context)
+
+
+@t.chained_action
+@t.side_effect_free
+def dataset_version_show(original_action, context, data_dict):
+    version_id_or_name = data_dict.get('release')
+    if version_id_or_name:
+        t.check_access('package_show', context, data_dict)
+        dataset_id = t.get_or_bust(data_dict, 'id')
+        try:
+            activity_id = get_activity_id_from_dataset_version_name(
+                context,
+                {
+                    'dataset_id': dataset_id,
+                    'version': version_id_or_name
+                }
+            )
+        except t.ObjectNotFound:
+            raise t.ObjectNotFound("Release not found for this dataset")
+        dataset = activity_dataset_show(
+            context,
+            {
+                'activity_id': activity_id,
+                'dataset_id': dataset_id
+            }
+        )
+        for resource in dataset['resources']:
+            if resource['url_type'] == 'upload':
+                resource['url'] = "{}?activity_id={}".format(resource['url'], activity_id)
+        return dataset
+    else:
+        return original_action(context, data_dict)
+
+
+@t.chained_action
+@t.side_effect_free
+def package_activity_list(original_action, context, data_dict):
+    activity_list = original_action(context, data_dict)
+    dataset_id = data_dict['id']
+    releases_list = t.get_action('dataset_version_list')(
+        context,
+        {
+            'dataset_id': dataset_id,
+        }
+    )
+    activity_to_release_name = {r['activity_id']: r['name'] for r in releases_list}
+    for activity in activity_list:
+        activity['release_name'] = activity_to_release_name.get(activity['id'])
+    return activity_list

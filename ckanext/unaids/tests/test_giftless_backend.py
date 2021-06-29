@@ -11,7 +11,6 @@ from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.usefixtures('clean_db')
 class TestGiftlessBackend(object):
 
     @pytest.mark.skip("doesn't work as long as HTTP auth is used."

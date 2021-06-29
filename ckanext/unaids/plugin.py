@@ -11,6 +11,8 @@ import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
+
+from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
     if_empty_guess_format,
     organization_id_exists_validator
@@ -22,12 +24,13 @@ from ckanext.unaids.helpers import (
     get_user_obj,
     get_all_organizations,
     get_bulk_file_uploader_default_fields,
+    get_current_dataset_release
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
 from ckanext.unaids import (
     auth,
-    licenses
+    licenses, command
 )
 from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
@@ -53,6 +56,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     """
 
+    p.implements(p.IClick)
     p.implements(p.IConfigurer)
     p.implements(p.IFacets, inherit=True)
     p.implements(p.IBlueprint)
@@ -66,11 +70,20 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IActions)
     p.implements(IDataValidation)
 
+    # IClick
+    def get_commands(self):
+        return command.get_commands()
+
     # IConfigurer
     def update_config(self, config):
-        '''
-        This method allows to access and modify the CKAN configuration object
-        '''
+        if not tables_exists():
+            log.critical(
+                "The unaids extension requires a database setup. Please run "
+                "the following to create the database tables: \n"
+                "ckan unaids initdb"
+            )
+        else:
+            log.debug("UNAIDS tables verified to exist")
         add_licenses()
         log.info("UNAIDS Plugin is enabled")
         p.toolkit.add_template_directory(config, 'theme/templates')
@@ -83,7 +96,9 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     def get_actions(self):
         return {
             u'task_status_update': actions.task_status_update,
-            u'get_table_schema': actions.get_table_schema
+            u'get_table_schema': actions.get_table_schema,
+            u'package_show': actions.dataset_version_show,
+            u'package_activity_list': actions.package_activity_list
         }
 
     def dataset_facets(self, facet_dict, package_type):
@@ -110,6 +125,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'blob_storage_resource_filename': blobstorage_helpers.resource_filename,
             u'max_resource_size': uploader.get_max_resource_size,
             u'bulk_file_uploader_default_fields': get_bulk_file_uploader_default_fields,
+            u'get_current_dataset_release': get_current_dataset_release,
         }
 
     # IAuthFunctions
