@@ -59,53 +59,52 @@
         <table>
             <thead>
                 <tr>
-                    <th data-width="50"></th>
                     <th></th>
-                    <th class="small-column text-right"></th>
-                    <th class="small-column text-right"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for release in dataset_releases %}
                 <tr>
-                    <td class="text-right vertical-align-top">
-                        <h4><i class="fa fa-tag text-muted"></i></h4>
-                    </td>
-                    <td class="vertical-align-top">
-                        <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, activity_id=release.activity_id) }}">{{ release.name }}</a></h4> 
-                        <div class="text-muted">{{ release.notes }}</div>
-                        <div class="text-muted">Created by{{ h.linked_user(release.creator_user_id, 0, 0) }}</a></div>
-                        <br>
-                    </td>
                     <td>
-                        <p title="{{ h.render_datetime(release.created, with_hours=True) }}">{{ h.time_ago_from_timestamp(release.created) }}</p>
-                    </td>
-                    <td>
-                        <div class="btn-group pull-right btn-group-xs">
-                            {% if loop.index == 1 %}
-                                <button
-                                    class="btn btn-default disabled"
-                                    title="{{ _('Disabled') }}"
-                                >
-                                <i class="fa fa-refresh"></i>
-                                </button>
-                            {% else %}
-                                <a
-                                    href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
-                                    class="btn btn-default"
-                                    title="{{ _('Make release the latest version') }}"
-                                ><i class="fa fa-refresh"></i></a>
-                            {% endif %}
-                            <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
-                                class="btn btn-default"
-                                title="{{ _('Edit Release') }}"
-                            ><i class="fa fa-pencil"></i></a>
-                            <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
-                                class="btn btn-default"
-                                title="{{ _('Delete Release') }}"
-                            ><i class="fa fa-trash"></i></a>
+                        <div class="row vertical-align">
+                            <div class="col-sm-6">                                
+                                <h4><i class="fa fa-tag text-muted fa-fw"></i><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, activity_id=release.activity_id) }}">{{ release.name }}</a></h4> 
+                                {% if release.notes %}
+                                    <div class="text-muted release-notes"><i class="fa fa-tag fa-fw text-white"></i>{{ release.notes }}</div>                                    
+                                {% endif %}
+                                    <div class="release-creator"><i class="fa fa-tag fa-fw text-white"></i>{{ _('Created by') }} {{ h.linked_user(release.creator_user_id, 0, 0) }}</a></div>
+                            </div>
+                            <div class="col-sm-3">
+                                <span title="{{ h.render_datetime(release.created, with_hours=True) }}">{{ h.time_ago_from_timestamp(release.created) }}</span>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="btn-group btn-group-xs">
+                                    {% if loop.index == 1 %}
+                                        <button
+                                            class="btn btn-default disabled"
+                                            title="{{ _('Disabled') }}"
+                                        >
+                                        <i class="fa fa-refresh"></i>
+                                        </button>
+                                    {% else %}
+                                        <a
+                                            href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
+                                            class="btn btn-default"
+                                            title="{{ _('Make release the latest version') }}"
+                                        ><i class="fa fa-refresh"></i></a>
+                                    {% endif %}
+                                    <a
+                                        href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
+                                        class="btn btn-default"
+                                        title="{{ _('Edit Release') }}"
+                                    ><i class="fa fa-pencil"></i></a>
+                                    <a
+                                        href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
+                                        class="btn btn-default"
+                                        title="{{ _('Delete Release') }}"
+                                    ><i class="fa fa-trash"></i></a>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>
