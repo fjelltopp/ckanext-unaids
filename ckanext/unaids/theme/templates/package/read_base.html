@@ -20,7 +20,7 @@ icon='clock-o') }}
   <div class="module-content">
   {% set release = h.get_current_dataset_release(dataset_id, request.args.activity_id) %}
   {% if release %}
-    <h2 style="margin: 0;"><u>{{ release.name }}</u></h2>
+    <h2 style="margin: 0;"><b>{{ release.name }}</b></h2>
     <p class="text-muted">
       <span>{{ _('Description') }}: </span>
       <span>{{ release.notes or _('None set') }}</span>
