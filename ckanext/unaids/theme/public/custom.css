@@ -244,6 +244,11 @@ footer{
   margin-bottom: 10px;
 }
 
+#ReleasesTableContainer .release-date,
+#ReleasesTableContainer .release-actions {
+    margin-top: 10px;
+}
+
 @media (max-width: 991px) {
     #ReleasesTableContainer .release-creator,
     #ReleasesTableContainer .release-notes,
