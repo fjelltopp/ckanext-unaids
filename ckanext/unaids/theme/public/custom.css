@@ -237,6 +237,27 @@ footer{
   margin-bottom: 10px;
 }
 
+#ReleasesTableContainer .release-creator,
+#ReleasesTableContainer .release-notes,
+#ReleasesTableContainer .release-date {
+  padding-left: 35px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 991px) {
+    #ReleasesTableContainer .release-creator,
+    #ReleasesTableContainer .release-notes,
+    #ReleasesTableContainer .release-date {
+      padding-right: 35px;
+    }
+}
+
+#ReleasesTableContainer .release-actions {
+  padding-right: 27px;
+  margin-bottom: 10px;
+}
+
+
 #ReleasesTableContainer .fixed-table-container {
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -246,39 +267,14 @@ footer{
   border-top: none !important;
 }
 
-@media (max-width: 992px) {
-  /* custom css for mobile view */
-  #ReleasesTableContainer .row>* {
-    padding-top: 0;
-    padding-bottom: 0;
-  }
-  #ReleasesTableContainer .fa-tag {
-    display: none;
-  }
-  #ReleasesTableContainer .release-creator, .btn-group {
-    margin-top: 10px;
-  }
+#ReleasesTableContainer .fa-tag {
+margin-left: 10px;
+margin-right: 5px;
+}
+#ReleasesTableContainer .btn-group {
+float: right;
 }
 
-@media (min-width: 768px) {
-  /* custom css for desktop view */
-  #ReleasesTableContainer .row>* {
-    padding-top: 10px;
-    padding-bottom: 10px;
-  }
-  #ReleasesTableContainer .vertical-align {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  #ReleasesTableContainer .fa-tag {
-    margin-left: 10px;
-    margin-right: 5px;
-  }
-  #ReleasesTableContainer .btn-group {
-    float: right;
-  }
-}
 
 #RestoreOrDeleteReleaseContainer h3 {
   margin: 0;
