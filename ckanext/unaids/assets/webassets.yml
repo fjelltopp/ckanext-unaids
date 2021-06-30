@@ -30,3 +30,9 @@ BulkFileUploaderComponentScripts:
         - frictionless-js.js
         - build/BulkFileUploaderComponent.js
     output: unaids/%(version)s_BulkFileUploaderComponent.js
+
+MockupComponentScripts:
+    contents:
+        - frictionless-js.js
+        - build/MockupComponent.js
+    output: unaids/%(version)s_MockupComponent.js
