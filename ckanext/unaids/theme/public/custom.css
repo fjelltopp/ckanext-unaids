@@ -221,23 +221,66 @@ footer{
   vertical-align: top !important;
 }
 
-#ReleasesTableContainer{
+.text-white {
+  color: white;
+}
+
+#ReleasesTableContainer {
   display: none;
 }
 
-#ReleasesTableContainer .fixed-table-container{
+#ReleasesTableContainer .table {
+  overflow: hidden
+}
+
+#ReleasesTableContainer .release-notes {
+  margin-bottom: 10px;
+}
+
+#ReleasesTableContainer .release-creator,
+#ReleasesTableContainer .release-notes,
+#ReleasesTableContainer .release-date {
+  padding-left: 35px;
+  margin-bottom: 10px;
+}
+
+#ReleasesTableContainer .release-date,
+#ReleasesTableContainer .release-actions {
+    margin-top: 10px;
+}
+
+@media (max-width: 991px) {
+    #ReleasesTableContainer .release-creator,
+    #ReleasesTableContainer .release-notes,
+    #ReleasesTableContainer .release-date {
+      padding-right: 35px;
+    }
+}
+
+#ReleasesTableContainer .release-actions {
+  padding-right: 27px;
+  margin-bottom: 10px;
+}
+
+
+#ReleasesTableContainer .fixed-table-container {
   border: 1px solid #ddd;
-  border-radius: 4px;  
+  border-radius: 4px;
 }
 
-#ReleasesTableContainer .small-column{
-  max-width: 150px;
-}
-
-#ReleasesTableContainer tbody tr:first-child td{
+#ReleasesTableContainer tbody tr:first-child td {
   border-top: none !important;
 }
 
-#RestoreOrDeleteReleaseContainer h3{
+#ReleasesTableContainer .fa-tag {
+margin-left: 10px;
+margin-right: 5px;
+}
+#ReleasesTableContainer .btn-group {
+float: right;
+}
+
+
+#RestoreOrDeleteReleaseContainer h3 {
   margin: 0;
 }
