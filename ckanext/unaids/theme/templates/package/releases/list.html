@@ -75,20 +75,11 @@
                             </div>
                             <div class="col-sm-3">
                                 <div class="btn-group btn-group-xs">
-                                    {% if loop.index == 1 %}
-                                        <button
-                                            class="btn btn-default disabled"
-                                            title="{{ _('Disabled') }}"
-                                        >
-                                        <i class="fa fa-refresh"></i>
-                                        </button>
-                                    {% else %}
-                                        <a
-                                            href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
-                                            class="btn btn-default"
-                                            title="{{ _('Make release the latest version') }}"
-                                        ><i class="fa fa-refresh"></i></a>
-                                    {% endif %}
+                                    <a
+                                        href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
+                                        class="btn btn-default"
+                                        title="{{ _('Make release the latest version') }}"
+                                    ><i class="fa fa-refresh"></i></a>
                                     <a
                                         href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
                                         class="btn btn-default"
