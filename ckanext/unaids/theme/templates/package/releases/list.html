@@ -17,25 +17,21 @@
         </p>
     {% else %}
         <div class="btn-group">
-            <a href="{{ urls.create_from_latest_version }}" class="btn btn-danger">
-                <span>{{ _('Add Release') }}</span>
+            <a href="{{ urls.create_from_latest_version }}" class="btn btn-primary">
+                <i class="fa fa-plus-square"></i> <span>{{ _('Add Release') }}</span>
             </a>
-            <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
                 <li>
                     <a href="{{ urls.create_from_latest_version }}">
-                        <span>{{ _('From the') }} </span>
-                        <u>{{ _('latest version') }} </u>
-                        <span>{{ _('of the dataset') }}</span>
+                        <span>{{ _('From <b>the latest version</b> of the dataset') }}</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ urls.create_from_an_older_version }}">
-                        <span>{{ _('From a') }} </span>
-                        <u>{{ _('past version') }} </u>
-                        <span>{{ _('of the dataset') }}</span>
+                        <span>{{ _('From <b>a past version</b> of the dataset') }}</span>
                     </a>
                 </li>
             </ul>
@@ -59,53 +55,45 @@
         <table>
             <thead>
                 <tr>
-                    <th data-width="50"></th>
                     <th></th>
-                    <th class="small-column text-right"></th>
-                    <th class="small-column text-right"></th>
                 </tr>
             </thead>
             <tbody>
                 {% for release in dataset_releases %}
                 <tr>
-                    <td class="text-right vertical-align-top">
-                        <h4><i class="fa fa-tag text-muted"></i></h4>
-                    </td>
-                    <td class="vertical-align-top">
-                        <h4><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, activity_id=release.activity_id) }}">{{ release.name }}</a></h4> 
-                        <div class="text-muted">{{ release.notes }}</div>
-                        <div class="text-muted">Created by{{ h.linked_user(release.creator_user_id, 0, 0) }}</a></div>
-                        <br>
-                    </td>
                     <td>
-                        <p title="{{ h.render_datetime(release.created, with_hours=True) }}">{{ h.time_ago_from_timestamp(release.created) }}</p>
-                    </td>
-                    <td>
-                        <div class="btn-group pull-right btn-group-xs">
-                            {% if loop.index == 1 %}
-                                <button
-                                    class="btn btn-default disabled"
-                                    title="{{ _('Disabled') }}"
-                                >
-                                <i class="fa fa-refresh"></i>
-                                </button>
-                            {% else %}
-                                <a
-                                    href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
-                                    class="btn btn-default"
-                                    title="{{ _('Make release the latest version') }}"
-                                ><i class="fa fa-refresh"></i></a>
-                            {% endif %}
-                            <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
-                                class="btn btn-default"
-                                title="{{ _('Edit Release') }}"
-                            ><i class="fa fa-pencil"></i></a>
-                            <a
-                                href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
-                                class="btn btn-default"
-                                title="{{ _('Delete Release') }}"
-                            ><i class="fa fa-trash"></i></a>
+                        <div class="row vertical-align">
+                            <div class="col-xs-12 col-md-6">
+                                <div class="release-title"><h4><i class="fa fa-tag text-muted fa-fw"></i><a href="{{ h.url_for('dataset.read', id=pkg_dict.name, activity_id=release.activity_id) }}">{{ release.name }}</a></h4></div>
+                                {% if release.notes %}
+                                    <div class="text-muted release-notes">{{ release.notes }}</div>
+                                {% endif %}
+                                    <div class="release-creator">{{ _('Created by') }} {{ h.linked_user(release.creator_user_id, 0, 0) }}</a></div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="release-date"><span title="{{ h.render_datetime(release.created, with_hours=True) }}">{{ h.time_ago_from_timestamp(release.created) }}</span></div>
+                            </div>
+                            <div class="col-xs-12 col-md-3">
+                                <div class="release-actions">
+                                    <div class="btn-group btn-group-xs">
+                                        <a
+                                            href="{{ h.url_for('unaids_dataset_releases.release_restore', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
+                                            class="btn btn-default"
+                                            title="{{ _('Make release the latest version') }}"
+                                        ><i class="fa fa-refresh"></i></a>
+                                        <a
+                                            href="{{ h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
+                                            class="btn btn-default"
+                                            title="{{ _('Edit Release') }}"
+                                        ><i class="fa fa-pencil"></i></a>
+                                        <a
+                                            href="{{ h.url_for('unaids_dataset_releases.release_delete', dataset_type=dataset_type, dataset_id=pkg.name, release_id=release.id) }}"
+                                            class="btn btn-default"
+                                            title="{{ _('Delete Release') }}"
+                                        ><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </td>
                 </tr>
@@ -121,7 +109,7 @@
                 pagination: true,
                 pageSize: 5,
                 paginationParts: "pageList"
-            });        
+            });
             $('#ReleasesLoading').remove();
             $('#ReleasesTableContainer')
                 .css('opacity', 0)
@@ -141,5 +129,3 @@
 {% endif %}
 
 {% endblock %}
-
-
