@@ -31,6 +31,10 @@ async function renderAppComponent(existingResourceData) {
   })
 };
 
+afterEach(async () => {
+  expect(screen.getByTestId('last_modified')).toHaveValue();
+});
+
 describe('upload a new resource', () => {
 
   beforeEach(async () => {
