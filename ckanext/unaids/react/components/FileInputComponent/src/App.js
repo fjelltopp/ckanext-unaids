@@ -63,7 +63,8 @@ export default function App({ loadingHtml, maxResourceSize, lfsServer, orgId, da
             })
             setHiddenInputs('file', {
                 sha256: data.sha256,
-                size: data.size
+                size: data.size,
+                url: data.fileName
             })
         } else if (data.url) {
             // resource already has a url
