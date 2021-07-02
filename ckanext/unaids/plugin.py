@@ -243,9 +243,10 @@ def _giftless_upload(context, resource, current=None):
             )
 
             lfs_prefix = blobstorage_helpers.resource_storage_prefix(dataset_name, org_name=org_name)
+            last_modified = datetime.datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%SZ')
             resource.update({
                 'url_type': 'upload',
-                'last_modified': datetime.datetime.utcnow(),
+                'last_modified': last_modified,
                 'sha256': uploaded_file['oid'],
                 'size': uploaded_file['size'],
                 'url': attached_file.filename,
