@@ -9,50 +9,59 @@ from ckanext.unaids.plugin import (
 )
 
 
+def _resource_dict(resource_type='file'):
+    if resource_type == 'file':
+        return {
+            'url_type': 'upload',
+            'url': 'file.csv',
+            'lfs_prefix': 'prefix',
+            'sha256': 'sha256',
+            'size': 100,
+        }
+    elif resource_type == 'link':
+        return {
+            'url_type': '',
+            'url': 'http://example.com'
+        }
+    else:
+        raise ValueError("Unsupported resource type %s", resource_type)
+
+
 @pytest.fixture
 def resource_with_file():
-    return {
-        'url_type': 'upload',
-        'url': 'file.csv',
-        'lfs_prefix': 'prefix',
-        'sha256': 'sha256',
-        'size': 100,
-    }
+    return _resource_dict(resource_type='file')
 
 
 @pytest.fixture
 def resource_with_link():
-    return {
-        'url_type': '',
-        'url': 'http://example.com'
-    }
+    return _resource_dict(resource_type='link')
 
 
 @pytest.fixture
 def resource_with_updated_file():
-    updated_resource = resource_with_file()
-    updated_resource.update({'url': 'file2.csv'})
+    updated_resource = _resource_dict(resource_type='file')
+    updated_resource['url'] = 'file2.csv'
     return updated_resource
 
 
 @pytest.fixture
 def resource_with_updated_link():
-    updated_resource = resource_with_link()
-    updated_resource.update({'url': 'http://example2.com'})
+    updated_resource = _resource_dict(resource_type='link')
+    updated_resource['url'] = 'http://example2.com'
     return updated_resource
 
 
 @pytest.fixture
 def resource_with_file_and_updated_metadata():
-    updated_resource = resource_with_file()
-    updated_resource.update({'key': 'value'})
+    updated_resource = _resource_dict(resource_type='file')
+    updated_resource['description'] = 'updated-description'
     return updated_resource
 
 
 @pytest.fixture
 def resource_with_link_and_updated_metadata():
-    updated_resource = resource_with_link()
-    updated_resource.update({'key': 'value'})
+    updated_resource = _resource_dict(resource_type='link')
+    updated_resource['description'] = 'updated-description'
     return updated_resource
 
 
