@@ -174,7 +174,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     def before_update(self, context, current, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
-            _update_resource_last_modified_date(resource, current)
+            _update_resource_last_modified_date(resource, current=current)
         return resource
 
 
@@ -255,7 +255,8 @@ def _giftless_upload(context, resource, current=None):
             })
 
 
-def _update_resource_last_modified_date(resource, current={}):
+def _update_resource_last_modified_date(resource, current=None):
+    current = current or {}
     for key in ['url_type', 'lfs_prefix', 'sha256', 'size', 'url']:
         current_value = str(current.get(key) or '')
         resource_value = str(resource.get(key) or '')

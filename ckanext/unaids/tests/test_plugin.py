@@ -42,52 +42,85 @@ class TestResourceLastModified(object):
     whenever a resource is created or edited.
     '''
 
-    URL_TYPE_FILE_UPLOAD = 'upload'
-    URL_TYPE_LINK = ''
+    @pytest.fixture
+    def resource_with_file(autouse=True):
+        return {
+            'url_type': 'upload',
+            'url': 'file.csv',
+            'lfs_prefix': 'prefix123',
+            'sha256': 'sha256',
+            'size': 100,
+        }
 
-    def test_resource(self, url_type):
-        resource_dict = {'url_type': url_type}
-        if url_type == self.URL_TYPE_FILE_UPLOAD:
-            resource_dict.update({
-                'url': 'file.csv',
-                'lfs_prefix': 'prefix123',
-                'sha256': 'sha256',
-                'size': 100,
-            })
-        elif url_type == self.URL_TYPE_LINK:
-            resource_dict.update({
-                'url': 'http://example.com'
-            })
-        return resource_dict
+    @pytest.fixture
+    def resource_with_link(autouse=True):
+        return {
+            'url_type': '',
+            'url': 'http://example.com'
+        }
 
-    def test_null_to_file(self):
-        resource = self.test_resource(self.URL_TYPE_FILE_UPLOAD)
-        _update_resource_last_modified_date(resource=resource)
-        assert 'last_modified' in resource
+    def test_null_to_file(self, resource_with_file):
+        _update_resource_last_modified_date(resource_with_file)
+        assert 'last_modified' in resource_with_file
 
-    def test_file_to_null(self):
-        resource = self.test_resource(self.URL_TYPE_FILE_UPLOAD)
-        _update_resource_last_modified_date({}, resource)
-        assert 'last_modified' not in resource
+    def test_file_to_null(self, resource_with_file):
+        null_resource = {}
+        _update_resource_last_modified_date(
+            null_resource, current=resource_with_file
+        )
+        assert 'last_modified' not in resource_with_file
 
-    def test_file_to_url(self):
-        current = self.test_resource(self.URL_TYPE_FILE_UPLOAD)
-        resource = self.test_resource(self.URL_TYPE_LINK)
-        _update_resource_last_modified_date(resource, current)
-        assert 'last_modified' in resource
+    def test_file_to_file(self, resource_with_file):
+        updated_resource = resource_with_file.copy()
+        updated_resource.update({'url': 'file2.csv'})
+        _update_resource_last_modified_date(
+            updated_resource, current=resource_with_file
+        )
+        assert 'last_modified' in updated_resource
 
-    def test_null_to_url(self):
-        resource = self.test_resource(self.URL_TYPE_LINK)
-        _update_resource_last_modified_date(resource=resource)
-        assert 'last_modified' in resource
+    def test_file_to_link(self, resource_with_file, resource_with_link):
+        _update_resource_last_modified_date(
+            resource_with_link, current=resource_with_file
+        )
+        assert 'last_modified' in resource_with_link
 
-    def test_url_to_null(self):
-        resource = self.test_resource(self.URL_TYPE_LINK)
-        _update_resource_last_modified_date({}, resource)
-        assert 'last_modified' not in resource
+    def test_changing_random_metadata_in_file(self, resource_with_file):
+        updated_resource = resource_with_file.copy()
+        updated_resource.update({'random_key': 'random_value'})
+        _update_resource_last_modified_date(
+            resource_with_file, current=resource_with_file
+        )
+        assert 'last_modified' not in updated_resource
 
-    def test_url_to_file(self):
-        current = self.test_resource(self.URL_TYPE_LINK)
-        resource = self.test_resource(self.URL_TYPE_FILE_UPLOAD)
-        _update_resource_last_modified_date(resource, current)
-        assert 'last_modified' in resource
+    def test_null_to_link(self, resource_with_link):
+        _update_resource_last_modified_date(resource_with_link)
+        assert 'last_modified' in resource_with_link
+
+    def test_link_to_null(self, resource_with_link):
+        null_resource = {}
+        _update_resource_last_modified_date(
+            null_resource, current=resource_with_link
+        )
+        assert 'last_modified' not in resource_with_link
+
+    def test_link_to_link(self, resource_with_link):
+        updated_resource = resource_with_link.copy()
+        updated_resource.update({'url': 'http://example2.com'})
+        _update_resource_last_modified_date(
+            updated_resource, current=resource_with_link
+        )
+        assert 'last_modified' in updated_resource
+
+    def test_link_to_file(self, resource_with_file, resource_with_link):
+        _update_resource_last_modified_date(
+            resource_with_file, current=resource_with_link
+        )
+        assert 'last_modified' in resource_with_file
+
+    def test_changing_random_metadata_in_link(self, resource_with_link):
+        updated_resource = resource_with_link.copy()
+        updated_resource.update({'random_key': 'random_value'})
+        _update_resource_last_modified_date(
+            resource_with_link, current=resource_with_link
+        )
+        assert 'last_modified' not in updated_resource
