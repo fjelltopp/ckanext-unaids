@@ -168,11 +168,13 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     def before_create(self, context, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource)
+            _update_resource_last_modified_date(resource)
         return resource
 
     def before_update(self, context, current, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
+            _update_resource_last_modified_date(resource, current=current)
         return resource
 
 
@@ -251,6 +253,17 @@ def _giftless_upload(context, resource, current=None):
                 'url': attached_file.filename,
                 'lfs_prefix': lfs_prefix
             })
+
+
+def _update_resource_last_modified_date(resource, current=None):
+    if current is None:
+        current = {}
+    for key in ['url_type', 'lfs_prefix', 'sha256', 'size', 'url']:
+        current_value = str(current.get(key) or '')
+        resource_value = str(resource.get(key) or '')
+        if current_value != resource_value:
+            resource['last_modified'] = datetime.datetime.utcnow()
+            return
 
 
 def _get_upload_authz_token(context, dataset_name, org_name):
