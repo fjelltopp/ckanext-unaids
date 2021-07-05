@@ -256,7 +256,8 @@ def _giftless_upload(context, resource, current=None):
 
 
 def _update_resource_last_modified_date(resource, current=None):
-    current = current or {}
+    if current is None:
+        current = {}
     for key in ['url_type', 'lfs_prefix', 'sha256', 'size', 'url']:
         current_value = str(current.get(key) or '')
         resource_value = str(resource.get(key) or '')
