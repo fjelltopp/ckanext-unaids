@@ -122,6 +122,7 @@ describe('view/edit an existing file upload', () => {
     expect(screen.getByTestId('url_type')).toHaveValue(existingResourceData.urlType);
     expect(screen.getByTestId('lfs_prefix')).toHaveValue('mockedOrgId/mockedDatasetName');
     expect(screen.getByTestId('sha256')).toHaveValue(existingResourceData.sha256);
+    expect(screen.getByTestId('url')).toHaveValue(existingResourceData.url);
     expect(screen.getByTestId('size')).toHaveValue(existingResourceData.size);
   });
 
