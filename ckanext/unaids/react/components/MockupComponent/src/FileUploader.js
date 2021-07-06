@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
-import { useDropzone } from 'react-dropzone'
+import React, { useState, useMemo } from 'react';
+import { useDropzone } from 'react-dropzone';
 
-export default function FileUploader({ fileName }) {
+export default function FileUploader({ resouceType, setDraggedFiles, setActiveResourceType }) {
 
     const baseStyle = {
         backgroundColor: ''
@@ -26,9 +26,12 @@ export default function FileUploader({ fileName }) {
             isDragAccept,
             isDragReject
         } = useDropzone({
-            maxFiles:1,
+            //maxFiles: 1,
             onDropAccepted: React.useCallback(files => {
-                alert(files);
+                setActiveResourceType(resouceType);
+                setDraggedFiles(files);
+                console.log(files);
+                $('#MockupComponent .modal').modal('show');
             }),
         });
 
@@ -48,7 +51,7 @@ export default function FileUploader({ fileName }) {
                 <div className="resource-title">
                     <div className="resource-title">
                         <a className="heading" href="/inputs-unaids-estimates/cote-d-ivoire-inputs-unaids-estimates-2021/resource/26eab931-2c05-4b7b-baf1-cbc9a866b2a7" title="Geographic Data">
-                            {fileName}<span className="format-label" property="dc:format" data-format="geojson">GeoJSON</span>
+                            {resouceType}<span className="format-label" property="dc:format" data-format="geojson">GeoJSON</span>
                         </a>
                     </div>
                 </div>
