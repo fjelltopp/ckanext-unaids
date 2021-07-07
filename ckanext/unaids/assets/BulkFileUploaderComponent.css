@@ -3,7 +3,24 @@
     margin-bottom: 35px;
 }
 
-#BulkFileUploaderComponent .dropzone {
+#BulkFileUploaderComponent .fullPageDropzone {
+    border: 3px dashed white;
+    border-radius: 3px;
+    padding: 5px;
+    margin: -8px;
+    margin-bottom: 10px;
+}
+
+#BulkFileUploaderComponent .fullPageDropzone.active {
+    border-color: #189de3;
+    background-color: #eaf6fd;
+}
+
+#BulkFileUploaderComponent .fullPageDropzone.active .resource-item {
+    background-color: transparent !important;
+}
+
+#BulkFileUploaderComponent .modalDropzone {
     text-align: center;
     padding: 20px;
     border-width: 3px;
@@ -12,6 +29,11 @@
     border-style: dashed;
     background-color: #fafafa;
     margin-bottom: 20px;
+}
+
+#BulkFileUploaderComponent .modalDropzone.active {
+    border-color: #189de3;
+    background-color: #eaf6fd;
 }
 
 #BulkFileUploaderComponent .table td {
@@ -30,4 +52,31 @@
 
 #BulkFileUploaderComponent .label-danger {
     padding: 5px;
+}
+
+#BulkFileUploaderComponent .drag-files-instructions-wrapper {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    z-index: 10000;
+}
+
+#BulkFileUploaderComponent .drag-files-instructions {
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 0;
+    border-radius: 5px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    padding: 10px;
+    background-color: #189de3;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    text-align: center;
+}
+
+#BulkFileUploaderComponent .drag-files-instructions h3 {
+    margin: 0;
+    color: white;
 }

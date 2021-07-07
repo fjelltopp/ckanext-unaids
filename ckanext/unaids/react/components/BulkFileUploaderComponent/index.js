@@ -2,8 +2,11 @@ import ReactDOM from 'react-dom';
 import React from 'react';
 import App from './src/App';
 
+const componentElementId = 'BulkFileUploaderComponent';
+const modalElementId = 'BulkFileUploaderComponentModal';
+
 const componentElement =
-  document.getElementById('BulkFileUploaderComponent');
+  document.getElementById(componentElementId);
 const getAttr = key => {
   const val = componentElement.getAttribute(`data-${key}`);
   return ['None', ''].includes(val) ? null : val;
@@ -24,15 +27,20 @@ const loadCkan = callback => {
   } else {
     callback();
   }
-}
+};
+const moveDatasetPageIntoDropzoneArea = () => {
+  var fragment = document.createDocumentFragment();
+  fragment.appendChild(document.getElementById('ContentToMoveInsideDropzone'));
+  document.getElementById('DropzoneContainer').appendChild(fragment);
+};
 
 loadCkan(() => {
-  return (
-    ReactDOM.render(
-      <App {...{
-        lfsServer, maxResourceSize, orgId, datasetName, defaultFields
-      }} />,
-      componentElement
-    )
-  )
+  ReactDOM.render(
+    <App {...{
+      modalElementId, lfsServer, maxResourceSize,
+      orgId, datasetName, defaultFields
+    }} />,
+    componentElement
+  );
+  moveDatasetPageIntoDropzoneArea();
 });
