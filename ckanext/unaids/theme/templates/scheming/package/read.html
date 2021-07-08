@@ -1,0 +1,17 @@
+{% extends "package/read.html" %}
+
+{% block package_resources %}
+  {% asset 'ckanext-unaids/BulkFileUploaderComponentStyles' %}
+  <div
+      id="BulkFileUploaderComponent"
+      data-lfsServer="{{ h.blob_storage_server_url() }}"
+      data-maxResourceSize="{{ h.max_resource_size() }}"
+      data-orgId="{{ pkg.organization.name }}"
+      data-datasetName="{{ pkg.name }}"
+      data-defaultFields="{{ h.bulk_file_uploader_default_fields() }}"
+  ></div>
+  {% asset 'ckanext-unaids/BulkFileUploaderComponentScripts' %}
+  <div id="ContentToMoveInsideDropzone">
+    {{ super() }}
+  </div>
+{% endblock %}
