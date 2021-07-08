@@ -48,14 +48,14 @@ export default function FileUploader({ modalElementId, maxResourceSize, setPendi
                 ? (
                     <>
                         <div id="DropzoneContainer"></div>
-                        ({isDragActive &&
+                        {isDragActive &&
                             <div className="drag-files-instructions-wrapper">
                                 <div className="drag-files-instructions">
                                     <h3><i className="fa fa-upload"></i></h3>
                                     <h3>{ckan.i18n._('Drop files to upload them')}</h3>
                                 </div>
                             </div>
-                        })
+                        }
                     </>
                 )
                 : (
