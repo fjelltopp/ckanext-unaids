@@ -110,12 +110,22 @@ describe('test without network issues', () => {
     );
   });
   describe("test file uploads using drag and drop", () => {
-    test('successful uploads', async () =>
-      await testSuccessfulUpload('BulkFileUploaderComponent')
-    );
-    test('file too large', async () =>
-      await testUploadWithFileTooLarge('BulkFileUploaderComponent')
-    );
+    describe("test popup modal", () => {
+      test('successful uploads', async () =>
+        await testSuccessfulUpload('modalDropzone')
+      );
+      test('file too large', async () =>
+        await testUploadWithFileTooLarge('modalDropzone')
+      );
+    });
+    describe("test dataset page", () => {
+      test('successful uploads', async () =>
+        await testSuccessfulUpload('fullPageDropzone')
+      );
+      test('file too large', async () =>
+        await testUploadWithFileTooLarge('fullPageDropzone')
+      );
+    });
   });
 });
 
