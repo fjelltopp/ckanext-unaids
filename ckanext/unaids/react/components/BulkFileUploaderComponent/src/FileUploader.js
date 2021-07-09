@@ -61,7 +61,7 @@ export default function FileUploader({ modalElementId, maxResourceSize, setPendi
                 : (
                     <>
                         <input {...getInputProps()} data-testid="BulkFileUploaderInput" />
-                        <p>{ckan.i18n._('Drag & Drop files here to upload')}</p>
+                        <p>{ckan.i18n._('Drop files here to upload them to the dataset')}</p>
                         <div className="btn-group">
                             <button
                                 className="btn btn-success"
