@@ -23,3 +23,9 @@ global.data = {
     }
   })
 };
+
+// mock jquery
+global.$ = () => {
+  // bootstrap modal actions
+  return { modal: () => null }
+}
