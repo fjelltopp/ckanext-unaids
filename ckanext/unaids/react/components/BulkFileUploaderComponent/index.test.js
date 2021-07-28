@@ -1,4 +1,4 @@
-import { render, act, fireEvent, screen } from '@testing-library/react';
+import { render, act, fireEvent, screen, within } from '@testing-library/react';
 import App from './src/App';
 import axios from 'axios';
 import * as giftless from "giftless-client";
@@ -35,14 +35,20 @@ function setupMocks({ applyNetworkIssue }) {
   });
 }
 
-async function renderAppComponent(defaultFields) {
+async function renderAppComponent(
+  defaultFields, existingCoreResources = [],
+  existingExtraResources = [], missingCoreResources = []
+) {
   await act(async () => {
     const mockedAppProps = {
       lfsServer: 'mockedLfsServer',
       maxResourceSize: maxResourceSize,
       orgId: 'mockedOrgId',
       datasetName: 'mockedDatasetName',
-      defaultFields: defaultFields
+      defaultFields: defaultFields,
+      existingCoreResources: existingCoreResources,
+      existingExtraResources: existingExtraResources,
+      missingCoreResources: missingCoreResources
     };
     render(<App {...mockedAppProps} />);
   })
@@ -68,8 +74,8 @@ const uploadFilesAndCreateResources = async (validFileUploads, invalidFileUpload
     .filter(mock => mock[0] === requestAuthTokenUrl).length;
   const createResourceRequests = mockedAxiosPost.mock.calls
     .filter(mock => mock[0] === requestCreateResourceUrl).length;
-    expect(expectedAuthTokenRequests).toEqual(authTokenRequests);
-    expect(expectedCreateResourceRequests).toEqual(createResourceRequests);
+  expect(expectedAuthTokenRequests).toEqual(authTokenRequests);
+  expect(expectedCreateResourceRequests).toEqual(createResourceRequests);
 }
 
 const testSuccessfulUpload = async elementTestId => {
@@ -81,7 +87,7 @@ const testSuccessfulUpload = async elementTestId => {
   await selectFilesToUpload(elementTestId, validFiles);
   await screen.findByText('file_1.json');
   await screen.findByText('file_2.json');
-  await uploadFilesAndCreateResources(validFiles, invalidFiles);
+  //await uploadFilesAndCreateResources(validFiles, invalidFiles);
 };
 const testUploadWithFileTooLarge = async elementTestId => {
   const validFile = new File(['file'], 'file_1.json');
@@ -93,6 +99,148 @@ const testUploadWithFileTooLarge = async elementTestId => {
   await screen.findByText('file_2.json');
   await uploadFilesAndCreateResources([validFile], [invalidFile]);
 };
+
+describe('test selecting if we want to update an existing resource or upload a new one', () => {
+
+  const stageFileUpload = async (
+    existingCoreResources, existingExtraResources, missingCoreResources
+  ) => {
+    const elementTestId = 'BulkFileUploaderInput';
+    const validFiles = [
+      new File(['file'], 'file_1.json'),
+      new File(['file'], 'file_2.json'),
+    ];
+    const defaultFields = {};
+    await renderAppComponent(
+      defaultFields, existingCoreResources,
+      existingExtraResources, missingCoreResources
+    );
+    await selectFilesToUpload(elementTestId, validFiles);
+  };
+
+  test('correct select option labels', async () => {
+    const existingCoreResources = [
+      { id: 1, name: 'Resource 1', resource_type: 'resource_type 1' }
+    ];
+    const existingExtraResources = [
+      { id: 2, name: 'Resource 2', resource_type: 'resource_type 2' }
+    ];
+    const missingCoreResources = [
+      { name: 'Resource 3', resource_type: 'resource_type 3' }
+    ];
+    await stageFileUpload(
+      existingCoreResources,
+      existingExtraResources,
+      missingCoreResources
+    );
+    screen.getAllByTestId('uploadActionSelector').map(select => {
+      const selectOptionLabels = within(select)
+        .getAllByTestId('select-option')
+        .map(option => option.text);
+      const expectedOptionLabels = [
+        'Resource 1', 'Resource 2',
+        'Resource 3', 'Extra Resource'
+      ]
+      expect(expectedOptionLabels).toEqual(selectOptionLabels);
+    });
+  });
+
+  test('correct select option values', async () => {
+    const existingCoreResources = [
+      { id: 1, name: 'Resource 1', resource_type: 'resource_type 1' }
+    ];
+    const existingExtraResources = [
+      { id: 2, name: 'Resource 2', resource_type: 'resource_type 2' }
+    ];
+    const missingCoreResources = [
+      { name: 'Resource 3', resource_type: 'resource_type 3' }
+    ];
+    await stageFileUpload(
+      existingCoreResources,
+      existingExtraResources,
+      missingCoreResources
+    );
+    screen.getAllByTestId('uploadActionSelector').map(select => {
+      const selectOptionValues = within(select)
+        .getAllByTestId('select-option')
+        .map(option => option.value);
+      const expectedOptionValues = [
+        {
+          optionLabel: "Resource 1",
+          ckanAction: "resource_patch",
+          ckanDataDict: {
+            id: 1,
+            name: "Resource 1",
+            resource_type: "resource_type 1"
+          }
+        },
+        {
+          optionLabel: "Resource 2",
+          ckanAction: "resource_patch",
+          ckanDataDict: {
+            id: 2,
+            name: "Resource 2",
+            resource_type: "resource_type 2"
+          }
+        },
+        {
+          optionLabel: "Resource 3",
+          ckanAction: "resource_create",
+          ckanDataDict: {
+            name: "Resource 3",
+            resource_type: "resource_type 3"
+          }
+        },
+        {
+          optionLabel: "Extra Resource",
+          ckanAction: "resource_create",
+          ckanDataDict: {}
+        }
+      ].map(x => JSON.stringify(x));
+      expect(expectedOptionValues).toEqual(selectOptionValues);
+    });
+  });
+
+  describe('when the same option is selected twice', () => {
+    beforeEach(async () => {
+      const existingCoreResources = [
+        { id: 1, name: 'Resource 1', resource_type: 'resource_type 1' }
+      ];
+      const existingExtraResources = [];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const duplicateOptionValue = JSON.stringify({
+        optionLabel: "Resource 1",
+        ckanAction: "resource_patch",
+        ckanDataDict: {
+          id: 1,
+          name: "Resource 1",
+          resource_type: "resource_type 1"
+        }
+      })
+      await fireEvent.change(
+        screen.getAllByTestId('uploadActionSelector')[0],
+        { target: { value: duplicateOptionValue } }
+      );
+      await fireEvent.change(
+        screen.getAllByTestId('uploadActionSelector')[1],
+        { target: { value: duplicateOptionValue } }
+      );
+    });
+    test('display a warning', async () => {
+      await screen.getAllByText('Duplicate option selected');
+    });
+    test('disable the upload button', async () => {
+      const uploadButtonClass = screen.getByTestId('UploadFilesButton').className;
+      expect(uploadButtonClass).toContain('disabled')
+    });
+  });
+  
+});
 
 describe('test without network issues', () => {
   beforeEach(async () => {
@@ -170,3 +318,4 @@ describe('test with ckan authz_authorize network error', () => {
     await screen.findByText('Resource Create Error');
   })
 });
+
