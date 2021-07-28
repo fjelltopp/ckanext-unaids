@@ -87,7 +87,7 @@ const testSuccessfulUpload = async elementTestId => {
   await selectFilesToUpload(elementTestId, validFiles);
   await screen.findByText('file_1.json');
   await screen.findByText('file_2.json');
-  //await uploadFilesAndCreateResources(validFiles, invalidFiles);
+  await uploadFilesAndCreateResources(validFiles, invalidFiles);
 };
 const testUploadWithFileTooLarge = async elementTestId => {
   const validFile = new File(['file'], 'file_1.json');

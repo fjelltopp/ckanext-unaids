@@ -181,7 +181,7 @@ export default function ModalBody({
             )
         }
         return (
-            <table className="table" data-testid="PendingFilesTable">
+            <table className="table">
                 <tbody>
                     {pendingFiles.map((file, index) => (
                         <tr key={index}>
