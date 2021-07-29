@@ -101,3 +101,10 @@ unaids_blueprint.add_url_rule(
     u'/geodata/<package_id>',
     view_func=download_naomi_geodata
 )
+
+
+@unaids_blueprint.app_template_filter()
+def json_dumps(json_obj):
+    if not json_obj:
+        return '{}'
+    return json.dumps(json_obj)
