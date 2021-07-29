@@ -80,3 +80,9 @@
     margin: 0;
     color: white;
 }
+
+#BulkFileUploaderComponent select{
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 3px
+}

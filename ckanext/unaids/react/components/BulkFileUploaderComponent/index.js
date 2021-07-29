@@ -11,12 +11,19 @@ const getAttr = key => {
   const val = componentElement.getAttribute(`data-${key}`);
   return ['None', ''].includes(val) ? null : val;
 };
+const parseJsonList = attrValue => {
+  const jsonValue = JSON.parse(attrValue);
+  return jsonValue.length ? jsonValue : [];
+}
 const
   lfsServer = getAttr('lfsServer'),
   maxResourceSize = getAttr('maxResourceSize'),
   orgId = getAttr('orgId'),
   datasetName = getAttr('datasetName'),
-  defaultFields = JSON.parse(getAttr('defaultFields'));
+  defaultFields = JSON.parse(getAttr('defaultFields')),
+  existingCoreResources = parseJsonList(getAttr('existingCoreResources')),
+  existingExtraResources = parseJsonList(getAttr('existingExtraResources')),
+  missingCoreResources = parseJsonList(getAttr('missingCoreResources'));
 
 const loadCkan = callback => {
   if (
@@ -38,7 +45,8 @@ loadCkan(() => {
   ReactDOM.render(
     <App {...{
       modalElementId, lfsServer, maxResourceSize,
-      orgId, datasetName, defaultFields
+      orgId, datasetName, defaultFields, existingCoreResources,
+      existingExtraResources, missingCoreResources
     }} />,
     componentElement
   );
