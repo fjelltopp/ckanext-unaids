@@ -7,12 +7,12 @@ import ProgressBar from './ProgressBar';
 
 export default function ModalBody({
     modalElementId, lfsServer, maxResourceSize,
-    orgId, datasetName, defaultFields, existingCoreResources,
-    existingExtraResources, missingCoreResources,
+    orgId, datasetName, defaultFields, updateResourcesOptions,
+    createResourcesOptions, extraResource,
     pendingFiles, setPendingFiles,
     uploadInProgress, setUploadInProgress,
     uploadsComplete, setUploadsComplete,
-    networkError, setNetworkError
+    networkError, setNetworkError, getDefaultUploadAction
 }) {
 
     const setFileProgress = (pendingFileIndex, loaded, total) => {
@@ -87,39 +87,12 @@ export default function ModalBody({
             }
         }).then(() => setUploadsComplete(true));
     }
-
-    const updateResourcesOptions =
-        [
-            ...existingCoreResources,
-            ...existingExtraResources
-        ].map(x => ({
-            optionLabel: x.name,
-            ckanAction: 'resource_patch',
-            ckanDataDict: {
-                id: x.id,
-                name: x.name,
-                resource_type: x.resource_type
-            }
-        }));
-    const createResourcesOptions =
-        missingCoreResources.map(x => ({
-            optionLabel: x.name,
-            ckanAction: 'resource_create',
-            ckanDataDict: {
-                name: x.name,
-                resource_type: x.resource_type
-            }
-        }))
-    const extraResource = {
-        optionLabel: ckan.i18n._('Extra Resource'),
-        ckanAction: 'resource_create',
-        ckanDataDict: {}
-    };
     const uploadActionAlreadyTaken = (uploadAction) => {
-        if ([undefined, JSON.stringify(extraResource)].includes(uploadAction)) {
+        if (uploadAction === JSON.stringify(extraResource)) {
             return false;
         } else {
             return pendingFiles
+                .filter(x => x.uploadAction != undefined)
                 .filter(x => x.uploadAction === uploadAction)
                 .length > 1
         }
@@ -154,7 +127,7 @@ export default function ModalBody({
                     <select
                         data-testid="uploadActionSelector"
                         onChange={e => setFileUploadAction(index, e.target.value)}
-                        value={file.uploadAction || JSON.stringify(extraResource)}
+                        value={file.uploadAction}
                     >
                         {
                             updateResourcesOptions.length &&
@@ -188,9 +161,10 @@ export default function ModalBody({
                             <td width={20}><i className="fa fa-file"></i></td>
                             <td>{label(file, index)}</td>
                             <td width={200}>
-                                {uploadInProgress
-                                    ? progressBar(file)
-                                    : fileUploadActionSelector(file, index)
+                                {file.error === undefined &&
+                                    (uploadInProgress
+                                        ? progressBar(file)
+                                        : fileUploadActionSelector(file, index))
                                 }
                             </td>
                             <td width={20}>
@@ -292,6 +266,7 @@ export default function ModalBody({
             <>
                 <FileUploader {...{
                     modalElementId, maxResourceSize, setPendingFiles,
+                    getDefaultUploadAction,
                     dropzoneType: dropzoneTypes.modalDropzone
                 }} />
                 <PendingFilesTable />

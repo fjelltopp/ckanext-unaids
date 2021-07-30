@@ -6,15 +6,21 @@ export const dropzoneTypes = {
     modalDropzone: 'modalDropzone'
 }
 
-export default function FileUploader({ modalElementId, maxResourceSize, setPendingFiles, dropzoneType }) {
+export default function FileUploader({ modalElementId, maxResourceSize, setPendingFiles, getDefaultUploadAction, dropzoneType }) {
 
     const openModalUsingJquery = () => {
         if (dropzoneType === dropzoneTypes.fullPageDropzone) {
             $(`#${modalElementId}`).modal('show');
         }
     }
-    const handleDropAccepted = files => {
-        setPendingFiles(prev => [...prev, ...files]);
+    const handleDropAccepted = acceptedFiles => {
+        acceptedFiles = acceptedFiles.map(acceptedFile =>
+            Object.assign(acceptedFile, {
+                uploadAction:
+                    JSON.stringify(getDefaultUploadAction(acceptedFile))
+            })
+        );
+        setPendingFiles(pendingFiles => [...pendingFiles, ...acceptedFiles]);
     };
     const handleDropRejected = rejections => {
         const errorMessage = rejection => {
@@ -25,12 +31,10 @@ export default function FileUploader({ modalElementId, maxResourceSize, setPendi
                 return ckan.i18n._('Error: Unable To Load File.');
             }
         };
-        let rejectedFiled = rejections.map(rejection => {
-            let rejectedFile = rejection.file;
-            rejectedFile.error = errorMessage(rejection);
-            return rejectedFile;
-        });
-        setPendingFiles(prev => [...prev, ...rejectedFiled]);
+        rejections = rejections.map(rejection =>
+            Object.assign(rejection.file, { error: errorMessage(rejection) })
+        );
+        setPendingFiles(pendingFiles => [...pendingFiles, ...rejections]);
     };
 
     const { getRootProps, getInputProps, open, isDragActive } = useDropzone({

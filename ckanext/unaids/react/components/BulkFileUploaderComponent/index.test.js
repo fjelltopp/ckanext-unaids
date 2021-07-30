@@ -80,35 +80,35 @@ const uploadFilesAndCreateResources = async (validFileUploads, invalidFileUpload
 
 const testSuccessfulUpload = async elementTestId => {
   const validFiles = [
-    new File(['file'], 'file_1.json'),
-    new File(['file'], 'file_2.json'),
+    new File(['file'], 'anc_data_file.csv'),
+    new File(['file'], 'geographic.json'),
   ];
   const invalidFiles = [];
   await selectFilesToUpload(elementTestId, validFiles);
-  await screen.findByText('file_1.json');
-  await screen.findByText('file_2.json');
+  await screen.findByText('anc_data_file.csv');
+  await screen.findByText('geographic.json');
   await uploadFilesAndCreateResources(validFiles, invalidFiles);
 };
 const testUploadWithFileTooLarge = async elementTestId => {
-  const validFile = new File(['file'], 'file_1.json');
+  const validFile = new File(['file'], 'anc_data_file.csv');
   const invalidFile = new File(
-    [new ArrayBuffer(maxResourceSize * 10000000)], 'file_2.json'
+    [new ArrayBuffer(maxResourceSize * 10000000)], 'geographic.json'
   );
   await selectFilesToUpload(elementTestId, [validFile, invalidFile]);
-  await screen.findByText('file_1.json');
-  await screen.findByText('file_2.json');
+  await screen.findByText('anc_data_file.csv');
+  await screen.findByText('geographic.json');
   await uploadFilesAndCreateResources([validFile], [invalidFile]);
 };
 
 describe('test selecting if we want to update an existing resource or upload a new one', () => {
 
   const stageFileUpload = async (
-    existingCoreResources, existingExtraResources, missingCoreResources
+    existingCoreResources, existingExtraResources, missingCoreResources,
   ) => {
     const elementTestId = 'BulkFileUploaderInput';
     const validFiles = [
-      new File(['file'], 'file_1.json'),
-      new File(['file'], 'file_2.json'),
+      new File(['file'], 'anc_data_file.csv'),
+      new File(['file'], 'geographic.json'),
     ];
     const defaultFields = {};
     await renderAppComponent(
@@ -118,15 +118,106 @@ describe('test selecting if we want to update an existing resource or upload a n
     await selectFilesToUpload(elementTestId, validFiles);
   };
 
+  describe('automatically set the uploadAction select value', () => {
+    test('if the filename is an exact match', async () => {
+      const existingCoreResources = [];
+      const existingExtraResources = [
+        {
+          id: 2,
+          name: 'Resource 2',
+          resource_type: 'resource_type 2',
+          url: 'http://example.com/example.csv'
+        },
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/anc_data_file.csv'
+        }
+      ];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const selectValue = screen
+        .getAllByTestId('uploadActionSelector')[0].value;
+      const selectLabel = JSON.parse(selectValue).optionLabel;
+      expect(selectLabel).toEqual('Resource 1');
+    });
+    test('if the filename does not match', async () => {
+      const existingCoreResources = [];
+      const existingExtraResources = [
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/example.csv'
+        }
+      ];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const selectValue = screen
+        .getAllByTestId('uploadActionSelector')[0].value;
+      const selectLabel = JSON.parse(selectValue).optionLabel;
+      expect(selectLabel).toEqual('Extra Resource');
+    });
+    test('if the filename is a near match', async () => {
+      const existingCoreResources = [];
+      const existingExtraResources = [
+        {
+          id: 2,
+          name: 'Resource 2',
+          resource_type: 'resource_type 2',
+          url: 'http://example.com/geographic (1).json'
+        },
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/anc_data_file (1).csv'
+        }
+      ];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const selectValue = screen
+        .getAllByTestId('uploadActionSelector')[0].value;
+      const selectLabel = JSON.parse(selectValue).optionLabel;
+      expect(selectLabel).toEqual('Resource 1');
+    });
+  });
+
   test('correct select option labels', async () => {
     const existingCoreResources = [
-      { id: 1, name: 'Resource 1', resource_type: 'resource_type 1' }
+      {
+        id: 1,
+        name: 'Resource 1',
+        resource_type: 'resource_type 1',
+        url: 'http://example.com/resource_1.csv'
+      }
     ];
     const existingExtraResources = [
-      { id: 2, name: 'Resource 2', resource_type: 'resource_type 2' }
+      {
+        id: 2,
+        name: 'Resource 2',
+        resource_type: 'resource_type 2',
+        url: 'http://example.com/resource_2.csv'
+      }
     ];
     const missingCoreResources = [
-      { name: 'Resource 3', resource_type: 'resource_type 3' }
+      {
+        name: 'Resource 3',
+        resource_type: 'resource_type 3'
+      }
     ];
     await stageFileUpload(
       existingCoreResources,
@@ -147,13 +238,26 @@ describe('test selecting if we want to update an existing resource or upload a n
 
   test('correct select option values', async () => {
     const existingCoreResources = [
-      { id: 1, name: 'Resource 1', resource_type: 'resource_type 1' }
+      {
+        id: 1,
+        name: 'Resource 1',
+        resource_type: 'resource_type 1',
+        url: 'http://example.com/resource_1.csv'
+      }
     ];
     const existingExtraResources = [
-      { id: 2, name: 'Resource 2', resource_type: 'resource_type 2' }
+      {
+        id: 2,
+        name: 'Resource 2',
+        resource_type: 'resource_type 2',
+        url: 'http://example.com/resource_2.csv'
+      }
     ];
     const missingCoreResources = [
-      { name: 'Resource 3', resource_type: 'resource_type 3' }
+      {
+        name: 'Resource 3',
+        resource_type: 'resource_type 3'
+      }
     ];
     await stageFileUpload(
       existingCoreResources,
@@ -167,6 +271,7 @@ describe('test selecting if we want to update an existing resource or upload a n
       const expectedOptionValues = [
         {
           optionLabel: "Resource 1",
+          fileName: "resource_1.csv",
           ckanAction: "resource_patch",
           ckanDataDict: {
             id: 1,
@@ -176,6 +281,7 @@ describe('test selecting if we want to update an existing resource or upload a n
         },
         {
           optionLabel: "Resource 2",
+          fileName: "resource_2.csv",
           ckanAction: "resource_patch",
           ckanDataDict: {
             id: 2,
@@ -204,7 +310,12 @@ describe('test selecting if we want to update an existing resource or upload a n
   describe('when the same option is selected twice', () => {
     beforeEach(async () => {
       const existingCoreResources = [
-        { id: 1, name: 'Resource 1', resource_type: 'resource_type 1' }
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/resource_1.csv'
+        }
       ];
       const existingExtraResources = [];
       const missingCoreResources = [];
@@ -239,7 +350,7 @@ describe('test selecting if we want to update an existing resource or upload a n
       expect(uploadButtonClass).toContain('disabled')
     });
   });
-  
+
 });
 
 describe('test without network issues', () => {
@@ -283,9 +394,9 @@ describe('test with giftless network error', () => {
     await renderAppComponent({ restricted_allowed_orgs: 'unaids' });
   });
   test('uploading file', async () => {
-    const files = [new File(['file'], 'file_1.json')];
+    const files = [new File(['file'], 'anc_data_file.csv')];
     await selectFilesToUpload('BulkFileUploaderInput', files);
-    await screen.findByText('file_1.json');
+    await screen.findByText('anc_data_file.csv');
     fireEvent.click(screen.getByTestId('UploadFilesButton'));
     await screen.findByText('File Upload Error');
   })
@@ -297,9 +408,9 @@ describe('test with ckan authz_authorize network error', () => {
     await renderAppComponent({ restricted_allowed_orgs: 'unaids' });
   });
   test('uploading file', async () => {
-    const files = [new File(['file'], 'file_1.json')];
+    const files = [new File(['file'], 'anc_data_file.csv')];
     await selectFilesToUpload('BulkFileUploaderInput', files);
-    await screen.findByText('file_1.json');
+    await screen.findByText('anc_data_file.csv');
     fireEvent.click(screen.getByTestId('UploadFilesButton'));
     await screen.findByText('Authorisation Error');
   })
@@ -311,9 +422,9 @@ describe('test with ckan authz_authorize network error', () => {
     await renderAppComponent({ restricted_allowed_orgs: 'unaids' });
   });
   test('uploading file', async () => {
-    const files = [new File(['file'], 'file_1.json')];
+    const files = [new File(['file'], 'anc_data_file.csv')];
     await selectFilesToUpload('BulkFileUploaderInput', files);
-    await screen.findByText('file_1.json');
+    await screen.findByText('anc_data_file.csv');
     fireEvent.click(screen.getByTestId('UploadFilesButton'));
     await screen.findByText('Resource Create Error');
   })
