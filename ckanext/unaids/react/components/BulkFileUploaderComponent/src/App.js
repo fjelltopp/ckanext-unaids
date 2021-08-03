@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Fuse from 'fuse.js'
+// import Fuse from 'fuse.js'
 import Modal from './Modal';
 import FileUploader, { dropzoneTypes } from './FileUploader';
 
@@ -40,28 +40,38 @@ export default function App(props) {
     const [networkError, setNetworkError] = useState(false);
 
     const getDefaultUploadAction = file => {
-        const fuzzySearchResults = new Fuse(
-            updateResourcesOptions,
-            {
-                // https://bit.ly/3BTLnWd
-                includeScore: true,
-                findAllMatches: false,
-                keys: ['fileName'],
-                threshold: 0.3
-            }
-        ).search(file.name);
-        let defaultUploadAction = extraResource;
-        if (fuzzySearchResults.length === 1) {
-            defaultUploadAction = fuzzySearchResults[0].item;
-        } else if (fuzzySearchResults.length > 1) {
-            const firstResult = fuzzySearchResults[0];
-            const secondResult = fuzzySearchResults[1];
-            const scroreDiff = firstResult.score - secondResult.score;
-            if (scroreDiff > 0.05) {
-                defaultUploadAction = fuzzySearchResults[0].item;
-            }
+        // disabled until we figure out a nicer algorithm
+        // const fuzzySearchResults = new Fuse(
+        //     updateResourcesOptions,
+        //     {
+        //         // https://bit.ly/3BTLnWd
+        //         includeScore: true,
+        //         findAllMatches: false,
+        //         keys: ['fileName'],
+        //         threshold: 0.3
+        //     }
+        // ).search(file.name);
+        // let defaultUploadAction = extraResource;
+        // if (fuzzySearchResults.length === 1) {
+        //     defaultUploadAction = fuzzySearchResults[0].item;
+        // } else if (fuzzySearchResults.length > 1) {
+        //     const firstResult = fuzzySearchResults[0];
+        //     const secondResult = fuzzySearchResults[1];
+        //     const scroreDiff = firstResult.score - secondResult.score;
+        //     if (scroreDiff > 0.05) {
+        //         defaultUploadAction = fuzzySearchResults[0].item;
+        //     }
+        // }
+        // return defaultUploadAction;
+        const exactMatches = updateResourcesOptions.filter(
+            x => x.fileName === file.name
+        );
+        switch (exactMatches.length) {
+            case 1:
+                return exactMatches[0];
+            default:
+                return extraResource;
         }
-        return defaultUploadAction;
     }
 
     const updatedProps = {

@@ -167,20 +167,20 @@ describe('test selecting if we want to update an existing resource or upload a n
       const selectLabel = JSON.parse(selectValue).optionLabel;
       expect(selectLabel).toEqual('Extra Resource');
     });
-    test('if the filename is a near match', async () => {
+    test('if the filename matches multiple existing files', async () => {
       const existingCoreResources = [];
       const existingExtraResources = [
-        {
-          id: 2,
-          name: 'Resource 2',
-          resource_type: 'resource_type 2',
-          url: 'http://example.com/geographic (1).json'
-        },
         {
           id: 1,
           name: 'Resource 1',
           resource_type: 'resource_type 1',
-          url: 'http://example.com/anc_data_file (1).csv'
+          url: 'http://example.com/anc_data_file.csv'
+        },
+        {
+          id: 2,
+          name: 'Resource 2',
+          resource_type: 'resource_type 2',
+          url: 'http://example.com/anc_data_file.csv'
         }
       ];
       const missingCoreResources = [];
@@ -192,7 +192,7 @@ describe('test selecting if we want to update an existing resource or upload a n
       const selectValue = screen
         .getAllByTestId('uploadActionSelector')[0].value;
       const selectLabel = JSON.parse(selectValue).optionLabel;
-      expect(selectLabel).toEqual('Resource 1');
+      expect(selectLabel).toEqual('Extra Resource');
     });
   });
 
