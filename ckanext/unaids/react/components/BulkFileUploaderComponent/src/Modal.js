@@ -7,7 +7,7 @@ export default function Modal(props) {
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
-                        {!props.uploadsComplete &&
+                        {!props.uploadsComplete && !props.uploadInProgress &&
                             (
                                 <button type="button" className="close" data-dismiss="modal">
                                     <span aria-hidden="true">&times;</span>
