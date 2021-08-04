@@ -117,7 +117,10 @@ def get_current_dataset_release(dataset_id, activity_id=None):
         activities = toolkit.get_action('package_activity_list')(
             context, {'id': dataset_id}
         )
-        activity_id = activities[0]['id']
+        if not activities:
+            return None
+        else:
+            activity_id = activities[0]['id']
     releases = toolkit.get_action('dataset_version_list')(
         context, {'dataset_id': dataset_id}
     )
