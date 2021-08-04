@@ -167,13 +167,11 @@ export default function ModalBody({
                                         : fileUploadActionSelector(file, index))
                                 }
                             </td>
-                            <td width={20}>
-                                {!file.progress &&
-                                    <i
-                                        className="fa fa-close text-danger remove-file-btn"
-                                        onClick={() => removeFileFromPendingFiles(index)}
-                                    ></i>
-                                }
+                            <td width={30}>
+                                <i
+                                    className={`fa fa-close remove-file-btn-${uploadInProgress ? 'disabled' : 'active text-danger'} `}
+                                    onClick={() => !uploadInProgress && removeFileFromPendingFiles(index)}
+                                ></i>
                             </td>
                         </tr>
                     ))}
