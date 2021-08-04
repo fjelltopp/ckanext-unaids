@@ -49,6 +49,10 @@
     opacity: 0.25;
 }
 
+#BulkFileUploaderComponent .close.disabled {
+    cursor: not-allowed;
+}
+
 #BulkFileUploaderComponent .fa {
     margin-right: 5px;
 }
