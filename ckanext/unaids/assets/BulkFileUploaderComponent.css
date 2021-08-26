@@ -40,10 +40,17 @@
     overflow-wrap: break-word;
 }
 
-#BulkFileUploaderComponent .remove-file-btn {
+#BulkFileUploaderComponent .remove-file-btn-active {
     cursor: pointer;
-    margin: 0;
-    margin-left: 5px;
+}
+
+#BulkFileUploaderComponent .remove-file-btn-disabled {
+    cursor: not-allowed;
+    opacity: 0.25;
+}
+
+#BulkFileUploaderComponent .close.disabled {
+    cursor: not-allowed;
 }
 
 #BulkFileUploaderComponent .fa {
@@ -79,4 +86,10 @@
 #BulkFileUploaderComponent .drag-files-instructions h3 {
     margin: 0;
     color: white;
+}
+
+#BulkFileUploaderComponent select {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 3px
 }

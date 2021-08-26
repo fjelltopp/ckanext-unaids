@@ -1,6 +1,9 @@
 {% ckan_extends %}
 
 {% block package_resources %}
+  {% set core_resources = h.get_core_resources(pkg) %}
+  {% set missing = h.get_missing_resources(pkg, schema) %}
+  {% set extra_resources = h.get_extra_resources(pkg) %}
   {% asset 'ckanext-unaids/BulkFileUploaderComponentStyles' %}
   <div
       id="BulkFileUploaderComponent"
@@ -9,6 +12,9 @@
       data-orgId="{{ pkg.organization.name }}"
       data-datasetName="{{ pkg.name }}"
       data-defaultFields="{{ h.bulk_file_uploader_default_fields() }}"
+      data-existingCoreResources="{{ core_resources|json_dumps|replace('"', '\"') }}"
+      data-existingExtraResources="{{ extra_resources|json_dumps|replace('"', '\"') }}"
+      data-missingCoreResources="{{ missing|json_dumps|replace('"', '\"') }}"
   ></div>
   {% asset 'ckanext-unaids/BulkFileUploaderComponentScripts' %}
   <div id="ContentToMoveInsideDropzone">

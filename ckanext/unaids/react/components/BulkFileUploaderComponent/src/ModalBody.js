@@ -7,16 +7,22 @@ import ProgressBar from './ProgressBar';
 
 export default function ModalBody({
     modalElementId, lfsServer, maxResourceSize,
-    orgId, datasetName, defaultFields,
+    orgId, datasetName, defaultFields, updateResourcesOptions,
+    createResourcesOptions, extraResource,
     pendingFiles, setPendingFiles,
     uploadInProgress, setUploadInProgress,
     uploadsComplete, setUploadsComplete,
-    networkError, setNetworkError
+    networkError, setNetworkError, getDefaultUploadAction
 }) {
 
     const setFileProgress = (pendingFileIndex, loaded, total) => {
         let _pendingFiles = [...pendingFiles];
         _pendingFiles[pendingFileIndex].progress = { loaded, total };
+        setPendingFiles(_pendingFiles);
+    }
+    const setFileUploadAction = (pendingFileIndex, uploadAction) => {
+        let _pendingFiles = [...pendingFiles];
+        _pendingFiles[pendingFileIndex].uploadAction = uploadAction;
         setPendingFiles(_pendingFiles);
     }
     const removeFileFromPendingFiles = index => {
@@ -47,9 +53,9 @@ export default function ModalBody({
         ).catch(error => handleNetworkError(
             ckan.i18n._('File Upload Error'), error
         ));
-    const createResource = localFile =>
+    const createOrUpdateResource = (action, localFile, extraFields) =>
         axios.post(
-            '/api/3/action/resource_create',
+            `/api/3/action/${action}`,
             {
                 package_id: datasetName,
                 url_type: 'upload',
@@ -58,13 +64,12 @@ export default function ModalBody({
                 size: localFile._descriptor.size,
                 url: localFile._descriptor.name,
                 lfs_prefix: `${orgId}/${datasetName}`,
-                ...defaultFields
+                ...defaultFields, ...extraFields
             },
             { withCredentials: true }
         ).catch(error => handleNetworkError(
             ckan.i18n._('Resource Create Error'), error
         ));
-
     const uploadFiles = () => {
         setUploadInProgress(true);
         Promise.mapSeries(pendingFiles, async (file, index) => {
@@ -75,10 +80,22 @@ export default function ModalBody({
                 const localFile = data.open(file);
                 setFileProgress(index, 0, 100);
                 await uploadFile(client, index, localFile, setFileProgress);
-                await createResource(localFile);
+                const { ckanAction, ckanDataDict } =
+                    file.uploadAction ? JSON.parse(file.uploadAction) : extraResource;
+                await createOrUpdateResource(ckanAction, localFile, ckanDataDict);
                 setFileProgress(index, 100, 100);
             }
         }).then(() => setUploadsComplete(true));
+    }
+    const uploadActionAlreadyTaken = (uploadAction) => {
+        if (uploadAction === JSON.stringify(extraResource)) {
+            return false;
+        } else {
+            return pendingFiles
+                .filter(x => x.uploadAction != undefined)
+                .filter(x => x.uploadAction === uploadAction)
+                .length > 1
+        }
     }
 
     function PendingFilesTable() {
@@ -86,12 +103,6 @@ export default function ModalBody({
             <>
                 <div>
                     <span>{file.name}</span>
-                    {!file.progress &&
-                        <i
-                            className="fa fa-close text-danger remove-file-btn"
-                            onClick={() => removeFileFromPendingFiles(index)}
-                        ></i>
-                    }
                 </div>
                 {file.error &&
                     <p className="label label-danger">{file.error}</p>
@@ -100,14 +111,68 @@ export default function ModalBody({
         )
         const progressBar = file => !file.error && file.progress &&
             <ProgressBar uploadProgress={file.progress} />
+
+        const fileUploadActionSelector = (file, index) => {
+            const selectOptions = options =>
+                options.map(x => {
+                    const uploadAction = JSON.stringify(x);
+                    return <option
+                        key={uploadAction}
+                        value={uploadAction}
+                        data-testid="select-option"
+                    >{x.optionLabel}</option>
+                })
+            return (
+                <>
+                    <select
+                        data-testid="uploadActionSelector"
+                        onChange={e => setFileUploadAction(index, e.target.value)}
+                        value={file.uploadAction}
+                    >
+                        {
+                            updateResourcesOptions.length &&
+                            <optgroup label={ckan.i18n._('Overwrite Existing Resource')}>
+                                {selectOptions(updateResourcesOptions)}
+                            </optgroup>
+                        }
+                        <optgroup label={ckan.i18n._('Upload new resource')}>
+                            {
+                                createResourcesOptions.length &&
+                                <>
+                                    {selectOptions(createResourcesOptions)}
+                                    <option disabled>----------</option>
+                                </>
+                            }
+                            {selectOptions([extraResource])}
+                        </optgroup>
+                    </select>
+                    {
+                        uploadActionAlreadyTaken(file.uploadAction) &&
+                        <span className="label label-danger">{ckan.i18n._('Duplicate option selected')}</span>
+                    }
+                </>
+            )
+        }
         return (
             <table className="table">
                 <tbody>
                     {pendingFiles.map((file, index) => (
                         <tr key={index}>
                             <td width={20}><i className="fa fa-file"></i></td>
-                            <td width={400}>{label(file, index)}</td>
-                            <td>{progressBar(file)}</td>
+                            <td>{label(file, index)}</td>
+                            <td width={200}>
+                                {file.error === undefined &&
+                                    (uploadInProgress
+                                        ? progressBar(file)
+                                        : fileUploadActionSelector(file, index))
+                                }
+                            </td>
+                            <td width={30}>
+                                <i
+                                    className={`fa fa-close remove-file-btn-${uploadInProgress ? 'disabled' : 'active text-danger'} `}
+                                    onClick={() => !uploadInProgress && removeFileFromPendingFiles(index)}
+                                ></i>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -115,13 +180,20 @@ export default function ModalBody({
         )
     }
     function UploadButton() {
-        const classes = `btn btn-default ${!pendingFiles.length && 'disabled'}`;
+        const thereArePendingFiles = pendingFiles.length > 0;
+        const noDuplicateUploadActionsSet = pendingFiles
+            .map(file => uploadActionAlreadyTaken(file.uploadAction))
+            .filter(x => x).length === 0;
+        const enableButton = ![
+            thereArePendingFiles,
+            noDuplicateUploadActionsSet
+        ].includes(false);
         return (
             <button
                 type="button"
-                className={classes}
+                className={`btn btn-default ${enableButton ? '' : 'disabled'}`}
                 data-testid="UploadFilesButton"
-                onClick={pendingFiles.length ? uploadFiles : null}
+                onClick={enableButton ? uploadFiles : null}
             >
                 <i className="fa fa-upload"></i>
                 {ckan.i18n._('Upload Files')}
@@ -192,6 +264,7 @@ export default function ModalBody({
             <>
                 <FileUploader {...{
                     modalElementId, maxResourceSize, setPendingFiles,
+                    getDefaultUploadAction,
                     dropzoneType: dropzoneTypes.modalDropzone
                 }} />
                 <PendingFilesTable />
