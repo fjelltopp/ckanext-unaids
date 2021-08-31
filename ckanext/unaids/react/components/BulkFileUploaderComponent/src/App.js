@@ -71,8 +71,8 @@ export default function App(props) {
                have the same file extension, and any middle non-matching parts
                consist only of the following inserted or swapped:
                - a number
-               - a number in parenthesis
-               - a number after a hyphen
+               - a number or the word "copy" in parenthesis
+               - a number or the word "copy" after a hyphen
             */
 
             const regexp = /^$|^ ?[\(-]? ?([0-9]|copy|Copy)*\)?$/;
