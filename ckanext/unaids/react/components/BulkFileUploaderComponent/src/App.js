@@ -67,19 +67,22 @@ export default function App(props) {
         }
 
         function filenameMatch(filename1, filename2){
-            /* Matches where filenames begin and end with the same three (or more chars) and
-               any middle non-matching parts consist only of the following inserted or swapped:
+            /* Matches where filenames begin and end with the same three (or more chars),
+               have the same file extension, and any middle non-matching parts
+               consist only of the following inserted or swapped:
                - a number
                - a number in parenthesis
                - a number after a hyphen
             */
-            const regexp = /^$|^[\(-]? ?[0-9]*\)?$/;
+
+            const regexp = /^$|^ ?[\(-]? ?([0-9]|copy|Copy)*\)?$/;
             const matches = strDiff(filename1, filename2);
-            const completeMatch = matches[0] == matches[1] && matches[0];
+            const completeMatch = filename1 == filename2;
             const openingMatch = matches[0].length >= 3;
             const closingMatch = matches[1].length >= 3;
+            const extensionMatch = matches[1].includes('.');
             const regexMatch = matches[2].match(regexp) != null && matches[3].match(regexp) != null;
-            const match = completeMatch || openingMatch && closingMatch && regexMatch;
+            const match = completeMatch || openingMatch && closingMatch && extensionMatch && regexMatch;
             return match;
         }
 
