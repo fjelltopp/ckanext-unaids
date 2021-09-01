@@ -6,8 +6,8 @@ from ckan.common import _
 
 def if_empty_guess_format(key, data, errors, context):
     """
-    Overrides the core if_empty_guess_format validator to add the geojson
-    file type to those that it guesses.
+    Overrides the core if_empty_guess_format validator to add the geojson & pjnz
+    file types to those that it guesses.
     """
     value = data[key]
     resource_id = data.get(key[:-1] + ('id',))
@@ -15,6 +15,7 @@ def if_empty_guess_format(key, data, errors, context):
     if (not value or value is df.Missing) and not resource_id:
         url = data.get(key[:-1] + ('url',), '')
         mimetypes.add_type('application/geo+json', '.geojson')
+        mimetypes.add_type('application/pjnz', '.pjnz')
         mimetype, encoding = mimetypes.guess_type(url)
         if mimetype:
             data[key] = mimetype
