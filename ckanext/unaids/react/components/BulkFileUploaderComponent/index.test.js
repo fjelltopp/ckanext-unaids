@@ -146,6 +146,87 @@ describe('test selecting if we want to update an existing resource or upload a n
       const selectLabel = JSON.parse(selectValue).optionLabel;
       expect(selectLabel).toEqual('Resource 1');
     });
+    test('if the filename is a close match " (1)"', async () => {
+      const existingCoreResources = [];
+      const existingExtraResources = [
+        {
+          id: 2,
+          name: 'Resource 2',
+          resource_type: 'resource_type 2',
+          url: 'http://example.com/example.csv'
+        },
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/anc_data_file (1).csv'
+        }
+      ];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const selectValue = screen
+        .getAllByTestId('uploadActionSelector')[0].value;
+      const selectLabel = JSON.parse(selectValue).optionLabel;
+      expect(selectLabel).toEqual('Resource 1');
+    });
+    test('if the filename is a close match "-35"', async () => {
+      const existingCoreResources = [];
+      const existingExtraResources = [
+        {
+          id: 2,
+          name: 'Resource 2',
+          resource_type: 'resource_type 2',
+          url: 'http://example.com/example.csv'
+        },
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/anc_data_file-35.csv'
+        }
+      ];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const selectValue = screen
+        .getAllByTestId('uploadActionSelector')[0].value;
+      const selectLabel = JSON.parse(selectValue).optionLabel;
+      expect(selectLabel).toEqual('Resource 1');
+    });
+    test('if the filename is a close match "(copy)"', async () => {
+      const existingCoreResources = [];
+      const existingExtraResources = [
+        {
+          id: 2,
+          name: 'Resource 2',
+          resource_type: 'resource_type 2',
+          url: 'http://example.com/example.csv'
+        },
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/anc_data_file (copy).csv'
+        }
+      ];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const selectValue = screen
+        .getAllByTestId('uploadActionSelector')[0].value;
+      const selectLabel = JSON.parse(selectValue).optionLabel;
+      expect(selectLabel).toEqual('Resource 1');
+    });
     test('if the filename does not match', async () => {
       const existingCoreResources = [];
       const existingExtraResources = [
@@ -167,6 +248,27 @@ describe('test selecting if we want to update an existing resource or upload a n
       const selectLabel = JSON.parse(selectValue).optionLabel;
       expect(selectLabel).toEqual('Extra Resource');
     });
+    test('if the filename extension changes', async () => {
+      const existingCoreResources = [];
+      const existingExtraResources = [
+        {
+          id: 1,
+          name: 'Resource 1',
+          resource_type: 'resource_type 1',
+          url: 'http://example.com/example.icsv'
+        }
+      ];
+      const missingCoreResources = [];
+      await stageFileUpload(
+        existingCoreResources,
+        existingExtraResources,
+        missingCoreResources
+      );
+      const selectValue = screen
+        .getAllByTestId('uploadActionSelector')[0].value;
+      const selectLabel = JSON.parse(selectValue).optionLabel;
+      expect(selectLabel).toEqual('Extra Resource');
+    });
     test('if the filename matches multiple existing files', async () => {
       const existingCoreResources = [];
       const existingExtraResources = [
@@ -174,13 +276,13 @@ describe('test selecting if we want to update an existing resource or upload a n
           id: 1,
           name: 'Resource 1',
           resource_type: 'resource_type 1',
-          url: 'http://example.com/anc_data_file.csv'
+          url: 'http://example.com/anc_data_file(2).csv'
         },
         {
           id: 2,
           name: 'Resource 2',
           resource_type: 'resource_type 2',
-          url: 'http://example.com/anc_data_file.csv'
+          url: 'http://example.com/anc_data_file-1.csv'
         }
       ];
       const missingCoreResources = [];
@@ -195,7 +297,6 @@ describe('test selecting if we want to update an existing resource or upload a n
       expect(selectLabel).toEqual('Extra Resource');
     });
   });
-
   test('correct select option labels', async () => {
     const existingCoreResources = [
       {
@@ -429,4 +530,3 @@ describe('test with ckan authz_authorize network error', () => {
     await screen.findByText('Resource Create Error');
   })
 });
-
