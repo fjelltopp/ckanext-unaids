@@ -29,12 +29,11 @@ class TestValidators(object):
             )
 
     @pytest.mark.parametrize("format,resource_id,url,result", [
-        (None,  None, 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.csv', 'text/csv'),
-        (None,  None, 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.geojson', 'application/geo+json'),
-        (None,  None, 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.pjnz', 'application/pjnz'),
-        ('text/csv',  '891922a0f614', 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.xlsx', 'text/csv'),
-        (None,  '891922a0f614', 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.csv', None),
-
+        (None,  None, 'http://adr.local/resource/8919/demo.csv', 'text/csv'),
+        (None,  None, 'http://adr.local/resource/8919/demo.geojson', 'application/geo+json'),
+        (None,  None, 'http://adr.local/resource/8919/demo.pjnz', 'application/pjnz'),
+        ('text/csv',  '8919', 'http://adr.local/resource/89192/demo.xlsx', 'text/csv'),
+        (None,  '8919', 'http://adr.local/resource/8919/demo.csv', None)
     ])
     def test_if_empty_guess_format(self, url, resource_id, format, result):
         key = (u'resources', 0, 'format')
