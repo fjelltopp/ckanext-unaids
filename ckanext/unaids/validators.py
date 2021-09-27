@@ -14,11 +14,9 @@ def if_empty_guess_format(key, data, errors, context):
     # if resource_id then an update
     if (not value or value is df.Missing) and not resource_id:
         url = data.get(key[:-1] + ('url',), '')
-        mimetypes.add_type('application/geo+json', '.geojson')
-        mimetypes.add_type('application/pjnz', '.pjnz')
-        mimetype, encoding = mimetypes.guess_type(url)
-        if mimetype:
-            data[key] = mimetype
+        response = toolkit.get_action('format_guess')({}, {'filename': url})
+        if response.get('mimetype'):
+            data[key] = response['mimetype']
 
 
 def organization_id_exists_validator(key, data, errors, context):
