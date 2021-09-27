@@ -4,7 +4,7 @@
 from ckan.tests import factories
 import pytest
 import ckan.lib.navl.dictization_functions as df
-from ckanext.unaids.validators import organization_id_exists_validator
+from ckanext.unaids.validators import organization_id_exists_validator, if_empty_guess_format
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
@@ -27,3 +27,21 @@ class TestValidators(object):
                 {},
                 {}
             )
+
+    @pytest.mark.parametrize("format,resource_id,url,result", [
+        (None,  None, 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.csv', 'text/csv'),
+        (None,  None, 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.geojson', 'application/geo+json'),
+        (None,  None, 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.pjnz', 'application/pjnz'),
+        ('text/csv',  '891922a0f614', 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.xlsx', 'text/csv'),
+        (None,  '891922a0f614', 'http://adr.local/dataset/0f0cae9cea61/resource/891922a0f614/download/demo.csv', None),
+
+    ])
+    def test_if_empty_guess_format(self, url, resource_id, format, result):
+        key = (u'resources', 0, 'format')
+        data = {
+            (u'resources', 0, 'format'): format,
+            (u'resources', 0, 'id'): resource_id,
+            (u'resources', 0, 'url'): url
+        }
+        if_empty_guess_format(key, data, {}, {})
+        assert data[key] == result
