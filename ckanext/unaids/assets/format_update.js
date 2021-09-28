@@ -29,7 +29,7 @@ this.ckan.module('format_update', function ($) {
                     this.options.guess_action,
                     "?"+$.param({filename: filename}),
                     this._updateFormat.bind(this),
-                    function(error){console.log("Error guessing format")}
+                    function(error){console.error("Error calling api to guess format")}
                 );
             }else{
                 this._onTrigger();
