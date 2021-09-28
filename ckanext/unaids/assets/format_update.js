@@ -7,29 +7,38 @@
 // With the best guess taken from the name of the file
 // Using the action format_guess on the server
 this.ckan.module('format_update', function ($) {
-  return {
-    options: {
-      trigger: 'input[name=url]',
-      filename: 'input[name=url]',
-      guess_action: 'format_guess'
-    },
-    initialize: function () {
-      $.proxyAll(this, /_on/);
-      $(this.options.trigger).change(this._onTrigger);
-    },
-    _onTrigger: function (event) {
-      event.preventDefault();
-      var filename = $(this.options.filename).val();
-      this.sandbox.client.call(
-          'GET',
-          this.options.guess_action,
-          $.param({filename: filename}),
-          this._updateFormat,
-          function(error){console.log("Error guessing format")}
-      );
-    },
-    _updateFormat: function (json) {
-      $(this.el).select2("val", format);
-    }
-  };
+    return {
+        options: {
+            trigger: 'input[name=url]',
+            filename: 'input[name=url]',
+            guess_action: 'format_guess'
+        },
+        initialize: function () {
+            console.log(this.options);
+            $.proxyAll(this, /_on/);
+            $(this.options.trigger).change(this._onTrigger);
+        },
+        _onTrigger: function () {
+            setTimeout(this._autofillFormat.bind(this), 500);
+        },
+        _autofillFormat: function() {
+            var filename = $(this.options.filename).val();
+            if(filename){
+                this.sandbox.client.call(
+                    'GET',
+                    this.options.guess_action,
+                    "?"+$.param({filename: filename}),
+                    this._updateFormat.bind(this),
+                    function(error){console.log("Error guessing format")}
+                );
+            }else{
+                this._onTrigger();
+            }
+        },
+        _updateFormat: function (json) {
+            if('result' in json && 'format' in json.result){
+                $(this.el).select2("val", json.result.format);
+            }
+        }
+    };
 });
