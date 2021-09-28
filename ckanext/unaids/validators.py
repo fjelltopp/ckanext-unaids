@@ -1,5 +1,4 @@
 import ckan.lib.navl.dictization_functions as df
-import mimetypes
 import ckan.plugins.toolkit as toolkit
 from ckan.common import _
 
