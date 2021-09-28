@@ -10,7 +10,6 @@ this.ckan.module('text_template', function ($) {
       this._setup();
       $("form :input:not(#field-title, #field-name)").change(this._onChange);
       $(this.options.update).keyup(this._onKeyup);
-      console.log(this.options.template);
     },
     _form: {},
     _onChange: function (event) {
