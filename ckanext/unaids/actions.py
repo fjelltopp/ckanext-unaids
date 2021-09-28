@@ -147,6 +147,7 @@ def package_activity_list(original_action, context, data_dict):
     return activity_list
 
 
+@logic.side_effect_free
 def format_guess(context, data_dict):
     """
     Uses mimetypes to guess the file format for a given filename. This action
