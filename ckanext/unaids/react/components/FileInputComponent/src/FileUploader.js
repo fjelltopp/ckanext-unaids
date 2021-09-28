@@ -52,6 +52,8 @@ export default function FileUploader({
             size: file._descriptor.size,
             url: file._descriptor.name
         })
+        let event = new Event('input', { bubbles: true });
+        FileInputComponent.dispatchEvent(event);
     }
 
     const { getRootProps, getInputProps, open } = useDropzone({
