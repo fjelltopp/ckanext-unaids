@@ -14,7 +14,6 @@ this.ckan.module('format_update', function ($) {
             guess_action: 'format_guess'
         },
         initialize: function () {
-            console.log(this.options);
             $.proxyAll(this, /_on/);
             $(this.options.trigger).change(this._onTrigger);
         },

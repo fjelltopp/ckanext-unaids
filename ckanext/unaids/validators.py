@@ -13,7 +13,7 @@ def if_empty_guess_format(key, data, errors, context):
     # if resource_id then an update
     if (not value or value is df.Missing) and not resource_id:
         url = data.get(key[:-1] + ('url',), '')
-        response = toolkit.get_action('format_guess')({}, {'filename': url})
+        response = toolkit.get_action('format_guess')(context, {'filename': url})
         if response.get('mimetype'):
             data[key] = response['mimetype']
 
