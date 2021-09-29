@@ -164,7 +164,7 @@ class TestFormatGuess(object):
 
     @pytest.mark.parametrize("filename,mimetype,format", [
         ('art.csv', 'text/csv', 'CSV'),
-        ('anc.xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'XLSX'),
+        ('anc.xls', 'application/vnd.ms-excel', 'XLS'),
         ('country_regions.geojson', 'application/geo+json', 'GeoJSON'),
         ('spectrum_file.pjnz', 'application/pjnz', 'PJNZ'),
         ('no_file_extension', None, None),
