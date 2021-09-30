@@ -5,6 +5,7 @@ main:
     - download_all.js
     - text_template.js
     - bootstrap_table.js
+    - format_update.js
   extra:
     preload:
       - base/main

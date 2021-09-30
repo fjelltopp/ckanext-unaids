@@ -284,3 +284,7 @@ float: right;
 #RestoreOrDeleteReleaseContainer h3 {
   margin: 0;
 }
+
+.dataset-form input{
+    width: 100%;
+}

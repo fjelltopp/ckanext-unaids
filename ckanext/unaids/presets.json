@@ -83,6 +83,19 @@
         "validators": "organization_id_exists ignore_missing unicode",
         "form_snippet": "org_to_allow_transfer_to.html"
       }
+    },
+    {
+      "preset_name": "resource_format_autocomplete",
+      "values": {
+        "validators": "if_empty_guess_format ignore_missing clean_format unicode",
+        "form_placeholder": "eg. CSV, XML or JSON",
+	      "form_snippet": "format.html",
+        "form_attrs": {
+          "data-module": "autocomplete format_update",
+          "data-module-source": "/api/2/util/resource/format_autocomplete?incomplete=?",
+          "data-module-trigger": "#FileInputComponent"
+        }
+      }
     }
   ]
 }

@@ -98,7 +98,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'task_status_update': actions.task_status_update,
             u'get_table_schema': actions.get_table_schema,
             u'package_show': actions.dataset_version_show,
-            u'package_activity_list': actions.package_activity_list
+            u'package_activity_list': actions.package_activity_list,
+            u'format_guess': actions.format_guess
         }
 
     def dataset_facets(self, facet_dict, package_type):

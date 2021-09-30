@@ -1,5 +1,5 @@
 import logging
-
+import mimetypes
 import ckan.logic.schema as schema_
 import ckan.logic as logic
 import ckan.lib.navl.dictization_functions as dfunc
@@ -145,3 +145,28 @@ def package_activity_list(original_action, context, data_dict):
     for activity in activity_list:
         activity['release_name'] = activity_to_release_name.get(activity['id'])
     return activity_list
+
+
+@logic.side_effect_free
+def format_guess(context, data_dict):
+    """
+    Uses mimetypes to guess the file format for a given filename. This action
+    should provide the one true source of file format guessing logic.  It
+    should be used by both the server-side validation logic and the client-side
+    Javascript logic.  Note that the unified_resource_format depends on the
+    ckan.resource_formats config file - which has been overriden by this
+    extension in order to include addtional file formats.
+
+    :param filename: The name of the file
+    :rtype: dictionary with `mimetype` and `format` keys. Values are `None` if
+        no format can be guessed.
+    """
+    filename = data_dict.get('filename', "")
+    mimetypes.add_type('application/geo+json', '.geojson')
+    mimetypes.add_type('application/pjnz', '.pjnz')
+    mimetype, encoding = mimetypes.guess_type(filename)
+    if mimetype:
+        format = t.h.get('unified_resource_format')(mimetype)
+        return {'mimetype': mimetype, 'format': format}
+    else:
+        return {'mimetype': None, 'format': None}

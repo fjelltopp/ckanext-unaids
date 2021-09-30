@@ -51,7 +51,7 @@ export default function FileUploader({
             sha256: file._computedHashes.sha256,
             size: file._descriptor.size,
             url: file._descriptor.name
-        })
+        });
     }
 
     const { getRootProps, getInputProps, open } = useDropzone({
