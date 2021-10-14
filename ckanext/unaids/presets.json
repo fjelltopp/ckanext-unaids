@@ -33,7 +33,7 @@
         "validators": "ignore_missing",
         "form_snippet": "restricted_fields.html",
         "display_snippet": "restricted_fields.html",
-        "default": "{\"level\": \"restricted\", \"allowed_users\": \"\", \"allowed_organizations\": \"unaids\"}",
+        "default_restricted": "{\"level\": \"restricted\", \"allowed_users\": \"\", \"allowed_organizations\": \"unaids\"}",
         "choices": [{
             "value": "restricted",
             "label": "Restricted to specified users and organizations"
