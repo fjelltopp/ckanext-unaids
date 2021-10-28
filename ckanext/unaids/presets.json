@@ -33,7 +33,7 @@
         "validators": "ignore_missing",
         "form_snippet": "restricted_fields.html",
         "display_snippet": "restricted_fields.html",
-        "default": "{\"level\": \"restricted\", \"allowed_users\": \"\", \"allowed_organizations\": \"unaids\"}",
+        "default_restricted": "{\"level\": \"restricted\", \"allowed_users\": \"\", \"allowed_organizations\": \"unaids\"}",
         "choices": [{
             "value": "restricted",
             "label": "Restricted to specified users and organizations"
@@ -82,6 +82,19 @@
         "label": "Transfer to",
         "validators": "organization_id_exists ignore_missing unicode",
         "form_snippet": "org_to_allow_transfer_to.html"
+      }
+    },
+    {
+      "preset_name": "resource_format_autocomplete",
+      "values": {
+        "validators": "if_empty_guess_format ignore_missing clean_format unicode",
+        "form_placeholder": "eg. CSV, XML or JSON",
+	      "form_snippet": "format.html",
+        "form_attrs": {
+          "data-module": "autocomplete format_update",
+          "data-module-source": "/api/2/util/resource/format_autocomplete?incomplete=?",
+          "data-module-trigger": "#FileInputComponent"
+        }
       }
     }
   ]

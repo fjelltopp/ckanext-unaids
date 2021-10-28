@@ -156,3 +156,21 @@ class TestPackageActivityList(object):
         for release, activity in zip(releases, reversed(activity_list)):
             assert release['name'] == activity.get('release_name')
         pass
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.usefixtures('with_plugins')
+class TestFormatGuess(object):
+
+    @pytest.mark.parametrize("filename,mimetype,format", [
+        ('art.csv', 'text/csv', 'CSV'),
+        ('anc.xls', 'application/vnd.ms-excel', 'XLS'),
+        ('country_regions.geojson', 'application/geo+json', 'GeoJSON'),
+        ('spectrum_file.pjnz', 'application/pjnz', 'PJNZ'),
+        ('no_file_extension', None, None),
+        ('', None, None),
+    ])
+    def test_format_guess_csv(self, filename, mimetype, format):
+        response = call_action('format_guess', {}, filename=filename)
+        assert response.get('mimetype') == mimetype
+        assert response.get('format') == format
