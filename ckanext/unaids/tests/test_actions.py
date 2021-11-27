@@ -12,7 +12,7 @@ from ckanext.unaids.tests import get_context, create_dataset_with_releases
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage')
 @pytest.mark.usefixtures('with_plugins')
 class TestGetTableSchema(object):
 
@@ -39,7 +39,7 @@ class TestGetTableSchema(object):
         assert response == {}
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids versions restricted')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids versions restricted blob_storage')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetShowForRelease(object):
 
@@ -82,7 +82,8 @@ class TestDatasetShowForRelease(object):
                 "url_type": "upload",
                 "lfs_prefix": "test/prefix",
                 "filename": "test.csv",
-                "sha256": "123123123",
+                "sha256": "acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79",
+                "size": 50,
                 "package_id": test_dataset["id"]
             }
         )
