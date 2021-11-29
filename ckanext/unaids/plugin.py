@@ -30,7 +30,9 @@ import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
 from ckanext.unaids import (
     auth,
-    licenses, command
+    licenses,
+    command,
+    logic
 )
 from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
@@ -170,12 +172,14 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource)
             _update_resource_last_modified_date(resource)
+            logic.validate_resource_upload_fields(context, resource)
         return resource
 
     def before_update(self, context, current, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
             _update_resource_last_modified_date(resource, current=current)
+            logic.validate_resource_upload_fields(context, resource)
         return resource
 
 
