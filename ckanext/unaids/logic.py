@@ -9,7 +9,7 @@ def validate_resource_upload_fields(context, resource_dict):
     no_upload_fields_present = not any([upload_has_sha256, upload_has_lfs_prefix, upload_has_size])
     if not valid_blob_storage_upload:
         raise toolkit.ValidationError(
-            "Invalid blob storage upload fields. sha256, size and lfs_prefix needs to be provided.")
+            ["Invalid blob storage upload fields. sha256, size and lfs_prefix needs to be provided."])
     elif no_upload_fields_present:
         return None
     else:
@@ -19,4 +19,4 @@ def validate_resource_upload_fields(context, resource_dict):
             toolkit.get_validator('valid_sha256')(sha256)
             toolkit.get_validator('valid_lfs_prefix')(lfs_prefix)
         except toolkit.Invalid as err:
-            raise toolkit.ValidationError(err.error)
+            raise toolkit.ValidationError([err.error])
