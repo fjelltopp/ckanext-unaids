@@ -1,5 +1,6 @@
 """Tests for plugin.py."""
 # encoding: utf-8
+from mock import patch
 
 from ckan.tests.helpers import call_action
 from ckan.tests import factories
@@ -65,7 +66,7 @@ def resource_with_link_and_updated_metadata():
     return updated_resource
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage')
 @pytest.mark.usefixtures('with_plugins')
 class TestPlugin(object):
     '''Tests for the ckanext.example_iauthfunctions.plugin module.
@@ -89,6 +90,14 @@ class TestPlugin(object):
         response = call_action('resource_create', {}, **resource)
         response = call_action('package_show', {}, id=dataset['id'])
         assert response['resources'][0]['format'] == 'GeoJSON'
+
+    def test_blob_storage_validator_is_used_during_resource_actions(self):
+        dataset = factories.Dataset()
+        resource = {'name': 'test', 'package_id': dataset['id']}
+        context = {}
+        with patch('ckanext.unaids.logic.validate_resource_upload_fields') as mock:
+            call_action('resource_create', context, **resource)
+            assert mock.called
 
 
 class TestResourceLastModified(object):
