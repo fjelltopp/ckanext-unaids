@@ -31,7 +31,7 @@
 <div role="main">
   <div class="container">
     <div class='row'>
-      <div class="col-xs-12 col-md-6">
+      <div class="col-xs-12 order-xs-2 col-md-6 col-lg-4 col-lg-offset-2">
         {% if h.lang() == 'fr' %}
           {% set inputs_page = 'fr-inputs-unaids' %}
           {% set vmmc_page = 'fr-vmmc' %}
@@ -39,20 +39,28 @@
           {% set inputs_page = 'inputs-unaids' %}
           {% set vmmc_page = 'vmmc' %}
         {% endif %}
-      <a class="btn btn-primary btn-lg pages-button"
+      <a class="btn btn-primary btn-lg guidance-button"
+         href="https://navigator.unaids.org"
+         target="_blank">
+        <i class="fa fa-compass"></i>
+        <span class="button-text">{{_('HIV Estimates<br />Navigator')}}</span>
+      </a>
+      <a class="btn btn-primary btn-lg guidance-button"
          href="/{{h.lang()}}/pages/{{inputs_page}}"
          target="_blank">
         <i class="fa fa-info-circle"></i>
         <span class="button-text">{{_('Instructions to upload your<br />Country Estimates 2022 Data')}}</span>
       </a>
-      </div>
-      <div class="col-xs-12 col-md-6">
-      <a class="btn btn-primary btn-lg pages-button"
+      <a class="btn btn-primary btn-lg guidance-button"
          href="/{{h.lang()}}/pages/{{vmmc_page}}"
          target="_blank">
         <i class="fa fa-info-circle"></i>
         <span class="button-text">{{_('Instructions to upload your<br /> VMMC Data')}}</span>
       </a>
+      </div>
+      <div class="hidden-xs hidden-sm col-md-6 col-lg-4">
+        <h1>Unsure what to do next?</h1>
+        <h3>Use the HIV Estimates Navigator to guide you step-by-step through the HIV Estimates process, or click on one of our instruction pages opposite for videos and guidance.</h3>
       </div>
     </div>
     <div class="row">
@@ -113,21 +121,21 @@
       <div class="col-md-4">
         <div class="text-center">
           <a class="" href="https://www.avenirhealth.org/"  target="_blank">
-            <img class="img-responsive" src="{{ h.url_for_static('/avenir.png') }}" alt="aim" width="80%" />
+            <img class="img-responsive avenir-logo" src="{{ h.url_for_static('/avenir.png') }}" alt="aim" width="80%" />
           </a>
         </div>
       </div>
       <div class="col-md-4">
         <div class="text-center">
           <a class="" href="http://www.fjelltopp.org"  target="_blank">
-            <img class="img-responsive" src="{{ h.url_for_static('/fjelltopp.png') }}" alt="aim" width="80%" />
+            <img class="img-responsive fjelltopp-logo" src="{{ h.url_for_static('/fjelltopp.png') }}" alt="aim" width="80%" />
           </a>
         </div>
       </div>
       <div class="col-md-4">
         <div class="text-center" style="margin-top: 10px;">
           <a class="" href="https://www.imperial.ac.uk/"  target="_blank">
-            <img class="img-responsive" src="{{ h.url_for_static('/imperial.png') }}" alt="aim" width="80%" />
+            <img class="img-responsive imperial-logo" src="{{ h.url_for_static('/imperial.png') }}" alt="aim" width="80%" />
           </a>
         </div>
       </div>

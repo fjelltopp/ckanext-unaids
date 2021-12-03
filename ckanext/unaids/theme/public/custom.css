@@ -106,15 +106,17 @@ a.dropdown-item{
 }
 
 .template-button,
-.pages-button{
-  padding: 12px 30px 12px 80px;
+.guidance-button{
+  padding: 12px 30px 12px 70px;
   border-radius: 10px;
   position: relative;
   width: 100%;
+  margin-bottom: 20px;
+  height: 74px;
 }
 
 .template-button i,
-.pages-button i{
+.guidance-button i{
   font-size: 30px;
   position: absolute;
   left: 30px;
@@ -287,4 +289,16 @@ float: right;
 
 .dataset-form input{
     width: 100%;
+}
+
+.fjelltopp-logo{
+    margin: 0 auto;
+}
+
+.imperial-logo{
+    margin: 0 0px 0 auto;
+}
+
+.page-header .btn-default {
+    margin-left: 10px;
 }
