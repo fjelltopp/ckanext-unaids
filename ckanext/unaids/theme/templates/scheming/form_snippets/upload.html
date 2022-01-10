@@ -13,7 +13,7 @@
     data-existingSha256="{{ data.sha256 if data else '' }}"
     data-existingFileName="{{ h.blob_storage_resource_filename(data) if data else '' }}"
     data-existingSize="{{ data.size if data else '' }}"
->       
+>
     {% if data.url %}
         {% if data.url_type == 'upload' %}
             <h3 class="text-muted">
@@ -37,8 +37,15 @@
     {% else %}
         <div class="dropzone text-muted">
             <h3><i class="fa fa-spinner fa-spin"></i> {{ _('Loading') }}</h3>
-        </div>        
+        </div>
     {% endif %}
+
+    <input name="url" data-testid="url" type="hidden" value="{{ data.url if data else '' }}">
+    <input name="url_type" data-testid="url_type" type="hidden" value="{{ data.url_type if data else '' }}">
+    <input name="lfs_prefix" data-testid="lfs_prefix" type="hidden" value="{{ data.lfs_prefix if data else '' }}">
+    <input name="sha256" data-testid="sha256" type="hidden" value="{{ data.sha256 if data else '' }}">
+    <input name="size" data-testid="size" type="hidden" value="{{ data.size if data else '' }}">
+
 </div>
 
 {% asset 'ckanext-unaids/FileInputComponentScripts' %}
