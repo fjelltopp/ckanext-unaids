@@ -19,6 +19,13 @@
             <h3 class="text-muted">
                 <span><i class="fa fa-spinner fa-spin"></i> {{ _('Loading') }}</span>
             </h3>
+
+            <input name="url" data-testid="url" type="hidden" value="{{ data.url }}">
+            <input name="url_type" data-testid="url_type" type="hidden" value="{{ data.url_type }}">
+            <input name="lfs_prefix" data-testid="lfs_prefix" type="hidden" value="{{ data.lfs_prefix }}">
+            <input name="sha256" data-testid="sha256" type="hidden" value="{{ data.sha256 }}">
+            <input name="size" data-testid="size" type="hidden" value="{{ data.size }}">
+
         {% else %}
             <div>
                 <label class="control-label">{{ _('URL')}}</label>
@@ -40,11 +47,6 @@
         </div>
     {% endif %}
 
-    <input name="url" data-testid="url" type="hidden" value="{{ data.url if data else '' }}">
-    <input name="url_type" data-testid="url_type" type="hidden" value="{{ data.url_type if data else '' }}">
-    <input name="lfs_prefix" data-testid="lfs_prefix" type="hidden" value="{{ data.lfs_prefix if data else '' }}">
-    <input name="sha256" data-testid="sha256" type="hidden" value="{{ data.sha256 if data else '' }}">
-    <input name="size" data-testid="size" type="hidden" value="{{ data.size if data else '' }}">
 
 </div>
 
