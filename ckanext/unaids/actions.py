@@ -170,3 +170,12 @@ def format_guess(context, data_dict):
         return {'mimetype': mimetype, 'format': format}
     else:
         return {'mimetype': None, 'format': None}
+
+
+@logic.side_effect_free
+def user_show_me(context, resource_dict):
+    auth_user_obj = context.get('auth_user_obj')
+    if auth_user_obj:
+        return auth_user_obj.as_dict()
+    else:
+        return {}
