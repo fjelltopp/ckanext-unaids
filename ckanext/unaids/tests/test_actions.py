@@ -3,6 +3,8 @@
 from ckan.plugins import toolkit
 from ckan.tests.helpers import call_action
 from ckan.tests import factories
+from ckan.logic import NotAuthorized
+import ckan.model as model
 import pytest
 import logging
 from pprint import pformat
@@ -175,3 +177,18 @@ class TestFormatGuess(object):
         response = call_action('format_guess', {}, filename=filename)
         assert response.get('mimetype') == mimetype
         assert response.get('format') == format
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.usefixtures('with_plugins')
+class TestUserShowMe(object):
+
+    def test_no_user(self):
+        with pytest.raises(NotAuthorized):
+            call_action('user_show_me', {})
+
+    def test_user(self):
+        user = factories.User()
+        user_obj = model.User.get(user['name'])
+        response = call_action('user_show_me', {'auth_user_obj': user_obj})
+        assert response['name'] == user['name']

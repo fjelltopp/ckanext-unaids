@@ -11,6 +11,7 @@ from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 
 NotFound = logic.NotFound
+NotAuthorized = logic.NotAuthorized
 _check_access = logic.check_access
 _validate = dfunc.validate
 ValidationError = logic.ValidationError
@@ -170,3 +171,38 @@ def format_guess(context, data_dict):
         return {'mimetype': mimetype, 'format': format}
     else:
         return {'mimetype': None, 'format': None}
+
+
+@logic.side_effect_free
+def user_show_me(context, resource_dict):
+    """
+    Returns the current user object.  Raises NotAuthorized error if no user
+    object found.
+
+    No input params.
+
+    :rtype dictionary
+    :returns The user object as a dictionary, which takes the following structure:
+        ```
+            {
+                "id": "7f88caf3-e68b-4c96-883e-b49f3d547d84",
+                "name": "fjelltopp_editor",
+                "fullname": "Fjelltopp Editor",
+                "email": "fjelltopp_editor@fjelltopp.org",
+                "created": "2021-10-29 12:51:56.277305",
+                "reset_key": null,
+                "about": null,
+                "activity_streams_email_notifications": false,
+                "sysadmin": false,
+                "state": "active",
+                "image_url": null,
+                "plugin_extras": null
+            }
+        ```
+
+    """
+    auth_user_obj = context.get('auth_user_obj')
+    if auth_user_obj:
+        return auth_user_obj.as_dict()
+    else:
+        raise NotAuthorized
