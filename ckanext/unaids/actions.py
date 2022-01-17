@@ -176,12 +176,13 @@ def format_guess(context, data_dict):
 @logic.side_effect_free
 def user_show_me(context, resource_dict):
     """
-    Returns the current user object.
+    Returns the current user object.  Raises NotAuthorized error if no user
+    object found.
 
     No input params.
 
-    :rtype: Empty dict if no user (invalid authentication), otherwise the user
-        object as a dictionary, which takes the following structure:
+    :rtype dictionary
+    :returns The user object as a dictionary, which takes the following structure:
         ```
             {
                 "id": "7f88caf3-e68b-4c96-883e-b49f3d547d84",
