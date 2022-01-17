@@ -3,6 +3,7 @@
 from ckan.plugins import toolkit
 from ckan.tests.helpers import call_action
 from ckan.tests import factories
+from ckan.logic import NotAuthorized
 import ckan.model as model
 import pytest
 import logging
@@ -183,8 +184,8 @@ class TestFormatGuess(object):
 class TestUserShowMe(object):
 
     def test_no_user(self):
-        response = call_action('user_show_me', {})
-        assert not response
+        with pytest.raises(NotAuthorized):
+            call_action('user_show_me', {})
 
     def test_user(self):
         user = factories.User()
