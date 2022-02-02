@@ -6,6 +6,11 @@ CKAN Extension for UNADS Styling and custom features
 ## Docs
 - https://docs.ckan.org/en/2.9/extensions/translating-extensions.html
 
+
+## For all extensions
+If updating translations for all extensions used in the AIDS Data Repository you may want to read the "Translations" section of the adx_develop readme.  Tools are provided in adx_develop to quickly and efficiently process message catalogs for all extensions and all languages. 
+
+## For a single extension
 In brief:
 0. SSH into the ckan container
     ```
