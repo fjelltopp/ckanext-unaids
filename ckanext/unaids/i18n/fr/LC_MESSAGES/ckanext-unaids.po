@@ -520,7 +520,7 @@ msgid ""
 "bold;\">manage<br />and share </span><span style=\"font-size: 2em; color:"
 " grey;\">their HIV data.</span>"
 msgstr ""
-"<span style=\"font-size: 2em; color: grey;\">Le fichier de données sur le sida<br />a vocation à améliorer la</span><br /><span style=\"font-size: 2.75em; font-weight: bold;\">qualité,<br />l’accessibilité et la cohérence</span><span style=\"font-size: 2em;\"> des données et estimations concernant <br />le VIH. </span><span style=\"font-size: 2em; color: grey;\">Pour ce faire, ce projet fournit aux pays</span><br /><span style=\"font-size: 2.5em; font-weight: bold;\">une plateforme centrale</span><br /><span style=\"font-size: 2em;\">accompagnée d’outils afin de les aider </span><span style=\"font-size: 2em; font-weight: bold;\">à gérer<br />et communiquer </span><span style=\"font-size: 2em; color: grey;\">ces données.</span>"
+"<span style=\"font-size: 2em; color: grey;\">Le fichier de données sur le sida<br />a vocation à améliorer la</span><br /><span style=\"font-size: 2.75em; font-weight: bold;\">qualité, l’accessibilité et la cohérence</span><span style=\"font-size: 2em;\"> des données et estimations concernant le VIH.<br /></span><span style=\"font-size: 2em; color: grey;\">Pour ce faire, ce projet fournit aux pays</span><br /><span style=\"font-size: 2.5em; font-weight: bold;\">une plateforme centrale</span><br /><span style=\"font-size: 2em;\">accompagnée d’outils afin de les aider </span><span style=\"font-size: 2em; font-weight: bold;\">à gérer et communiquer </span><span style=\"font-size: 2em; color: grey;\">ces données.</span>"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:15
 msgid "Find out more..."
@@ -532,7 +532,7 @@ msgstr "Navigateur<br />pour l'estimation du VIH"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:52
 msgid "Instructions to upload your<br />Country Estimates 2022 Data"
-msgstr "Instructions pour télécharger vos<br />données sur les estimations par pays pour 2022"
+msgstr "Instructions pour télécharger vos<br />données sur les estimations 2022"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:58
 msgid "Instructions to upload your<br /> VMMC Data"

@@ -520,7 +520,7 @@ msgid ""
 "bold;\">manage<br />and share </span><span style=\"font-size: 2em; color:"
 " grey;\">their HIV data.</span>"
 msgstr ""
-"<span style=\"font-size: 2em; color: grey;\">O Repositório de Dados sobre a SIDA<br />tem como objetivo melhorar a qualidade</span><br /><span style=\"font-size: 2.75em; font-weight: bold;\">, a acessibilidade <br /> e a coerência</span><span style=\"font-size: 2em;\"> dos dados sobre o VIH<br />e das estimativas sobre o VIH </span><span style=\"font-size: 2em; color: grey;\">fornecendo uma plataforma centralizada</span><br /><span style=\"font-size: 2.5em; font-weight: bold;\"></span><br /><span style=\"font-size: 2em;\">com ferramentas para ajudar os países </span><span style=\"font-size: 2em; font-weight: bold;\">a gerir<br />e a partilhar </span><span style=\"font-size: 2em; color: grey;\">os seus dados sobre o VIH.</span>"
+"<span style=\"font-size: 1.75em; color: grey;\">O Repositório de Dados sobre a SIDA<br />tem como objetivo melhorar a</span><br /><span style=\"font-size: 2.5em; font-weight: bold;\">qualidade, a acessibilidade <br /> e a coerência</span><span style=\"font-size: 1.75em;\"> dos dados sobre o VIH<br />e das estimativas sobre o VIH </span><br /><span style=\"font-size: 2em; color: grey;\">fornecendo uma</span><br /><span style=\"font-size: 2.5em; font-weight: bold;\">plataforma centralizada</span><br /><span style=\"font-size: 2em;\">com ferramentas para ajudar os países </span><br /><span style=\"font-size: 2em; font-weight: bold;\">a gerire a partilhar </span><span style=\"font-size: 2em; color: grey;\">os seus dados sobre o VIH.</span>"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:15
 msgid "Find out more..."
@@ -532,11 +532,11 @@ msgstr "Navegador<br />de estimativas sobre o VIH"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:52
 msgid "Instructions to upload your<br />Country Estimates 2022 Data"
-msgstr "Instruções para carregar os seus dados de<br />Estimativas do país para 2022"
+msgstr "Instruções para carregar os seus<br>dados de Estimativas do país 2022"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:58
 msgid "Instructions to upload your<br /> VMMC Data"
-msgstr "Instruções para carregar os seus dados<br /> VMMC"
+msgstr "Instruções para carregar<br />os seus dados VMMC"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:62
 msgid "Unsure what to do next?"
