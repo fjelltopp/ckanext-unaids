@@ -35,6 +35,9 @@
         {% if h.lang() == 'fr' %}
           {% set inputs_page = 'fr-inputs-unaids' %}
           {% set vmmc_page = 'fr-vmmc' %}
+        {% elif h.lang() == 'pt_PT' %}
+          {% set inputs_page = 'pt-inputs-unaids' %}
+          {% set vmmc_page = 'pt-vmmc' %}
         {% else %}
           {% set inputs_page = 'inputs-unaids' %}
           {% set vmmc_page = 'vmmc' %}
