@@ -67,6 +67,10 @@ a.dropdown-item{
   padding-bottom: 30px;
 }
 
+.whats-next H1{
+  margin-top: 0;
+}
+
 .masthead .nav > li > a,
 .masthead .nav > li > a:focus,
 .masthead .nav > li > a:hover,
@@ -302,3 +306,4 @@ float: right;
 .page-header .btn-default {
     margin-left: 10px;
 }
+

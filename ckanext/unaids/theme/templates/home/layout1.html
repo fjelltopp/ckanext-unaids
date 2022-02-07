@@ -35,6 +35,9 @@
         {% if h.lang() == 'fr' %}
           {% set inputs_page = 'fr-inputs-unaids' %}
           {% set vmmc_page = 'fr-vmmc' %}
+        {% elif h.lang() == 'pt_PT' %}
+          {% set inputs_page = 'pt-inputs-unaids' %}
+          {% set vmmc_page = 'pt-vmmc' %}
         {% else %}
           {% set inputs_page = 'inputs-unaids' %}
           {% set vmmc_page = 'vmmc' %}
@@ -58,7 +61,7 @@
         <span class="button-text">{{_('Instructions to upload your<br /> VMMC Data')}}</span>
       </a>
       </div>
-      <div class="hidden-xs hidden-sm col-md-6 col-lg-4">
+      <div class="hidden-xs hidden-sm col-md-6 col-lg-4 whats-next">
         <h1>{{_('Unsure what to do next?')}}</h1>
         <h3>{{_('Use the HIV Estimates Navigator to guide you step-by-step through the HIV Estimates process, or click on one of our instruction pages opposite for videos and guidance.')}}</h3>
       </div>
