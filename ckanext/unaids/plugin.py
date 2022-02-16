@@ -41,6 +41,8 @@ from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
 from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
+from ckanext.datapusher.interfaces import IDataPusher
+from ckanext.validation.helpers import validation_load_json_schema
 
 log = logging.getLogger(__name__)
 
@@ -74,7 +76,11 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IValidators)
     p.implements(p.IActions)
     p.implements(IDataValidation)
+<<<<<<< HEAD
     p.implements(IResourceDownloadHandler, inherit=True)
+=======
+    p.implements(IDataPusher, inherit=True)
+>>>>>>> ADX-470 Initial working proof of concept
 
     # IClick
     def get_commands(self):
@@ -189,9 +195,40 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             logic.validate_resource_upload_fields(context, resource)
         return resource
 
+
     def before_show(self, resource):
         if _data_dict_is_resource(resource):
             return logic.update_filename_in_resource_url(resource)
+
+
+    def after_upload(self, context, resource_dict, dataset_dict):
+
+        table_schema = resource_dict.get('schema')
+        if table_schema:
+            table_schema_dict = validation_load_json_schema(table_schema)
+            field_schemas = {}
+            for field_schema in table_schema_dict['fields']:
+                field_schemas[field_schema['name']] = field_schema
+            fields = toolkit.get_action(u'datastore_search')(
+                None, {'resource_id': resource_dict['id']}
+            )['fields']
+            fields = fields[1:]  # Hack: to get rid of _id field.  But this should be got rid of higher up stream.
+
+            for index, field in enumerate(fields):
+                field_id = field['id']
+                if not field.get('info'):
+                    field['info'] = {
+                        'label': field_schemas[field_id].get('title', field_id),
+                        'notes': field_schemas[field_id].get('description', field_id)
+                    }
+
+            toolkit.get_action(u'datastore_create')(
+                None, {
+                    u'resource_id': resource_dict['id'],
+                    u'force': True,
+                    u'fields': fields
+                }
+            )
 
 
 class UNAIDSReclineView(ReclineViewBase):
