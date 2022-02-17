@@ -1,5 +1,6 @@
 from ckan import model
 from ckan.plugins import toolkit
+from ckanext.validation.helpers import validation_load_json_schema
 
 
 def validate_resource_upload_fields(context, resource_dict):
@@ -35,3 +36,38 @@ def update_filename_in_resource_url(resource):
         new_url_segments = url_segments[:-1] + [filename]
         resource['url'] = '/'.join(new_url_segments)
     return resource
+
+
+def auto_populate_data_dictionary(context, resource_dict, dataset_dict):
+    table_schema = resource_dict.get('schema')
+
+    if not table_schema:
+        return
+
+    table_schema_dict = validation_load_json_schema(table_schema)
+
+    if not table_schema_dict or not table_schema_dict.get('fields'):
+        return
+
+    field_schemas = {field['name']: field for field in table_schema_dict['fields']}
+    fields = toolkit.get_action(u'datastore_search')(
+        context, {u'resource_id': resource_dict['id']}
+    )[u'fields']
+
+    fields = fields[1:]  # Hack: to get rid of _id field.  But this should be got rid of higher up stream.
+
+    for field in fields:
+        field_id = field[u'id']
+        if field_id in field_schemas and not field.get(u'info'):
+            field[u'info'] = {
+                u'label': field_schemas[field_id].get(u'title', field_id),
+                u'notes': field_schemas[field_id].get(u'description', field_id)
+            }
+
+    toolkit.get_action(u'datastore_create')(
+        context, {
+            u'resource_id': resource_dict[u'id'],
+            u'force': True,
+            u'fields': fields
+        }
+    )
