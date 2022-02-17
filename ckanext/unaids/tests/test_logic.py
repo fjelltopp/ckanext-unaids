@@ -127,10 +127,10 @@ class TestAutoPopulateDataDictionaries():
                             "required": True
                         }
                     }, {
-                      "name": "area_name",
-                      "title": "Area Name",
-                      "description": "Area name for area_id (optional).",
-                      "type": "string"
+                        "name": "area_name",
+                        "title": "Area Name",
+                        "description": "Area name for area_id (optional).",
+                        "type": "string"
                     }
                 ]
             }
