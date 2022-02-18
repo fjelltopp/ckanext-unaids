@@ -196,7 +196,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             return logic.update_filename_in_resource_url(resource)
 
     def after_upload(self, context, resource_dict, dataset_dict):
-        logic.auto_populate_data_dictionary(context, resource_dict, dataset_dict)
+        logic.auto_populate_data_dictionary(context, resource_dict)
 
 
 class UNAIDSReclineView(ReclineViewBase):

@@ -75,7 +75,7 @@ class TestAutoPopulateDataDictionaries():
         mock_load_json_schema = mocker.patch(
             'ckanext.unaids.logic.validation_load_json_schema'
         )
-        logic.auto_populate_data_dictionary(context, resource, dataset)
+        logic.auto_populate_data_dictionary(context, resource)
         mock_load_json_schema.assert_not_called()
 
     def test_missing_schema(self, mocker):
@@ -89,7 +89,7 @@ class TestAutoPopulateDataDictionaries():
             'ckanext.unaids.logic.validation_load_json_schema',
             return_value=None
         )
-        logic.auto_populate_data_dictionary(context, resource, dataset)
+        logic.auto_populate_data_dictionary(context, resource)
         mock_load_json_schema.assert_called_once_with(u'test_schema')
 
     def test_schema_missing_fields(self, mocker):
@@ -103,8 +103,57 @@ class TestAutoPopulateDataDictionaries():
             'ckanext.unaids.logic.validation_load_json_schema',
             return_value={'title': 'Schema without fields'}
         )
-        logic.auto_populate_data_dictionary(context, resource, dataset)
+        logic.auto_populate_data_dictionary(context, resource)
         mock_load_json_schema.assert_called_once_with(u'test_schema')
+
+    def test_no_datastore_upload(self, mocker):
+        context = {}
+        dataset = factories.Dataset()
+        resource = factories.Resource(
+            package_id=dataset['id'],
+            schema='test_schema'
+        )
+        mock_load_json_schema = mocker.patch(
+            'ckanext.unaids.logic.validation_load_json_schema',
+            return_value={
+                "title": "UNAIDS ART Programme Input",
+                "fields": [
+                    {
+                        "name": "area_id",
+                        "title": "Area ID",
+                        "description": "An area_id from the agreed hierarchy.",
+                        "type": "string",
+                        "constraints": {
+                            "required": True
+                        }
+                    }, {
+                        "name": "area_name",
+                        "title": "Area Name",
+                        "description": "Area name for area_id (optional).",
+                        "type": "string"
+                    }
+                ]
+            }
+        )
+        mock_datastore_search = mocker.Mock(
+            side_effect=toolkit.ObjectNotFound
+        )
+        mock_action = mocker.Mock()
+
+        def side_effect(action_name):
+
+            if action_name == 'datastore_search':
+                return mock_datastore_search
+
+            else:
+                return mock_action
+
+        mock_get_action = mocker.patch(
+            'ckanext.unaids.logic.toolkit.get_action',
+            side_effect=side_effect
+        )
+        # Check that no error is raised when resource is missing from datastore
+        logic.auto_populate_data_dictionary(context, resource)
 
     def test_simple_schema(self, mocker):
         context = {}
@@ -159,7 +208,7 @@ class TestAutoPopulateDataDictionaries():
             side_effect=side_effect
         )
 
-        logic.auto_populate_data_dictionary(context, resource, dataset)
+        logic.auto_populate_data_dictionary(context, resource)
         mock_load_json_schema.assert_called_once_with(u'test_schema')
         mock_get_action.assert_called_with('datastore_create')
         mock_action.assert_called_with(context, {

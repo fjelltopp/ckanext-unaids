@@ -38,7 +38,7 @@ def update_filename_in_resource_url(resource):
     return resource
 
 
-def auto_populate_data_dictionary(context, resource_dict, dataset_dict):
+def auto_populate_data_dictionary(context, resource_dict):
     table_schema = resource_dict.get('schema')
 
     if not table_schema:
@@ -50,14 +50,19 @@ def auto_populate_data_dictionary(context, resource_dict, dataset_dict):
         return
 
     field_schemas = {field['name']: field for field in table_schema_dict['fields']}
-    fields = toolkit.get_action(u'datastore_search')(
-        context, {u'resource_id': resource_dict['id']}
-    )[u'fields']
+
+    try:
+        fields = toolkit.get_action(u'datastore_search')(
+            context, {u'resource_id': resource_dict['id']}
+        )[u'fields']
+    except toolkit.ObjectNotFound:
+        return
 
     fields = fields[1:]  # Hack: to get rid of _id field.  But this should be got rid of higher up stream.
 
     for field in fields:
         field_id = field[u'id']
+
         if field_id in field_schemas and not field.get(u'info'):
             field[u'info'] = {
                 u'label': field_schemas[field_id].get(u'title', field_id),
