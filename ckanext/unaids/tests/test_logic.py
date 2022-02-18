@@ -140,7 +140,7 @@ class TestAutoPopulateDataDictionaries():
                 'fields': [
                     {'id': '_id', 'type': 'numeric'},
                     {'id': 'area_id', 'type': 'numeric'},
-                    {'id': 'area_name', 'type': 'text'},
+                    {'id': 'area_name', 'type': 'text', 'info': {'notes': 'Existing notes'}},
                 ]
             }
         )
@@ -177,8 +177,7 @@ class TestAutoPopulateDataDictionaries():
                     u'id': u'area_name',
                     u'type': u'text',
                     u'info': {
-                        u'label': u'Area Name',
-                        u'notes': u'Area name for area_id (optional).'
+                        u'notes': u'Existing notes'
                     }
                 }
             ]
