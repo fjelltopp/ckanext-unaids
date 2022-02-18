@@ -4,7 +4,6 @@ from ckan.plugins import toolkit
 from ckan.tests import factories
 from ckanext.unaids import logic
 from ckan.tests import factories
-import ckan.logic
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')

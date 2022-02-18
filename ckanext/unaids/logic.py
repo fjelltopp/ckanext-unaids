@@ -39,23 +39,29 @@ def update_filename_in_resource_url(resource):
 
 
 def auto_populate_data_dictionary(context, resource_dict):
-    table_schema = resource_dict.get('schema')
+    table_schema_name = resource_dict.get('schema')
 
-    if not table_schema:
+    if not table_schema_name:
         return
 
-    table_schema_dict = validation_load_json_schema(table_schema)
+    table_schema = validation_load_json_schema(table_schema_name)
 
-    if not table_schema_dict:
+    if not table_schema:
         raise toolkit.ObjectNotFound(
-            'Table schema "{}" does not exist'.format(table_schema)
+            'Resource table schema "{}" does not exist'.format(table_schema)
         )
 
-    field_schemas = {field['name']: field for field in table_schema_dict['fields']}
+    field_schemas = {field['name']: field for field in table_schema.get('fields')}
 
-    fields = toolkit.get_action(u'datastore_search')(
-        context, {u'resource_id': resource_dict['id']}
-    )[u'fields']
+    try:
+        fields = toolkit.get_action(u'datastore_search')(
+            context, {u'resource_id': resource_dict['id']}
+        )[u'fields']
+    except toolkit.ObjectNotFound:
+        raise toolkit.ObjectNotFound(
+            'Resource "{}" must first be uploaded to the datastore in order to '
+            'update the data dictionary.'.format(resource_dict['id'])
+        )
 
     fields = fields[1:]  # Hack: to get rid of _id field.
 

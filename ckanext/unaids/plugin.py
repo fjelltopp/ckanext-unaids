@@ -197,13 +197,13 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             return logic.update_filename_in_resource_url(resource)
 
     def after_upload(self, context, resource_dict, dataset_dict):
+        pass
+        # try:
+        #     logic.auto_populate_data_dictionary(context, resource_dict)
 
-        try:
-            logic.auto_populate_data_dictionary(context, resource_dict)
-
-        except Exception as e:
-            # Background task should fail silently otherwise problems downstream
-            log.exception(e)
+        # except Exception as e:
+        #     # Background task should fail silently otherwise problems downstream
+        #     log.exception(e)
 
 
 class UNAIDSReclineView(ReclineViewBase):
