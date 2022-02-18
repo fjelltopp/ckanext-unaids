@@ -210,9 +210,9 @@ def user_show_me(context, resource_dict):
 
 
 def populate_data_dictionary(context, data_dict):
-
+    resource_id = logic.get_or_bust(data_dict, 'resource_id')
     resource_dict = t.get_action('resource_show')(
         context,
-        {'id': data_dict['resource_id']}
+        {'id': resource_id}
     )
     auto_populate_data_dictionary(context, resource_dict)
