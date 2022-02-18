@@ -198,7 +198,6 @@ class TestUserShowMe(object):
 class TestPopulateDataDictionary(object):
 
     def test_expected_use(self, mocker):
-        context = {}
         dataset = factories.Dataset()
         resource = factories.Resource(
             package_id=dataset['id'],
