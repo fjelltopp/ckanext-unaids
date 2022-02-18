@@ -206,3 +206,11 @@ def user_show_me(context, resource_dict):
         return auth_user_obj.as_dict()
     else:
         raise NotAuthorized
+
+
+def populate_data_dictionary(context, data_dict):
+    resource_dict = t.get_action('resource_show')(
+        context,
+        {'id': data_dict['resource_id']}
+    )
+    logic.populate_data_dictionary(context, resource_dict)

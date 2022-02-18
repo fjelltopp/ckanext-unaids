@@ -46,19 +46,18 @@ def auto_populate_data_dictionary(context, resource_dict):
 
     table_schema_dict = validation_load_json_schema(table_schema)
 
-    if not table_schema_dict or not table_schema_dict.get('fields'):
-        return
+    if not table_schema_dict:
+        raise toolkit.ObjectNotFound(
+            'Table schema "{}" does not exist'.format(table_schema)
+        )
 
     field_schemas = {field['name']: field for field in table_schema_dict['fields']}
 
-    try:
-        fields = toolkit.get_action(u'datastore_search')(
-            context, {u'resource_id': resource_dict['id']}
-        )[u'fields']
-    except toolkit.ObjectNotFound:
-        return
+    fields = toolkit.get_action(u'datastore_search')(
+        context, {u'resource_id': resource_dict['id']}
+    )[u'fields']
 
-    fields = fields[1:]  # Hack: to get rid of _id field.  But this should be got rid of higher up stream.
+    fields = fields[1:]  # Hack: to get rid of _id field.
 
     for field in fields:
         field_id = field[u'id']
