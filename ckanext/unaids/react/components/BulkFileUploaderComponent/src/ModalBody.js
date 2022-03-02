@@ -185,10 +185,10 @@ export default function ModalBody({
             .map(file => uploadActionAlreadyTaken(file.uploadAction))
             .filter(x => x).length === 0;
         const enableButton = ![
-            thereArePendingFiles,
-            !uploadInProgress,
-            noDuplicateUploadActionsSet
-        ].includes(false);
+            !thereArePendingFiles,
+            uploadInProgress,
+            !noDuplicateUploadActionsSet
+        ].every(Boolean);
         return (
             <button
                 type="button"
