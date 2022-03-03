@@ -5,7 +5,9 @@ const components = {
     'FileInputComponent':
         path.resolve(__dirname, 'components', 'FileInputComponent/index.js'),
     'BulkFileUploaderComponent':
-        path.resolve(__dirname, 'components', 'BulkFileUploaderComponent/index.js')
+        path.resolve(__dirname, 'components', 'BulkFileUploaderComponent/index.js'),
+    'DatasetReleaseComponent':
+        path.resolve(__dirname, 'components', 'DatasetReleaseComponent/index.js'),
 }
 
 module.exports = {

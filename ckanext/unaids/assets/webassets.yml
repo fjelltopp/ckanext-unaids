@@ -31,3 +31,14 @@ BulkFileUploaderComponentScripts:
         - frictionless-js.js
         - build/BulkFileUploaderComponent.js
     output: unaids/%(version)s_BulkFileUploaderComponent.js
+
+DatasetReleaseComponentStyles:
+    contents:
+        - DatasetReleaseComponent.css
+    output: unaids/%(version)s_DatasetReleaseComponent.css
+
+DatasetReleaseComponentScripts:
+    contents:
+        - frictionless-js.js
+        - build/DatasetReleaseComponent.js
+    output: unaids/%(version)s_DatasetReleaseComponent.js

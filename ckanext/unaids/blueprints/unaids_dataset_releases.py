@@ -42,6 +42,20 @@ def list_releases(dataset_type, dataset_id):
     releases = toolkit.get_action('dataset_version_list')(
         _get_context(), {'dataset_id': dataset_id}
     )
+    for release in releases:
+        release.update({
+            'url': h.url_for(
+                'dataset.read',
+                id=dataset['name'],
+                activity_id=release['activity_id']
+            ),
+            'creator_name_as_raw_html': \
+                h.linked_user(release['creator_user_id'], 0, 0),
+            'created_datetime_ago_string': \
+                h.time_ago_from_timestamp(release['created']),
+            'created_datetime_string': \
+                h.render_datetime(release['created'], with_hours=True)
+        })
     return toolkit.render(
         'package/releases/list.html',
         {

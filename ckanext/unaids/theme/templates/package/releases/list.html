@@ -52,6 +52,7 @@
         </li>
     </ul>
     <div id="ReleasesTableContainer">
+        <h3>Old implementation</h3>
         <table>
             <thead>
                 <tr>
@@ -100,6 +101,15 @@
                 {% endfor %}
             </tbody>
         </table>
+        <br /><br />
+        <h3>New implementation</h3>
+        {% asset 'ckanext-unaids/DatasetReleaseComponentStyles' %}
+            <div
+            id="DatasetReleaseComponent"
+            data-datasetReleases="{{ dataset_releases|json_dumps|replace('"', '\"') }}"
+        ></div>
+        {% asset 'ckanext-unaids/DatasetReleaseComponentScripts' %}
+
     </div>
     <script>
         window.onload = function() {
