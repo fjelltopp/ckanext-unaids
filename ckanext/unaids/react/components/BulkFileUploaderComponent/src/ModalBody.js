@@ -186,7 +186,7 @@ export default function ModalBody({
             .filter(x => x).length === 0;
         const enableButton = [
             !thereArePendingFiles,
-            uploadInProgress,
+            !uploadInProgress,
             !noDuplicateUploadActionsSet
         ].every(Boolean);
         return (
