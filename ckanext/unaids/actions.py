@@ -206,3 +206,13 @@ def user_show_me(context, resource_dict):
         return auth_user_obj.as_dict()
     else:
         raise NotAuthorized
+
+
+@t.chained_action
+@t.side_effect_free
+def resource_search(original_action, context, data_dict):
+    response = original_action(context, data_dict)
+    print('~'*50)
+    print(response)
+    print('~'*50)
+    return response
