@@ -3,58 +3,7 @@ CKAN Extension for UNADS Styling and custom features
 
 # Translations
 
-## Docs
-- https://docs.ckan.org/en/2.9/extensions/translating-extensions.html
-
-
-## For all extensions
-If updating translations for all extensions used in the AIDS Data Repository you may want to read the "Translations" section of the adx_develop readme.  Tools are provided in adx_develop to quickly and efficiently process message catalogs for all extensions and all languages. 
-
-## For a single extension
-In brief:
-0. SSH into the ckan container
-    ```
-    adx bash ckan
-    source ../../bin/activate
-    cd /usr/lib/adx/ckanext-extension-name/
-    ```
-
-1. Generate the `.pot` file to extract the strings from your extension
-    ```
-    $ adx bash ckan
-    $ cd /usr/lib/ckan/venv/
-    $ source bin/activate
-    $ cd /usr/lib/adx/ckanext-unaids
-    ```
-
-2. Generate the `.pot` file to extract the strings from your extension
-    ```
-    $ python setup.py extract_messages
-    ```
-
-3. If there is no `.po` already set up, init it:
-    ```
-    $ python setup.py init_catalog --locale fr
-    ```
-
-4. If there is a `.po`, update it:
-    ```
-    $ python setup.py update_catalog --locale fr
-    ```
-
-5. Give yourself edit-access to the `.po/.mo` files:
-    ```
-    $ chmod -R 777 /usr/lib/adx/ckanext-unaids/ckanext/unaids/i18n/
-    ```
-
-6. Make updates to the `.po` file
-
-7. Compile the `.po` file into the `.mo` file
-    ```
-    $ python setup.py compile_catalog --locale fr 
-    ```
-
-8. Restart the ckan container to see the changes
+Please have a look at: https://fjelltopp.atlassian.net/wiki/spaces/ADR/pages/168591361/ADR+Translations
 
 # Developing react components
 
