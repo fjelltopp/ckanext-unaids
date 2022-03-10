@@ -4,21 +4,21 @@
 "use strict";
 
 this.ckan.module('map_selector', function ($) {
-	return {
+    return {
         options: {
-        	configurl: "/map-options/"
+            configurl: "/map-options/"
         },
         initialize: function () {
-        	var mapElementID = this.el.attr('id');
-        	$.getJSON({
-				url: this.options.configurl
-			}).done(function( data ) {
-				console.log(data);
-				new svgMap({
-	            	targetElementID: mapElementID,
-	            	data: data
-	            });
-			});
+            var mapElementID = this.el.attr('id');
+            $.getJSON({
+                url: this.options.configurl
+            }).done(function( data ) {
+                console.log(data);
+                new svgMap({
+                    targetElementID: mapElementID,
+                    data: data
+                });
+            });
         }
     };
 });
