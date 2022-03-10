@@ -16,7 +16,10 @@ this.ckan.module('map_selector', function ($) {
                 console.log(data);
                 new svgMap({
                     targetElementID: mapElementID,
-                    data: data
+                    data: data,
+                    mouseWheelZoomWithKey: true,
+                    initialZoom: 1.9,
+                    initialPan: {x:0, y:0}
                 });
             });
         }

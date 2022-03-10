@@ -66,6 +66,20 @@
         <h3>{{_('Use the HIV Estimates Navigator to guide you step-by-step through the HIV Estimates process, or click on one of our instruction pages opposite for videos and guidance.')}}</h3>
       </div>
     </div>
+  </div>
+</div>
+<div class="map">
+  <div class="container">
+    <h3 class="map-title">{{_('Datasets by country')}}</h3>
+  </div>
+  <div id="map-selector"
+       data-module="map_selector"
+       data-module-configurl="/map-options/"></div>
+    {% asset 'ckanext-unaids/MapSelectorJS' %}
+    {% asset 'ckanext-unaids/MapSelectorCSS' %}
+</div>
+<div role="main">
+  <div class="container">
     <div class="row">
       <div class="col-xs-12">
         <center>
@@ -91,17 +105,6 @@
         </div>
       </div>
       {% endfor %}
-    </div>
-  </div>
-</div>
-<div class="homepage-partners">
-  <div class="container">
-    <div class="col-xs-12">
-      <div id="map_selector"
-           data-module="map_selector"
-           data-module-configurl="/map-options/"></div>
-      {% asset 'ckanext-unaids/MapSelectorJS' %}
-      {% asset 'ckanext-unaids/MapSelectorCSS' %}
     </div>
   </div>
 </div>
