@@ -307,3 +307,27 @@ float: right;
     margin-left: 10px;
 }
 
+#map-selector{
+  height: 40vh;
+  overflow:  hidden;
+}
+
+.svgMap-map-wrapper, .svgMap-map-container, .svgMap-container{
+  padding-top: 0;
+  height:  100%;
+}
+
+.homepage [role=main]:not(.hero){
+  border-top: 4px white solid;
+  border-bottom: 4px white solid;
+}
+
+.map .map-title{
+  z-index: 1
+  position: absolute;
+  margin-top: 0px;
+  background: #e31837;
+  padding: 20px;
+  border-radius: 0 0 4px 4px;
+  color: white;
+}
