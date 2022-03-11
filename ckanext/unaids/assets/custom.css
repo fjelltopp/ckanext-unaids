@@ -1,8 +1,8 @@
 @font-face {
     font-family: 'AvenirLTStd-Book';
-    src: url('AvenirLTStd-Book.woff2') format('woff2'),
-        url('AvenirLTStd-Book.woff') format('woff'),
-        url('AvenirLTStd-Book.ttf') format('truetype');
+    src: url('/AvenirLTStd-Book.woff2') format('woff2'),
+        url('/AvenirLTStd-Book.woff') format('woff'),
+        url('/AvenirLTStd-Book.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
