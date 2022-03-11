@@ -2,13 +2,10 @@
 
 {% block custom_styles %}
   {{ super() }}
-  hello
   {% asset 'ckanext-unaids/UnaidsCSS' %}
-
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
   {% asset 'ckanext-unaids/main' %}
-  
 {% endblock %}

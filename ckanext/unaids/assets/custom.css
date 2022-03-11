@@ -323,7 +323,7 @@ float: right;
 }
 
 .map .map-title{
-  z-index: 1
+  z-index: 1;
   position: absolute;
   margin-top: 0px;
   background: #e31837;
