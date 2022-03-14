@@ -23,13 +23,13 @@ def dataset_count():
 
 
 def map_options():
-    datasets = toolkit.get_action("package_search")({}, {"rows": 1000})['results']
+    dataset_search = toolkit.get_action("package_search")({}, {"rows": 0, "facet.field": ["geo-location"]})
+    location_facet = dataset_search['facets']['geo-location']
     values = defaultdict(dataset_count)
-    for dataset in datasets:
-        geo_location = dataset.get('geo-location')
+    for geo_location, count in location_facet.iteritems():
         if geo_location:
             country_code = _country_code_from_location_name(geo_location)
-            values[country_code]["count"] += 1
+            values[country_code]["count"] = count
             values[country_code]["link"] = u'/dataset/?geo-location={}'.format(geo_location)
 
     return jsonify({
@@ -37,9 +37,7 @@ def map_options():
             "count": {
                 "name": 'Datasets Count: ',
                 "format": '{0}',
-                "thousandSeparator": ',',
-                "thresholdMax": 100,
-                "thresholdMin": 0
+                "thousandSeparator": ','
             }
         },
         "applyData": 'count',
