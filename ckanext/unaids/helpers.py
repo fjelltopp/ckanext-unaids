@@ -1,6 +1,6 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
-from ckan.plugins.toolkit import get_action
+from ckan.plugins.toolkit import get_action, request
 from ckan.plugins import toolkit as toolkit
 from ckan.common import _, g
 import logging
@@ -127,3 +127,7 @@ def get_current_dataset_release(dataset_id, activity_id=None):
     for release in releases:
         if release['activity_id'] == activity_id:
             return release
+
+
+def get_navigator_locale():
+    return request.environ['CKAN_LANG'].split('_')[0]
