@@ -1,6 +1,7 @@
 import logging
 from collections import defaultdict
 
+import pycountry
 from flask import Blueprint, jsonify
 
 from ckan.plugins import toolkit
@@ -13,11 +14,13 @@ svg_map_options = Blueprint(
     url_prefix=u'/map-options/'
 )
 
+
 def dataset_count():
     return {
         "url": '',
         "count": 0
     }
+
 
 def map_options():
     datasets = toolkit.get_action("package_search")({}, {})['results']
@@ -47,7 +50,9 @@ def map_options():
         "values": values
     })
 
+
 def _country_code_from_location_name(geo_location):
-    return 'PL'
+    return pycountry.countries.get(name=geo_location).alpha_2
+
 
 svg_map_options.add_url_rule('/', view_func=map_options)
