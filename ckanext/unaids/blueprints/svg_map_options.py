@@ -23,7 +23,7 @@ def dataset_count():
 
 
 def map_options():
-    datasets = toolkit.get_action("package_search")({}, {})['results']
+    datasets = toolkit.get_action("package_search")({}, {"rows": 1000})['results']
     values = defaultdict(dataset_count)
     for dataset in datasets:
         geo_location = dataset.get('geo-location')
