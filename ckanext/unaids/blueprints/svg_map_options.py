@@ -17,7 +17,7 @@ svg_map_options = Blueprint(
 
 def dataset_count():
     return {
-        "url": '',
+        "link": '',
         "count": 0
     }
 
@@ -30,20 +30,16 @@ def map_options():
         if geo_location:
             country_code = _country_code_from_location_name(geo_location)
             values[country_code]["count"] += 1
-            values[country_code]["url"] = u'http://adr.local/dataset/?geo-location={}'.format(geo_location)
+            values[country_code]["link"] = u'/dataset/?geo-location={}'.format(geo_location)
 
     return jsonify({
         "data": {
             "count": {
-                "name": 'Dataset Count',
-                "format": '{0} datasets',
+                "name": 'Datasets Count: ',
+                "format": '{0}',
                 "thousandSeparator": ',',
                 "thresholdMax": 100,
                 "thresholdMin": 0
-            },
-            "url": {
-                "name": 'Browse',
-                "format": '{0}'
             }
         },
         "applyData": 'count',
