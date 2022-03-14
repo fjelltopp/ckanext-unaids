@@ -41,7 +41,8 @@ def map_options():
             }
         },
         "applyData": 'count',
-        "values": values
+        "values": values,
+        "touchLink": True
     })
 
 
