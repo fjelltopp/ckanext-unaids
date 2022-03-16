@@ -3,7 +3,7 @@
 {% block content_action %}
   {% if not is_activity_archive %}
     {% if h.check_access('package_update', {'id':pkg.id }) %}
-      <a class="btn btn-default" href="https://navigator.unaids.org/{{ h.get_navigator_locale() }}/?datasetId={{ pkg.id }}" target="_blank">
+      <a class="btn btn-default" href="https://navigator.unaids.org/{{ h.get_language_code() }}/?datasetId={{ pkg.id }}" target="_blank">
         <i class="fa fa-compass"></i>
         {{_('Navigator')}}
       </a>

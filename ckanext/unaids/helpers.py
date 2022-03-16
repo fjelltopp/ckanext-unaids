@@ -129,5 +129,5 @@ def get_current_dataset_release(dataset_id, activity_id=None):
             return release
 
 
-def get_navigator_locale():
+def get_language_code():
     return request.environ['CKAN_LANG'].split('_')[0]
