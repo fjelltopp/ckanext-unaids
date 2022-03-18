@@ -4,11 +4,18 @@
   {{ super() }}
   <link rel="stylesheet" href="/unaids.css" />
   <link rel="stylesheet" href="/custom.css" />
-
+  {% asset 'ckanext-unaids/MainStyles' %}
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
-  {% asset 'ckanext-unaids/main' %}
-  
+  {% asset 'ckanext-unaids/MainScripts' %}
+{% endblock %}
+
+{% block body_extras %}
+  {{ super() }}
+  <div class="cookie-message alert alert-warning">
+    <span>We use cookies on this site to enhance your user experience.</span>
+    <a class="cookie-message-close text-right" href>I understand</a>
+  </div>
 {% endblock %}

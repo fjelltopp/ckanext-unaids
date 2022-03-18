@@ -1,4 +1,4 @@
-main:
+MainScripts:
   output: unaids/%(version)s_unaids.js
   contents:
     - autocomplete-without-creating-new-options.js
@@ -6,9 +6,16 @@ main:
     - text_template.js
     - bootstrap_table.js
     - format_update.js
+    - jquery.cookieBar.js
+    - cookieBar.js
   extra:
     preload:
       - base/main
+
+MainStyles:
+    contents:
+        - cookieBar.css
+    output: unaids/%(version)s_cookieBar.css
 
 FileInputComponentStyles:
     contents:
