@@ -1,10 +1,9 @@
- .cookie-message {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
-    box-shadow: 0px 0px 3px #ccc;
-    z-index: 99;
-    display: none;
-  }
-  
+.cookie-message {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  box-shadow: 0px 0px 3px #ccc;
+  z-index: 99;
+  display: none;
+}
