@@ -15,7 +15,7 @@
 {% block body_extras %}
   {{ super() }}
   <div class="cookie-message alert alert-warning">
-    <span>We use cookies on this site to enhance your user experience.</span>
-    <a class="cookie-message-close text-right" href>I understand</a>
+    <span>{{ _('We use cookies on this site to enhance your user experience.') }}</span>
+    <a class="cookie-message-close text-right" href>{{ _('I understand') }}</a>
   </div>
 {% endblock %}
