@@ -2,13 +2,10 @@
 
 {% block custom_styles %}
   {{ super() }}
-  <link rel="stylesheet" href="/unaids.css" />
-  <link rel="stylesheet" href="/custom.css" />
-
+  {% asset 'ckanext-unaids/UnaidsCSS' %}
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
   {% asset 'ckanext-unaids/main' %}
-  
 {% endblock %}
