@@ -31,3 +31,28 @@ BulkFileUploaderComponentScripts:
         - frictionless-js.js
         - build/BulkFileUploaderComponent.js
     output: unaids/%(version)s_BulkFileUploaderComponent.js
+
+MapSelectorJS:
+    contents:
+        - map_selector.js
+        - dependancies/svg-pan-zoom.min.js
+        - dependancies/svgMap.min.js
+    output: unaids/%(version)s_MapSelector.js
+    extra:
+        preload:
+            - base/main
+
+UnaidsCSS:
+    contents:
+        - unaids.css
+        - custom.css
+    output: unaids/%(version)s_unaids.css
+    extra:
+        preload:
+            - ckanext-unaids/MapSelectorCSS
+
+MapSelectorCSS:
+    contents:
+        - dependancies/svgMap.min.css
+    output: unaids/%(version)s_MapSelector.css
+
