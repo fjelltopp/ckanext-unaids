@@ -68,7 +68,8 @@ def auto_populate_data_dictionary(context, resource_dict):
     for field in fields:
         field_id = field[u'id']
 
-        if field_id in field_schemas and not field.get(u'info'):
+        if field_id in field_schemas:
+
             field[u'info'] = {
                 u'label': field_schemas[field_id].get(u'title', field_id),
                 u'notes': field_schemas[field_id].get(u'description', field_id)
