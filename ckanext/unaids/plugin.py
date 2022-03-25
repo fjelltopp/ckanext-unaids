@@ -25,7 +25,8 @@ from ckanext.unaids.helpers import (
     get_all_organizations,
     get_bulk_file_uploader_default_fields,
     get_current_dataset_release,
-    get_language_code
+    get_language_code,
+    build_pages_nav_main
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
@@ -131,7 +132,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'max_resource_size': uploader.get_max_resource_size,
             u'bulk_file_uploader_default_fields': get_bulk_file_uploader_default_fields,
             u'get_current_dataset_release': get_current_dataset_release,
-            u'get_language_code': get_language_code
+            u'get_language_code': get_language_code,
+            u'build_nav_main': build_pages_nav_main,
         }
 
     # IAuthFunctions
