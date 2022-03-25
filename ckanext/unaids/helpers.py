@@ -1,13 +1,18 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
 from ckan.plugins.toolkit import get_action, request
-from ckan.plugins import toolkit as toolkit
+from ckan.plugins import toolkit
 from ckan.common import _, g
 import logging
 import os
 import json
-
-
+import six
+from ckan.lib.helpers import build_nav_main as core_build_nav_main
+from six.moves.urllib.parse import quote
+try:
+    from html import escape as html_escape
+except ImportError:
+    from cgi import escape as html_escape
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
 
@@ -131,3 +136,55 @@ def get_current_dataset_release(dataset_id, activity_id=None):
 
 def get_language_code():
     return request.environ['CKAN_LANG'].split('_')[0]
+
+
+def build_pages_nav_main(*args):
+    about_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.about_menu', True))
+    group_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.group_menu', True))
+    org_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.organization_menu', True))
+
+    # Different CKAN versions use different route names - gotta catch em all!
+    about_menu_routes = ['about', 'home.about']
+    group_menu_routes = ['group_index', 'home.group_index', 'group.index']
+    org_menu_routes = ['organizations_index', 'home.organizations_index', 'organization.index']
+
+    new_args = []
+    for arg in args:
+        if arg[0] in about_menu_routes and not about_menu:
+            continue
+        if arg[0] in org_menu_routes and not org_menu:
+            continue
+        if arg[0] in group_menu_routes and not group_menu:
+            continue
+        new_args.append(arg)
+
+    output = core_build_nav_main(*new_args)
+
+    # do not display any private pages in menu even for sysadmins
+    pages_list = toolkit.get_action('ckanext_pages_list')(None, {'order': True, 'private': False})
+
+    page_name = ''
+    if toolkit.check_ckan_version(u'2.9'):
+        is_current_page = toolkit.get_endpoint() in (('pages', 'show'), ('pages', 'blog_show'))
+    else:
+        is_current_page = (
+            hasattr(toolkit.c, 'action') and toolkit.c.action in ('pages_show', 'blog_show')
+            and toolkit.c.controller == 'ckanext.pages.controller:PagesController')
+    if is_current_page:
+        page_name = toolkit.request.path.split('/')[-1]
+
+    for page in pages_list:
+        type_ = 'blog' if page['page_type'] == 'blog' else 'pages'
+        if six.PY2:
+            name = quote(page['name'].encode('utf-8')).decode('utf-8')
+        else:
+            name = quote(page['name'])
+        title = html_escape(_(page['title']))
+        link = toolkit.h.literal(u'<a href="/{}/{}/{}">{}</a>'.format(toolkit.h.lang(), type_, name, title))
+        if page['name'] == page_name:
+            li = toolkit.literal('<li class="active">') + link + toolkit.literal('</li>')
+        else:
+            li = toolkit.literal('<li>') + link + toolkit.literal('</li>')
+        output = output + li
+
+    return output
