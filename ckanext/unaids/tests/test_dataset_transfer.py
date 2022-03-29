@@ -11,11 +11,12 @@ from ckanext.unaids.dataset_transfer.logic import (
 )
 
 
+@pytest.mark.ckan_config('ckan.auth.allow_dataset_collaborators', True)
 @pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets versions blob_storage pages')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetTransfer(object):
 
-    def test_derp(self, app):
+    def test_collaborator_transfering_dataset(self, app):
         # create 2 users and orgs
         user_1, user_2 = [
             factories.User(
@@ -28,7 +29,7 @@ class TestDatasetTransfer(object):
             for user in [user_1, user_2]
         ]
 
-        # create an org_1 dataset pending transfer to org_2
+        # create an org_1 private dataset pending transfer to org_2
         dataset = factories.Dataset(
             owner_org=org_1['id'],
             type='test-schema',
@@ -49,8 +50,7 @@ class TestDatasetTransfer(object):
         )
         app.get(
             url=transfer_dataset_url,
-            extra_environ={'REMOTE_USER': user_2['name']},
-            status=200
+            extra_environ={'REMOTE_USER': user_2['name']}
         )
 
         # confirm dataset is now under org_2
@@ -136,8 +136,10 @@ class TestDatasetTransfer(object):
     def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
         user_1 = factories.User(email='user_1@example.com')
         user_2 = factories.User(email='user_2@example.com')
-        org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
-        org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
+        org_1 = factories.Organization(
+            user={'name': user_1['name'], 'capacity': 'admin'})
+        org_2 = factories.Organization(
+            user={'name': user_2['name'], 'capacity': 'admin'})
         dataset = factories.Dataset(
             owner_org=org_1['id'],
             type='test-schema',
@@ -159,8 +161,10 @@ class TestDatasetTransfer(object):
     def test_send_dataset_transfer_email_subject(self, mocked_mail_recipient, app):
         user_1 = factories.User(email='user_1@example.com')
         user_2 = factories.User(email='user_2@example.com')
-        org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
-        org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
+        org_1 = factories.Organization(
+            user={'name': user_1['name'], 'capacity': 'admin'})
+        org_2 = factories.Organization(
+            user={'name': user_2['name'], 'capacity': 'admin'})
         dataset_name = u"Côte d'Ivoire Test Dataset"
         dataset = factories.Dataset(
             owner_org=org_1['id'],

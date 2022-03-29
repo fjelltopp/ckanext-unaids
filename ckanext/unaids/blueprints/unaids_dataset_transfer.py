@@ -14,11 +14,6 @@ unaids_dataset_transfer = Blueprint(
 )
 
 
-def _admin_user():
-    context = {'model': model, 'session': model.Session, 'ignore_auth': True}
-    return toolkit.get_action('get_site_user')(context, {})
-
-
 def process_dataset_transfer(dataset_id):
     dataset = toolkit.get_action('package_show')({}, {'id': dataset_id})
 
@@ -36,9 +31,9 @@ def process_dataset_transfer(dataset_id):
         'org_to_allow_transfer_to': None
     })
     toolkit.get_action('package_update')({
-        'user': _admin_user()['name'],
         'model': model,
         'session': model.Session,
+        'ignore_auth': True
     }, dataset)
 
     h.flash_success(
@@ -48,7 +43,7 @@ def process_dataset_transfer(dataset_id):
         ])
     )
     return h.redirect_to(
-        controller='dataset', action='read', id=dataset['name']
+        controller='dataset', action='read', id=dataset_id
     )
 
 
