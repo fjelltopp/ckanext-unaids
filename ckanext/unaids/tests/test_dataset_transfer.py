@@ -17,7 +17,6 @@ from ckanext.unaids.dataset_transfer.logic import (
 class TestDatasetTransfer(object):
 
     def test_collaborator_transfering_dataset(self, app):
-        # create 2 users and orgs
         user_1, user_2 = [
             factories.User(
                 email='user_{}_@example.com'.format(x)
@@ -28,22 +27,17 @@ class TestDatasetTransfer(object):
             factories.Organization(user=user)
             for user in [user_1, user_2]
         ]
-
-        # create an org_1 private dataset pending transfer to org_2
         dataset = factories.Dataset(
             owner_org=org_1['id'],
             type='test-schema',
             org_to_allow_transfer_to=org_2['id'],
             private=True
         )
-
-        # add user_2 as a collaborator to the dataset
         helpers.call_action(
             'package_collaborator_create',
             id=dataset['id'], user_id=user_2['id'], capacity='editor'
         )
 
-        # user_2 should be able to accept the dataset transfer
         transfer_dataset_url = url_for(
             'unaids_dataset_transfer.process_dataset_transfer',
             dataset_id=dataset['id']
@@ -53,7 +47,6 @@ class TestDatasetTransfer(object):
             extra_environ={'REMOTE_USER': user_2['name']}
         )
 
-        # confirm dataset is now under org_2
         result = helpers.call_action(
             'package_show',
             id=dataset['id'],
@@ -136,10 +129,8 @@ class TestDatasetTransfer(object):
     def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
         user_1 = factories.User(email='user_1@example.com')
         user_2 = factories.User(email='user_2@example.com')
-        org_1 = factories.Organization(
-            user={'name': user_1['name'], 'capacity': 'admin'})
-        org_2 = factories.Organization(
-            user={'name': user_2['name'], 'capacity': 'admin'})
+        org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
+        org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
         dataset = factories.Dataset(
             owner_org=org_1['id'],
             type='test-schema',
@@ -161,10 +152,8 @@ class TestDatasetTransfer(object):
     def test_send_dataset_transfer_email_subject(self, mocked_mail_recipient, app):
         user_1 = factories.User(email='user_1@example.com')
         user_2 = factories.User(email='user_2@example.com')
-        org_1 = factories.Organization(
-            user={'name': user_1['name'], 'capacity': 'admin'})
-        org_2 = factories.Organization(
-            user={'name': user_2['name'], 'capacity': 'admin'})
+        org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
+        org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
         dataset_name = u"Côte d'Ivoire Test Dataset"
         dataset = factories.Dataset(
             owner_org=org_1['id'],
