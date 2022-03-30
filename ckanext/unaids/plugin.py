@@ -12,6 +12,7 @@ from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
+from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
     if_empty_guess_format,
@@ -73,6 +74,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IValidators)
     p.implements(p.IActions)
     p.implements(IDataValidation)
+    p.implements(IResourceDownloadHandler, inherit=True)
 
     # IClick
     def get_commands(self):
@@ -186,6 +188,10 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             _update_resource_last_modified_date(resource, current=current)
             logic.validate_resource_upload_fields(context, resource)
         return resource
+
+    def before_show(self, resource):
+        if _data_dict_is_resource(resource):
+            return logic.update_filename_in_resource_url(resource)
 
 
 class UNAIDSReclineView(ReclineViewBase):
