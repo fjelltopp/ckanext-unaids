@@ -31,6 +31,7 @@ def process_dataset_transfer(dataset_id):
         'org_to_allow_transfer_to': None
     })
     toolkit.get_action('package_update')({
+        'user': '',
         'model': model,
         'session': model.Session,
         'ignore_auth': True
