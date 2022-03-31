@@ -1,3 +1,4 @@
+from ckan import model
 from ckan.plugins import toolkit
 
 
@@ -25,3 +26,12 @@ def validate_resource_upload_fields(context, resource_dict):
             toolkit.get_validator('valid_lfs_prefix')(lfs_prefix)
         except toolkit.Invalid as err:
             raise toolkit.ValidationError([err.error])
+
+
+def update_filename_in_resource_url(resource):
+    filename = str(model.Resource.get(resource['id']).url)
+    url_segments = resource['url'].split('/')
+    if filename and len(url_segments):
+        new_url_segments = url_segments[:-1] + [filename]
+        resource['url'] = '/'.join(new_url_segments)
+    return resource
