@@ -1,5 +1,7 @@
 import pytest
+
 from ckan.plugins import toolkit
+from ckan.tests import factories
 from ckanext.unaids import logic
 
 
@@ -47,3 +49,16 @@ def test_validate_resource_upload_fields(lfs_prefix, sha256, size, valid):
             logic.validate_resource_upload_fields(context, resource_dict)
     else:
         logic.validate_resource_upload_fields(context, resource_dict)
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
+@pytest.mark.usefixtures('with_plugins')
+def test_update_filename_in_resource_url():
+    actual_filename = "TeSt.CSV"
+    resource = factories.Resource(url_type="upload",
+                                  url=actual_filename,
+                                  sha256="cc71500070cf26cd6e8eab7c9eec3a937be957d144f445ad24003157e2bd0919",
+                                  lfs_prefix="lfs/prefix",
+                                  size=500
+                                  )
+    assert resource['url'].endswith(actual_filename)

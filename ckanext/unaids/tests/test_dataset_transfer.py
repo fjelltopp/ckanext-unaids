@@ -11,9 +11,49 @@ from ckanext.unaids.dataset_transfer.logic import (
 )
 
 
+@pytest.mark.ckan_config('ckan.auth.allow_dataset_collaborators', True)
 @pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets versions blob_storage pages')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetTransfer(object):
+
+    def test_collaborator_transfering_dataset(self, app):
+        user_1, user_2 = [
+            factories.User(
+                email='user_{}_@example.com'.format(x)
+            )
+            for x in range(2)
+        ]
+        org_1, org_2 = [
+            factories.Organization(user=user)
+            for user in [user_1, user_2]
+        ]
+        dataset = factories.Dataset(
+            owner_org=org_1['id'],
+            type='test-schema',
+            org_to_allow_transfer_to=org_2['id'],
+            private=True
+        )
+        helpers.call_action(
+            'package_collaborator_create',
+            id=dataset['id'], user_id=user_2['id'], capacity='editor'
+        )
+
+        transfer_dataset_url = url_for(
+            'unaids_dataset_transfer.process_dataset_transfer',
+            dataset_id=dataset['id']
+        )
+        app.get(
+            url=transfer_dataset_url,
+            extra_environ={'REMOTE_USER': user_2['name']}
+        )
+
+        result = helpers.call_action(
+            'package_show',
+            id=dataset['id'],
+            context={'user': user_2['name']},
+        )
+        assert result['owner_org'] == org_2['id']
+        assert 'org_to_allow_transfer_to' not in result
 
     def test_get_org_admins_with_email_addresses_two_admins(self, app):
         user_1 = factories.User(email='user_1@example.com')
