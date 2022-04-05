@@ -38,12 +38,8 @@ def update_filename_in_resource_url(resource):
     return resource
 
 
-def auto_populate_data_dictionary(context, resource_dict):
-    table_schema_name = resource_dict.get('schema')
-
-    if not table_schema_name:
-        return
-
+def populate_data_dictionary_from_schema(context, resource_dict):
+    table_schema_name = toolkit.get_or_bust(resource_dict, 'schema')
     table_schema = validation_load_json_schema(table_schema_name)
 
     if not table_schema:
@@ -57,6 +53,7 @@ def auto_populate_data_dictionary(context, resource_dict):
         fields = toolkit.get_action(u'datastore_search')(
             context, {u'resource_id': resource_dict['id']}
         )[u'fields']
+
     except toolkit.ObjectNotFound:
         raise toolkit.ObjectNotFound(
             'Resource "{}" must first be uploaded to the datastore in order to '

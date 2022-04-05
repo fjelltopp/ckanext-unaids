@@ -74,7 +74,8 @@ class TestAutoPopulateDataDictionaries():
             'ckanext.unaids.logic.validation_load_json_schema',
             return_value=None
         )
-        logic.auto_populate_data_dictionary(context, resource)
+        with pytest.raises(toolkit.ValidationError):
+            logic.populate_data_dictionary_from_schema(context, resource)
         mock_load_json_schema.assert_not_called()
 
     def test_missing_schema(self, mocker):
@@ -89,7 +90,7 @@ class TestAutoPopulateDataDictionaries():
             return_value=None
         )
         with pytest.raises(toolkit.ObjectNotFound):
-            logic.auto_populate_data_dictionary(context, resource)
+            logic.populate_data_dictionary_from_schema(context, resource)
         mock_load_json_schema.assert_called_once_with(u'test_schema')
 
     def test_simple_schema(self, mocker):
@@ -145,7 +146,7 @@ class TestAutoPopulateDataDictionaries():
             side_effect=side_effect
         )
 
-        logic.auto_populate_data_dictionary(context, resource)
+        logic.populate_data_dictionary_from_schema(context, resource)
         mock_load_json_schema.assert_called_once_with(u'test_schema')
         mock_get_action.assert_called_with('datastore_create')
         mock_action.assert_called_with(context, {

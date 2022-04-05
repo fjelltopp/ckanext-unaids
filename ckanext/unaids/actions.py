@@ -9,7 +9,7 @@ import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
-from ckanext.unaids.logic import auto_populate_data_dictionary
+from ckanext.unaids.logic import populate_data_dictionary_from_schema
 
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
@@ -215,4 +215,4 @@ def populate_data_dictionary(context, data_dict):
         context,
         {'id': resource_id}
     )
-    auto_populate_data_dictionary(context, resource_dict)
+    populate_data_dictionary_from_schema(context, resource_dict)
