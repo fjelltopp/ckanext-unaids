@@ -163,7 +163,8 @@ class TestAutoPopulateDataDictionaries():
                     u'id': u'area_name',
                     u'type': u'text',
                     u'info': {
-                        u'notes': u'Existing notes'
+                        u'label': u'Area Name',
+                        u'notes': u'Area name for area_id (optional).'
                     }
                 }
             ]
