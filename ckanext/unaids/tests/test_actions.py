@@ -201,10 +201,12 @@ class TestPopulateDataDictionary(object):
         dataset = factories.Dataset()
         resource = factories.Resource(
             package_id=dataset['id'],
-            schema='test_schema'
+            schema='test_schema',
+            url='some.data'
         )
-        mock_auto_populate_data_dictionary = mocker.patch(
-            'ckanext.unaids.actions.auto_populate_data_dictionary',
+
+        mock_populate_data_dictionary_from_schema = mocker.patch(
+            'ckanext.unaids.actions.populate_data_dictionary_from_schema',
         )
         call_action('populate_data_dictionary', {}, resource_id=resource['id'])
-        mock_auto_populate_data_dictionary.assert_called_once_with(mocker.ANY, resource)
+        mock_populate_data_dictionary_from_schema.assert_called_once_with(mocker.ANY, resource)
