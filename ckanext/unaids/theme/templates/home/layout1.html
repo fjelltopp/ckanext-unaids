@@ -4,18 +4,14 @@
       <div class="col-md-6 col1">
         {% block promoted %}
         <div class="module-content box">
-          <section class="featured media-overlay hidden-xs">
-            <center>
-            <!--<a class="media-image" href="/about">
-              <!--<img class="img-responsive" src="{{ h.url_for_static('/aim.png') }}" alt="aim" width="420" height="220" /> -->
+          <section class="featured media-overlay">
+            <div id="unaids-wordcloud" class="text-center">
               {{_('<span style="font-size: 2em; color: grey;">The AIDS Data Repository<br />aims to improve the</span><br /><span style="font-size: 2.75em; font-weight: bold;">quality, accessibility <br /> and consistency</span><span style="font-size: 2em;"> of HIV data<br />and HIV estimates by </span><span style="font-size: 2em; color: grey;">providing a</span><br /><span style="font-size: 2.5em; font-weight: bold;">centralised platform</span><br /><span style="font-size: 2em;">with tools to help countries </span><span style="font-size: 2em; font-weight: bold;">manage<br />and share </span><span style="font-size: 2em; color: grey;">their HIV data.</span>')}}
-            <!--</a>-->
-            </center>
+            </div>
             <a class="pull-right" href={{h.url_for("/pages/about")}}>
               {{_('Find out more...')}}
             </a>
           </section>
-
         </div>
         {% endblock %}
       </div>
