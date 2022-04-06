@@ -9,6 +9,7 @@ import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
+from ckanext.unaids.logic import populate_data_dictionary_from_schema
 
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
@@ -206,3 +207,12 @@ def user_show_me(context, resource_dict):
         return auth_user_obj.as_dict()
     else:
         raise NotAuthorized
+
+
+def populate_data_dictionary(context, data_dict):
+    resource_id = logic.get_or_bust(data_dict, 'resource_id')
+    resource_dict = t.get_action('resource_show')(
+        context,
+        {'id': resource_id}
+    )
+    populate_data_dictionary_from_schema(context, resource_dict)

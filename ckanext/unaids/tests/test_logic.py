@@ -62,3 +62,111 @@ def test_update_filename_in_resource_url():
                                   size=500
                                   )
     assert resource['url'].endswith(actual_filename)
+
+
+class TestAutoPopulateDataDictionaries():
+
+    def test_no_schema(self, mocker):
+        context = {}
+        dataset = factories.Dataset()
+        resource = factories.Resource(package_id=dataset['id'])
+        mock_load_json_schema = mocker.patch(
+            'ckanext.unaids.logic.validation_load_json_schema',
+            return_value=None
+        )
+        with pytest.raises(toolkit.ValidationError):
+            logic.populate_data_dictionary_from_schema(context, resource)
+        mock_load_json_schema.assert_not_called()
+
+    def test_missing_schema(self, mocker):
+        context = {}
+        dataset = factories.Dataset()
+        resource = factories.Resource(
+            package_id=dataset['id'],
+            schema='test_schema'
+        )
+        mock_load_json_schema = mocker.patch(
+            'ckanext.unaids.logic.validation_load_json_schema',
+            return_value=None
+        )
+        with pytest.raises(toolkit.ObjectNotFound):
+            logic.populate_data_dictionary_from_schema(context, resource)
+        mock_load_json_schema.assert_called_once_with(u'test_schema')
+
+    def test_simple_schema(self, mocker):
+        context = {}
+        dataset = factories.Dataset()
+        resource = factories.Resource(
+            package_id=dataset['id'],
+            schema='test_schema'
+        )
+        mock_load_json_schema = mocker.patch(
+            'ckanext.unaids.logic.validation_load_json_schema',
+            return_value={
+                "title": "UNAIDS ART Programme Input",
+                "fields": [
+                    {
+                        "name": "area_id",
+                        "title": "Area ID",
+                        "description": "An area_id from the agreed hierarchy.",
+                        "type": "string",
+                        "constraints": {
+                            "required": True
+                        }
+                    }, {
+                        "name": "area_name",
+                        "title": "Area Name",
+                        "description": "Area name for area_id (optional).",
+                        "type": "string"
+                    }
+                ]
+            }
+        )
+        mock_datastore_search = mocker.Mock(
+            return_value={
+                'fields': [
+                    {'id': '_id', 'type': 'numeric'},
+                    {'id': 'area_id', 'type': 'numeric'},
+                    {'id': 'area_name', 'type': 'text', 'info': {'notes': 'Existing notes'}},
+                ]
+            }
+        )
+        mock_action = mocker.Mock()
+
+        def side_effect(action_name):
+
+            if action_name == 'datastore_search':
+                return mock_datastore_search
+
+            else:
+                return mock_action
+
+        mock_get_action = mocker.patch(
+            'ckanext.unaids.logic.toolkit.get_action',
+            side_effect=side_effect
+        )
+
+        logic.populate_data_dictionary_from_schema(context, resource)
+        mock_load_json_schema.assert_called_once_with(u'test_schema')
+        mock_get_action.assert_called_with('datastore_create')
+        mock_action.assert_called_with(context, {
+            u'resource_id': resource[u'id'],
+            u'force': True,
+            u'fields': [
+                {
+                    u'id': u'area_id',
+                    u'type': u'numeric',
+                    u'info': {
+                        u'label': u'Area ID',
+                        u'notes': u'An area_id from the agreed hierarchy.'
+                    }
+                }, {
+                    u'id': u'area_name',
+                    u'type': u'text',
+                    u'info': {
+                        u'label': u'Area Name',
+                        u'notes': u'Area name for area_id (optional).'
+                    }
+                }
+            ]
+        })
