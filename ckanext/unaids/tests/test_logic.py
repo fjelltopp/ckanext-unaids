@@ -67,9 +67,9 @@ def test_update_filename_in_upload_resource_url():
 @pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.parametrize("link_url",
-    ["http://link.my", "https://link.my", "https://link.my/path/to/resource"],
-    ids=["http url", "https url", "url with path"]
-    )
+                         ["http://link.my", "https://link.my", "https://link.my/path/to/resource"],
+                         ids=["http url", "https url", "url with path"]
+                         )
 def test_update_filename_in_link_resource_url(link_url):
     resource = factories.Resource(
         url=link_url
