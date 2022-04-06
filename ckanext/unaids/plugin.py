@@ -41,6 +41,7 @@ from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
 from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
+from ckanext.datapusher.interfaces import IDataPusher
 
 log = logging.getLogger(__name__)
 
@@ -75,6 +76,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IActions)
     p.implements(IDataValidation)
     p.implements(IResourceDownloadHandler, inherit=True)
+    p.implements(IDataPusher, inherit=True)
 
     # IClick
     def get_commands(self):
@@ -106,7 +108,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'package_show': actions.dataset_version_show,
             u'package_activity_list': actions.package_activity_list,
             u'format_guess': actions.format_guess,
-            u'user_show_me': actions.user_show_me
+            u'user_show_me': actions.user_show_me,
+            u'populate_data_dictionary': actions.populate_data_dictionary
         }
 
     def dataset_facets(self, facet_dict, package_type):
@@ -192,6 +195,18 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     def before_show(self, resource):
         if _data_dict_is_resource(resource):
             return logic.update_filename_in_resource_url(resource)
+
+    def after_upload(self, context, resource_dict, dataset_dict):
+        if 'schema' in resource_dict:
+            try:
+                logic.populate_data_dictionary_from_schema(context, resource_dict)
+            except Exception:
+                log.exception(
+                    "Error in background task auto populating {} data dictionary. "
+                    "Failing silently to avoid problems downstream".format(
+                        resource_dict.get('id', '')
+                    )
+                )
 
 
 class UNAIDSReclineView(ReclineViewBase):
