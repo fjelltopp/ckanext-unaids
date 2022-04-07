@@ -13,7 +13,6 @@ this.ckan.module('map_selector', function ($) {
             $.getJSON({
                 url: this.options.configurl
             }).done(function( data ) {
-                console.log(data);
                 new svgMap({
                     targetElementID: mapElementID,
                     data: data,
