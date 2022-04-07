@@ -30,11 +30,12 @@ def validate_resource_upload_fields(context, resource_dict):
 
 
 def update_filename_in_resource_url(resource):
-    filename = str(model.Resource.get(resource['id']).url)
-    url_segments = resource['url'].split('/')
-    if filename and len(url_segments):
-        new_url_segments = url_segments[:-1] + [filename]
-        resource['url'] = '/'.join(new_url_segments)
+    if resource['url_type'] == 'upload':
+        filename = str(model.Resource.get(resource['id']).url)
+        url_segments = resource['url'].split('/')
+        if filename and len(url_segments):
+            new_url_segments = url_segments[:-1] + [filename]
+            resource['url'] = '/'.join(new_url_segments)
     return resource
 
 
