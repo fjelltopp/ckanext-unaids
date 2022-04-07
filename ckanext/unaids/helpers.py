@@ -190,5 +190,6 @@ def build_pages_nav_main(*args):
 
     return output
 
+
 def get_google_analytics_id():
     return toolkit.config.get(GOOGLE_ANALYTICS_ID, {})
