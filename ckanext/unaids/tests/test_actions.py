@@ -202,7 +202,6 @@ class TestPopulateDataDictionary(object):
         resource = factories.Resource(
             package_id=dataset['id'],
             schema='test_schema',
-            url='some.data'
         )
 
         mock_populate_data_dictionary_from_schema = mocker.patch(

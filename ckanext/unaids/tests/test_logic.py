@@ -53,7 +53,7 @@ def test_validate_resource_upload_fields(lfs_prefix, sha256, size, valid):
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
 @pytest.mark.usefixtures('with_plugins')
-def test_update_filename_in_resource_url():
+def test_update_filename_in_upload_resource_url():
     actual_filename = "TeSt.CSV"
     resource = factories.Resource(url_type="upload",
                                   url=actual_filename,
@@ -62,6 +62,19 @@ def test_update_filename_in_resource_url():
                                   size=500
                                   )
     assert resource['url'].endswith(actual_filename)
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
+@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.parametrize("link_url",
+                         ["http://link.my", "https://link.my", "https://link.my/path/to/resource"],
+                         ids=["http url", "https url", "url with path"]
+                         )
+def test_update_filename_in_link_resource_url(link_url):
+    resource = factories.Resource(
+        url=link_url
+    )
+    assert resource['url'] == link_url
 
 
 class TestAutoPopulateDataDictionaries():
