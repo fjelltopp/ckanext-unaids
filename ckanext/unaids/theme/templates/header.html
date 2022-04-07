@@ -12,4 +12,12 @@
       <h2>{{ g.site_description }}</h2>
     {% endif %}
   {% endif %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ h.get_google_analytics_id() }}"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', '{{ h.get_google_analytics_id() }}');
+  </script>
 {% endblock %}
