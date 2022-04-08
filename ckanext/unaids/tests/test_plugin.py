@@ -13,16 +13,16 @@ from ckanext.unaids.plugin import (
 def _resource_dict(resource_type='file'):
     if resource_type == 'file':
         return {
-            'url_type': 'upload',
-            'url': 'file.csv',
-            'lfs_prefix': 'prefix',
-            'sha256': 'sha256',
+            'url_type': u'upload',
+            'url': u'UTF-8-è file.csv',
+            'lfs_prefix': u'prefix',
+            'sha256': u'sha256',
             'size': 100,
         }
     elif resource_type == 'link':
         return {
-            'url_type': '',
-            'url': 'http://example.com'
+            'url_type': u'',
+            'url': u'http://example.com'
         }
     else:
         raise ValueError("Unsupported resource type %s", resource_type)
@@ -41,28 +41,28 @@ def resource_with_link():
 @pytest.fixture
 def resource_with_updated_file():
     updated_resource = _resource_dict(resource_type='file')
-    updated_resource['url'] = 'file2.csv'
+    updated_resource['url'] = u'file2 è.csv'
     return updated_resource
 
 
 @pytest.fixture
 def resource_with_updated_link():
     updated_resource = _resource_dict(resource_type='link')
-    updated_resource['url'] = 'http://example2.com'
+    updated_resource['url'] = u'http://example2.com'
     return updated_resource
 
 
 @pytest.fixture
 def resource_with_file_and_updated_metadata():
     updated_resource = _resource_dict(resource_type='file')
-    updated_resource['description'] = 'updated-description'
+    updated_resource['description'] = u'updated-description'
     return updated_resource
 
 
 @pytest.fixture
 def resource_with_link_and_updated_metadata():
     updated_resource = _resource_dict(resource_type='link')
-    updated_resource['description'] = 'updated-description'
+    updated_resource['description'] = u'updated-description'
     return updated_resource
 
 
@@ -81,11 +81,11 @@ class TestPlugin(object):
         '''
         dataset = factories.Dataset()
         resource = {
-            'name': 'test',
-            'url': 'file.geojson',
+            'name': u'test',
+            'url': u'file.geojson',
             'package_id': dataset['id'],
-            'format': '',
-            'id': ''
+            'format': u'',
+            'id': u''
         }
         response = call_action('resource_create', {}, **resource)
         response = call_action('package_show', {}, id=dataset['id'])
