@@ -8,7 +8,6 @@ import ckan.model as model
 import pytest
 import logging
 from pprint import pformat
-
 from ckanext.unaids.tests import get_context, create_dataset_with_releases
 
 log = logging.getLogger(__name__)
@@ -192,3 +191,21 @@ class TestUserShowMe(object):
         user_obj = model.User.get(user['name'])
         response = call_action('user_show_me', {'auth_user_obj': user_obj})
         assert response['name'] == user['name']
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.usefixtures('with_plugins')
+class TestPopulateDataDictionary(object):
+
+    def test_expected_use(self, mocker):
+        dataset = factories.Dataset()
+        resource = factories.Resource(
+            package_id=dataset['id'],
+            schema='test_schema',
+        )
+
+        mock_populate_data_dictionary_from_schema = mocker.patch(
+            'ckanext.unaids.actions.populate_data_dictionary_from_schema',
+        )
+        call_action('populate_data_dictionary', {}, resource_id=resource['id'])
+        mock_populate_data_dictionary_from_schema.assert_called_once_with(mocker.ANY, resource)

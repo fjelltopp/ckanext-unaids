@@ -156,7 +156,7 @@ aside.secondary{
   background-color: white;
 }
 .format-label{
-    background: url("sprite-resource-icons.png") no-repeat 0 0;
+    background: url("/sprite-resource-icons.png") no-repeat 0 0;
     width: 32px;
     height: 35px;
     background-position: 0px -62px;
@@ -330,4 +330,16 @@ float: right;
   padding: 20px;
   border-radius: 0 0 4px 4px;
   color: white;
+}
+
+@media (max-width: 768px) {
+  #unaids-wordcloud{
+    font-size: 0.75em;
+  }
+}
+
+@media (max-width: 576px) {
+  #unaids-wordcloud{
+    font-size: 0.5em;
+  }
 }

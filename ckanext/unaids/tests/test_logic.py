@@ -1,3 +1,4 @@
+# coding=utf-8
 import pytest
 
 from ckan.plugins import toolkit
@@ -53,12 +54,134 @@ def test_validate_resource_upload_fields(lfs_prefix, sha256, size, valid):
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
 @pytest.mark.usefixtures('with_plugins')
-def test_update_filename_in_resource_url():
-    actual_filename = "TeSt.CSV"
+def test_update_filename_in_upload_resource_url():
+    actual_filename = u"TeStè.CSV"
+    expected_filename = u"TeSte.CSV"
     resource = factories.Resource(url_type="upload",
                                   url=actual_filename,
                                   sha256="cc71500070cf26cd6e8eab7c9eec3a937be957d144f445ad24003157e2bd0919",
                                   lfs_prefix="lfs/prefix",
                                   size=500
                                   )
-    assert resource['url'].endswith(actual_filename)
+    assert resource['url'].endswith(expected_filename)
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
+@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.parametrize("link_url",
+                         ["http://link.my", "https://link.my", "https://link.my/path/to/resource"],
+                         ids=["http url", "https url", "url with path"]
+                         )
+def test_update_filename_in_link_resource_url(link_url):
+    resource = factories.Resource(
+        url=link_url
+    )
+    assert resource['url'] == link_url
+
+
+class TestAutoPopulateDataDictionaries():
+
+    def test_no_schema(self, mocker):
+        context = {}
+        dataset = factories.Dataset()
+        resource = factories.Resource(package_id=dataset['id'])
+        mock_load_json_schema = mocker.patch(
+            'ckanext.unaids.logic.validation_load_json_schema',
+            return_value=None
+        )
+        with pytest.raises(toolkit.ValidationError):
+            logic.populate_data_dictionary_from_schema(context, resource)
+        mock_load_json_schema.assert_not_called()
+
+    def test_missing_schema(self, mocker):
+        context = {}
+        dataset = factories.Dataset()
+        resource = factories.Resource(
+            package_id=dataset['id'],
+            schema='test_schema'
+        )
+        mock_load_json_schema = mocker.patch(
+            'ckanext.unaids.logic.validation_load_json_schema',
+            return_value=None
+        )
+        with pytest.raises(toolkit.ObjectNotFound):
+            logic.populate_data_dictionary_from_schema(context, resource)
+        mock_load_json_schema.assert_called_once_with(u'test_schema')
+
+    def test_simple_schema(self, mocker):
+        context = {}
+        dataset = factories.Dataset()
+        resource = factories.Resource(
+            package_id=dataset['id'],
+            schema='test_schema'
+        )
+        mock_load_json_schema = mocker.patch(
+            'ckanext.unaids.logic.validation_load_json_schema',
+            return_value={
+                "title": "UNAIDS ART Programme Input",
+                "fields": [
+                    {
+                        "name": "area_id",
+                        "title": "Area ID",
+                        "description": "An area_id from the agreed hierarchy.",
+                        "type": "string",
+                        "constraints": {
+                            "required": True
+                        }
+                    }, {
+                        "name": "area_name",
+                        "title": "Area Name",
+                        "description": "Area name for area_id (optional).",
+                        "type": "string"
+                    }
+                ]
+            }
+        )
+        mock_datastore_search = mocker.Mock(
+            return_value={
+                'fields': [
+                    {'id': '_id', 'type': 'numeric'},
+                    {'id': 'area_id', 'type': 'numeric'},
+                    {'id': 'area_name', 'type': 'text', 'info': {'notes': 'Existing notes'}},
+                ]
+            }
+        )
+        mock_action = mocker.Mock()
+
+        def side_effect(action_name):
+
+            if action_name == 'datastore_search':
+                return mock_datastore_search
+
+            else:
+                return mock_action
+
+        mock_get_action = mocker.patch(
+            'ckanext.unaids.logic.toolkit.get_action',
+            side_effect=side_effect
+        )
+
+        logic.populate_data_dictionary_from_schema(context, resource)
+        mock_load_json_schema.assert_called_once_with(u'test_schema')
+        mock_get_action.assert_called_with('datastore_create')
+        mock_action.assert_called_with(context, {
+            u'resource_id': resource[u'id'],
+            u'force': True,
+            u'fields': [
+                {
+                    u'id': u'area_id',
+                    u'type': u'numeric',
+                    u'info': {
+                        u'label': u'Area ID',
+                        u'notes': u'An area_id from the agreed hierarchy.'
+                    }
+                }, {
+                    u'id': u'area_name',
+                    u'type': u'text',
+                    u'info': {
+                        u'label': u'Area Name',
+                        u'notes': u'Area name for area_id (optional).'
+                    }
+                }
+            ]
+        })
