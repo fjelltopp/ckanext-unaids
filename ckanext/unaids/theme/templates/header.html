@@ -1,5 +1,19 @@
 {% ckan_extends %}
 
+{% block header_wrapper %}
+  {{ super() }}
+  {% if h.get_google_analytics_id()  %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ h.get_google_analytics_id() }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ h.get_google_analytics_id() }}');
+    </script>
+  {% endif %}
+{% endblock %}
+
 {% block header_logo %}
   {% if g.site_logo %}
     {% set current_lang = request.environ.CKAN_LANG %}
@@ -12,12 +26,4 @@
       <h2>{{ g.site_description }}</h2>
     {% endif %}
   {% endif %}
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ h.get_google_analytics_id() }}"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', '{{ h.get_google_analytics_id() }}');
-  </script>
 {% endblock %}

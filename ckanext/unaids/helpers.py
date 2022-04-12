@@ -15,8 +15,6 @@ except ImportError:
     from cgi import escape as html_escape
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
-GOOGLE_ANALYTICS_ID = 'ckan.googleanalytics_id'
-
 
 def get_all_package_downloads(pkg_dict):
     """
@@ -192,4 +190,7 @@ def build_pages_nav_main(*args):
 
 
 def get_google_analytics_id():
-    return toolkit.config.get(GOOGLE_ANALYTICS_ID, {})
+    from_env = os.environ.get('CKAN_GOOGLE_ANALYTICS_ID', None)
+    if not from_env:
+        return toolkit.config.get('ckan.google_analytics_id', None)
+    return from_env
