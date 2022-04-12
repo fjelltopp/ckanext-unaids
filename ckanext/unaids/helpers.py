@@ -16,6 +16,7 @@ except ImportError:
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
 
+
 def get_all_package_downloads(pkg_dict):
     """
     Get all the urls of resources the user has access to in the package.
