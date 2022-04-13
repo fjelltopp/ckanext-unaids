@@ -292,8 +292,8 @@ def _update_resource_last_modified_date(resource, current=None):
     if current is None:
         current = {}
     for key in ['url_type', 'lfs_prefix', 'sha256', 'size', 'url']:
-        current_value = str(current.get(key) or '')
-        resource_value = str(resource.get(key) or '')
+        current_value = current.get(key, u'')
+        resource_value = resource.get(key, u'')
         if current_value != resource_value:
             resource['last_modified'] = datetime.datetime.utcnow()
             return
