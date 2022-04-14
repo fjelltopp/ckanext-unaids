@@ -188,3 +188,10 @@ def build_pages_nav_main(*args):
         output = output + li
 
     return output
+
+
+def get_google_analytics_id():
+    from_env = os.environ.get('CKAN_GOOGLE_ANALYTICS_ID', None)
+    if not from_env:
+        return toolkit.config.get('ckan.google_analytics_id', None)
+    return from_env

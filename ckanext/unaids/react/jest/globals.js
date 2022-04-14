@@ -29,3 +29,7 @@ global.$ = () => {
   // bootstrap modal actions
   return { modal: () => null }
 }
+
+global.console = () => {
+  return;
+}
