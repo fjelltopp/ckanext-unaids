@@ -1,11 +1,7 @@
 {% ckan_extends %}
 
-{% block styles %}
-  {{ super() }}
-  {% asset 'ckanext-unaids/UnaidsCSS' %}
-{% endblock %}
-
 {% block head_extras %}
+  {% asset 'ckanext-unaids/UnaidsCSS' %}
   {{ super() }}
   {% if h.get_google_analytics_id()  %}
     <!-- Global site tag (gtag.js) - Google Analytics -->

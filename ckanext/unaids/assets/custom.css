@@ -343,3 +343,19 @@ float: right;
     font-size: 0.5em;
   }
 }
+
+.recline-pager{
+  margin-left: 0;
+}
+
+.recline-pager .pagination{
+  margin: 0 0 5px 0;
+}
+
+.resource-view-filters{
+  margin: 0;
+}
+
+.ckanext-datapreview{
+  padding: 0;
+}
