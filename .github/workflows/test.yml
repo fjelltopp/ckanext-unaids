@@ -93,7 +93,7 @@ jobs:
         pip install -e "git+https://github.com/fjelltopp/ckanext-blob-storage@development#egg=ckanext-blob-storage"
         pip install -e "git+https://github.com/fjelltopp/ckanext-versions@development#egg=ckanext-versions"
         pip install -e "git+https://github.com/fjelltopp/ckanext-restricted@development#egg=ckanext-restricted"
-        ${{ ckanext-requirements }}
+        ${{ matrix.ckanext-requirements }}
 
         pip install -e .
         # Replace default path to CKAN core config file with the one on the container
