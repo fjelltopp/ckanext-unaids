@@ -28,6 +28,7 @@ jobs:
           - ckan-container-version: "2.9-py2"
             ckan-postgres-version: "2.9"
             ckan-solr-version: "2.9-solr8"
+            requirements-dev: "dev-requirements.txt"
             ckanext-requirements: |
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.txt
@@ -37,6 +38,7 @@ jobs:
           - ckan-container-version: "2.9"
             ckan-postgres-version: "2.9"
             ckan-solr-version: "2.9-solr8"
+            requirements-dev: "dev-requirements.py3.txt"
             ckanext-requirements: |
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.py3.txt
@@ -46,6 +48,7 @@ jobs:
           - ckan-container-version: "2.10"
             ckan-postgres-version: "2.10"
             ckan-solr-version: "2.10"
+            requirements-dev: "dev-requirements.py3.txt"
             ckanext-requirements: |
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.py3.txt
@@ -85,7 +88,7 @@ jobs:
     - name: Install requirements
       run: |
         pip install -r requirements.txt
-        pip install -r dev-requirements.txt
+        pip install -r {{ $matrix.requirements-dev }}
         pip install -e "git+https://github.com/fjelltopp/ckanext-scheming@development#egg=ckanext-scheming"
         pip install -e "git+https://github.com/fjelltopp/ckanext-validation@development#egg=ckanext-validation"
         pip install -e "git+https://github.com/datopian/ckanext-authz-service@bd4c80f55a714c1117a0e130d07463e383c494c7#egg=ckanext-authz-service"
