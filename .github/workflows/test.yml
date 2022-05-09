@@ -28,12 +28,30 @@ jobs:
           - ckan-container-version: "2.9-py2"
             ckan-postgres-version: "2.9"
             ckan-solr-version: "2.9-solr8"
+            ckanext-requirements: |
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py2.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-restricted/development/requirements.txt
           - ckan-container-version: "2.9"
             ckan-postgres-version: "2.9"
             ckan-solr-version: "2.9-solr8"
+            ckanext-requirements: |
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.py3.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py3.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-restricted/development/requirements.txt
           - ckan-container-version: "2.10"
             ckan-postgres-version: "2.10"
             ckan-solr-version: "2.10"
+            ckanext-requirements: |
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.py3.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py3.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-restricted/development/requirements.txt 
 
     container:
       image: openknowledge/ckan-dev:${{ matrix.ckan-container-version }}
@@ -75,11 +93,7 @@ jobs:
         pip install -e "git+https://github.com/fjelltopp/ckanext-blob-storage@development#egg=ckanext-blob-storage"
         pip install -e "git+https://github.com/fjelltopp/ckanext-versions@development#egg=ckanext-versions"
         pip install -e "git+https://github.com/fjelltopp/ckanext-restricted@development#egg=ckanext-restricted"
-        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
-        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.txt
-        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py2.txt
-        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
-        pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-restricted/development/requirements.txt
+        ${{ ckanext-requirements }}
 
         pip install -e .
         # Replace default path to CKAN core config file with the one on the container
