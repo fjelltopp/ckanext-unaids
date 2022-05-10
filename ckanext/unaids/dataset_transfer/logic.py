@@ -89,7 +89,7 @@ def send_dataset_transfer_emails(dataset_id, recipient_org_id):
         except mailer.MailerException as e:
             status = STATUS_EMAIL_FAILED
             log.error('Sending email for DatasetTransferRequest failed for user {} dataset_id {}. Reason: {}'.format(
-                user.id, dataset['id'], e.message
+                user.id, dataset['id'], str(e)
             ))
         model.Session.add(DatasetTransferRequest(
             dataset_id=dataset_id,
