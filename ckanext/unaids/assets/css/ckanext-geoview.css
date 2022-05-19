@@ -1,0 +1,6 @@
+.label[data-format=shp]{
+    background-color: #91318c;
+}
+.label[data-format=geojson] {
+    background-color: #8d2932;
+}

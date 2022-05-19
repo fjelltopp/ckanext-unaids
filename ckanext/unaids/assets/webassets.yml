@@ -46,6 +46,7 @@ UnaidsCSS:
     contents:
         - unaids.css
         - custom.css
+        - css/ckanext-geoview.css
     output: unaids/%(version)s_unaids.css
     extra:
         preload:

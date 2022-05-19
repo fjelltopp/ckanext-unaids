@@ -1,0 +1,5 @@
+pytest-ckan
+pytest-cov
+pytest-mock
+ckantoolkit
+pytest-rerunfailures==10.2

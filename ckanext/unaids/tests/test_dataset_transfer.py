@@ -136,10 +136,11 @@ class TestDatasetTransfer(object):
             type='test-schema',
             org_to_allow_transfer_to=org_2['id']
         )
-        emails_succeeded = send_dataset_transfer_emails(
-            dataset_id=dataset['id'],
-            recipient_org_id=org_2['id']
-        )
+        with app.flask_app.test_request_context():
+            emails_succeeded = send_dataset_transfer_emails(
+                dataset_id=dataset['id'],
+                recipient_org_id=org_2['id']
+            )
         assert emails_succeeded
         mocked_mail_user.assert_called()
         emailed_user_ids = [
@@ -161,10 +162,11 @@ class TestDatasetTransfer(object):
             title=dataset_name,
             org_to_allow_transfer_to=org_2['id']
         )
-        send_dataset_transfer_emails(
-            dataset_id=dataset['id'],
-            recipient_org_id=org_2['id']
-        )
+        with app.flask_app.test_request_context():
+            send_dataset_transfer_emails(
+                dataset_id=dataset['id'],
+                recipient_org_id=org_2['id']
+            )
         email_subject = mocked_mail_recipient.call_args_list[0][0][4]
         assert dataset_name in email_subject
 
@@ -182,10 +184,11 @@ class TestDatasetTransfer(object):
             type='test-schema',
             org_to_allow_transfer_to=org_2['id']
         )
-        emails_succeeded = send_dataset_transfer_emails(
-            dataset_id=dataset['id'],
-            recipient_org_id=org_2['id']
-        )
+        with app.flask_app.test_request_context():
+            emails_succeeded = send_dataset_transfer_emails(
+                dataset_id=dataset['id'],
+                recipient_org_id=org_2['id']
+            )
         assert not emails_succeeded
 
     def test_dataset_transfer_request(self, app):
