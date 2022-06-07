@@ -43,11 +43,11 @@ MapSelectorJS:
             - base/main
 
 UnaidsCSS:
+    output: unaids/%(version)s_unaids.css
     contents:
-        - unaids.css
         - custom.css
         - css/ckanext-geoview.css
-    output: unaids/%(version)s_unaids.css
+    filters: cssutils
     extra:
         preload:
             - ckanext-unaids/MapSelectorCSS
