@@ -1,5 +1,6 @@
 main:
   output: unaids/%(version)s_unaids.js
+  filters: rjsmin
   contents:
     - autocomplete-without-creating-new-options.js
     - download_all.js
@@ -17,6 +18,7 @@ FileInputComponentStyles:
     output: unaids/%(version)s_FileInputComponent.css
 
 FileInputComponentScripts:
+    filters: rjsmin
     contents:
         - frictionless-js.js
         - build/FileInputComponent.js
@@ -29,12 +31,14 @@ BulkFileUploaderComponentStyles:
     output: unaids/%(version)s_BulkFileUploaderComponent.css
 
 BulkFileUploaderComponentScripts:
+    filters: rjsmin
     contents:
         - frictionless-js.js
         - build/BulkFileUploaderComponent.js
     output: unaids/%(version)s_BulkFileUploaderComponent.js
 
 MapSelectorJS:
+    filters: rjsmin
     contents:
         - map_selector.js
         - dependancies/svg-pan-zoom.min.js
