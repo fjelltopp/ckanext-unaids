@@ -13,6 +13,7 @@ main:
 FileInputComponentStyles:
     contents:
         - FileInputComponent.css
+    filters: cssmin
     output: unaids/%(version)s_FileInputComponent.css
 
 FileInputComponentScripts:
@@ -24,6 +25,7 @@ FileInputComponentScripts:
 BulkFileUploaderComponentStyles:
     contents:
         - BulkFileUploaderComponent.css
+    filters: cssmin
     output: unaids/%(version)s_BulkFileUploaderComponent.css
 
 BulkFileUploaderComponentScripts:
@@ -47,7 +49,7 @@ UnaidsCSS:
     contents:
         - custom.css
         - css/ckanext-geoview.css
-    filters: cssutils
+    filters: cssmin
     extra:
         preload:
             - ckanext-unaids/MapSelectorCSS
@@ -55,5 +57,6 @@ UnaidsCSS:
 MapSelectorCSS:
     contents:
         - dependancies/svgMap.min.css
+    filters: cssmin
     output: unaids/%(version)s_MapSelector.css
 
