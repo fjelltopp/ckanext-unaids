@@ -79,10 +79,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: borales/actions-yarn@v2.3.0
+    - uses: borales/actions-yarn@v3.0.0
       with:
         cmd: --cwd ckanext/unaids/react/ install
-    - uses: borales/actions-yarn@v2.3.0
+    - uses: borales/actions-yarn@v3.0.0
       with:
         cmd: --cwd ckanext/unaids/react/ build
     - name: Install requirements
