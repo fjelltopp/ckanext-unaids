@@ -244,10 +244,10 @@ def _commit_plugin_extras(context):
 
 
 def check_plugin_extras_provided(data_dict):
-    print("did this")
+    print("checking custom fields are present and not just empty strings")
     for field in CUSTOM_FIELDS:
         if field["name"] not in data_dict or data_dict.get(field["name"]) == None or data_dict.get(field["name"]) == '':
-            print("got here")
+            print(f"checking {field['name']}")
             raise t.ValidationError(
                 {field["name"]: ["Missing value"]}
             )
@@ -315,7 +315,6 @@ def user_update(original_action, context, data_dict):
 
     plugin_extras = _init_plugin_extras(user_obj.plugin_extras)
     plugin_extras = _add_to_plugin_extras(plugin_extras, data_dict)
-    print(plugin_extras)
     user_obj.plugin_extras = plugin_extras
 
     _commit_plugin_extras(context)
