@@ -43,3 +43,13 @@ def create_dataset_with_releases(user, number_of_releases=5):
             }
         )
     return dataset, releases
+
+
+def user_factory_with_affiliation(**kwargs):
+    if "job_title" not in kwargs.keys():
+        kwargs["job_title"] = "Data Scientist"
+    if "affiliation" not in kwargs.keys():
+        kwargs["affiliation"] = "Data Fjelltopp"
+    return factories.User(
+        **kwargs
+    )

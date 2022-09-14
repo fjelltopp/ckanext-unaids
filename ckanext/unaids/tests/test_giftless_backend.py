@@ -3,7 +3,7 @@
 import pytest
 from six import StringIO
 
-import ckan.tests.factories as factories
+from ckanext.unaids.tests import factories, user_factory_with_affiliation
 from ckan.plugins import toolkit
 from ckan import model
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
@@ -16,7 +16,7 @@ class TestGiftlessBackend(object):
     @pytest.mark.skip("doesn't work as long as HTTP auth is used."
                       " Wait for https://github.com/datopian/ckanext-authz-service/issues/24")
     def test_giftless_resource_create(self):
-        user = factories.User()
+        user = user_factory_with_affiliation()
         org = factories.Organization(
             users=[
                 {'name': user['name'], 'capacity': 'admin'},
