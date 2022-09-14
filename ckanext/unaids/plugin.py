@@ -110,9 +110,9 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             u'format_guess': actions.format_guess,
             u'user_show_me': actions.user_show_me,
             u'populate_data_dictionary': actions.populate_data_dictionary,
-            u'user_show': actions.user_show,
-            u'user_create': actions.user_create,
-            u'user_update': actions.user_update
+            # u'user_show': actions.user_show,
+            # u'user_create': actions.user_create,
+            # u'user_update': actions.user_update
         }
 
     def dataset_facets(self, facet_dict, package_type):

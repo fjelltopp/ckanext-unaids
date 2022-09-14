@@ -244,10 +244,8 @@ def _commit_plugin_extras(context):
 
 
 def check_plugin_extras_provided(data_dict):
-    print("checking custom fields are present and not just empty strings")
     for field in CUSTOM_FIELDS:
         if field["name"] not in data_dict or data_dict.get(field["name"]) == None or data_dict.get(field["name"]) == '':
-            print(f"checking {field['name']}")
             raise t.ValidationError(
                 {field["name"]: ["Missing value"]}
             )

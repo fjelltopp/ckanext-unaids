@@ -21,7 +21,7 @@ class TestUserAffiliationBlueprint(object):
         user = factories.User()
         ckan.plugins.load('unaids')
         url_after_login = get_route_to_intercept()
-        print(url_after_login)
         user_response = app.get(url_after_login, headers={
             'Authorization': user['apikey']
-        })
+        }, follow_redirects=False)
+        assert 'user/edit' in user_response.location

@@ -26,29 +26,24 @@ def _check_user_affiliation():
     except:
         # assume if this fails that the user is not logged in?
         h.redirect_to(u'user.login')
-    print(user_profile)
 
     try:
         # does user have the new fields and are they non-empty strings
         plugin_extras_dict = user_profile.as_dict().get('plugin_extras',{})
-        print(plugin_extras_dict)
         if plugin_extras_dict is None or plugin_extras_dict.get('useraffiliation') is None:
             # this should catch users created before this extension was created
-            print('redirecting #1')
             h.flash_error('Please complete your profile by completing the required fields.')
             return h.redirect_to(u'user.edit')
         else:
             check_plugin_extras_provided(plugin_extras_dict.get('useraffiliation',{}))
             # if this passes fine then carry on as normal (i.e. load the dashboard)
             # Note - this now ignores the ckan.route_after_login config setting, which is not ideal
-            print("continuing")
             return index()
         
     except toolkit.ValidationError as e:
         # if validation fails then redirect to the user profile page
         # with a flash error so the user know what to do
         # this will be when either field is an empty string
-        print('redirecting #2')
         h.flash_error('Please complete your profile by completing the required fields.')
         return h.redirect_to(u'user.edit')
 
