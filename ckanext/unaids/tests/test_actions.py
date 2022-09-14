@@ -8,7 +8,7 @@ import ckan.model as model
 import pytest
 import logging
 from pprint import pformat
-from ckanext.unaids.tests import get_context, create_dataset_with_releases
+from ckanext.unaids.tests import create_dataset_with_releases
 log = logging.getLogger(__name__)
 
 
@@ -215,12 +215,11 @@ class TestUserAffiliation(object):
 
     def test_user_create_with_affiliation(self):
         user = factories.User(
-            job_title='Data Scientist',
-            affiliation='Fjelltopp',
+            job_title = 'Data Scientist',
+            affiliation = 'Fjelltopp',
         )
-        assert user.get('job_title',False) == 'Data Scientist'
-        assert user.get('affiliation',False) == 'Fjelltopp'
-
+        assert user.get('job_title', False) == 'Data Scientist'
+        assert user.get('affiliation', False) == 'Fjelltopp'
 
     @pytest.mark.parametrize('job_title, affiliation', [
         ('Data Scientist', None),
@@ -231,38 +230,36 @@ class TestUserAffiliation(object):
     def test_user_create_without_affiliations(self, job_title, affiliation):
         with pytest.raises(ValidationError):
             user = factories.User(
-                job_title=job_title,
-                affiliation=affiliation,
+                job_title = job_title,
+                affiliation = affiliation,
             )
-            assert user.get('job_title',False) == job_title
-            assert user.get('affiliation',False) == affiliation
-
+            assert user.get('job_title', False) == job_title
+            assert user.get('affiliation', False) == affiliation
 
     def test_user_show_with_affiliation(self):
         user = factories.User(
-            job_title='Data Scientist',
-            affiliation='Fjelltopp',
+            job_title = 'Data Scientist',
+            affiliation = 'Fjelltopp',
         )
         response = call_action(
             'user_show',
             id=user['id']
         )
-        assert response.get('job_title',False) == 'Data Scientist'
-        assert response.get('affiliation',False) == 'Fjelltopp'
-
+        assert response.get('job_title', False) == 'Data Scientist'
+        assert response.get('affiliation', False) == 'Fjelltopp'
 
     def test_user_update_with_affiliation(self):
         user = factories.User(
-            job_title='Data Scientist',
-            affiliation='Fjelltopp',
+            job_title = 'Data Scientist',
+            affiliation = 'Fjelltopp',
         )
-        assert user.get('job_title',False) == 'Data Scientist'
-        assert user.get('affiliation',False) == 'Fjelltopp'
-        user['job_title']='Data Engineer'
-        user['affiliation']='WHO'
+        assert user.get('job_title', False) == 'Data Scientist'
+        assert user.get('affiliation', False) == 'Fjelltopp'
+        user['job_title'] = 'Data Engineer'
+        user['affiliation'] = 'WHO'
         response = call_action(
             "user_update",
             **user
         )
-        assert response.get('job_title',False) == 'Data Engineer'
-        assert response.get('affiliation',False) == 'WHO'
+        assert response.get('job_title', False) == 'Data Engineer'
+        assert response.get('affiliation', False) == 'WHO'

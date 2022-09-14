@@ -219,19 +219,19 @@ def populate_data_dictionary(context, data_dict):
     populate_data_dictionary_from_schema(context, resource_dict)
 
 
-### Custom user profile fields ###
-
+# Custom user profile fields
 CUSTOM_FIELDS = [
     {"name": "job_title", "default": None},
     {"name": "affiliation", "default": None},
 ]
+
 
 def _get_user_obj(context):
     if "user_obj" in context:
         user_obj = context["user_obj"]
     elif "model" in context and "user" in context:
         user_obj = context['model'].User.get(context['user'])
-        
+
     if not user_obj:
         raise t.ObjectNotFound("No user object could be found")
         
@@ -245,10 +245,11 @@ def _commit_plugin_extras(context):
 
 def check_plugin_extras_provided(data_dict):
     for field in CUSTOM_FIELDS:
-        if field["name"] not in data_dict or data_dict.get(field["name"]) == None or data_dict.get(field["name"]) == '':
+        if field["name"] not in data_dict or data_dict.get(field["name"]) is None or data_dict.get(field["name"]) == '':
             raise t.ValidationError(
                 {field["name"]: ["Missing value"]}
             )
+
 
 def _init_plugin_extras(plugin_extras):
     out_dict = copy.deepcopy(plugin_extras)
@@ -273,6 +274,7 @@ def _format_plugin_extras(plugin_extras):
     for field in CUSTOM_FIELDS:
         out_dict[field["name"]] = plugin_extras.get(field["name"], field["default"])
     return out_dict
+
 
 @t.chained_action
 def user_show(original_action, context, data_dict):
