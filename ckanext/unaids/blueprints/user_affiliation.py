@@ -32,6 +32,7 @@ def _check_user_affiliation():
         plugin_extras_dict = user_profile.as_dict().get('plugin_extras',{})
         if plugin_extras_dict is None or plugin_extras_dict.get('useraffiliation') is None:
             # this should catch users created before this extension was created
+            log.info('Redirecting user to the profile edit page as no affiliation data found (1)')
             h.flash_error('Please complete your profile by completing the required fields.')
             return h.redirect_to(u'user.edit')
         else:
@@ -44,6 +45,7 @@ def _check_user_affiliation():
         # if validation fails then redirect to the user profile page
         # with a flash error so the user know what to do
         # this will be when either field is an empty string
+        log.info('Redirecting user to the profile edit page as no affiliation data found (2)')
         h.flash_error('Please complete your profile by completing the required fields.')
         return h.redirect_to(u'user.edit')
 
