@@ -2,6 +2,6 @@
 
 {% block user_heading %}
     <h1 class="heading">{{ user.display_name }}</h1>
-    <h2 class="heading small">{{ user.job_title }}, {{ user.affiliation }}</h2>
+    <p class="affiliation">{{ user.job_title }}<br/>{{ user.affiliation }}</p>
 {% endblock %}
     
