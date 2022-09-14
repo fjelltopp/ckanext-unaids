@@ -209,6 +209,7 @@ class TestPopulateDataDictionary(object):
         call_action('populate_data_dictionary', {}, resource_id=resource['id'])
         mock_populate_data_dictionary_from_schema.assert_called_once_with(mocker.ANY, resource)
 
+
 @pytest.mark.ckan_config('ckan.plugins', 'unaids')
 @pytest.mark.usefixtures('with_plugins')
 class TestUserAffiliation(object):

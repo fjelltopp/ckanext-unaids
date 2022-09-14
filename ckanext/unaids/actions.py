@@ -234,7 +234,7 @@ def _get_user_obj(context):
 
     if not user_obj:
         raise t.ObjectNotFound("No user object could be found")
-        
+
     return user_obj
 
 
