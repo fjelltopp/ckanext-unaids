@@ -215,8 +215,8 @@ class TestUserAffiliation(object):
 
     def test_user_create_with_affiliation(self):
         user = factories.User(
-            job_title = 'Data Scientist',
-            affiliation = 'Fjelltopp',
+            job_title='Data Scientist',
+            affiliation='Fjelltopp',
         )
         assert user.get('job_title', False) == 'Data Scientist'
         assert user.get('affiliation', False) == 'Fjelltopp'
@@ -230,16 +230,16 @@ class TestUserAffiliation(object):
     def test_user_create_without_affiliations(self, job_title, affiliation):
         with pytest.raises(ValidationError):
             user = factories.User(
-                job_title = job_title,
-                affiliation = affiliation,
+                job_title=job_title,
+                affiliation=affiliation,
             )
             assert user.get('job_title', False) == job_title
             assert user.get('affiliation', False) == affiliation
 
     def test_user_show_with_affiliation(self):
         user = factories.User(
-            job_title = 'Data Scientist',
-            affiliation = 'Fjelltopp',
+            job_title='Data Scientist',
+            affiliation='Fjelltopp',
         )
         response = call_action(
             'user_show',
@@ -250,8 +250,8 @@ class TestUserAffiliation(object):
 
     def test_user_update_with_affiliation(self):
         user = factories.User(
-            job_title = 'Data Scientist',
-            affiliation = 'Fjelltopp',
+            job_title='Data Scientist',
+            affiliation='Fjelltopp',
         )
         assert user.get('job_title', False) == 'Data Scientist'
         assert user.get('affiliation', False) == 'Fjelltopp'
