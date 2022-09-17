@@ -6,12 +6,21 @@ from ckan.common import _
 import ckan.lib.helpers as h
 import ckan.logic as logic
 import ckan.lib.base as base
+import json
+
 
 unaids_dataset_transfer = Blueprint(
     u'unaids_dataset_transfer',
     __name__,
     url_prefix=u'/validation'
 )
+
+
+@unaids_dataset_transfer.app_template_filter()
+def json_dumps(json_obj):
+    if not json_obj:
+        return '{}'
+    return json.dumps(json_obj)
 
 
 def process_dataset_transfer(dataset_id):

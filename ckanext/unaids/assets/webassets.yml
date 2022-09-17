@@ -1,5 +1,6 @@
 main:
   output: unaids/%(version)s_unaids.js
+  filters: rjsmin
   contents:
     - autocomplete-without-creating-new-options.js
     - download_all.js
@@ -13,9 +14,11 @@ main:
 FileInputComponentStyles:
     contents:
         - FileInputComponent.css
+    filters: cssmin
     output: unaids/%(version)s_FileInputComponent.css
 
 FileInputComponentScripts:
+    filters: rjsmin
     contents:
         - frictionless-js.js
         - build/FileInputComponent.js
@@ -24,15 +27,18 @@ FileInputComponentScripts:
 BulkFileUploaderComponentStyles:
     contents:
         - BulkFileUploaderComponent.css
+    filters: cssmin
     output: unaids/%(version)s_BulkFileUploaderComponent.css
 
 BulkFileUploaderComponentScripts:
+    filters: rjsmin
     contents:
         - frictionless-js.js
         - build/BulkFileUploaderComponent.js
     output: unaids/%(version)s_BulkFileUploaderComponent.js
 
 MapSelectorJS:
+    filters: rjsmin
     contents:
         - map_selector.js
         - dependancies/svg-pan-zoom.min.js
@@ -43,11 +49,11 @@ MapSelectorJS:
             - base/main
 
 UnaidsCSS:
+    output: unaids/%(version)s_unaids.css
     contents:
-        - unaids.css
         - custom.css
         - css/ckanext-geoview.css
-    output: unaids/%(version)s_unaids.css
+    filters: cssmin
     extra:
         preload:
             - ckanext-unaids/MapSelectorCSS
@@ -55,5 +61,6 @@ UnaidsCSS:
 MapSelectorCSS:
     contents:
         - dependancies/svgMap.min.css
+    filters: cssmin
     output: unaids/%(version)s_MapSelector.css
 
