@@ -1,4 +1,3 @@
-import copy
 import logging
 import mimetypes
 import ckan.logic.schema as schema_
@@ -8,6 +7,7 @@ import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
+import ckanext.unaids.custom_user_profile as custom_user_profile
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 from ckanext.unaids.logic import populate_data_dictionary_from_schema
@@ -219,70 +219,13 @@ def populate_data_dictionary(context, data_dict):
     populate_data_dictionary_from_schema(context, resource_dict)
 
 
-# Custom user profile fields
-CUSTOM_FIELDS = [
-    {"name": "job_title", "default": None},
-    {"name": "affiliation", "default": None},
-]
-
-
-def _get_user_obj(context):
-    if "user_obj" in context:
-        user_obj = context["user_obj"]
-    elif "model" in context and "user" in context:
-        user_obj = context['model'].User.get(context['user'])
-
-    if not user_obj:
-        raise t.ObjectNotFound("No user object could be found")
-
-    return user_obj
-
-
-def _commit_plugin_extras(context):
-    if not context.get("defer_commit"):
-        context['model'].Session.commit()
-
-
-def check_plugin_extras_provided(data_dict):
-    for field in CUSTOM_FIELDS:
-        if field["name"] not in data_dict or data_dict.get(field["name"]) is None or data_dict.get(field["name"]) == '':
-            raise t.ValidationError(
-                {field["name"]: ["Missing value"]}
-            )
-
-
-def _init_plugin_extras(plugin_extras):
-    out_dict = copy.deepcopy(plugin_extras)
-    if not out_dict:
-        out_dict = {}
-    if "useraffiliation" not in out_dict:
-        out_dict["useraffiliation"] = {}
-    return out_dict
-
-
-def _add_to_plugin_extras(plugin_extras, data_dict):
-    out_dict = copy.deepcopy(plugin_extras)
-    for field in CUSTOM_FIELDS:
-        out_dict["useraffiliation"][field["name"]] = data_dict.get(field["name"], field["default"])
-    return out_dict
-
-
-def _format_plugin_extras(plugin_extras):
-    if not plugin_extras:
-        plugin_extras = {}
-    out_dict = {}
-    for field in CUSTOM_FIELDS:
-        out_dict[field["name"]] = plugin_extras.get(field["name"], field["default"])
-    return out_dict
-
-
 @t.chained_action
 def user_show(original_action, context, data_dict):
     user = original_action(context, data_dict)
-    user_obj = _get_user_obj(context)
+    user_obj = custom_user_profile.get_user_obj(context)
 
-    extras = _init_plugin_extras(user_obj.plugin_extras)
-    extras = _format_plugin_extras(extras["useraffiliation"])
+    extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
+    extras = custom_user_profile.format_plugin_extras(extras["unaids"])
 
     user.update(extras)
     return user
@@ -290,34 +233,33 @@ def user_show(original_action, context, data_dict):
 
 @t.chained_action
 def user_create(original_action, context, data_dict):
-    check_plugin_extras_provided(data_dict)
+    custom_user_profile.validate_plugin_extras_provided(data_dict)
 
     user = original_action(context, data_dict)
-    user_obj = _get_user_obj(context)
+    user_obj = custom_user_profile.get_user_obj(context)
 
-    plugin_extras = _init_plugin_extras(user_obj.plugin_extras)
-    plugin_extras = _add_to_plugin_extras(plugin_extras, data_dict)
+    plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
+    plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
     user_obj.plugin_extras = plugin_extras
 
-    _commit_plugin_extras(context)
+    custom_user_profile.commit_plugin_extras(context)
 
-    user.update(plugin_extras["useraffiliation"])
+    user.update(plugin_extras["unaids"])
     return user
 
 
 @t.chained_action
 def user_update(original_action, context, data_dict):
-    t.check_access("user_update", context, data_dict)
-    check_plugin_extras_provided(data_dict)
+    custom_user_profile.validate_plugin_extras_provided(data_dict)
 
     user = original_action(context, data_dict)
-    user_obj = _get_user_obj(context)
+    user_obj = custom_user_profile.get_user_obj(context)
 
-    plugin_extras = _init_plugin_extras(user_obj.plugin_extras)
-    plugin_extras = _add_to_plugin_extras(plugin_extras, data_dict)
+    plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
+    plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
     user_obj.plugin_extras = plugin_extras
 
-    _commit_plugin_extras(context)
+    custom_user_profile.commit_plugin_extras(context)
 
-    user.update(plugin_extras["useraffiliation"])
+    user.update(plugin_extras["unaids"])
     return user

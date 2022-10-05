@@ -4,7 +4,7 @@ from ckan.lib.helpers import url_for
 from ckan.tests import factories
 import pytest
 import mock
-from ckanext.unaids.tests import user_factory_with_affiliation
+from ckanext.unaids.tests.factories import User
 
 from ckanext.unaids.dataset_transfer.logic import (
     get_org_admins_with_email_addresses,
@@ -19,7 +19,7 @@ class TestDatasetTransfer(object):
 
     def test_collaborator_transfering_dataset(self, app):
         user_1, user_2 = [
-            user_factory_with_affiliation(
+            User(
                 email='user_{}_@example.com'.format(x)
             )
             for x in range(2)
@@ -57,8 +57,8 @@ class TestDatasetTransfer(object):
         assert 'org_to_allow_transfer_to' not in result
 
     def test_get_org_admins_with_email_addresses_two_admins(self, app):
-        user_1 = user_factory_with_affiliation(email='user_1@example.com')
-        user_2 = user_factory_with_affiliation(email='user_2@example.com')
+        user_1 = User(email='user_1@example.com')
+        user_2 = User(email='user_2@example.com')
         organization = factories.Organization(
             users=[
                 {'name': user_1['name'], 'capacity': 'admin'},
@@ -73,8 +73,8 @@ class TestDatasetTransfer(object):
         assert returned_user_ids == [user_2['id']]
 
     def test_get_org_admins_with_email_addresses_one_admin(self, app):
-        user_1 = user_factory_with_affiliation(email='user_1@example.com')
-        user_2 = user_factory_with_affiliation(email='user_2@example.com')
+        user_1 = User(email='user_1@example.com')
+        user_2 = User(email='user_2@example.com')
         organization = factories.Organization(
             users=[
                 {'name': user_1['name'], 'capacity': 'admin'},
@@ -89,8 +89,8 @@ class TestDatasetTransfer(object):
         assert returned_user_ids == [user_1['id']]
 
     def test_get_org_admins_with_email_addresses_no_admins(self, app):
-        user_1 = user_factory_with_affiliation(email='user_1@example.com')
-        user_2 = user_factory_with_affiliation(email='user_2@example.com')
+        user_1 = User(email='user_1@example.com')
+        user_2 = User(email='user_2@example.com')
         organization = factories.Organization(
             users=[
                 {'name': user_1['name'], 'capacity': 'member'},
@@ -104,8 +104,8 @@ class TestDatasetTransfer(object):
         assert returned_users == []
 
     def test_get_org_admins_with_email_addresses_two_orgs(self, app):
-        user_1 = user_factory_with_affiliation(email='user_1@example.com')
-        user_2 = user_factory_with_affiliation(email='user_2@example.com')
+        user_1 = User(email='user_1@example.com')
+        user_2 = User(email='user_2@example.com')
         organization_1 = factories.Organization(
             users=[{'name': user_1['name'], 'capacity': 'admin'}]
         )
@@ -128,8 +128,8 @@ class TestDatasetTransfer(object):
 
     @mock.patch('ckan.lib.mailer.mail_user')
     def test_send_dataset_transfer_emails(self, mocked_mail_user, app):
-        user_1 = user_factory_with_affiliation(email='user_1@example.com')
-        user_2 = user_factory_with_affiliation(email='user_2@example.com')
+        user_1 = User(email='user_1@example.com')
+        user_2 = User(email='user_2@example.com')
         org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
         org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
         dataset = factories.Dataset(
@@ -152,8 +152,8 @@ class TestDatasetTransfer(object):
 
     @mock.patch('ckan.lib.mailer._mail_recipient')
     def test_send_dataset_transfer_email_subject(self, mocked_mail_recipient, app):
-        user_1 = user_factory_with_affiliation(email='user_1@example.com')
-        user_2 = user_factory_with_affiliation(email='user_2@example.com')
+        user_1 = User(email='user_1@example.com')
+        user_2 = User(email='user_2@example.com')
         org_1 = factories.Organization(user={'name': user_1['name'], 'capacity': 'admin'})
         org_2 = factories.Organization(user={'name': user_2['name'], 'capacity': 'admin'})
         dataset_name = u"Côte d'Ivoire Test Dataset"
@@ -173,7 +173,7 @@ class TestDatasetTransfer(object):
 
     def test_send_dataset_transfer_emails_errors(self, app):
         user_1, user_2 = [
-            user_factory_with_affiliation()
+            User()
             for x in range(2)
         ]
         org_1, org_2 = [
@@ -196,7 +196,7 @@ class TestDatasetTransfer(object):
 
         # create 3 users and orgs
         user_1, user_2, user_3 = [
-            user_factory_with_affiliation(
+            User(
                 email='user_{}_@example.com'.format(x)
             )
             for x in range(3)

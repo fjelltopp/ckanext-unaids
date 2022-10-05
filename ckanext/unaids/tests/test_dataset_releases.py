@@ -3,7 +3,8 @@
 import pytest
 from bs4 import BeautifulSoup
 from ckan.lib.helpers import url_for
-from ckanext.unaids.tests import create_dataset_with_releases, user_factory_with_affiliation
+from ckanext.unaids.tests import create_dataset_with_releases
+from ckanext.unaids.tests.factories import User
 from ckanext.versions.logic.dataset_version_action import (
     dataset_version_create, dataset_version_list
 )
@@ -67,7 +68,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         return soup.find('span', {'class': 'error-block'}).text
 
     def test_create_with_valid_user(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         release = {'name': 'my-new-release', 'notes': 'example'}
         response = self._create_or_edit(app, user, dataset, release)
@@ -76,7 +77,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         assert_releases_are_exactly(user, dataset['id'], releases + [release])
 
     def test_create_with_invalid_user(self, app):
-        user_1, user_2 = user_factory_with_affiliation(), user_factory_with_affiliation()
+        user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         release = {'name': 'my-new-release', 'notes': 'example'}
         response = self._create_or_edit(
@@ -87,7 +88,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
     def test_create_with_existing_activity_id(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         release = {'name': 'my-new-release', 'notes': 'example'}
         response = self._create_or_edit(
@@ -99,7 +100,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_create_with_existing_release_name(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         release = {'name': releases[0]['name'], 'notes': 'example'}
         response = self._create_or_edit(
@@ -110,7 +111,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_edit_with_valid_user(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         updated_release = releases[0]
         updated_release['name'] = 'updated-release-name'
@@ -123,7 +124,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_edit_with_invalid_user(self, app):
-        user_1, user_2 = user_factory_with_affiliation(), user_factory_with_affiliation()
+        user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         updated_release = releases[0].copy()
         updated_release['name'] = 'updated-release-name'
@@ -155,7 +156,7 @@ class TestDatasetReleaseDelete(object):
         return flash_messages
 
     def test_delete_with_valid_user(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         deleted_release = releases.pop()
         flash_message = self._delete(app, user, dataset, deleted_release)
@@ -166,7 +167,7 @@ class TestDatasetReleaseDelete(object):
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_delete_with_invalid_user(self, app):
-        user_1, user_2 = user_factory_with_affiliation(), user_factory_with_affiliation()
+        user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         deleted_release = releases[0]
         flash_message = self._delete(
@@ -196,7 +197,7 @@ class TestDatasetReleaseRestore(object):
         return flash_messages
 
     def test_restore_with_valid_user(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         restored_release = releases[-1].copy()
         flash_message = self._restore(app, user, dataset, restored_release)
@@ -210,7 +211,7 @@ class TestDatasetReleaseRestore(object):
             user, dataset['id'], releases + [restored_release])
 
     def test_restore_with_invalid_user(self, app):
-        user_1, user_2 = user_factory_with_affiliation(), user_factory_with_affiliation()
+        user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         restored_release = releases[-1].copy()
         flash_message = self._restore(
@@ -225,34 +226,34 @@ class TestDatasetReleaseRestore(object):
 class TestDatasetReleaseListView(object):
 
     def test_no_releases_created(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user, 0)
         response = get_listview(app, user, dataset)
         assert_in('No releases have been created yet', response.body)
         assert_not_in('ReleasesTableContainer', response.body)
 
     def test_releases_are_listed_to_owners(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         response = get_listview(app, user, dataset)
         for release in releases:
             assert_in(release['name'], response.body)
 
     def test_releases_are_listed_to_outsiders(self, app):
-        user_1, user_2 = user_factory_with_affiliation(), user_factory_with_affiliation()
+        user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         response = get_listview(app, user_2, dataset)
         for release in releases:
             assert_in(release['name'], response.body)
 
     def test_add_release_button_is_shown_to_owners(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         response = get_listview(app, user, dataset)
         assert_in('Add Release', response.body)
 
     def test_add_release_button_is_not_shown_to_outsiders(self, app):
-        user_1, user_2 = user_factory_with_affiliation(), user_factory_with_affiliation()
+        user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         response = get_listview(app, user_2, dataset)
         assert_not_in('Add Release', response.body)
@@ -276,7 +277,7 @@ class TestDatasetRead(object):
         return soup.find(id='ReleasesSidebar').text
 
     def test_activity_id_query_param(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         release = releases[0]
         response = self._get_dataset_release_sidebar(
@@ -287,14 +288,14 @@ class TestDatasetRead(object):
         assert_not_in('Create Release', response)
 
     def test_when_no_release_for_dataset(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         response = self._get_dataset_release_sidebar(app, user, dataset)
         assert_in('no release associated', response)
         assert_in('Add Release', response)
 
     def test_when_on_latest_version_of_dataset_has_release(self, app):
-        user = user_factory_with_affiliation()
+        user = User()
         dataset, releases = create_dataset_with_releases(user)
         release = dataset_version_create(
             get_context(user),

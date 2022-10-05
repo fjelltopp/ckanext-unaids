@@ -8,7 +8,8 @@ import ckan.model as model
 import pytest
 import logging
 from pprint import pformat
-from ckanext.unaids.tests import get_context, create_dataset_with_releases, user_factory_with_affiliation
+from ckanext.unaids.tests import get_context, create_dataset_with_releases
+from ckanext.unaids.tests.factories import User
 log = logging.getLogger(__name__)
 
 
@@ -186,7 +187,7 @@ class TestUserShowMe(object):
             call_action('user_show_me', {})
 
     def test_user(self):
-        user = user_factory_with_affiliation()
+        user = User()
         user_obj = model.User.get(user['name'])
         response = call_action('user_show_me', {'auth_user_obj': user_obj})
         assert response['name'] == user['name']
@@ -215,7 +216,7 @@ class TestPopulateDataDictionary(object):
 class TestUserAffiliation(object):
 
     def test_user_create_with_affiliation(self):
-        user = user_factory_with_affiliation(
+        user = User(
             job_title='Data Scientist',
             affiliation='Fjelltopp',
         )
@@ -230,7 +231,7 @@ class TestUserAffiliation(object):
     ])
     def test_user_create_without_affiliations(self, job_title, affiliation):
         with pytest.raises(ValidationError):
-            user = user_factory_with_affiliation(
+            user = User(
                 job_title=job_title,
                 affiliation=affiliation,
             )
@@ -238,7 +239,7 @@ class TestUserAffiliation(object):
             assert user.get('affiliation', False) == affiliation
 
     def test_user_show_with_affiliation(self):
-        user = user_factory_with_affiliation(
+        user = User(
             job_title='Data Scientist',
             affiliation='Fjelltopp',
         )
@@ -250,7 +251,7 @@ class TestUserAffiliation(object):
         assert response.get('affiliation', False) == 'Fjelltopp'
 
     def test_user_update_with_affiliation(self):
-        user = user_factory_with_affiliation(
+        user = User(
             job_title='Data Scientist',
             affiliation='Fjelltopp',
         )

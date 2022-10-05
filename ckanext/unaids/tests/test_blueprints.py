@@ -3,19 +3,19 @@ import logging
 import pytest
 import ckan.model
 import ckan.plugins
-from ckanext.unaids.tests import user_factory_with_affiliation
-from ckanext.unaids.blueprints.user_affiliation import get_route_to_intercept
+from ckanext.unaids.tests.factories import User
+from ckanext.unaids.blueprints.validate_user_profile import get_route_to_intercept
 
 log = logging.getLogger(__name__)
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids')
 @pytest.mark.usefixtures('with_plugins')
-class TestUserAffiliationBlueprint(object):
+class TestValidateUserProfileBlueprint(object):
 
-    def test_user_affiliation_blueprint_intercepts(self, app):
+    def test_validate_user_profile_blueprint_intercepts(self, app):
         ckan.plugins.unload('unaids')
-        user = user_factory_with_affiliation()
+        user = User()
         ckan.plugins.load('unaids')
         url_after_login = get_route_to_intercept()
         user_response = app.get(url_after_login, headers={

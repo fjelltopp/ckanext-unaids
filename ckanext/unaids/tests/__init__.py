@@ -1,6 +1,6 @@
 from ckan import model
 from ckan.plugins import toolkit
-from ckan.tests import factories as factories
+from ckan.tests import factories
 from ckanext.unaids.dataset_transfer.model import tables_exists, init_tables
 from ckanext.versions.logic.dataset_version_action import dataset_version_create
 
@@ -43,13 +43,3 @@ def create_dataset_with_releases(user, number_of_releases=5):
             }
         )
     return dataset, releases
-
-
-def user_factory_with_affiliation(**kwargs):
-    if "job_title" not in kwargs.keys():
-        kwargs["job_title"] = "Data Scientist"
-    if "affiliation" not in kwargs.keys():
-        kwargs["affiliation"] = "Data Fjelltopp"
-    return factories.User(
-        **kwargs
-    )
