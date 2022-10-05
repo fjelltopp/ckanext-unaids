@@ -24,7 +24,7 @@ def _check_user_affiliation():
     except Exception:
         h.redirect_to(u'user.login')
 
-    try: 
+    try:
         user_profile_dict = user_profile.as_dict()
         plugin_extras = user_profile_dict.get('plugin_extras', {})
         unaids_extras = plugin_extras.get('unaids', {})
