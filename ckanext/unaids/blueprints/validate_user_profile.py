@@ -15,7 +15,7 @@ validate_user_profile = Blueprint(
 )
 
 
-def _check_user_affiliation():
+def check_user_affiliation():
     """
     Check if user profile has the custom fields, as defined by this plugin.
     """
@@ -41,25 +41,10 @@ def _check_user_affiliation():
 
     # if this passes fine then carry on as normal (i.e. load the dashboard)
     # Note - this now ignores the ckan.route_after_login config setting, which is not ideal
-    return index()
-
-
-def get_route_to_intercept():
-    """
-    Get the route that should be intercepted
-    To parse we remove ".index", add leading and trailing slashes and change internal periods to slashes
-    e.g. "dashboard.index" (the default) becomes ("/dashboard/")
-    """
-    configured_route = config.get('ckan.route_after_login', 'dashboard.index')
-
-    if configured_route.endswith('.index'):
-        configured_route = configured_route[:-6]
-
-    return '/' + configured_route.replace('.', '/') + '/'
-
+    return h.redirect_to('dashboard.index')
 
 validate_user_profile.add_url_rule(
-    get_route_to_intercept(),
-    view_func=_check_user_affiliation,
+    "/",
+    view_func=check_user_affiliation,
     methods=['GET']
 )

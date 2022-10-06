@@ -4,7 +4,7 @@ import pytest
 import ckan.model
 import ckan.plugins
 from ckanext.unaids.tests.factories import User
-from ckanext.unaids.blueprints.validate_user_profile import get_route_to_intercept
+# from ckanext.unaids.blueprints.validate_user_profile import get_route_to_intercept
 
 log = logging.getLogger(__name__)
 
@@ -17,8 +17,14 @@ class TestValidateUserProfileBlueprint(object):
         ckan.plugins.unload('unaids')
         user = User()
         ckan.plugins.load('unaids')
-        url_after_login = get_route_to_intercept()
-        user_response = app.get(url_after_login, headers={
-            'Authorization': user['apikey']
-        }, follow_redirects=False)
+        # url_after_login = get_route_to_intercept()
+        user_response = app.get(
+            url=ckan.plugins.toolkit.url_for(
+                'validate_user_profile.check_user_affiliation'
+            ),
+            headers={
+                'Authorization': user['apikey']
+            },
+            follow_redirects=False,
+        )
         assert 'user/edit' in user_response.location
