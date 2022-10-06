@@ -2,9 +2,8 @@
 import logging
 import ckan.lib.helpers as h
 from flask import Blueprint
-from ckan.common import config, g
+from ckan.common import g
 from ckan.plugins import toolkit
-from ckan.views.dashboard import index
 from ckanext.unaids.custom_user_profile import validate_plugin_extras_provided
 
 log = logging.getLogger(__name__)
@@ -42,6 +41,7 @@ def check_user_affiliation():
     # if this passes fine then carry on as normal (i.e. load the dashboard)
     # Note - this now ignores the ckan.route_after_login config setting, which is not ideal
     return h.redirect_to('dashboard.index')
+
 
 validate_user_profile.add_url_rule(
     "/",
