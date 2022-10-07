@@ -42,3 +42,14 @@ class TestValidateUserProfileBlueprint(object):
             follow_redirects=False,
         )
         assert '/dashboard/' in user_response.location
+
+    def test_validate_user_profile_blueprint_does_nothing_if_not_logged_in(self, app):
+        user_response = app.get(
+            url=ckan.plugins.toolkit.url_for(
+                'home.index'
+            ),
+            follow_redirects=False,
+        )
+        assert ckan.plugins.toolkit.url_for(
+                'home.index'
+            ) in user_response.location

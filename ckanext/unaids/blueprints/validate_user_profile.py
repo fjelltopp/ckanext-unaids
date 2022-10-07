@@ -44,7 +44,7 @@ def check_user_affiliation():
 
 
 validate_user_profile.add_url_rule(
-    "/",
+    "/check_user_affiliation",
     view_func=check_user_affiliation,
     methods=['GET']
 )
