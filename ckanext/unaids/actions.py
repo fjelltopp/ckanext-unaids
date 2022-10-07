@@ -7,6 +7,7 @@ import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
+import ckanext.unaids.custom_user_profile as custom_user_profile
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 from ckanext.unaids.logic import populate_data_dictionary_from_schema
@@ -216,3 +217,49 @@ def populate_data_dictionary(context, data_dict):
         {'id': resource_id}
     )
     populate_data_dictionary_from_schema(context, resource_dict)
+
+
+@t.chained_action
+def user_show(original_action, context, data_dict):
+    user = original_action(context, data_dict)
+    user_obj = custom_user_profile.get_user_obj(context)
+
+    extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
+    extras = custom_user_profile.format_plugin_extras(extras["unaids"])
+
+    user.update(extras)
+    return user
+
+
+@t.chained_action
+def user_create(original_action, context, data_dict):
+    custom_user_profile.validate_plugin_extras_provided(data_dict)
+
+    user = original_action(context, data_dict)
+    user_obj = custom_user_profile.get_user_obj(context)
+
+    plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
+    plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
+    user_obj.plugin_extras = plugin_extras
+
+    custom_user_profile.commit_plugin_extras(context)
+
+    user.update(plugin_extras["unaids"])
+    return user
+
+
+@t.chained_action
+def user_update(original_action, context, data_dict):
+    custom_user_profile.validate_plugin_extras_provided(data_dict)
+
+    user = original_action(context, data_dict)
+    user_obj = custom_user_profile.get_user_obj(context)
+
+    plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
+    plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
+    user_obj.plugin_extras = plugin_extras
+
+    custom_user_profile.commit_plugin_extras(context)
+
+    user.update(plugin_extras["unaids"])
+    return user
