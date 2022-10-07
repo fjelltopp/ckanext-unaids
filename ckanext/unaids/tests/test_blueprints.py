@@ -44,7 +44,8 @@ class TestValidateUserProfileBlueprint(object):
         assert '/dashboard/' in user_response.location
 
     def test_annonymous_access_to_index_page(self, app):
-        index_response = app.get('/',
+        index_response = app.get(
+            '/',
             follow_redirects=False
         )
         assert index_response.status_code == 200
