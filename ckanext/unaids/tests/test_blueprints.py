@@ -8,7 +8,7 @@ from ckanext.unaids.tests.factories import User
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids pages')
 @pytest.mark.usefixtures('with_plugins')
 class TestValidateUserProfileBlueprint(object):
 
@@ -42,3 +42,10 @@ class TestValidateUserProfileBlueprint(object):
             follow_redirects=False,
         )
         assert '/dashboard/' in user_response.location
+
+    def test_annonymous_access_to_index_page(self, app):
+        index_response = app.get(
+            '/',
+            follow_redirects=False
+        )
+        assert index_response.status_code == 200
