@@ -27,7 +27,6 @@ class TestValidateUserProfileBlueprint(object):
         )
         assert 'user/edit' in user_response.location
 
-
     def test_validate_user_profile_blueprint_does_not_intercept_complete(self, app):
         user = User(
             job_title='Data Scientist',
