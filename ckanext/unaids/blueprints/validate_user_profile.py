@@ -21,7 +21,7 @@ def check_user_affiliation():
     try:
         user_profile = g.userobj
     except Exception:
-        h.redirect_to(u'user.login')
+        h.redirect_to('user.login')
 
     try:
         user_profile_dict = user_profile.as_dict()
@@ -36,7 +36,7 @@ def check_user_affiliation():
             "to your user profile. Please complete the required "
             "fields below before continuing..."
         )
-        return h.redirect_to(u'user.edit')
+        return h.redirect_to('user.edit')
 
     # if this passes fine then carry on as normal (i.e. load the dashboard)
     # Note - this now ignores the ckan.route_after_login config setting, which is not ideal
