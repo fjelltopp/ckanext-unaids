@@ -42,7 +42,7 @@ class EditUserAffiliationView(MethodView):
             user_profile_dict['affiliation'] = toolkit.request.form['affiliation']
 
             toolkit.get_action('user_update')(context, user_profile_dict)
-            
+
             h.flash_success('Profile updated')
             return h.redirect_to('dashboard.index')
 
