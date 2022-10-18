@@ -1,0 +1,17 @@
+{% import 'macros/form.html' as form %}
+
+<form id="user-affiliation-edit-form" class="dataset-form" method="post" action="{{ action }}" enctype="multipart/form-data">
+  {{ form.errors(error_summary) }}
+
+  <fieldset>
+    <legend>{{ _('Add new details') }}</legend>
+    {{ form.input("job_title",id="field-job-title",label=_("Job Title"),placeholder=_("Data Scientist"),value=data.job_title,classes=["control-medium"],error=errors.job_title,is_required=True) }}
+        
+    {{ form.input("affiliation",id="field-affiliation",label=_("Affiliation"),placeholder=_("WHO"),value=data.affiliation,classes=["control-medium"],error=errors.affiliation,is_required=True) }}
+  </fieldset>
+
+  <div class="form-actions">
+    {{ form.required_message() }}
+    <button class="btn btn-primary" type="submit" name="save">{{ _('Update Profile') }}</button>
+  </div>
+</form>
