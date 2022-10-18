@@ -15,6 +15,7 @@ validate_user_profile = Blueprint(
     __name__,
 )
 
+
 class EditUserAffiliationView(MethodView):
     @staticmethod
     def _get_context():
@@ -34,13 +35,12 @@ class EditUserAffiliationView(MethodView):
         except Exception:
             h.redirect_to('user.login')
 
-
         try:
             user_profile_dict = user_profile.as_dict()
 
             user_profile_dict['job_title'] = toolkit.request.form['job_title']
             user_profile_dict['affiliation'] = toolkit.request.form['affiliation']
-            
+
             toolkit.get_action('user_update')(context, user_profile_dict)
             
             h.flash_success('Profile updated')
@@ -60,7 +60,7 @@ class EditUserAffiliationView(MethodView):
 
         user_profile = g.userobj
         user_profile_dict = user_profile.as_dict()
-        
+
         if data is None:
             plugin_extras = user_profile_dict.get('plugin_extras', {})
             data = plugin_extras.get('unaids', {})
@@ -82,6 +82,7 @@ class EditUserAffiliationView(MethodView):
             extra_vars=vars)
 
         return toolkit.render('user/edit.html', extra_vars)
+
 
 def check_user_affiliation():
     """
@@ -121,5 +122,5 @@ validate_user_profile.add_url_rule(
 validate_user_profile.add_url_rule(
     '/edit_user_affiliation',
     view_func=EditUserAffiliationView.as_view('edit_user_affiliation'),
-    methods=['GET','POST']
+    methods=['GET', 'POST']
 )
