@@ -3,7 +3,7 @@
 from ckan.plugins import toolkit
 from ckan.tests.helpers import call_action
 from ckan.tests import factories
-from ckan.logic import NotAuthorized, ValidationError
+from ckan.logic import NotAuthorized  # , ValidationError
 import ckan.model as model
 import pytest
 import logging
