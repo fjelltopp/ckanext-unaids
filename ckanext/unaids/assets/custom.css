@@ -812,3 +812,9 @@ div.resource-view-filters{
 div.ckanext-datapreview{
   padding: 0;
 }
+
+.affiliation{
+    font-weight: bold;
+    size: 1.2em;
+    margin: 10px 0px;
+ }

@@ -1,0 +1,7 @@
+{% ckan_extends %}
+
+{% block user_heading %}
+    <h1 class="heading">{{ user.display_name }}</h1>
+    <p class="affiliation">{{ user.job_title }}<br/>{{ user.affiliation }}</p>
+{% endblock %}
+    

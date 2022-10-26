@@ -1,6 +1,8 @@
 import pytest
 
-from ckanext.unaids.tests import unaids_db_setup
+from ckan.tests import factories
+from ckanext.unaids.tests import unaids_db_setup, create_version
+from ckanext.unaids.tests.factories import User
 from ckanext.validation.tests import validation_db_setup
 from ckanext.versions.tests import versions_db_setup
 
@@ -10,3 +12,42 @@ def unaids_setup(clean_db):
     validation_db_setup()
     versions_db_setup()
     unaids_db_setup()
+
+
+@pytest.fixture()
+def org_admin():
+    return User(name="admin")
+
+
+@pytest.fixture()
+def org_editor():
+    return User(name="editor")
+
+
+@pytest.fixture()
+def org_member():
+    return User(name="member")
+
+
+@pytest.fixture()
+def test_organization(org_admin, org_editor, org_member):
+    return factories.Organization(users=[
+        {'name': org_admin['id'], 'capacity': 'admin'},
+        {'name': org_editor['id'], 'capacity': 'editor'},
+        {'name': org_member['id'], 'capacity': 'member'}
+    ])
+
+
+@pytest.fixture()
+def test_dataset(test_organization):
+    return factories.Dataset(owner_org=test_organization['id'])
+
+
+@pytest.fixture()
+def test_resource(test_dataset):
+    return factories.Resource(package_id=test_dataset['id'])
+
+
+@pytest.fixture()
+def test_version(test_dataset, org_editor):
+    return create_version(test_dataset['id'], org_editor, version_name="Version1")
