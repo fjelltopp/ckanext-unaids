@@ -6,6 +6,7 @@ from collections import OrderedDict
 from giftless_client import LfsClient
 import ckan.model.license as core_licenses
 import ckan.model.package as package
+import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
@@ -13,6 +14,7 @@ from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
+from ckanext.saml2auth.interfaces import ISaml2Auth
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
     if_empty_guess_format,
@@ -77,6 +79,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(IDataValidation)
     p.implements(IResourceDownloadHandler, inherit=True)
     p.implements(IDataPusher, inherit=True)
+    p.implements(ISaml2Auth, inherit=True)
 
     # IClick
     def get_commands(self):
@@ -210,6 +213,13 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                         resource_dict.get('id', '')
                     )
                 )
+
+    def before_saml2_user_update(self, user_dict, saml_attributes):
+        user = model.Session.query(model.User).filter(model.User.id == user_dict['id']).first()
+
+        for plugin_key in user.plugin_extras.keys():
+            if plugin_key not in user_dict[u'plugin_extras'].keys():
+                user_dict[u'plugin_extras'][plugin_key] = user.plugin_extras[plugin_key]
 
 
 class UNAIDSReclineView(ReclineViewBase):
