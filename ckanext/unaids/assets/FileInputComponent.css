@@ -16,3 +16,72 @@
 #FileInputComponent .field-url-input-group{
     margin-bottom: 30px;
 }
+
+.ResourceForkComponent{
+    text-align: left;
+    padding: 20px;
+    border-width: 3px;
+    border-radius: 2px;
+    border-color: #ebebeb;
+    border-style: solid;
+    background-color: #fafafa;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#resource-search-label:after {
+    content: "";
+  }
+
+.ResourceForkComponent>.input-group{
+    margin-bottom: 20px;
+}
+
+.resource-fork-search-results>.panel{
+    margin-bottom: 10px;
+}
+
+.resource-fork-search-results .resource-item{
+    padding: 5px 5px 5px 30px;
+    /* min-height: 25px; */
+}
+
+.panel-heading .badge {
+    float: right;
+}
+
+.panel-heading p.heading,
+.panel-heading p.description,
+.panel-body p.heading,
+.panel-body p.description{
+    margin-bottom: 0px;
+}
+
+.panel-body span.description{
+    float:right;
+    margin-right: 60px;
+}
+
+ul.panel-body{
+    padding: 5px 5px 5px 30px;
+}
+
+.resource-btn{
+    margin-bottom: 3px;
+}
+
+.resource-fork-escape{
+    position: absolute;
+    right: 10px;
+    top: 5px;
+}
+
+.resource-fork-details-tile{
+    background-color: #fff;
+    border: 1px solid #ddd;
+}
+
+.resource-fork-details-tile:hover{
+    /* this is a bit of a hack to undo the resource-item:hover */
+    background-color: #fff;
+}
