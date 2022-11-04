@@ -9,6 +9,7 @@
     "core-js": "^3.21.1",
     "fuse.js": "^6.5.3",
     "giftless-client": "git+https://github.com/datopian/giftless-client-js.git#ce1e6606a36ea8a2debaa523dc752e9248a0b060",
+    "html-react-parser": "^3.0.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-dropzone": "^12.0.5",
