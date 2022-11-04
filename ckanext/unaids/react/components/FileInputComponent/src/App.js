@@ -23,9 +23,15 @@ export default function App({
     const [hiddenInputs, _setHiddenInputs] = useState({});
     const [uploadError, setUploadError] = useState(false);
     const [useEffectCompleted, setUseEffectCompleted] = useState(false);
+    const [selectedResource, setSelectedResource] = useState({
+        resource: null,
+        dataset: null,
+    });
 
     const setHiddenInputs = (newUploadMode, metadata) => {
         setUploadMode(newUploadMode);
+        let fileFormatField =
+                        document.getElementById('field-format');
         _setHiddenInputs(() => {
             switch (newUploadMode) {
                 case 'file':
@@ -37,8 +43,6 @@ export default function App({
                         url: metadata.url,
                     };
                 case 'url':
-                    const fileFormatField =
-                        document.getElementById('field-format');
                     if (fileFormatField) fileFormatField.value = 'url';
                     return {
                         url_type: null,
@@ -46,21 +50,28 @@ export default function App({
                         sha256: null,
                         size: null,
                         // url field is handled by input field in UI
+                        fork_resource: null
                     };
                 case 'resource':
+                    if (fileFormatField) fileFormatField.value = metadata.format;
+                    // setUploadFileName(metadata.filename);
                     return {
-                        url_type: 'fork',
+                        url_type: null,
                         lfs_prefix: null,
                         sha256: null,
                         size: null,
+                        url: metadata.filename,
+                        fork_resource: metadata.fork_resource
                     };
                 default:
+                    // setUploadFileName();
                     return {
                         url_type: null,
                         lfs_prefix: null,
                         sha256: null,
                         size: null,
                         url: null,
+                        fork_resource: null
                     };
             }
         });
@@ -138,20 +149,13 @@ export default function App({
         } else if (uploadMode === 'resource') {
             return (
                 <ResourceForker
-                    {...{
-                        maxResourceSize,
-                        lfsServer,
-                        orgId,
-                        datasetName,
-                        setUploadProgress,
-                        setUploadFileName,
-                        setHiddenInputs,
-                        setUploadError,
-                    }}
+                    selectedResource={selectedResource}
+                    setSelectedResource={setSelectedResource}
+                    setHiddenInputs={setHiddenInputs}
                 />
             );
         } else {
-            // [undefined, null, "file"].includes(uploadMode)
+            // e.g. [undefined, null, "file"].includes(uploadMode)
             return (
                 <FileUploader
                     {...{
