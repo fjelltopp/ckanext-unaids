@@ -218,7 +218,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         user = model.Session.query(model.User).filter(model.User.id == user_dict['id']).first()
 
         for plugin_key in user.plugin_extras.keys():
-            if plugin_key not in user_dict[u'plugin_extras'].keys():
+            if plugin_key not in user_dict[u'plugin_extras'].keys() and plugin_key != u'saml2auth':
                 user_dict[u'plugin_extras'][plugin_key] = user.plugin_extras[plugin_key]
 
 
