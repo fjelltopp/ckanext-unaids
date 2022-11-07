@@ -23,10 +23,6 @@ def check_user_affiliation():
     except Exception:
         h.redirect_to('user.login')
 
-    return h.redirect_to('dashboard.index')
-    # NOTE this redirect prevents the rest of the blueprint logic
-    # as a temporary measure due to SAML2 extension conflicts
-
     try:
         user_profile_dict = user_profile.as_dict()
         plugin_extras = user_profile_dict.get('plugin_extras', {})

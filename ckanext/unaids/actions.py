@@ -233,32 +233,22 @@ def user_show(original_action, context, data_dict):
 
 @t.chained_action
 def user_create(original_action, context, data_dict):
-    custom_user_profile.validate_plugin_extras_provided(data_dict)
-
-    user = original_action(context, data_dict)
-    user_obj = custom_user_profile.get_user_obj(context)
-
-    plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
-    plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
-    user_obj.plugin_extras = plugin_extras
-
-    custom_user_profile.commit_plugin_extras(context)
-
-    user.update(plugin_extras["unaids"])
-    return user
+    return add_plugin_extras_to_user(context, data_dict, original_action)
 
 
 @t.chained_action
 def user_update(original_action, context, data_dict):
-    custom_user_profile.validate_plugin_extras_provided(data_dict)
+    return add_plugin_extras_to_user(context, data_dict, original_action)
 
+
+def add_plugin_extras_to_user(context, data_dict, original_action):
     user = original_action(context, data_dict)
     user_obj = custom_user_profile.get_user_obj(context)
 
     plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
     plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
-    user_obj.plugin_extras = plugin_extras
 
+    user_obj.plugin_extras = plugin_extras
     custom_user_profile.commit_plugin_extras(context)
 
     user.update(plugin_extras["unaids"])
