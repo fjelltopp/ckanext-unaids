@@ -32,11 +32,11 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
     }, []);
 
     return (
-        <div className="input-group">
+        <div className="field">
             <label
                 id="resource-search-label"
-                className="input-group-addon"
                 htmlFor="resource-search"
+                className="btn-search"
             >
                 <i className={`fa fa-search`}></i>
             </label>
@@ -50,15 +50,15 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 ref={searchInput}
             />
-            <span className="input-group-btn">
+            {/* <span className="input-group-btn"> */}
                 <button
                     type="reset"
-                    className="btn btn-default"
+                    className="btn-reset"
                     onClick={() => setSearchQuery('')}
                 >
                     <i className={`fa fa-close`}></i>
                 </button>
-            </span>
+            {/* </span> */}
         </div>
     );
 };
@@ -78,22 +78,22 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
     };
 
     return (
-        <div className="panel panel-default">
+        <div className="panel">
             <div
-                className="panel-heading resource-item"
+                className="panel-heading"
                 onClick={() => setIsCollapsed(!isCollapsed)}
             >
                 <p className="heading">
                     {markQuerySubstring(dataset.title, searchQuery)}
                 </p>
                 <p className="description">
-                    {markQuerySubstring(dataset.owner_org, searchQuery)}
-                    &emsp;|&emsp;
-                    <small>
-                        {markQuerySubstring(dataset.name, searchQuery)}
-                    </small>
+                    <strong>
+                        {markQuerySubstring(dataset.owner_org, searchQuery)}
+                        &ensp;|&ensp;
+                    </strong>
+                    {markQuerySubstring(dataset.name, searchQuery)}
                     <span className="badge">
-                        {dataset.resources.length} resources&emsp;
+                        {dataset.resources.length} resources&ensp;
                         {isCollapsed ? (
                             <i className={`fa fa-chevron-down`}></i>
                         ) : (
@@ -160,28 +160,37 @@ const ResourceButton = ({
     searchQuery,
 }) => (
     <li
-        className="list-group-item resource-item resource-btn"
+        className="list-group-item resource-btn"
         onClick={() => setResourceAndMetadata(resource, dataset)}
     >
         <p className="heading">
             {markQuerySubstring(resource.name, searchQuery)}
         </p>
         <p className="description">
-            Modified {resource.last_modified}&emsp;|&emsp;
-            <small>{resource.id.split('-')[0]}</small>
+            <strong>
+                Modified {resource.last_modified}
+                &ensp;|&ensp;
+            </strong>
+            {resource.id.split('-')[0]}
         </p>
     </li>
 );
 
 const ResourceWithDatasetInfoTile = ({ resource, dataset }) => (
-    <div className="resource-item resource-btn resource-fork-details-tile">
+    <div className="resource-fork-details-tile">
         <p className="heading">{resource.name}</p>
         <p className="description">
-            {dataset.owner_org}&emsp;|&emsp;
-            <small>{dataset.name}</small>
+            <strong>
+                {dataset.owner_org}
+                &ensp;|&ensp;
+            </strong>
+            {dataset.name}
             <br />
-            Modified {resource.last_modified}&emsp;|&emsp;
-            <small>{resource.id.split('-')[0]}</small>
+            <strong>
+                Modified {resource.last_modified}
+                &ensp;|&ensp;
+            </strong>
+            {resource.id.split('-')[0]}
         </p>
     </div>
 );
@@ -224,7 +233,7 @@ export default function ResourceForker({
 
     return (
         <div
-            className="ResourceForkComponent"
+            className="resource-fork-component"
             data-testid="ResourceForkComponent"
         >
             <header>
@@ -268,7 +277,7 @@ export default function ResourceForker({
                             className="btn btn-default"
                             onClick={() => clearResourceAndMetadata(false)}
                         >
-                            <i className={`fa fa-search`}></i>&emsp;
+                            <i className={`fa fa-search`}></i>&ensp;
                             <span>Choose Again</span>
                         </button>
                     </footer>

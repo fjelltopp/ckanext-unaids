@@ -1,4 +1,4 @@
-.dropzone{
+.dropzone {
     text-align: center;
     padding: 20px;
     border-width: 3px;
@@ -9,15 +9,15 @@
     margin-bottom: 20px;
 }
 
-#FileInputComponent h3{
+#FileInputComponent h3 {
     margin-bottom: 20px;
 }
 
-#FileInputComponent .field-url-input-group{
+#FileInputComponent .field-url-input-group {
     margin-bottom: 30px;
 }
 
-.ResourceForkComponent{
+.resource-fork-component {
     text-align: left;
     padding: 20px;
     border-width: 3px;
@@ -29,59 +29,118 @@
     position: relative;
 }
 
-#resource-search-label:after {
-    content: "";
-  }
+/* FORK RESOURCE SEARCH BAR */
 
-.ResourceForkComponent>.input-group{
-    margin-bottom: 20px;
+.resource-fork-component > .field {
+    position: relative;
 }
 
-.resource-fork-search-results>.panel{
+.resource-fork-component > .field > .form-control {
+    height: auto;
+    width: 100%;
+    padding: 5px 37px;
+}
+
+.resource-fork-component > .field > .btn-search,
+.resource-fork-component > .field > .btn-reset {
+    position: absolute;
+    height: 17px;
+    width: 17px;
+    padding: 0;
+    top: 50%;
+    margin-top: -10px;
+    background-color: transparent;
+    border: none;
+    color: #999;
+    transition: color 0.2s ease-in;
+}
+
+.resource-fork-component > .field > .btn-search {
+    left: 10px;
+}
+
+#resource-search-label:after {
+    content: "";
+}
+
+.resource-fork-component > .field > .btn-reset {
+    right: 10px;
+}
+
+.resource-fork-component > .field > .btn-search:hover,
+.resource-fork-component > .field > .btn-reset:hover {
+    color: #000;
+}
+
+/* FORK RESOURCE SEARCH RESULTS */
+
+.resource-fork-search-results > header {
+    margin-top: 20px;
+}
+
+.resource-fork-search-results > .panel {
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    border-color: #ddd;
     margin-bottom: 10px;
 }
 
-.resource-fork-search-results .resource-item{
-    padding: 5px 5px 5px 30px;
-    /* min-height: 25px; */
+.resource-fork-search-results mark {
+    padding: 0;
+    background-color: inherit;
+    color: #e31837;
 }
 
-.panel-heading .badge {
+.resource-fork-search-results .panel-heading .badge {
     float: right;
+    background-color: #e31837;
 }
 
-.panel-heading p.heading,
-.panel-heading p.description,
-.panel-body p.heading,
-.panel-body p.description{
+.resource-fork-search-results .panel p.description,
+.resource-fork-details-tile p.description {
+    font-size: 12px;
+}
+
+.resource-fork-search-results .panel-heading p.heading,
+.resource-fork-search-results .panel-heading p.description,
+.resource-fork-search-results .panel-body p.heading,
+.resource-fork-search-results .panel-body p.description,
+.resource-fork-details-tile p.heading,
+.resource-fork-details-tile p.description {
     margin-bottom: 0px;
 }
 
-.panel-body span.description{
-    float:right;
-    margin-right: 60px;
+.resource-fork-search-results ul.panel-body {
+    padding: 10px 5px;
 }
 
-ul.panel-body{
-    padding: 5px 5px 5px 30px;
+.resource-fork-search-results ul.panel-body li.list-group-item {
+    margin-bottom: 5px;
 }
 
-.resource-btn{
-    margin-bottom: 3px;
+.resource-fork-search-results .resource-btn:hover {
+    background-color: #e6e6e6;
 }
 
-.resource-fork-escape{
+/*FORK RESOURCE SELECTED RESOURCE */
+
+.resource-fork-escape {
     position: absolute;
     right: 10px;
     top: 5px;
 }
 
-.resource-fork-details-tile{
+.resource-fork-details-tile {
+    padding: 10px 15px;
     background-color: #fff;
     border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 5px;
 }
 
-.resource-fork-details-tile:hover{
-    /* this is a bit of a hack to undo the resource-item:hover */
-    background-color: #fff;
+.resource-fork-details-tile p.description {
+    margin-left: 5px;
 }
