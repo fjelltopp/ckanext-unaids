@@ -24,15 +24,14 @@ const getSearchResults = (searchQuery, setSearchResults) => {
 
 const markQuerySubstring = (string, searchQuery) => {
     let newString = string;
-    searchQuery
-        .split(" ")
-        .map(
-            (word) =>
-                (newString = newString.replaceAll(
-                    RegExp(word, "gi"),
-                    `<mark>$&</mark>`
-                ))
-        );
+    searchQuery.split(" ").map((word) => {
+        if (word.length > 0) {
+            newString = newString.replaceAll(
+                RegExp(word, "gi"),
+                `<mark>$&</mark>`
+            );
+        }
+    });
     return parse(newString);
 };
 
