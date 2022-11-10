@@ -1,6 +1,6 @@
-import axios from 'axios';
-import React, { useEffect, useState, useRef } from 'react';
-import parse from 'html-react-parser';
+import axios from "axios";
+import React, { useEffect, useState, useRef } from "react";
+import parse from "html-react-parser";
 
 const getSearchResults = (searchQuery, setSearchResults) => {
     if (searchQuery) {
@@ -10,11 +10,11 @@ const getSearchResults = (searchQuery, setSearchResults) => {
 
         const config = {
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
+                "Content-Type": "application/x-www-form-urlencoded",
             },
         };
         axios
-            .post('/api/3/action/resource_autocomplete', body, config) // QUERY why does this need to be POST?
+            .post("/api/3/action/resource_autocomplete", body, config) // QUERY why does this need to be POST?
             .then((response) => {
                 setSearchResults(response.data.result);
             })
@@ -22,8 +22,19 @@ const getSearchResults = (searchQuery, setSearchResults) => {
     }
 };
 
-const markQuerySubstring = (string, searchQuery) =>
-    parse(string.replaceAll(RegExp(searchQuery, 'gi'), `<mark>$&</mark>`));
+const markQuerySubstring = (string, searchQuery) => {
+    let newString = string;
+    searchQuery
+        .split(" ")
+        .map(
+            (word) =>
+                (newString = newString.replaceAll(
+                    RegExp(word, "gi"),
+                    `<mark>$&</mark>`
+                ))
+        );
+    return parse(newString);
+};
 
 const SearchBar = ({ searchQuery, setSearchQuery }) => {
     const searchInput = useRef(null);
@@ -51,13 +62,13 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                 ref={searchInput}
             />
             {/* <span className="input-group-btn"> */}
-                <button
-                    type="reset"
-                    className="btn-reset"
-                    onClick={() => setSearchQuery('')}
-                >
-                    <i className={`fa fa-close`}></i>
-                </button>
+            <button
+                type="reset"
+                className="btn-reset"
+                onClick={() => setSearchQuery("")}
+            >
+                <i className={`fa fa-close`}></i>
+            </button>
             {/* </span> */}
         </div>
     );
@@ -94,32 +105,29 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
                     {markQuerySubstring(dataset.name, searchQuery)}
                     <span className="badge">
                         {dataset.resources.length} resources&ensp;
-                        {isCollapsed ? (
-                            <i className={`fa fa-chevron-down`}></i>
-                        ) : (
-                            <i className={`fa fa-chevron-up`}></i>
-                        )}
+                        {dataset.resources.length > 0 &&
+                            (isCollapsed ? (
+                                <i className={`fa fa-chevron-down`}></i>
+                            ) : (
+                                <i className={`fa fa-chevron-up`}></i>
+                            ))}
                     </span>
                 </p>
             </div>
-            {!isCollapsed && (
-                <>
-                    <ul className="panel-body">
-                        {dataset.resources.length > 0 &&
-                            dataset.resources.map((resource) => (
-                                <ResourceButton
-                                    resource={resource}
-                                    dataset={dataset}
-                                    setResourceAndMetadata={
-                                        setResourceAndMetadata
-                                    }
-                                    searchQuery={searchQuery}
-                                />
-                            ))}
-                    </ul>
-                </>
+            {dataset.resources.length > 0 && !isCollapsed && (
+                <ul className="panel-body">
+                    {dataset.resources.length > 0 &&
+                        dataset.resources.map((resource) => (
+                            <ResourceButton
+                                resource={resource}
+                                dataset={dataset}
+                                setResourceAndMetadata={setResourceAndMetadata}
+                                searchQuery={searchQuery}
+                            />
+                        ))}
+                </ul>
             )}
-            {isCollapsed && isFiltered && (
+            {dataset.resources.length > 0 && isCollapsed && isFiltered && (
                 <>
                     <ul className="panel-body">
                         {dataset.resources.length > 0 &&
@@ -141,10 +149,10 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
                         className="text-center small"
                         onClick={() => setIsCollapsed(!isCollapsed)}
                     >
-                        ... and{' '}
+                        ... and{" "}
                         {dataset.resources.length -
                             getFilteredResources(dataset.resources, searchQuery)
-                                .length}{' '}
+                                .length}{" "}
                         non-matching resources (click to see them).
                     </footer>
                 </>
@@ -171,7 +179,7 @@ const ResourceButton = ({
                 Modified {resource.last_modified}
                 &ensp;|&ensp;
             </strong>
-            {resource.id.split('-')[0]}
+            {resource.id.split("-")[0]}
         </p>
     </li>
 );
@@ -190,7 +198,7 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset }) => (
                 Modified {resource.last_modified}
                 &ensp;|&ensp;
             </strong>
-            {resource.id.split('-')[0]}
+            {resource.id.split("-")[0]}
         </p>
     </div>
 );
@@ -200,8 +208,8 @@ export default function ResourceForker({
     setSelectedResource,
     setHiddenInputs,
 }) {
-    const [searchQuery, setSearchQuery] = useState('');
-    const [searchResults, setSearchResults] = useState('');
+    const [searchQuery, setSearchQuery] = useState("");
+    const [searchResults, setSearchResults] = useState("");
 
     useEffect(() => {
         getSearchResults(searchQuery, setSearchResults);
@@ -212,7 +220,7 @@ export default function ResourceForker({
             resource: resource,
             dataset: dataset,
         });
-        setHiddenInputs('resource', {
+        setHiddenInputs("resource", {
             format: resource.format,
             filename: resource.filename,
             fork_resource: resource.id,
@@ -227,7 +235,7 @@ export default function ResourceForker({
         if (completeRestart) {
             setHiddenInputs(null, {});
         } else {
-            setHiddenInputs('resource', {});
+            setHiddenInputs("resource", {});
         }
     };
 
@@ -257,13 +265,15 @@ export default function ResourceForker({
                         Found {searchResults.length} datasets with matching
                         resources. Keeping typing to refine these results.
                     </header>
-                    {searchResults.map((dataset) => (
-                        <DatasetGroup
-                            dataset={dataset}
-                            setResourceAndMetadata={setResourceAndMetadata}
-                            searchQuery={searchQuery}
-                        />
-                    ))}
+                    <div className="scroll">
+                        {searchResults.map((dataset) => (
+                            <DatasetGroup
+                                dataset={dataset}
+                                setResourceAndMetadata={setResourceAndMetadata}
+                                searchQuery={searchQuery}
+                            />
+                        ))}
+                    </div>
                 </div>
             )}
             {selectedResource.resource && (

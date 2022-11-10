@@ -78,7 +78,13 @@
     margin-top: 20px;
 }
 
-.resource-fork-search-results > .panel {
+.resource-fork-search-results > .scroll {
+    padding: 2px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.resource-fork-search-results .panel {
     margin-bottom: 10px;
     background-color: #fff;
     border: 1px solid transparent;
@@ -92,6 +98,10 @@
     padding: 0;
     background-color: inherit;
     color: #e31837;
+}
+
+.resource-fork-search-results .panel-heading {
+    cursor: pointer;
 }
 
 .resource-fork-search-results .panel-heading .badge {
@@ -119,6 +129,7 @@
 
 .resource-fork-search-results ul.panel-body li.list-group-item {
     margin-bottom: 5px;
+    cursor: pointer;
 }
 
 .resource-fork-search-results .resource-btn:hover {
@@ -143,4 +154,5 @@
 
 .resource-fork-details-tile p.description {
     margin-left: 5px;
+    cursor: pointer;
 }
