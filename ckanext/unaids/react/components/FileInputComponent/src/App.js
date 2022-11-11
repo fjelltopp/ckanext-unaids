@@ -54,7 +54,6 @@ export default function App({
                     };
                 case 'resource':
                     if (fileFormatField) fileFormatField.value = metadata.format;
-                    // setUploadFileName(metadata.filename);
                     return {
                         url_type: null,
                         lfs_prefix: null,
@@ -64,7 +63,6 @@ export default function App({
                         fork_resource: metadata.fork_resource
                     };
                 default:
-                    // setUploadFileName();
                     return {
                         url_type: null,
                         lfs_prefix: null,
@@ -155,7 +153,8 @@ export default function App({
                 />
             );
         } else {
-            // e.g. [undefined, null, "file"].includes(uploadMode)
+            // essentially this is catchin any of [undefined, null, "file"]
+            // and anything else will also  be treated as this general case
             return (
                 <FileUploader
                     {...{
