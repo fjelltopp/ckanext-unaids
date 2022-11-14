@@ -51,6 +51,7 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                 name="resource-search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault() }} // DEVNOTE - not IE compatible
                 ref={searchInput}
             />
             <button type="reset" className="btn-reset" onClick={() => setSearchQuery("")}>
