@@ -384,6 +384,7 @@ msgid "File Upload Error"
 msgstr "Erreur de téléchargement du fichier"
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:71
+#: ckanext/unaids/react/components/FileInputComponent/src/App.js:174
 msgid "Resource Create Error"
 msgstr "Erreur de création de la ressource"
 
@@ -416,6 +417,7 @@ msgid "Uploaded"
 msgstr "Téléchargé"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:90
+#: ckanext/unaids/react/components/FileInputComponent/src/App.js:178
 msgid "Please refresh this page and try again."
 msgstr "Veuillez rafraîchir cette page et réessayer."
 

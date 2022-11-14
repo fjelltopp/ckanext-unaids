@@ -141,8 +141,7 @@ export default function App({
             ) : (
                 <ProgressBar {...{ uploadProgress }} />
             );
-        }
-        if (uploadMode === 'url') {
+        } else if (uploadMode === 'url') {
             return <UrlUploader {...{ linkUrl, resetComponent }} />;
         } else if (uploadMode === 'resource') {
             return (
@@ -152,9 +151,7 @@ export default function App({
                     setHiddenInputs={setHiddenInputs}
                 />
             );
-        } else {
-            // essentially this is catchin any of [undefined, null, "file"]
-            // and anything else will also  be treated as this general case
+        } else if (uploadMode === 'file' || uploadMode === null){
             return (
                 <FileUploader
                     {...{
@@ -168,6 +165,20 @@ export default function App({
                         setUploadError,
                     }}
                 />
+            );
+        } else {
+            return (
+                <div className="alert alert-danger">
+                    <p>
+                        <i className="fa fa-exclamation-triangle"></i>{' '}
+                        {ckan.i18n._('Resource Create Error')}
+                    </p>
+                    <p>
+                        <span>
+                            {ckan.i18n._('Please refresh this page and try again.')}
+                        </span>
+                    </p>
+                </div>
             );
         }
     }
