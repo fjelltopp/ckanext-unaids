@@ -53,25 +53,35 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 ref={searchInput}
             />
-            {/* <span className="input-group-btn"> */}
             <button type="reset" className="btn-reset" onClick={() => setSearchQuery("")}>
                 <i className={`fa fa-close`}></i>
             </button>
-            {/* </span> */}
         </div>
     );
 };
 
 const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
-    const [isFiltered, setIsFiltered] = useState(false);
 
-    useEffect(() => {
-        setIsFiltered(!dataset.match);
-    }, []);
+    const markQuerySubstring = (string, searchQuery) => {
+        let newString = string;
+        searchQuery.split(" ").map((word) => {
+            if (word.length > 0) {
+                newString = newString.replaceAll(RegExp(word, "gi"), `<mark>$&</mark>`);
+            }
+        });
+        return parse(newString);
+    };
 
     const getFilteredResources = (resources, searchQuery) => {
-        return resources.filter((r) => r.name.toLowerCase().includes(searchQuery.toLowerCase()));
+        return resources.filter((resource) => {
+            return searchQuery
+                .toLowerCase()
+                .split(" ")
+                .filter((word) => word.length > 0)
+                .map((word) => resource.name.toLowerCase().includes(word))
+                .some((x) => x == true);
+        });
     };
 
     return (
@@ -93,37 +103,29 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
             </div>
             {dataset.resources.length > 0 && !isCollapsed && (
                 <ul className="panel-body">
-                    {dataset.resources.length > 0 &&
-                        dataset.resources.map((resource) => (
-                            <ResourceButton
-                                key={resource.id}
-                                resource={resource}
-                                dataset={dataset}
-                                setResourceAndMetadata={setResourceAndMetadata}
-                                searchQuery={searchQuery}
-                            />
-                        ))}
+                    {dataset.resources.map((resource) => (
+                        <ResourceButton
+                            key={resource.id}
+                            resource={resource}
+                            dataset={dataset}
+                            setResourceAndMetadata={setResourceAndMetadata}
+                            searchQuery={searchQuery}
+                        />
+                    ))}
                 </ul>
             )}
-            {dataset.resources.length > 0 && isCollapsed && isFiltered && (
-                <>
-                    <ul className="panel-body">
-                        {dataset.resources.length > 0 &&
-                            getFilteredResources(dataset.resources, searchQuery).map((resource) => (
-                                <ResourceButton
-                                    key={resource.id}
-                                    resource={resource}
-                                    dataset={dataset}
-                                    setResourceAndMetadata={setResourceAndMetadata}
-                                    searchQuery={searchQuery}
-                                />
-                            ))}
-                    </ul>
-                    <footer className="text-center small" onClick={() => setIsCollapsed(!isCollapsed)}>
-                        ... and {dataset.resources.length - getFilteredResources(dataset.resources, searchQuery).length}{" "}
-                        non-matching resources (click to see them).
-                    </footer>
-                </>
+            {dataset.resources.length > 0 && isCollapsed && (
+                <ul className="panel-body">
+                    {getFilteredResources(dataset.resources, searchQuery).map((resource) => (
+                        <ResourceButton
+                            key={resource.id}
+                            resource={resource}
+                            dataset={dataset}
+                            setResourceAndMetadata={setResourceAndMetadata}
+                            searchQuery={searchQuery}
+                        />
+                    ))}
+                </ul>
             )}
         </div>
     );
@@ -204,9 +206,6 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
             {!selectedResource.resource && <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
             {searchResults && !selectedResource.resource && (
                 <div className="resource-fork-search-results">
-                    <header className="small">
-                        Found {searchResults.length} datasets with matching resources. Keeping typing to refine these results.
-                    </header>
                     <div className="scroll">
                         {searchResults.map((dataset) => (
                             <DatasetGroup
