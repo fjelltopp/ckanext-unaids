@@ -96,6 +96,7 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
                     {dataset.resources.length > 0 &&
                         dataset.resources.map((resource) => (
                             <ResourceButton
+                                key={resource.id}
                                 resource={resource}
                                 dataset={dataset}
                                 setResourceAndMetadata={setResourceAndMetadata}
@@ -110,6 +111,7 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
                         {dataset.resources.length > 0 &&
                             getFilteredResources(dataset.resources, searchQuery).map((resource) => (
                                 <ResourceButton
+                                    key={resource.id}
                                     resource={resource}
                                     dataset={dataset}
                                     setResourceAndMetadata={setResourceAndMetadata}
@@ -128,7 +130,7 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
 };
 
 const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery }) => (
-    <li className="list-group-item resource-btn" onClick={() => setResourceAndMetadata(resource, dataset)}>
+    <li className="list-group-item resource-btn" key={resource.id} onClick={() => setResourceAndMetadata(resource, dataset)}>
         <p className="heading">{markQuerySubstring(resource.name, searchQuery)}</p>
         <p className="description">
             <strong>
@@ -208,6 +210,7 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
                     <div className="scroll">
                         {searchResults.map((dataset) => (
                             <DatasetGroup
+                                key={dataset.id}
                                 dataset={dataset}
                                 setResourceAndMetadata={setResourceAndMetadata}
                                 searchQuery={searchQuery}
