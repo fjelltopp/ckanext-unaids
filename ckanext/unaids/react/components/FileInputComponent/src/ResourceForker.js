@@ -26,10 +26,7 @@ const markQuerySubstring = (string, searchQuery) => {
     let newString = string;
     searchQuery.split(" ").map((word) => {
         if (word.length > 0) {
-            newString = newString.replaceAll(
-                RegExp(word, "gi"),
-                `<mark>$&</mark>`
-            );
+            newString = newString.replaceAll(RegExp(word, "gi"), `<mark>$&</mark>`);
         }
     });
     return parse(newString);
@@ -43,11 +40,7 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
 
     return (
         <div className="field">
-            <label
-                id="resource-search-label"
-                htmlFor="resource-search"
-                className="btn-search"
-            >
+            <label id="resource-search-label" htmlFor="resource-search" className="btn-search">
                 <i className={`fa fa-search`}></i>
             </label>
             <input
@@ -61,11 +54,7 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                 ref={searchInput}
             />
             {/* <span className="input-group-btn"> */}
-            <button
-                type="reset"
-                className="btn-reset"
-                onClick={() => setSearchQuery("")}
-            >
+            <button type="reset" className="btn-reset" onClick={() => setSearchQuery("")}>
                 <i className={`fa fa-close`}></i>
             </button>
             {/* </span> */}
@@ -82,20 +71,13 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
     }, []);
 
     const getFilteredResources = (resources, searchQuery) => {
-        return resources.filter((r) =>
-            r.name.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+        return resources.filter((r) => r.name.toLowerCase().includes(searchQuery.toLowerCase()));
     };
 
     return (
         <div className="panel">
-            <div
-                className="panel-heading"
-                onClick={() => setIsCollapsed(!isCollapsed)}
-            >
-                <p className="heading">
-                    {markQuerySubstring(dataset.title, searchQuery)}
-                </p>
+            <div className="panel-heading" onClick={() => setIsCollapsed(!isCollapsed)}>
+                <p className="heading">{markQuerySubstring(dataset.title, searchQuery)}</p>
                 <p className="description">
                     <strong>
                         {markQuerySubstring(dataset.owner_org, searchQuery)}
@@ -105,11 +87,7 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
                     <span className="badge">
                         {dataset.resources.length} resources&ensp;
                         {dataset.resources.length > 0 &&
-                            (isCollapsed ? (
-                                <i className={`fa fa-chevron-down`}></i>
-                            ) : (
-                                <i className={`fa fa-chevron-up`}></i>
-                            ))}
+                            (isCollapsed ? <i className={`fa fa-chevron-down`}></i> : <i className={`fa fa-chevron-up`}></i>)}
                     </span>
                 </p>
             </div>
@@ -130,28 +108,17 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
                 <>
                     <ul className="panel-body">
                         {dataset.resources.length > 0 &&
-                            getFilteredResources(
-                                dataset.resources,
-                                searchQuery
-                            ).map((resource) => (
+                            getFilteredResources(dataset.resources, searchQuery).map((resource) => (
                                 <ResourceButton
                                     resource={resource}
                                     dataset={dataset}
-                                    setResourceAndMetadata={
-                                        setResourceAndMetadata
-                                    }
+                                    setResourceAndMetadata={setResourceAndMetadata}
                                     searchQuery={searchQuery}
                                 />
                             ))}
                     </ul>
-                    <footer
-                        className="text-center small"
-                        onClick={() => setIsCollapsed(!isCollapsed)}
-                    >
-                        ... and{" "}
-                        {dataset.resources.length -
-                            getFilteredResources(dataset.resources, searchQuery)
-                                .length}{" "}
+                    <footer className="text-center small" onClick={() => setIsCollapsed(!isCollapsed)}>
+                        ... and {dataset.resources.length - getFilteredResources(dataset.resources, searchQuery).length}{" "}
                         non-matching resources (click to see them).
                     </footer>
                 </>
@@ -160,19 +127,9 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
     );
 };
 
-const ResourceButton = ({
-    resource,
-    dataset,
-    setResourceAndMetadata,
-    searchQuery,
-}) => (
-    <li
-        className="list-group-item resource-btn"
-        onClick={() => setResourceAndMetadata(resource, dataset)}
-    >
-        <p className="heading">
-            {markQuerySubstring(resource.name, searchQuery)}
-        </p>
+const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery }) => (
+    <li className="list-group-item resource-btn" onClick={() => setResourceAndMetadata(resource, dataset)}>
+        <p className="heading">{markQuerySubstring(resource.name, searchQuery)}</p>
         <p className="description">
             <strong>
                 Modified {resource.last_modified}
@@ -202,11 +159,7 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset }) => (
     </div>
 );
 
-export default function ResourceForker({
-    selectedResource,
-    setSelectedResource,
-    setHiddenInputs,
-}) {
+export default function ResourceForker({ selectedResource, setSelectedResource, setHiddenInputs }) {
     const [searchQuery, setSearchQuery] = useState("");
     const [searchResults, setSearchResults] = useState("");
 
@@ -239,30 +192,18 @@ export default function ResourceForker({
     };
 
     return (
-        <div
-            className="resource-fork-component"
-            data-testid="ResourceForkComponent"
-        >
+        <div className="resource-fork-component" data-testid="ResourceForkComponent">
             <header>
                 <p>Import data from another resource:</p>
-                <span
-                    className="resource-fork-escape"
-                    onClick={() => clearResourceAndMetadata(true)}
-                >
+                <span className="resource-fork-escape" onClick={() => clearResourceAndMetadata(true)}>
                     <i className={`fa fa-close`}></i>
                 </span>
             </header>
-            {!selectedResource.resource && (
-                <SearchBar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                />
-            )}
+            {!selectedResource.resource && <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
             {searchResults && !selectedResource.resource && (
                 <div className="resource-fork-search-results">
                     <header className="small">
-                        Found {searchResults.length} datasets with matching
-                        resources. Keeping typing to refine these results.
+                        Found {searchResults.length} datasets with matching resources. Keeping typing to refine these results.
                     </header>
                     <div className="scroll">
                         {searchResults.map((dataset) => (
@@ -277,15 +218,9 @@ export default function ResourceForker({
             )}
             {selectedResource.resource && (
                 <>
-                    <ResourceWithDatasetInfoTile
-                        resource={selectedResource.resource}
-                        dataset={selectedResource.dataset}
-                    />
+                    <ResourceWithDatasetInfoTile resource={selectedResource.resource} dataset={selectedResource.dataset} />
                     <footer className="text-right">
-                        <button
-                            className="btn btn-default"
-                            onClick={() => clearResourceAndMetadata(false)}
-                        >
+                        <button className="btn btn-default" onClick={() => clearResourceAndMetadata(false)}>
                             <i className={`fa fa-search`}></i>&ensp;
                             <span>Choose Again</span>
                         </button>
