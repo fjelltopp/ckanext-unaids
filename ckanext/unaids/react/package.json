@@ -30,7 +30,7 @@
     "@testing-library/user-event": "^14.1.0",
     "jest": "*",
     "jest-environment-jsdom": "^29.3.1",
-    "jest-extended": "*",
+    "jest-extended": "^3.1.0",
     "path-browserify": "^1.0.1",
     "react-scripts": "5.0.0",
     "webpack": "^5.72.0",

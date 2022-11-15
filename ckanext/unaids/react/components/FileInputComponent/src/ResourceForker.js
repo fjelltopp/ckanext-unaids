@@ -51,8 +51,11 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                 name="resource-search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => { e.key === 'Enter' && e.preventDefault() }} // DEVNOTE - not IE compatible
+                onKeyDown={(e) => {
+                    e.key === "Enter" && e.preventDefault();
+                }} // DEVNOTE - not IE compatible
                 ref={searchInput}
+                data-testid="resource-fork-search-bar"
             />
             <button type="reset" className="btn-reset" onClick={() => setSearchQuery("")}>
                 <i className={`fa fa-close`}></i>
@@ -166,7 +169,7 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset }) => (
 
 export default function ResourceForker({ selectedResource, setSelectedResource, setHiddenInputs }) {
     const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState("");
+    const [searchResults, setSearchResults] = useState([]);
 
     useEffect(() => {
         getSearchResults(searchQuery, setSearchResults);
@@ -204,9 +207,10 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
                     <i className={`fa fa-close`}></i>
                 </span>
             </header>
+            <p>{JSON.stringify(searchResults)}</p>
             {!selectedResource.resource && <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
             {searchResults && !selectedResource.resource && (
-                <div className="resource-fork-search-results">
+                <div className="resource-fork-search-results" data-testid="resource-fork-search-results">
                     <div className="scroll">
                         {searchResults.map((dataset) => (
                             <DatasetGroup
