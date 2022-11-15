@@ -207,7 +207,6 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
                     <i className={`fa fa-close`}></i>
                 </span>
             </header>
-            <p>{JSON.stringify(searchResults)}</p>
             {!selectedResource.resource && <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
             {searchResults && !selectedResource.resource && (
                 <div className="resource-fork-search-results" data-testid="resource-fork-search-results">
