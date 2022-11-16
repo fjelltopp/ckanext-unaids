@@ -126,11 +126,45 @@
 
 .resource-fork-search-results ul.panel-body li.list-group-item {
     margin-bottom: 5px;
+}
+
+.resource-fork-search-results ul.panel-body li.list-group-item:not(.disabled) {
     cursor: pointer;
 }
 
-.resource-fork-search-results .resource-btn:hover {
-    background-color: #e6e6e6;
+.restricted-item {
+    color: #808080;
+    font-style: italic;
+}
+
+.spin::before {
+    animation: 1s linear infinite spinner;
+    animation-play-state: running;
+    border: solid 2px transparent;
+    border-bottom-color: #e31837;
+    border-radius: 50%;
+    content: "";
+    height: 12px;
+    position: absolute;
+    bottom: 10px;
+    left: -1em;
+    transform: translate3d(-50%, -50%, 0);
+    width: 12px;
+    will-change: transform;
+}
+@keyframes spinner {
+    0% {
+        transform: translate3d(-50%, -50%, 0) rotate(0deg);
+    }
+    100% {
+        transform: translate3d(-50%, -50%, 0) rotate(360deg);
+    }
+}
+
+.resource-fork-search-results .dropdown.btn-group {
+    position: absolute;
+    top: 9px;
+    right: 10px;
 }
 
 /*FORK RESOURCE SELECTED RESOURCE */

@@ -14,12 +14,39 @@ const getSearchResults = (searchQuery, setSearchResults) => {
             },
         };
         axios
-            .post("/api/3/action/resource_autocomplete", body, config) // QUERY why does this need to be POST?
+            .post("/api/3/action/resource_autocomplete", body, config)
             .then((response) => {
                 setSearchResults(response.data.result);
             })
             .catch((error) => console.error(error));
     }
+};
+
+const checkResourceAccess = (packageID, resourceID, setResourceAccess) => {
+    const body = JSON.stringify({
+        package_id: packageID,
+        resource_id: resourceID,
+    });
+
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+    axios
+        .post("/api/3/action/restricted_check_access", body, config)
+        .then((response) => {
+            if (response.status == 200) {
+                setResourceAccess(response.data.result);
+            } else {
+                setResourceAccess(false);
+                console.log(`Error: Request failed with status code ` + response.status);
+            }
+        })
+        .catch((error) => {
+            setResourceAccess(false);
+            console.log(error);
+        });
 };
 
 const markQuerySubstring = (string, searchQuery) => {
@@ -34,6 +61,7 @@ const markQuerySubstring = (string, searchQuery) => {
 
 const SearchBar = ({ searchQuery, setSearchQuery }) => {
     const searchInput = useRef(null);
+
     useEffect(() => {
         searchInput.current.focus();
     }, []);
@@ -135,18 +163,42 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery }) => {
     );
 };
 
-const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery }) => (
-    <li className="list-group-item resource-btn" key={resource.id} onClick={() => setResourceAndMetadata(resource, dataset)}>
-        <p className="heading">{markQuerySubstring(resource.name, searchQuery)}</p>
-        <p className="description">
-            <strong>
-                Modified {resource.last_modified}
-                &ensp;|&ensp;
-            </strong>
-            {resource.id.split("-")[0]}
-        </p>
-    </li>
-);
+const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery }) => {
+    const [resourceAccess, setResourceAccess] = useState();
+
+    useEffect(() => {
+        setTimeout(() => console.log("pausing..."), 3000);
+        checkResourceAccess(dataset.id, resource.id, setResourceAccess);
+    }, []);
+    //  FIXME style="margin-right: 5px;" was removed from the i below
+    // TODO move request access badge
+    // TODO jest tests need the resource access endpoint mocked
+
+    return (
+        <li
+            className={`list-group-item resource-btn `+(!resourceAccess && "disabled")}
+            key={resource.id}
+            onClick={() => setResourceAndMetadata(resource, dataset)}
+        >
+            <p className={`heading `+(resourceAccess==false && "restricted-item")}>{markQuerySubstring(resource.name, searchQuery)}</p>
+            <p className="description">
+                <strong>
+                    Modified {resource.last_modified}
+                    &ensp;|&ensp;
+                </strong>
+                {resource.id.split("-")[0]}&ensp;|&ensp;{dataset.id}
+            </p>
+            <div className="dropdown btn-group">
+                {resourceAccess == null && <p><span className="spin"></span>Checking access...</p>}
+                {resourceAccess == false && (
+                    <a href={`/dataset/` + dataset.name + `/restricted_request_access/` + resource.id} className="btn">
+                        <i className="fa fa-icon fa-unlock-alt"></i>Request Access
+                    </a>
+                )}
+            </div>
+        </li>
+    );
+};
 
 const ResourceWithDatasetInfoTile = ({ resource, dataset }) => (
     <div className="resource-fork-details-tile">
