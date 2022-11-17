@@ -23,6 +23,9 @@ const existingResourceData = {
   sha256: getAttr('existingSha256'),
   fileName: getAttr('existingFileName'),
   size: getAttr('existingSize'),
+  forkResource: getAttr('existingForkResource'),
+  forkSynced: getAttr('existingForkSynced') == "True",
+  forkActivity: getAttr('existingForkActivity'),
 };
 
 const root = createRoot(componentElement);

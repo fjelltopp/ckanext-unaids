@@ -263,3 +263,6 @@ def user_update(original_action, context, data_dict):
 
     user.update(plugin_extras["unaids"])
     return user
+
+def time_ago_from_timestamp(context, data_dict):
+    return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))

@@ -37,7 +37,7 @@ const checkResourceAccess = (packageID, resourceID, setResourceAccess) => {
         .post("/api/3/action/restricted_check_access", body, config)
         .then((response) => {
             if (response.status == 200) {
-                setResourceAccess(response.data.result.success)
+                setResourceAccess(response.data.result.success);
             } else {
                 console.log(`Error: Request failed with status code ` + response.status);
                 setResourceAccess(false);
@@ -172,11 +172,13 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
 
     return (
         <li
-            className={`list-group-item resource-btn `+(!resourceAccess && "disabled")}
+            className={`list-group-item resource-btn ` + (!resourceAccess && "disabled")}
             key={resource.id}
             onClick={() => setResourceAndMetadata(resource, dataset)}
         >
-            <p className={`heading `+(resourceAccess==false && "restricted-item")}>{markQuerySubstring(resource.name, searchQuery)}</p>
+            <p className={`heading ` + (resourceAccess == false && "restricted-item")}>
+                {markQuerySubstring(resource.name, searchQuery)}
+            </p>
             <p className="description">
                 <strong>
                     Modified {resource.last_modified}
@@ -185,7 +187,11 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                 {resource.id.split("-")[0]}
             </p>
             <div className="dropdown btn-group">
-                {resourceAccess == null && <p><span className="spin"></span>Checking access...</p>}
+                {resourceAccess == null && (
+                    <p>
+                        <span className="spin"></span>Checking access...
+                    </p>
+                )}
                 {resourceAccess == false && (
                     <a href={`/dataset/` + dataset.name + `/restricted_request_access/` + resource.id} className="btn">
                         <i className="fa fa-icon fa-unlock-alt"></i>Request Access
@@ -196,24 +202,53 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
     );
 };
 
-const ResourceWithDatasetInfoTile = ({ resource, dataset }) => (
-    <div className="resource-fork-details-tile">
-        <p className="heading">{resource.name}</p>
-        <p className="description">
-            <strong>
-                {dataset.owner_org}
-                &ensp;|&ensp;
-            </strong>
-            {dataset.name}
-            <br />
-            <strong>
-                Modified {resource.last_modified}
-                &ensp;|&ensp;
-            </strong>
-            {resource.id.split("-")[0]}
-        </p>
-    </div>
-);
+const timeAgoFromTimestamp = async (timestamp, setlastModified) => {
+    const body = JSON.stringify({
+        timestamp: timestamp,
+    });
+
+    const config = {
+        headers: {
+            "Content-Type": "application/json",
+        },
+    };
+
+    axios
+        .post("/api/3/action/time_ago_from_timestamp", body, config)
+        .then((response) => setlastModified(response.data.result))
+        .catch((error) => {});
+};
+
+const ResourceWithDatasetInfoTile = ({ resource, dataset }) => {
+    const [lastModified, setlastModified] = useState();
+
+    useEffect(() => {
+        if (resource.last_modified.match(/\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?/)) {
+            timeAgoFromTimestamp(resource.last_modified, setlastModified);
+        } else {
+            setlastModified(resource.last_modified);
+        }
+    }, []);
+
+    return (
+        <div className="resource-fork-details-tile">
+            <p className="heading">{resource.name}</p>
+            <p className="description">
+                <strong>
+                    {dataset.organization ? dataset.organization.title : dataset.owner_org}
+                    &ensp;|&ensp;
+                </strong>
+                {dataset.name}
+                <br />
+                <strong>
+                    Modified&nbsp;{lastModified}
+                    &ensp;|&ensp;
+                </strong>
+                {resource.id.split("-")[0]}
+            </p>
+        </div>
+    );
+};
 
 export default function ResourceForker({ selectedResource, setSelectedResource, setHiddenInputs }) {
     const [searchQuery, setSearchQuery] = useState("");
@@ -227,6 +262,7 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
         setSelectedResource({
             resource: resource,
             dataset: dataset,
+            synced: true,
         });
         setHiddenInputs("resource", {
             format: resource.format,
@@ -239,6 +275,7 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
         setSelectedResource({
             resource: null,
             dataset: null,
+            synced: null,
         });
         if (completeRestart) {
             setHiddenInputs(null, {});
@@ -274,10 +311,25 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
                 <>
                     <ResourceWithDatasetInfoTile resource={selectedResource.resource} dataset={selectedResource.dataset} />
                     <footer className="text-right">
-                        <button className="btn btn-default" onClick={() => clearResourceAndMetadata(false)}>
-                            <i className={`fa fa-search`}></i>&ensp;
-                            <span>Choose Again</span>
-                        </button>
+                        <div className="btn-group">
+                            {!selectedResource.synced && (
+                                <>
+                                    <header className="small">Data out of sync since imported</header>
+                                    <button
+                                        className="btn btn-default"
+                                        onClick={() =>
+                                            setResourceAndMetadata(selectedResource.resource, selectedResource.dataset)
+                                        }
+                                    >
+                                        Synchronise Now
+                                    </button>
+                                </>
+                            )}
+                            <button className="btn btn-default" onClick={() => clearResourceAndMetadata(false)}>
+                                <i className={`fa fa-search`}></i>&ensp;
+                                <span>Select Different Resource</span>
+                            </button>
+                        </div>
                     </footer>
                 </>
             )}
