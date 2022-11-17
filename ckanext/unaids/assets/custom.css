@@ -832,3 +832,7 @@ div.ckanext-datapreview{
   padding:5px;
   margin: 0px;
 }
+
+.homepage .help-panel{
+  padding: 60px 0px;
+}
