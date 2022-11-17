@@ -19,7 +19,7 @@
 
 .resource-fork-component {
     text-align: left;
-    padding: 20px;
+    padding: 15px;
     border-width: 3px;
     border-radius: 2px;
     border-color: #ebebeb;
@@ -75,8 +75,7 @@
 /* FORK RESOURCE SEARCH RESULTS */
 
 .resource-fork-search-results > .scroll {
-    margin-top: 20px;
-    padding: 2px;
+    margin-top: 15px;
     max-height: 50vh;
     overflow-y: auto;
 }
@@ -90,20 +89,28 @@
     border-color: #ddd;
     margin-bottom: 10px;
 }
+.resource-fork-search-results .panel:last-child{
+    margin-bottom: 0px;
+}
 
 .resource-fork-search-results mark {
-    padding: 0;
-    background-color: inherit;
-    color: #e31837;
+    background-color: #e3183747;
+    padding: 3px 3px;
+    border-radius: 3px;
 }
 
 .resource-fork-search-results .panel-heading {
     cursor: pointer;
+    position: relative;
+    padding: 10px 15px;
 }
 
 .resource-fork-search-results .panel-heading .badge {
-    float: right;
     background-color: #e31837;
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    padding: 5px 10px;
 }
 
 .resource-fork-search-results .panel p.description,
@@ -121,15 +128,16 @@
 }
 
 .resource-fork-search-results ul.panel-body {
-    padding: 10px 5px;
-}
-
-.resource-fork-search-results ul.panel-body li.list-group-item {
-    margin-bottom: 5px;
+    padding: 0px 15px 15px;
+    margin-bottom: 0px;
 }
 
 .resource-fork-search-results ul.panel-body li.list-group-item:not(.disabled) {
     cursor: pointer;
+}
+
+.resource-fork-search-results ul.panel-body li.list-group-item:not(.disabled):hover{
+    background: #fafafa;
 }
 
 .restricted-item {
@@ -171,8 +179,8 @@
 
 .resource-fork-escape {
     position: absolute;
-    right: 10px;
-    top: 5px;
+    right: 15px;
+    top: 12px;
 }
 
 .resource-fork-details-tile {
@@ -180,9 +188,9 @@
     background-color: #fff;
     border: 1px solid #ddd;
     border-radius: 4px;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 }
 
 .resource-fork-details-tile p.description {
-    margin-left: 5px;
+    margin-top: 5px;
 }
