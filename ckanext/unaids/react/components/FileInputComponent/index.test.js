@@ -4,7 +4,7 @@ import axios from "axios";
 import * as giftless from "giftless-client";
 
 jest.mock("axios");
-let mockedAuthTokenRequest = undefined;
+let mockedAPI = undefined;
 
 const searchResultsForNorth = {
     help: "http://adr.local/api/3/action/help_show?name=resource_autocomplete",
@@ -109,11 +109,25 @@ function setupMocks() {
         default: jest.fn(),
         upload: jest.fn(() => Promise.resolve()),
     }));
-    mockedAuthTokenRequest = axios.post.mockImplementation(() =>
-        Promise.resolve({
-            data: { result: { token: "MockedToken" } },
-        })
-    );
+    mockedAPI = axios.post.mockImplementation((url) => {
+        switch (url) {
+            case "/api/3/action/authz_authorize":
+                return Promise.resolve({
+                    status: 200,
+                    data: { result: { token: "MockedToken" } },
+                });
+            case "/api/3/action/resource_autocomplete":
+                return Promise.resolve({
+                    status: 200,
+                    data: searchResultsForNorth,
+                });
+            case "/api/3/action/restricted_check_access":
+                return Promise.resolve({
+                    status: 200,
+                    data: { result: { success: true } },
+                });
+        }
+    });
 }
 
 async function renderAppComponent(existingResourceData) {
@@ -137,6 +151,7 @@ describe("upload a new resource", () => {
             sha256: null,
             fileName: null,
             size: null,
+            fork_resource: null,
         });
         expect(screen.getByTestId("FileUploaderButton")).toBeInTheDocument();
         expect(screen.getByTestId("UrlUploaderButton")).toBeInTheDocument();
@@ -152,6 +167,7 @@ describe("upload a new resource", () => {
         expect(screen.getByTestId("lfs_prefix")).toHaveValue("");
         expect(screen.getByTestId("sha256")).toHaveValue("");
         expect(screen.getByTestId("size")).toHaveValue("");
+        expect(screen.getByTestId("fork_resource")).toHaveValue("");
     });
 
     describe("file upload", () => {
@@ -161,7 +177,7 @@ describe("upload a new resource", () => {
             Object.defineProperty(component, "files", { value: [file] });
             fireEvent.drop(component);
             await screen.findByText("data.json");
-            expect(mockedAuthTokenRequest).toHaveBeenCalledTimes(1);
+            expect(mockedAPI).toHaveBeenCalledTimes(1);
             expect(screen.getByTestId("url_type")).toHaveValue("upload");
             expect(screen.getByTestId("lfs_prefix")).toHaveValue("mockedOrgId/mockedDatasetName");
             expect(screen.getByTestId("sha256")).toHaveValue("mockedSha256");
@@ -176,21 +192,19 @@ describe("upload a new resource", () => {
     });
 
     describe("fork resource", () => {
-        test("search for matching dataset and select resource", async () => {
+        beforeEach(() => {
             fireEvent.click(screen.getByTestId("ResourceForkButton"));
             expect(screen.getByTestId("ResourceForkComponent")).toBeInTheDocument();
             expect(screen.getByTestId("resource-fork-search-bar")).toBeInTheDocument();
+        });
 
-            axios.post.mockImplementationOnce(() =>
-                Promise.resolve({
-                    data: searchResultsForNorth,
-                })
-            );
+        test("search for matching dataset", async () => {
             fireEvent.change(screen.getByTestId("resource-fork-search-bar"), { target: { value: "north" } });
             await waitFor(() => expect(screen.getByTestId("resource-fork-search-results")).toBeInTheDocument());
             await waitFor(() =>
                 expect(screen.getByTestId("resource-fork-search-results").getElementsByClassName("panel")).toHaveLength(2)
             );
+
             expect(screen.getByText("2021 Santa Claus Lists")).toBeInTheDocument();
             expect(screen.getAllByText("North")[0].tagName).toMatch("MARK");
             expect(
@@ -203,19 +217,17 @@ describe("upload a new resource", () => {
                     .parentElement.parentElement.getElementsByClassName("list-group-item resource-btn")
             ).toBeEmpty();
             fireEvent.click(screen.getByText("2021 Santa Claus Lists"));
-            expect(
-                screen
-                    .getByText("2021 Santa Claus Lists")
-                    .parentElement.parentElement.getElementsByClassName("list-group-item resource-btn")
-            ).toHaveLength(2);
+            await waitFor(() =>
+                expect(
+                    screen
+                        .getByText("2021 Santa Claus Lists")
+                        .parentElement.parentElement.getElementsByClassName("list-group-item resource-btn")
+                ).toHaveLength(2)
+            );
         });
 
         test("search for matching resource", async () => {
-            fireEvent.click(screen.getByTestId("ResourceForkButton"));
-            expect(screen.getByTestId("ResourceForkComponent")).toBeInTheDocument();
-            expect(screen.getByTestId("resource-fork-search-bar")).toBeInTheDocument();
-
-            axios.post.mockImplementationOnce(() =>
+            mockedAPI.mockImplementationOnce(() =>
                 Promise.resolve({
                     data: searchResultsForNorthNice,
                 })
@@ -225,26 +237,23 @@ describe("upload a new resource", () => {
             await waitFor(() =>
                 expect(screen.getByTestId("resource-fork-search-results").getElementsByClassName("panel")).toHaveLength(1)
             );
+
+            expect(
+                screen
+                    .getByText("2021 Santa Claus Lists")
+                    .parentElement.parentElement.getElementsByClassName("list-group-item resource-btn")
+            ).toHaveLength(1);
+            fireEvent.click(screen.getByText("2021 Santa Claus Lists"));
             await waitFor(() =>
                 expect(
                     screen
                         .getByText("2021 Santa Claus Lists")
                         .parentElement.parentElement.getElementsByClassName("list-group-item resource-btn")
-                ).toHaveLength(1)
+                ).toHaveLength(2)
             );
-            fireEvent.click(screen.getByText("2021 Santa Claus Lists"));
-            expect(
-                screen
-                    .getByText("2021 Santa Claus Lists")
-                    .parentElement.parentElement.getElementsByClassName("list-group-item resource-btn")
-            ).toHaveLength(2);
         });
 
         test("select a resource", async () => {
-            fireEvent.click(screen.getByTestId("ResourceForkButton"));
-            expect(screen.getByTestId("ResourceForkComponent")).toBeInTheDocument();
-            expect(screen.getByTestId("resource-fork-search-bar")).toBeInTheDocument();
-
             expect(screen.getByTestId("url_type")).toHaveValue("");
             expect(screen.getByTestId("lfs_prefix")).toHaveValue("");
             expect(screen.getByTestId("sha256")).toHaveValue("");
@@ -252,11 +261,6 @@ describe("upload a new resource", () => {
             expect(screen.getByTestId("url")).toHaveValue("");
             expect(screen.getByTestId("fork_resource")).toHaveValue("");
 
-            axios.post.mockImplementationOnce(() =>
-                Promise.resolve({
-                    data: searchResultsForNorth,
-                })
-            );
             fireEvent.change(screen.getByTestId("resource-fork-search-bar"), { target: { value: "north" } });
             await waitFor(() =>
                 expect(screen.getByTestId("resource-fork-search-results").getElementsByClassName("panel")).toHaveLength(2)

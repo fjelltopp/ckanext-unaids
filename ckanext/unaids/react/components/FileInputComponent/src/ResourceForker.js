@@ -37,15 +37,15 @@ const checkResourceAccess = (packageID, resourceID, setResourceAccess) => {
         .post("/api/3/action/restricted_check_access", body, config)
         .then((response) => {
             if (response.status == 200) {
-                setResourceAccess(response.data.result);
+                setResourceAccess(response.data.result.success)
             } else {
-                setResourceAccess(false);
                 console.log(`Error: Request failed with status code ` + response.status);
+                setResourceAccess(false);
             }
         })
         .catch((error) => {
-            setResourceAccess(false);
             console.log(error);
+            setResourceAccess(false);
         });
 };
 
@@ -167,12 +167,8 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
     const [resourceAccess, setResourceAccess] = useState();
 
     useEffect(() => {
-        setTimeout(() => console.log("pausing..."), 3000);
         checkResourceAccess(dataset.id, resource.id, setResourceAccess);
     }, []);
-    //  FIXME style="margin-right: 5px;" was removed from the i below
-    // TODO move request access badge
-    // TODO jest tests need the resource access endpoint mocked
 
     return (
         <li
@@ -186,7 +182,7 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                     Modified {resource.last_modified}
                     &ensp;|&ensp;
                 </strong>
-                {resource.id.split("-")[0]}&ensp;|&ensp;{dataset.id}
+                {resource.id.split("-")[0]}
             </p>
             <div className="dropdown btn-group">
                 {resourceAccess == null && <p><span className="spin"></span>Checking access...</p>}

@@ -20,6 +20,7 @@
     "start": "webpack --config webpack.config.js --watch",
     "build": "webpack --config webpack.config.js",
     "test": "jest",
+    "test:debug": "node --inspect node_modules/.bin/jest --runInBand",
     "test:watch": "jest --watch"
   },
   "devDependencies": {
