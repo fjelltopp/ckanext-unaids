@@ -24,9 +24,7 @@ export default function FileUploader({
             .catch((error) => {
                 setUploadError({
                     error: ckan.i18n._('Authorisation Error'),
-                    description: ckan.i18n._(
-                        'You are not authorized to upload this resource.'
-                    ),
+                    description: ckan.i18n._('You are not authorized to upload this resource.'),
                 });
                 throw error;
             });
@@ -41,9 +39,7 @@ export default function FileUploader({
             .catch((error) => {
                 setUploadError({
                     error: ckan.i18n._('Server Error'),
-                    description: ckan.i18n._(
-                        'An unknown server error has occurred.'
-                    ),
+                    description: ckan.i18n._('An unknown server error has occurred.'),
                 });
                 throw error;
             });
@@ -73,18 +69,12 @@ export default function FileUploader({
             if (rejectedFiles.length > 1) {
                 setUploadError({
                     error: ckan.i18n._('Too many files'),
-                    description: ckan.i18n._(
-                        'You can only upload one file for each resource.'
-                    ),
+                    description: ckan.i18n._('You can only upload one file for each resource.'),
                 });
-            } else if (
-                JSON.stringify(rejectedFiles).includes('file-too-large')
-            ) {
+            } else if (JSON.stringify(rejectedFiles).includes('file-too-large')) {
                 setUploadError({
                     error: ckan.i18n._('File Too Large'),
-                    description: ckan.i18n._(
-                        `Resources cannot be larger than ${maxResourceSize} megabytes.`
-                    ),
+                    description: ckan.i18n._(`Resources cannot be larger than ${maxResourceSize} megabytes.`),
                 });
             } else {
                 setUploadError({
@@ -127,20 +117,12 @@ export default function FileUploader({
     ];
 
     return (
-        <div
-            {...getRootProps({ className: 'dropzone' })}
-            data-testid="FileUploaderComponent"
-        >
+        <div {...getRootProps({ className: 'dropzone' })} data-testid="FileUploaderComponent">
             <input {...getInputProps()} data-testid="FileUploaderInput" />
             <p>{ckan.i18n._('Drag a file into this box or')}</p>
             <div className="btn-group">
                 {uploadOptions.map((option) => (
-                    <button
-                        key={option.name}
-                        data-testid={option.name}
-                        className="btn btn-default"
-                        onClick={option.onClick}
-                    >
+                    <button key={option.name} data-testid={option.name} className="btn btn-default" onClick={option.onClick}>
                         <i className={`fa ${option.icon}`}></i>
                         {option.label}
                     </button>
