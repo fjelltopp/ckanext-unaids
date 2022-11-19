@@ -267,13 +267,9 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset, synced }) => {
                 {resource.id}
             </p>
             {!synced && (
-                <div className="data-out-of-sync-label">
-                    <p>
-                        <span className="label label-warning">
-                            <i className="fa fa-warning"></i>&ensp; Data out of date
-                        </span>
-                    </p>
-                </div>
+                <span className="label label-warning data-out-of-sync-label">
+                    <i className="fa fa-warning"></i>&ensp; Data out of date
+                </span>
             )}
         </div>
     );
