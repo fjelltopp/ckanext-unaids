@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block resource_read_url %}
-
+    <div class="resource-read-metadata">
     <p class="text-muted break-word">{{ _('Resource ID:') }} <span style="color: #e31837">{{ res.id }}</span></p>
 
     {% if res.format == 'url'%}
@@ -35,10 +35,11 @@
             {% if not res.fork_synced %}
                 &nbsp;(<a class="resource-url-analytics" href="{{ parent.resource.url }}?activity_id={{ res.fork_activity }}" title="{{ parent.resource.url }}?activity_id={{ res.fork_activity }}">old version</a>)
             {% else %}
-                &nbsp;<span class="alert alert-success">Data Synchronised</a>
+                &nbsp;<span class="sync-success"> <i class="fa fa-check"></i> Data Synchronised</a></span>
             {% endif %}
         </p>
     {% endif %}
+    </div>
 {% endblock %}
 
 {% block download_resource_button %}
