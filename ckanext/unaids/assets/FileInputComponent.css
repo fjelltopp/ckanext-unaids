@@ -140,6 +140,18 @@
     background: #fafafa;
 }
 
+.resource-fork-search-results ul.panel-body li.list-group-item .resource-icon{
+    float: left;
+    margin-right: 15px;
+    height: 35px;
+    width: 32px;
+}
+
+.resource-fork-search-results ul.panel-body li.list-group-item .resource-metadata{
+    display: inline-block;
+}
+
+
 .restricted-item {
     color: #808080;
     font-style: italic;
@@ -201,3 +213,4 @@
     right: 15px;
     bottom: 12px;
 }
+

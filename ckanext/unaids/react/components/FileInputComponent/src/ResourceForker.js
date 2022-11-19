@@ -184,16 +184,23 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
             key={resource.id}
             onClick={() => setResourceAndMetadata(resource, dataset)}
         >
-            <p className={`heading ` + (resourceAccess == false && 'restricted-item')}>
-                {markQuerySubstring(resource.name, searchQuery)}
-            </p>
-            <p className="description">
-                <strong>
-                    Modified {resource.last_modified}
-                    &ensp;|&ensp;
-                </strong>
-                {resource.id}
-            </p>
+            <div className="resource-icon">
+                <span className="format-label" property="dc:format" data-format={resource.format.toLowerCase() || 'data'}>
+                    {resource.format}
+                </span>
+            </div>
+            <div className="resource-metadata">
+                <p className={`heading ` + (resourceAccess == false && "restricted-item")}>
+                    {markQuerySubstring(resource.name, searchQuery)}
+                </p>
+                <p className="description">
+                    <strong>
+                        Modified {resource.last_modified}
+                        &ensp;|&ensp;
+                    </strong>
+                    {resource.id}
+                </p>
+            </div>
             <div className="dropdown btn-group">
                 {resourceAccess == null && (
                     <p>
