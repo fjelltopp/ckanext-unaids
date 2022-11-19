@@ -140,14 +140,16 @@
     background: #fafafa;
 }
 
-.resource-fork-search-results ul.panel-body li.list-group-item .resource-icon{
+.resource-fork-search-results ul.panel-body li.list-group-item .resource-icon,
+.resource-fork-details-tile .resource-icon{
     float: left;
     margin-right: 15px;
-    height: 35px;
+    height: 100%;
     width: 32px;
 }
 
-.resource-fork-search-results ul.panel-body li.list-group-item .resource-metadata{
+.resource-fork-search-results ul.panel-body li.list-group-item .resource-metadata,
+.resource-fork-details-tile .resource-icon{
     display: inline-block;
 }
 

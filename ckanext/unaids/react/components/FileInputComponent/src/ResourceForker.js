@@ -252,25 +252,32 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset, synced }) => {
 
     return (
         <div className="resource-fork-details-tile">
-            <p className="heading">{resource.name}</p>
-            <p className="description">
-                <strong>
-                    {dataset.organization ? dataset.organization.title : dataset.owner_org}
-                    &ensp;|&ensp;
-                </strong>
-                {dataset.name}
-                <br />
-                <strong>
-                    Modified&nbsp;{lastModified}
-                    &ensp;|&ensp;
-                </strong>
-                {resource.id}
-            </p>
-            {!synced && (
-                <span className="label label-warning data-out-of-sync-label">
-                    <i className="fa fa-warning"></i>&ensp; Data out of date
+            <div className="resource-icon">
+                <span className="format-label" property="dc:format" data-format={resource.format.toLowerCase() || 'data'}>
+                    {resource.format}
                 </span>
-            )}
+            </div>
+            <div className="resource-metadata">
+                <p className="heading">{resource.name}</p>
+                <p className="description">
+                    <strong>
+                        {dataset.organization ? dataset.organization.title : dataset.owner_org}
+                        &ensp;|&ensp;
+                    </strong>
+                    {dataset.name}
+                    <br />
+                    <strong>
+                        Modified&nbsp;{lastModified}
+                        &ensp;|&ensp;
+                    </strong>
+                    {resource.id}
+                </p>
+                {!synced && (
+                    <span className="label label-warning data-out-of-sync-label">
+                        <i className="fa fa-warning"></i>&ensp; Data out of date
+                    </span>
+                )}
+            </div>
         </div>
     );
 };
