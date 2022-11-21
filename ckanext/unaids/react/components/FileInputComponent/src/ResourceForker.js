@@ -195,9 +195,7 @@ ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery, curr
                         Request Access
                     </a>
                 )}
-                {isCurrentResource && (
-                        <i className="btn disabled fa fa-icon fa-ban" />
-                )}
+                {isCurrentResource && <i className="btn disabled fa fa-icon fa-ban" />}
             </div>
         </li>
     );
@@ -307,28 +305,25 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
         }
     };
 
-    const synchroniseResourceAndMetadata = (resource, dataset) => {
-        // const config = {
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        // };
+    const synchroniseResourceAndMetadata = (resource, dataset, event) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
 
-        // const body = JSON.stringify({
-        //     id: resource.id,
-        // });
-        // axios
-        //     .post('/api/3/action/resource_show', body, config)
-        //     .then((response) => {
-        //         setResourceAndMetadata(response.data.result, dataset);
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //     });
-        // FIXME the above post fails because, somehow, it calls a Flask View
-        // as a temporary fix, set the last_modified to a useful message
-        // this means the user still gets informative feedback
-        resource.last_modified = 'just now';
+        const body = JSON.stringify({
+            id: resource.id,
+        });
+        axios
+            .post('/api/3/action/resource_show', body, config)
+            .then((response) => {
+                setResourceAndMetadata(response.data.result, dataset);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+
         setResourceAndMetadata(resource, dataset);
     };
 
@@ -337,7 +332,7 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
             <header>
                 <p>Import data from another resource:</p>
                 <span className="resource-fork-escape" onClick={() => clearResourceAndMetadata(true)}>
-                    <i className={`fa fa-close`}></i>
+                    <i className="fa fa-close" />
                 </span>
             </header>
             {!selectedResource.resource && <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />}
@@ -369,7 +364,11 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
                                 <button
                                     className="btn btn-default"
                                     onClick={(event) =>
-                                        synchroniseResourceAndMetadata(selectedResource.resource, selectedResource.dataset, event)
+                                        synchroniseResourceAndMetadata(
+                                            selectedResource.resource,
+                                            selectedResource.dataset,
+                                            event
+                                        )
                                     }
                                 >
                                     <i className="fa fa-refresh" />
