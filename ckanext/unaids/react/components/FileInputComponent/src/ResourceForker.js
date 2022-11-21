@@ -150,7 +150,7 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery, currentRes
     );
 };
 
-ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery, currentResourceID }) => {
+const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery, currentResourceID }) => {
     const [resourceAccess, setResourceAccess] = useState();
 
     useEffect(() => {
