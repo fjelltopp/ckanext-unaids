@@ -36,15 +36,13 @@ const checkResourceAccess = (packageID, resourceID, setResourceAccess) => {
     axios
         .post('/api/3/action/restricted_check_access', body, config)
         .then((response) => {
-            if (response.status == 200) {
+            if (response.status === 200) {
                 setResourceAccess(response.data.result.success);
             } else {
-                console.log(`Error: Request failed with status code ` + response.status);
                 setResourceAccess(false);
             }
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(() => {
             setResourceAccess(false);
         });
 };
@@ -69,7 +67,7 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
     return (
         <div className="field">
             <label id="resource-search-label" htmlFor="resource-search" className="btn-search">
-                <i className={`fa fa-search`}></i>
+                <i className="fa fa-search" />
             </label>
             <input
                 type="text"
@@ -79,14 +77,12 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
                 name="resource-search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={(e) => {
-                    e.key === 'Enter' && e.preventDefault();
-                }} // DEVNOTE - not IE compatible
+                onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()} // DEVNOTE - not IE compatible
                 ref={searchInput}
                 data-testid="resource-fork-search-bar"
             />
             <button type="reset" className="btn-reset" onClick={() => setSearchQuery('')}>
-                <i className={`fa fa-close`}></i>
+                <i className="fa fa-close" />
             </button>
         </div>
     );
@@ -95,34 +91,15 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
 const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery, currentResourceID }) => {
     const [isCollapsed, setIsCollapsed] = useState(true);
 
-    const markQuerySubstring = (string, searchQuery) => {
-        let newString = string;
-        searchQuery.split(' ').map((word) => {
-            if (word.length > 0) {
-                newString = newString.replaceAll(RegExp(word, 'gi'), `<mark>$&</mark>`);
-            }
-        });
-        return parse(newString);
-    };
-
-    const getFilteredResources = (resources, searchQuery) => {
-        return resources.filter((resource) => {
-            return searchQuery
+    const getFilteredResources = (resources, searchQuery) =>
+        resources.filter((resource) =>
+            searchQuery
                 .toLowerCase()
                 .split(' ')
                 .filter((word) => word.length > 0)
                 .map((word) => resource.name.toLowerCase().includes(word))
-                .some((x) => x == true);
-        });
-    };
-
-    const removeSelfResource = (resources) => {
-        return resources.filter((resource) => {
-            return resource.id !== currentResourceID;
-        });
-    };
-
-    const resourcesWithoutSelf = removeSelfResource(dataset.resources);
+                .some((x) => x === true)
+        );
 
     return (
         <div className="panel">
@@ -135,34 +112,36 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery, currentRes
                     </strong>
                     {markQuerySubstring(dataset.name, searchQuery)}
                     <span className="badge">
-                        {resourcesWithoutSelf.length} resources&ensp;
-                        {resourcesWithoutSelf.length > 0 &&
-                            (isCollapsed ? <i className={`fa fa-chevron-down`}></i> : <i className={`fa fa-chevron-up`}></i>)}
+                        {dataset.resources.length} resources&ensp;
+                        {dataset.resources.length > 0 &&
+                            (isCollapsed ? <i className="fa fa-chevron-down" /> : <i className="fa fa-chevron-up" />)}
                     </span>
                 </p>
             </div>
-            {resourcesWithoutSelf.length > 0 && !isCollapsed && (
+            {dataset.resources.length > 0 && !isCollapsed && (
                 <ul className="panel-body">
-                    {resourcesWithoutSelf.map((resource) => (
+                    {dataset.resources.map((resource) => (
                         <ResourceButton
                             key={resource.id}
                             resource={resource}
                             dataset={dataset}
                             setResourceAndMetadata={setResourceAndMetadata}
                             searchQuery={searchQuery}
+                            currentResourceID={currentResourceID}
                         />
                     ))}
                 </ul>
             )}
-            {resourcesWithoutSelf.length > 0 && isCollapsed && (
+            {dataset.resources.length > 0 && isCollapsed && (
                 <ul className="panel-body">
-                    {getFilteredResources(resourcesWithoutSelf, searchQuery).map((resource) => (
+                    {getFilteredResources(dataset.resources, searchQuery).map((resource) => (
                         <ResourceButton
                             key={resource.id}
                             resource={resource}
                             dataset={dataset}
                             setResourceAndMetadata={setResourceAndMetadata}
                             searchQuery={searchQuery}
+                            currentResourceID={currentResourceID}
                         />
                     ))}
                 </ul>
@@ -171,16 +150,18 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery, currentRes
     );
 };
 
-const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery }) => {
+ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery, currentResourceID }) => {
     const [resourceAccess, setResourceAccess] = useState();
 
     useEffect(() => {
         checkResourceAccess(dataset.id, resource.id, setResourceAccess);
     }, []);
 
+    const isCurrentResource = resource.id === currentResourceID;
+
     return (
         <li
-            className={`list-group-item resource-btn ` + (!resourceAccess && 'disabled')}
+            className={`list-group-item resource-btn ${(isCurrentResource || !resourceAccess) && 'disabled'}`}
             key={resource.id}
             onClick={() => setResourceAndMetadata(resource, dataset)}
         >
@@ -190,7 +171,7 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                 </span>
             </div>
             <div className="resource-metadata">
-                <p className={`heading ` + (resourceAccess == false && "restricted-item")}>
+                <p className={`heading ${(isCurrentResource || resourceAccess === false) && 'restricted-item'}`}>
                     {markQuerySubstring(resource.name, searchQuery)}
                 </p>
                 <p className="description">
@@ -202,15 +183,20 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                 </p>
             </div>
             <div className="dropdown btn-group">
-                {resourceAccess == null && (
+                {resourceAccess === null && (
                     <p>
-                        <span className="spin"></span>Checking access...
+                        <span className="spin" />
+                        Checking access...
                     </p>
                 )}
-                {resourceAccess == false && (
-                    <a href={`/dataset/` + dataset.name + `/restricted_request_access/` + resource.id} className="btn">
-                        <i className="fa fa-icon fa-unlock-alt"></i>Request Access
+                {resourceAccess === false && (
+                    <a href={`/dataset/${dataset.name}/restricted_request_access/${resource.id}`} className="btn">
+                        <i className="fa fa-icon fa-unlock-alt" />
+                        Request Access
                     </a>
+                )}
+                {isCurrentResource && (
+                        <i className="btn disabled fa fa-icon fa-ban" />
                 )}
             </div>
         </li>
@@ -273,9 +259,14 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset, synced }) => {
                     {resource.id}
                 </p>
                 {!synced && (
-                    <span className="label label-warning data-out-of-sync-label">
-                        <i className="fa fa-warning"></i>&ensp; Data out of date
-                    </span>
+                    <div className="data-out-of-sync-label">
+                        <p>
+                            <span className="label label-warning">
+                                <i className="fa fa-warning" />
+                                &ensp; Data out of date
+                            </span>
+                        </p>
+                    </div>
                 )}
             </div>
         </div>
@@ -377,15 +368,17 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
                             {!selectedResource.synced && (
                                 <button
                                     className="btn btn-default"
-                                    onClick={() =>
-                                        synchroniseResourceAndMetadata(selectedResource.resource, selectedResource.dataset)
+                                    onClick={(event) =>
+                                        synchroniseResourceAndMetadata(selectedResource.resource, selectedResource.dataset, event)
                                     }
                                 >
-                                    <i className={`fa fa-refresh`}></i>&ensp; Import Latest Data
+                                    <i className="fa fa-refresh" />
+                                    &ensp; Import Latest Data
                                 </button>
                             )}
                             <button className="btn btn-default" onClick={() => clearResourceAndMetadata(false)}>
-                                <i className={`fa fa-search`}></i>&ensp;
+                                <i className="fa fa-search" />
+                                &ensp;
                                 <span>Select Different Resource</span>
                             </button>
                         </div>

@@ -60,7 +60,7 @@
 }
 
 #resource-search-label:after {
-    content: "";
+    content: '';
 }
 
 .resource-fork-component > .field > .btn-reset {
@@ -89,7 +89,7 @@
     border-color: #ddd;
     margin-bottom: 10px;
 }
-.resource-fork-search-results .panel:last-child{
+.resource-fork-search-results .panel:last-child {
     margin-bottom: 0px;
 }
 
@@ -136,12 +136,12 @@
     cursor: pointer;
 }
 
-.resource-fork-search-results ul.panel-body li.list-group-item:not(.disabled):hover{
+.resource-fork-search-results ul.panel-body li.list-group-item:not(.disabled):hover {
     background: #fafafa;
 }
 
 .resource-fork-search-results ul.panel-body li.list-group-item .resource-icon,
-.resource-fork-details-tile .resource-icon{
+.resource-fork-details-tile .resource-icon {
     float: left;
     margin-right: 15px;
     height: 100%;
@@ -149,10 +149,9 @@
 }
 
 .resource-fork-search-results ul.panel-body li.list-group-item .resource-metadata,
-.resource-fork-details-tile .resource-icon{
+.resource-fork-details-tile .resource-icon {
     display: inline-block;
 }
-
 
 .restricted-item {
     color: #808080;
@@ -165,7 +164,7 @@
     border: solid 2px transparent;
     border-bottom-color: #e31837;
     border-radius: 50%;
-    content: "";
+    content: '';
     height: 12px;
     position: absolute;
     bottom: 10px;
@@ -216,4 +215,3 @@
     top: 15px;
     right: 15px;
 }
-
