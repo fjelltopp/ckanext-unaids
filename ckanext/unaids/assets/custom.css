@@ -814,7 +814,21 @@ div.ckanext-datapreview{
 }
 
 .affiliation{
-    font-weight: bold;
-    size: 1.2em;
-    margin: 10px 0px;
+  font-weight: bold;
+  size: 1.2em;
+  margin: 10px 0px;
  }
+
+.sync-success{
+  margin: 0px 0px 0px 20px;
+  padding: 6px 10px 4px 4px;
+  background: #5cb85c;
+  color: #FFF;
+  border: none;
+  border-radius: 4px;
+}
+
+.resource-read-metadata p{
+  padding:5px;
+  margin: 0px;
+}

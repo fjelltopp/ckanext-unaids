@@ -1,4 +1,4 @@
-.dropzone{
+.dropzone {
     text-align: center;
     padding: 20px;
     border-width: 3px;
@@ -9,10 +9,211 @@
     margin-bottom: 20px;
 }
 
-#FileInputComponent h3{
+#FileInputComponent h3 {
     margin-bottom: 20px;
 }
 
-#FileInputComponent .field-url-input-group{
+#FileInputComponent .field-url-input-group {
     margin-bottom: 30px;
 }
+
+.resource-fork-component {
+    text-align: left;
+    padding: 15px;
+    border-width: 3px;
+    border-radius: 2px;
+    border-color: #ebebeb;
+    border-style: solid;
+    background-color: #fafafa;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+/* FORK RESOURCE SEARCH BAR */
+
+.resource-fork-component > .field {
+    position: relative;
+}
+
+.resource-fork-component > .field > .form-control {
+    height: auto;
+    width: 100%;
+    padding: 5px 37px;
+}
+
+.resource-fork-component > .field > .btn-search,
+.resource-fork-component > .field > .btn-reset {
+    position: absolute;
+    height: 17px;
+    width: 17px;
+    padding: 0;
+    top: 50%;
+    margin-top: -10px;
+    background-color: transparent;
+    border: none;
+    color: #999;
+    transition: color 0.2s ease-in;
+}
+
+.resource-fork-component > .field > .btn-search {
+    left: 10px;
+}
+
+#resource-search-label:after {
+    content: "";
+}
+
+.resource-fork-component > .field > .btn-reset {
+    right: 10px;
+}
+
+.resource-fork-component > .field > .btn-search:hover,
+.resource-fork-component > .field > .btn-reset:hover {
+    color: #000;
+}
+
+/* FORK RESOURCE SEARCH RESULTS */
+
+.resource-fork-search-results > .scroll {
+    margin-top: 15px;
+    max-height: 50vh;
+    overflow-y: auto;
+}
+
+.resource-fork-search-results .panel {
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
+    border-color: #ddd;
+    margin-bottom: 10px;
+}
+.resource-fork-search-results .panel:last-child{
+    margin-bottom: 0px;
+}
+
+.resource-fork-search-results mark {
+    background-color: #e3183747;
+    padding: 3px 3px;
+    border-radius: 3px;
+}
+
+.resource-fork-search-results .panel-heading {
+    cursor: pointer;
+    position: relative;
+    padding: 10px 15px;
+}
+
+.resource-fork-search-results .panel-heading .badge {
+    background-color: #e31837;
+    position: absolute;
+    top: 12px;
+    right: 15px;
+    padding: 5px 10px;
+}
+
+.resource-fork-search-results .panel p.description,
+.resource-fork-details-tile p.description {
+    font-size: 12px;
+}
+
+.resource-fork-search-results .panel-heading p.heading,
+.resource-fork-search-results .panel-heading p.description,
+.resource-fork-search-results .panel-body p.heading,
+.resource-fork-search-results .panel-body p.description,
+.resource-fork-details-tile p.heading,
+.resource-fork-details-tile p.description {
+    margin-bottom: 0px;
+}
+
+.resource-fork-search-results ul.panel-body {
+    padding: 0px 15px 15px;
+    margin-bottom: 0px;
+}
+
+.resource-fork-search-results ul.panel-body li.list-group-item:not(.disabled) {
+    cursor: pointer;
+}
+
+.resource-fork-search-results ul.panel-body li.list-group-item:not(.disabled):hover{
+    background: #fafafa;
+}
+
+.resource-fork-search-results ul.panel-body li.list-group-item .resource-icon,
+.resource-fork-details-tile .resource-icon{
+    float: left;
+    margin-right: 15px;
+    height: 100%;
+    width: 32px;
+}
+
+.resource-fork-search-results ul.panel-body li.list-group-item .resource-metadata,
+.resource-fork-details-tile .resource-icon{
+    display: inline-block;
+}
+
+
+.restricted-item {
+    color: #808080;
+    font-style: italic;
+}
+
+.spin::before {
+    animation: 1s linear infinite spinner;
+    animation-play-state: running;
+    border: solid 2px transparent;
+    border-bottom-color: #e31837;
+    border-radius: 50%;
+    content: "";
+    height: 12px;
+    position: absolute;
+    bottom: 10px;
+    left: -1em;
+    transform: translate3d(-50%, -50%, 0);
+    width: 12px;
+    will-change: transform;
+}
+@keyframes spinner {
+    0% {
+        transform: translate3d(-50%, -50%, 0) rotate(0deg);
+    }
+    100% {
+        transform: translate3d(-50%, -50%, 0) rotate(360deg);
+    }
+}
+
+.resource-fork-search-results .dropdown.btn-group {
+    position: absolute;
+    top: 9px;
+    right: 10px;
+}
+
+/*FORK RESOURCE SELECTED RESOURCE */
+
+.resource-fork-escape {
+    position: absolute;
+    right: 15px;
+    top: 12px;
+}
+
+.resource-fork-details-tile {
+    padding: 10px 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.resource-fork-details-tile p.description {
+    margin-top: 5px;
+}
+
+.resource-fork-details-tile .data-out-of-sync-label {
+    padding: 7px 10px 5px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}
+

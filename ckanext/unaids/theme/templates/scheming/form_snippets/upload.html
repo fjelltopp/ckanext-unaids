@@ -8,11 +8,15 @@
     data-maxResourceSize="{{ h.max_resource_size() }}"
     data-orgId="{{ dataset.organization.name }}"
     data-datasetName="{{ dataset.name }}"
+    data-currentResource ="{{ data.id }}"
     data-existingUrlType="{{ data.url_type if data else '' }}"
     data-existingUrl="{{ data.url if data else '' }}"
     data-existingSha256="{{ data.sha256 if data else '' }}"
     data-existingFileName="{{ h.blob_storage_resource_filename(data) if data else '' }}"
     data-existingSize="{{ data.size if data else '' }}"
+    data-existingForkResource="{{ data.fork_resource if data else '' }}"
+    data-existingForkSynced="{{ data.fork_synced if data else '' }}"
+    data-existingForkActivity="{{ data.fork_activity if data else '' }}"
 >
     {% if data.url %}
         {% if data.url_type == 'upload' %}
@@ -25,6 +29,9 @@
             <input name="lfs_prefix" data-testid="lfs_prefix" type="hidden" value="{{ data.lfs_prefix }}">
             <input name="sha256" data-testid="sha256" type="hidden" value="{{ data.sha256 }}">
             <input name="size" data-testid="size" type="hidden" value="{{ data.size }}">
+            <input name="fork_resource" data-testid="fork_resource" type="hidden" value="{{ data.fork_resource }}">
+            <input name="fork_synced" data-testid="fork_synced" type="hidden" value="{{ data.fork_synced }}">
+            <input name="fork_activity" data-testid="fork_activity" type="hidden" value="{{ data.fork_activity }}">
 
         {% else %}
             <div>
