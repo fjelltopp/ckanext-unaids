@@ -215,3 +215,9 @@
     top: 15px;
     right: 15px;
 }
+
+.circular-import {
+    color: #e31837;
+    font-weight: bold;
+    padding: 6px 12px;
+}
