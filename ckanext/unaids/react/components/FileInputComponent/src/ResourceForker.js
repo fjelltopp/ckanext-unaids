@@ -97,7 +97,7 @@ const DatasetGroup = ({ dataset, setResourceAndMetadata, searchQuery, currentRes
                 .toLowerCase()
                 .split(' ')
                 .filter((word) => word.length > 0)
-                .map((word) => resource.name.toLowerCase().includes(word))
+                .map((word) => (resource.name + resource.id).toLowerCase().includes(word))
                 .some((x) => x === true)
         );
 
@@ -179,7 +179,7 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                         Modified {resource.last_modified}
                         &ensp;|&ensp;
                     </strong>
-                    {resource.id}
+                    {markQuerySubstring(resource.id, searchQuery)}
                 </p>
             </div>
             <div className="dropdown btn-group">
