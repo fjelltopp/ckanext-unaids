@@ -48,12 +48,8 @@ const checkResourceAccess = (packageID, resourceID, setResourceAccess) => {
 };
 
 const markQuerySubstring = (string, searchQuery) => {
-    let newString = string;
-    searchQuery.split(' ').map((word) => {
-        if (word.length > 0) {
-            newString = newString.replaceAll(RegExp(word, 'gi'), `<mark>$&</mark>`);
-        }
-    });
+    const regex = searchQuery.match(/\b(\w+)\b/g).join('|');
+    const newString = string.replaceAll(RegExp(regex, 'gi'), `<mark>$&</mark>`);
     return parse(newString);
 };
 
@@ -195,7 +191,11 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                         Request Access
                     </a>
                 )}
-                {isCurrentResource && <div class="circular-import"><i className="disabled fa fa-icon fa-ban" /> Circular Import</div>}
+                {isCurrentResource && (
+                    <div class="circular-import">
+                        <i className="disabled fa fa-icon fa-ban" /> Circular Import
+                    </div>
+                )}
             </div>
         </li>
     );

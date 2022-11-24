@@ -17,7 +17,8 @@
     margin-bottom: 30px;
 }
 
-.resource-fork-component {
+.resource-fork-component,
+.file-input-error-component {
     text-align: left;
     padding: 15px;
     border-width: 3px;
@@ -27,6 +28,17 @@
     background-color: #fafafa;
     margin-bottom: 20px;
     position: relative;
+}
+
+/* ERROR COMPONENT */
+.file-input-error-component {
+    vertical-align: middle;
+}
+
+.file-input-error-component .error {
+    color:#e31837;
+    float: left;
+    font-size: x-large;
 }
 
 /* FORK RESOURCE SEARCH BAR */

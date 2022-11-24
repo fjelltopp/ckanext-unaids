@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import axios from 'axios';
 import ProgressBar from './ProgressBar';
 import DisplayUploadedFile from './DisplayUploadedFile';
@@ -29,6 +30,29 @@ const getRootResourceActivityDetails = async (resourceID, activityID) => {
         }
     }
     return [resourceData, datasetData];
+};
+
+const ErrorComponent = ({ error, resetErrorBoundary }) => {
+    return (
+        <div className="file-input-error-component">
+            <div className="alert alert-danger">
+                <p>
+                    <i className="fa fa-exclamation-triangle"></i> {error.error || 'Unfortunately an error has occured.'}
+                </p>
+                <p>
+                    {error.description && <span>{error.description}</span>}
+                    <br />
+                    <span>
+                        Please click{' '}
+                        <a href="#" onClick={resetErrorBoundary}>
+                            here
+                        </a>{' '}
+                        to try again.
+                    </span>
+                </p>
+            </div>
+        </div>
+    );
 };
 
 export default function App({
@@ -156,16 +180,14 @@ export default function App({
 
     if (uploadError)
         return (
-            <div className="alert alert-danger">
-                <p>
-                    <i className="fa fa-exclamation-triangle"></i> {uploadError.error}
-                </p>
-                <p>
-                    <span>{uploadError.description}</span>
-                    <br />
-                    <span>{ckan.i18n._('Please refresh this page and try again.')}</span>
-                </p>
-            </div>
+            <ErrorComponent
+                error={uploadError}
+                resetErrorBoundary={() => {
+                    setHiddenInputs(null, {});
+                    setUploadProgress(defaultUploadProgress);
+                    setUploadError(false);
+                }}
+            />
         );
 
     function UploaderComponent() {
@@ -226,9 +248,15 @@ export default function App({
         }
     }
     return (
-        <>
+        <ErrorBoundary
+            FallbackComponent={ErrorComponent}
+            onReset={() => {
+                setHiddenInputs(null, {});
+                setUploadProgress(defaultUploadProgress);
+            }}
+        >
             <UploaderComponent />
             <HiddenFormInputs {...{ hiddenInputs }} />
-        </>
+        </ErrorBoundary>
     );
 }
