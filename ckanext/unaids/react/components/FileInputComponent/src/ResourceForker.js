@@ -50,7 +50,7 @@ const checkResourceAccess = (packageID, resourceID, setResourceAccess) => {
 const markQuerySubstring = (string, searchQuery) => {
     const regex = searchQuery.match(/\b(\w+)\b/g).join('|');
     const newString = string.replaceAll(RegExp(regex, 'gi'), `<mark>$&</mark>`);
-    return parse(newString.toMadeUpFunction());
+    return parse(newString);
 };
 
 const SearchBar = ({ searchQuery, setSearchQuery }) => {
