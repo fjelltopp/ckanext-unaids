@@ -195,7 +195,7 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                     </a>
                 )}
                 {isCurrentResource && (
-                    <div class="circular-import">
+                    <div className="circular-import">
                         <i className="disabled fa fa-icon fa-ban" /> Circular Import
                     </div>
                 )}
