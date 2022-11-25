@@ -236,14 +236,14 @@ export default function App({
             );
         } else {
             return (
-                <div className="alert alert-danger">
-                    <p>
-                        <i className="fa fa-exclamation-triangle"></i> {ckan.i18n._('Resource Create Error')}
-                    </p>
-                    <p>
-                        <span>{ckan.i18n._('Please refresh this page and try again.')}</span>
-                    </p>
-                </div>
+                <ErrorComponent
+                    error={{ error: 'Resource Create Error' }}
+                    resetErrorBoundary={() => {
+                        setHiddenInputs(null, {});
+                        setUploadProgress(defaultUploadProgress);
+                        setUploadError(false);
+                    }}
+                />
             );
         }
     }
