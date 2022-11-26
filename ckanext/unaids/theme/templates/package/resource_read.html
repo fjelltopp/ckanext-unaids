@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block resource_read_url %}
-
+    <div class="resource-read-metadata">
     <p class="text-muted break-word">{{ _('Resource ID:') }} <span style="color: #e31837">{{ res.id }}</span></p>
 
     {% if res.format == 'url'%}
@@ -27,6 +27,19 @@
             <p class="text-muted break-word">{{ _('URL:') }} {{ res.url }}</p>
         {% endif %}
     {% endif %}
+        
+    {% if res.fork_resource%}
+        {% set parent = h.fork_get_parent_resource_details(res.fork_resource) %}
+        <p class="text-muted ellipsis">
+            {{ _('Imported from:') }}&nbsp;<a class="resource-url-analytics" href="{{ parent.organization.url }}" title="{{ parent.organization.url }}">{{ parent.organization.name }}</a>&nbsp;/&nbsp;<a class="resource-url-analytics" href="{{ parent.package.url }}" title="{{ parent.package.url }}">{{ parent.package.name }}</a>&nbsp;/&nbsp;<a class="resource-url-analytics" href="{{ parent.resource.url }}" title="{{ parent.resource.url }}">{{ parent.resource.name }}</a>
+            {% if not res.fork_synced %}
+                &nbsp;(<a class="resource-url-analytics" href="{{ parent.resource.url }}?activity_id={{ res.fork_activity }}" title="{{ parent.resource.url }}?activity_id={{ res.fork_activity }}">old version</a>)
+            {% else %}
+                &nbsp;<span class="sync-success"> <i class="fa fa-check"></i> Data Synchronised</a></span>
+            {% endif %}
+        </p>
+    {% endif %}
+    </div>
 {% endblock %}
 
 {% block download_resource_button %}
