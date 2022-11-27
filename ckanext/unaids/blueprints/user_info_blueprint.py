@@ -20,7 +20,7 @@ user_info_blueprint.before_request(before_request)
 
 def display_user_details(locale=None):
     if not g.user:
-        return h.redirect_to(locale=locale, controller='user', action='login',
+        return h.redirect_to(locale=locale, controller='saml2auth', action='saml2login',
                              id=None, came_from="/me")
     else:
         context = None
