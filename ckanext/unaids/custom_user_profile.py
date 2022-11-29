@@ -20,22 +20,6 @@ def get_user_obj(context):
     return user_obj
 
 
-def commit_plugin_extras(context):
-    if not context.get("defer_commit"):
-        context['model'].Session.commit()
-
-
-def validate_plugin_extras_provided(data_dict):
-    for field in CUSTOM_FIELDS:
-        if not data_dict.get(field["name"]):
-            pass
-            # NOTE the following raise has been commented out
-            # as a temporary measure due to SAML2 extension conflicts
-            # raise t.ValidationError(
-            #     {field["name"]: ["Missing value"]}
-            # )
-
-
 def init_plugin_extras(plugin_extras):
     out_dict = copy.deepcopy(plugin_extras)
     if not out_dict:

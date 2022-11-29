@@ -231,39 +231,5 @@ def user_show(original_action, context, data_dict):
     return user
 
 
-@t.chained_action
-def user_create(original_action, context, data_dict):
-    custom_user_profile.validate_plugin_extras_provided(data_dict)
-
-    user = original_action(context, data_dict)
-    user_obj = custom_user_profile.get_user_obj(context)
-
-    plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
-    plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
-    user_obj.plugin_extras = plugin_extras
-
-    custom_user_profile.commit_plugin_extras(context)
-
-    user.update(plugin_extras["unaids"])
-    return user
-
-
-@t.chained_action
-def user_update(original_action, context, data_dict):
-    custom_user_profile.validate_plugin_extras_provided(data_dict)
-
-    user = original_action(context, data_dict)
-    user_obj = custom_user_profile.get_user_obj(context)
-
-    plugin_extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
-    plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
-    user_obj.plugin_extras = plugin_extras
-
-    custom_user_profile.commit_plugin_extras(context)
-
-    user.update(plugin_extras["unaids"])
-    return user
-
-
 def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))
