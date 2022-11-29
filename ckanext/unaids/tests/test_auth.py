@@ -5,7 +5,6 @@ from ckan.tests import factories
 from ckanext.unaids.auth import (
     unaids_organization_update
 )
-from ckanext.unaids.tests.factories import User
 import pytest
 import logging
 
