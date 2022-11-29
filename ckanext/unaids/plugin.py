@@ -13,8 +13,10 @@ from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
 from ckan.views import _identify_user_default
+from ckanext.saml2auth.interfaces import ISaml2Auth
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
+from ckanext.unaids import custom_user_profile
 from ckanext.unaids.validators import (
     if_empty_guess_format,
     organization_id_exists_validator
@@ -75,6 +77,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IConfigurer)
     p.implements(p.ITemplateHelpers)
     p.implements(p.IAuthFunctions)
+    p.implements(ISaml2Auth, inherit=True)
     p.implements(p.IPackageController, inherit=True)
     p.implements(p.IResourceController, inherit=True)
     p.implements(p.IValidators)
@@ -231,6 +234,21 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if is_sysadmin and substitute_user_id:
             return auth.substitute_user(substitute_user_id)
 
+
+    def after_saml2_login(self, resp, saml_attributes):
+        user_obj = toolkit.g.userobj
+
+        data_dict = {}
+        for field in custom_user_profile.CUSTOM_FIELDS:
+            data_dict.update({field["name"]: saml_attributes.get(field["name"], [None])[0]})
+
+        plugin_extras = custom_user_profile.init_plugin_extras(user_obj.as_dict().get('plugin_extras', None))
+        plugin_extras = custom_user_profile.add_to_plugin_extras(plugin_extras, data_dict)
+        user_obj.plugin_extras = plugin_extras
+
+        user_obj.save()
+
+        return resp
 
 class UNAIDSReclineView(ReclineViewBase):
     '''

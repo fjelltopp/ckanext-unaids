@@ -5,15 +5,18 @@
 
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
+
+    <p>If you need to change any disabled field, please contact <a href="mailto:estimates@unaids.org">estimates@unaids.org</a> for assistance.</p>
+    
     {{ form.input('name', label=_('Username'), id='field-username', value=data.name, error=errors.name, classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
 
-    {{ form.input('fullname', label=_('Full name'), id='field-fullname', value=data.fullname, error=errors.fullname, placeholder=_('eg. Joe Bloggs'), classes=['control-medium']) }}
+    {{ form.input('fullname', label=_('Full name'), id='field-fullname', value=data.fullname, error=errors.fullname, placeholder=_('eg. Joe Bloggs'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
 
-    {{ form.input('email', label=_('Email'), id='field-email', type='email', value=data.email, error=errors.email, placeholder=_('eg. joe@example.com'), classes=['control-medium'], is_required=true) }}
+    {{ form.input('email', label=_('Email'), id='field-email', type='email', value=data.email, error=errors.email, placeholder=_('eg. joe@example.com'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
 
-    {{ form.input("job_title",id="field-job-title",label=_("Job Title"),placeholder=_("Data Scientist"),value=data.job_title,classes=["control-medium"],error=errors.job_title,is_required=True) }}
+    {{ form.input("job_title",id="field-job-title",label=_("Job Title"),placeholder=_("Data Scientist"),value=data.job_title,classes=["control-medium"], attrs={'readonly': '', 'class': 'form-control'}) }}
         
-    {{ form.input("affiliation",id="field-affiliation",label=_("Affiliation"),placeholder=_("WHO"),value=data.affiliation,classes=["control-medium"],error=errors.affiliation,is_required=True) }}
+    {{ form.input("affiliation",id="field-affiliation",label=_("Affiliation"),placeholder=_("WHO"),value=data.affiliation,classes=["control-medium"], attrs={'readonly': '', 'class': 'form-control'}) }}
 
     {{ form.markdown('about', label=_('About'), id='field-about', value=data.about, error=errors.about, placeholder=_('A little information about yourself')) }}
 
