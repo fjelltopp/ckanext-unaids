@@ -9,7 +9,7 @@ import pytest
 import logging
 from pprint import pformat
 from ckanext.unaids.tests import get_context, create_dataset_with_releases
-from ckanext.unaids.tests.factories import User
+
 log = logging.getLogger(__name__)
 
 
@@ -187,7 +187,7 @@ class TestUserShowMe(object):
             call_action('user_show_me', {})
 
     def test_user(self):
-        user = User()
+        user = factories.User()
         user_obj = model.User.get(user['name'])
         response = call_action('user_show_me', {'auth_user_obj': user_obj})
         assert response['name'] == user['name']

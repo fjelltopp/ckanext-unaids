@@ -17,7 +17,7 @@ log = logging.getLogger(__name__)
 class TestAuth(object):
 
     def test_unaids_organization_update_valid(self, app):
-        user = User()
+        user = factories.User()
         org = factories.Organization(user=user)
         response = unaids_organization_update(
             {'user': user['name']},
@@ -26,7 +26,7 @@ class TestAuth(object):
         assert response['success']
 
     def test_unaids_organization_update_invalid(self, app):
-        user = User()
+        user = factories.User()
         org = factories.Organization()
         response = unaids_organization_update(
             {'user': user['name']},
