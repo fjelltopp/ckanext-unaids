@@ -248,6 +248,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return resp
 
+
 class UNAIDSReclineView(ReclineViewBase):
     '''
     This override of the recline view plugin allows data explorers to be auto
