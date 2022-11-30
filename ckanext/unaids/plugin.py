@@ -57,6 +57,10 @@ def add_licenses():
     ]
 
 
+def initialize_g_userobj_using_private_core_ckan_method():
+    _identify_user_default()
+
+
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     """
     This plugin implements the configurations needed for AIDS data exchange
@@ -216,30 +220,16 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def identify(self):
         """
-        Requires all API requests to be made by a registered sysadmin user.
-
-        Allows API requests to be sent "on behalf" of a substitute user. This is
+        Allows requests to be sent "on behalf" of a substitute user for sysadmins only. This is
         done by setting a HTTP Header in the requests "CKAN-Substitute-User" to be the
         username or user id of another CKAN user.
         """
+        initialize_g_userobj_using_private_core_ckan_method()
+        is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
+        substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
 
-        if toolkit.request.path.startswith('/api/'):
-            # Private import is only way to set g.userobj using core CKAN.
-            _identify_user_default()
-
-            if not toolkit.g.userobj or not toolkit.g.userobj.sysadmin:
-                return {
-                    "success": False,
-                    "error": {
-                        "__type": "Not Authorized",
-                        "message": "Must be a system administrator."
-                    }
-                }, 403
-
-            substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
-
-            if substitute_user_id:
-                return auth.substitute_user(substitute_user_id)
+        if is_sysadmin and substitute_user_id:
+            return auth.substitute_user(substitute_user_id)
 
 
 class UNAIDSReclineView(ReclineViewBase):
