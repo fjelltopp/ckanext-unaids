@@ -12,6 +12,7 @@ from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
 
+from ckan.views import _identify_user_default
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
@@ -56,6 +57,10 @@ def add_licenses():
     ]
 
 
+def initialize_g_userobj_using_private_core_ckan_method():
+    _identify_user_default()
+
+
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     """
     This plugin implements the configurations needed for AIDS data exchange
@@ -77,6 +82,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(IDataValidation)
     p.implements(IResourceDownloadHandler, inherit=True)
     p.implements(IDataPusher, inherit=True)
+    p.implements(p.IAuthenticator, inherit=True)
 
     # IClick
     def get_commands(self):
@@ -211,6 +217,19 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                         resource_dict.get('id', '')
                     )
                 )
+
+    def identify(self):
+        """
+        Allows requests to be sent "on behalf" of a substitute user for sysadmins only. This is
+        done by setting a HTTP Header in the requests "CKAN-Substitute-User" to be the
+        username or user id of another CKAN user.
+        """
+        initialize_g_userobj_using_private_core_ckan_method()
+        is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
+        substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
+
+        if is_sysadmin and substitute_user_id:
+            return auth.substitute_user(substitute_user_id)
 
 
 class UNAIDSReclineView(ReclineViewBase):
