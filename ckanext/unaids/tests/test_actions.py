@@ -226,7 +226,6 @@ class TestUserAffiliation(object):
                 "affiliation": ["Fjelltopp"],
             },
         )
-        print(user_obj)
         response = call_action("user_show", id=user["id"])
         assert response.get("job_title", False) == "Data Scientist"
         assert response.get("affiliation", False) == "Fjelltopp"

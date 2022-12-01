@@ -222,7 +222,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if is_sysadmin and substitute_user_id:
             return auth.substitute_user(substitute_user_id)
 
-
     def after_saml2_login(self, resp, saml_attributes):
         user_obj = toolkit.g.userobj
         custom_user_profile.read_saml_profile(user_obj, saml_attributes)
