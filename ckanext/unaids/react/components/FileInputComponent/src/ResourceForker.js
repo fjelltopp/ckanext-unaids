@@ -49,8 +49,8 @@ const checkResourceAccess = (packageID, resourceID, setResourceAccess) => {
 
 const markQuerySubstring = (string, searchQuery) => {
     let newString = string;
-    if(searchQuery.length > 0){
-        const regex = searchQuery.match(/\b(\w+)\b/g).join("|");
+    if (searchQuery.length > 0) {
+        const regex = searchQuery.match(/\b(\w+)\b/g).join('|');
         newString = string.replaceAll(RegExp(regex, 'gi'), `<mark>$&</mark>`);
     }
     return parse(newString);
@@ -71,8 +71,7 @@ const SearchBar = ({ searchQuery, setSearchQuery }) => {
             <input
                 type="text"
                 className="form-control"
-                aria-label="Search existing resources"
-                placeholder="Search existing resources"
+                placeholder={ckan.i18n._('Search existing resources')}
                 name="resource-search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -175,7 +174,7 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                 </p>
                 <p className="description">
                     <strong>
-                        Modified {resource.last_modified}
+                        {ckan.i18n._('Modified')}&nbsp;{resource.last_modified}
                         &ensp;|&ensp;
                     </strong>
                     {markQuerySubstring(resource.id, searchQuery)}
@@ -185,18 +184,18 @@ const ResourceButton = ({ resource, dataset, setResourceAndMetadata, searchQuery
                 {resourceAccess === null && (
                     <p>
                         <span className="spin" />
-                        Checking access...
+                        {ckan.i18n._('Checking access...')}
                     </p>
                 )}
                 {resourceAccess === false && (
                     <a href={`/dataset/${dataset.name}/restricted_request_access/${resource.id}`} className="btn">
                         <i className="fa fa-icon fa-unlock-alt" />
-                        Request Access
+                        {ckan.i18n._('Request Access')}
                     </a>
                 )}
                 {isCurrentResource && (
-                    <div className="circular-import">
-                        <i className="disabled fa fa-icon fa-ban" /> Circular Import
+                    <div class="circular-import">
+                        <i className="disabled fa fa-icon fa-ban" /> {ckan.i18n._('Circular Import')}
                     </div>
                 )}
             </div>
@@ -254,7 +253,7 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset, synced }) => {
                     {dataset.name}
                     <br />
                     <strong>
-                        Modified&nbsp;{lastModified}
+                        {ckan.i18n._('Modified')}&nbsp;{lastModified}
                         &ensp;|&ensp;
                     </strong>
                     {resource.id}
@@ -262,7 +261,7 @@ const ResourceWithDatasetInfoTile = ({ resource, dataset, synced }) => {
                 {!synced && (
                     <div className="label label-warning data-out-of-sync-label">
                         <i className="fa fa-warning" />
-                        &ensp; Data out of date
+                        &ensp; {ckan.i18n._('Data out of date')}
                     </div>
                 )}
             </div>
@@ -329,7 +328,7 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
     return (
         <div className="resource-fork-component" data-testid="ResourceForkComponent">
             <header>
-                <p>Import data from another resource:</p>
+                <p>{ckan.i18n._('Import data from another resource:')}</p>
                 <span className="resource-fork-escape" onClick={() => clearResourceAndMetadata(true)}>
                     <i className="fa fa-close" />
                 </span>
@@ -371,13 +370,13 @@ export default function ResourceForker({ selectedResource, setSelectedResource, 
                                     }
                                 >
                                     <i className="fa fa-refresh" />
-                                    &ensp; Import Latest Data
+                                    &ensp; {ckan.i18n._('Import Latest Data')}
                                 </button>
                             )}
                             <button className="btn btn-default" onClick={() => clearResourceAndMetadata(false)}>
                                 <i className="fa fa-search" />
                                 &ensp;
-                                <span>Select Different Resource</span>
+                                <span>{ckan.i18n._('Select Different Resource')}</span>
                             </button>
                         </div>
                     </footer>
