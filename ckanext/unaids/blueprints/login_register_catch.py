@@ -13,5 +13,6 @@ def disable_default_login_register():
     """
     return toolkit.redirect_to("/user/saml2login")
 
+
 login_register_catch.add_url_rule("/user/login", view_func=disable_default_login_register)
 login_register_catch.add_url_rule("/user/register", view_func=disable_default_login_register)
