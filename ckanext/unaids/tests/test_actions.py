@@ -8,8 +8,9 @@ import ckan.model as model
 import pytest
 import logging
 from pprint import pformat
+from ckanext.unaids.custom_user_profile import read_saml_profile
 from ckanext.unaids.tests import get_context, create_dataset_with_releases
-from ckanext.unaids.tests.factories import User
+
 log = logging.getLogger(__name__)
 
 
@@ -187,7 +188,7 @@ class TestUserShowMe(object):
             call_action('user_show_me', {})
 
     def test_user(self):
-        user = User()
+        user = factories.User()
         user_obj = model.User.get(user['name'])
         response = call_action('user_show_me', {'auth_user_obj': user_obj})
         assert response['name'] == user['name']
@@ -214,56 +215,17 @@ class TestPopulateDataDictionary(object):
 @pytest.mark.ckan_config('ckan.plugins', 'unaids')
 @pytest.mark.usefixtures('with_plugins')
 class TestUserAffiliation(object):
-
-    def test_user_create_with_affiliation(self):
-        user = User(
-            job_title='Data Scientist',
-            affiliation='Fjelltopp',
-        )
-        assert user.get('job_title', False) == 'Data Scientist'
-        assert user.get('affiliation', False) == 'Fjelltopp'
-
-    # NOTE the following tests have been commented out
-    # as a temporary measure due to SAML2 extension conflicts
-    # @pytest.mark.parametrize('job_title, affiliation', [
-    #     ('Data Scientist', None),
-    #     (None, 'Fjelltopp'),
-    #     ('Data Scientist', ''),
-    #     ('', 'Fjelltopp'),
-    # ])
-    # def test_user_create_without_affiliations(self, job_title, affiliation):
-    #     with pytest.raises(ValidationError):
-    #         user = User(
-    #             job_title=job_title,
-    #             affiliation=affiliation,
-    #         )
-    #         assert user.get('job_title', False) == job_title
-    #         assert user.get('affiliation', False) == affiliation
-
     def test_user_show_with_affiliation(self):
-        user = User(
-            job_title='Data Scientist',
-            affiliation='Fjelltopp',
-        )
-        response = call_action(
-            'user_show',
-            id=user['id']
-        )
-        assert response.get('job_title', False) == 'Data Scientist'
-        assert response.get('affiliation', False) == 'Fjelltopp'
+        user = factories.User()
+        user_obj = model.User.get(user["id"])
 
-    def test_user_update_with_affiliation(self):
-        user = User(
-            job_title='Data Scientist',
-            affiliation='Fjelltopp',
+        read_saml_profile(
+            user_obj,
+            {
+                "job_title": ["Data Scientist"],
+                "affiliation": ["Fjelltopp"],
+            },
         )
-        assert user.get('job_title', False) == 'Data Scientist'
-        assert user.get('affiliation', False) == 'Fjelltopp'
-        user['job_title'] = 'Data Engineer'
-        user['affiliation'] = 'WHO'
-        response = call_action(
-            "user_update",
-            **user
-        )
-        assert response.get('job_title', False) == 'Data Engineer'
-        assert response.get('affiliation', False) == 'WHO'
+        response = call_action("user_show", id=user["id"])
+        assert response.get("job_title", False) == "Data Scientist"
+        assert response.get("affiliation", False) == "Fjelltopp"

@@ -4,16 +4,17 @@ import pytest
 from bs4 import BeautifulSoup
 from ckan.lib.helpers import url_for
 from ckanext.unaids.tests import create_dataset_with_releases
-from ckanext.unaids.tests.factories import User
+from ckan.tests.factories import User
 from ckanext.versions.logic.dataset_version_action import (
-    dataset_version_create, dataset_version_list
+    dataset_version_create,
+    dataset_version_list,
 )
 from ckanext.versions.tests import get_context
 from nose.tools import assert_equals, assert_in, assert_not_in
 from ckanext.unaids.blueprints.unaids_dataset_releases import (
     AUTHORIZATION_ERROR,
     RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR,
-    RELEASE_NAME_NOT_UNIQUE_ERROR
+    RELEASE_NAME_NOT_UNIQUE_ERROR,
 )
 
 

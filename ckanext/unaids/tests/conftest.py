@@ -2,7 +2,6 @@ import pytest
 
 from ckan.tests import factories
 from ckanext.unaids.tests import unaids_db_setup, create_version
-from ckanext.unaids.tests.factories import User
 from ckanext.validation.tests import validation_db_setup
 from ckanext.versions.tests import versions_db_setup
 
@@ -16,17 +15,17 @@ def unaids_setup(clean_db):
 
 @pytest.fixture()
 def org_admin():
-    return User(name="admin")
+    return factories.User(name="admin")
 
 
 @pytest.fixture()
 def org_editor():
-    return User(name="editor")
+    return factories.User(name="editor")
 
 
 @pytest.fixture()
 def org_member():
-    return User(name="member")
+    return factories.User(name="member")
 
 
 @pytest.fixture()
