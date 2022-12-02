@@ -37,18 +37,13 @@ const ErrorComponent = ({ error, resetErrorBoundary }) => {
         <div className="file-input-error-component">
             <div className="alert alert-danger">
                 <p>
-                    <i className="fa fa-exclamation-triangle"></i> {error.error || 'Unfortunately an error has occured.'}
+                    <i className="fa fa-exclamation-triangle"></i>{' '}
+                    {error.error || ckan.i18n._('Unfortunately an error has occurred.')}
                 </p>
                 <p>
                     {error.description && <span>{error.description}</span>}
                     <br />
-                    <span>
-                        Please click{' '}
-                        <a href="#" onClick={resetErrorBoundary}>
-                            here
-                        </a>{' '}
-                        to try again.
-                    </span>
+                    <span>{ckan.i18n._('Please click <a href="#" onClick={resetErrorBoundary}>here</a> to try again.')}</span>
                 </p>
             </div>
         </div>
@@ -236,14 +231,14 @@ export default function App({
             );
         } else {
             return (
-                <div className="alert alert-danger">
-                    <p>
-                        <i className="fa fa-exclamation-triangle"></i> {ckan.i18n._('Resource Create Error')}
-                    </p>
-                    <p>
-                        <span>{ckan.i18n._('Please refresh this page and try again.')}</span>
-                    </p>
-                </div>
+                <ErrorComponent
+                    error={{ error: ckan.i18n._('Resource Create Error') }}
+                    resetErrorBoundary={() => {
+                        setHiddenInputs(null, {});
+                        setUploadProgress(defaultUploadProgress);
+                        setUploadError(false);
+                    }}
+                />
             );
         }
     }
