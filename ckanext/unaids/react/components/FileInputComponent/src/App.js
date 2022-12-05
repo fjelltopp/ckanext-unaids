@@ -100,7 +100,7 @@ export default function App({
                         // url field is handled by input field in UI
                     };
                 case 'resource':
-                    if (fileFormatField) fileFormatField.value = metadata.format;
+                    if (fileFormatField && 'format' in metadata) fileFormatField.value = metadata.format;
                     return {
                         url_type: null,
                         lfs_prefix: null,
