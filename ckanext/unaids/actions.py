@@ -219,6 +219,7 @@ def populate_data_dictionary(context, data_dict):
     populate_data_dictionary_from_schema(context, resource_dict)
 
 
+@logic.side_effect_free
 @t.chained_action
 def user_show(original_action, context, data_dict):
     user = original_action(context, data_dict)
