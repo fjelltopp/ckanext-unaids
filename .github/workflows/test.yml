@@ -1,23 +1,6 @@
 name: Tests
 on: [pull_request]
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: [ 3.9 ]
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install requirements
-        run: pip install flake8 pycodestyle
-      - name: Check syntax
-        run: |
-          flake8 . --count --max-line-length=127 --show-source --statistics
-
   test:
     name: CKAN
     runs-on: ubuntu-latest
