@@ -1,4 +1,13 @@
 {% ckan_extends %}
+
+{% block page_primary_action %}
+{% if h.check_access('package_create') %}
+<div class="page_primary_action">
+    {% snippet 'snippets/dataset_selector.html'%}
+</div>
+{% endif %}
+{% endblock %}
+
 {% block form %}
   {% if page.item_count %}
     <form method="POST" data-module="basic-form">
