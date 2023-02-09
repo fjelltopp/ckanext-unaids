@@ -6,6 +6,7 @@ from ckan.common import _, g
 import logging
 import os
 import json
+import requests
 import six
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
 
@@ -19,6 +20,43 @@ from urllib.parse import quote
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
+
+log = logging.getLogger(__name__)
+
+
+def _files_from_directory(path, extension=".json"):
+    listed_files = {}
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if extension in file:
+                name = file.split(".json")[0]
+                listed_files[name] = os.path.join(root, file)
+    return listed_files
+
+
+def get_schema_filepath(schema):
+    schema_directory = toolkit.config["ckanext.unaids.schema_directory"]
+    schemas = _files_from_directory(schema_directory)
+    return schemas.get(schema)
+
+
+def validation_load_json_schema(schema):
+    try:
+        if schema.startswith("http"):
+            r = requests.get(schema)
+            return r.json()
+
+        schema_filepath = get_schema_filepath(schema)
+        if schema_filepath:
+            with open(schema_filepath, "rb") as schema_file:
+                return json.load(schema_file)
+
+        return json.loads(schema)
+
+    except json.JSONDecodeError as e:
+        log.error("Error loading schema: " + schema)
+        log.exception(e)
+        return None
 
 
 def get_all_package_downloads(pkg_dict):
