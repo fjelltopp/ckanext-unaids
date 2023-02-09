@@ -185,12 +185,27 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                 )
 
     # IResourceController
+    def _process_schema_fields(self, data_dict):
+        """
+        Here we overload the default schema processing (from frictionlessdata/ckanext-validation)
+        to allow for the fact that we just pass a schema name around rather than the schema url
+        or a schema JSON.
+        """
+
+        schema = data_dict.pop("schema", None)
+        if schema:
+            schema_json = logic.validation_load_json_schema(schema)
+            data_dict[u'schema'] = schema_json
+
+        return data_dict
+
     def before_create(self, context, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource)
             _update_resource_last_modified_date(resource)
             logic.validate_resource_upload_fields(context, resource)
-        return resource
+            context["_resource_create_call"] = True
+        return self._process_schema_fields(resource)
 
     def before_update(self, context, current, resource):
         if _data_dict_is_resource(resource):
