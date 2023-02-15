@@ -191,11 +191,11 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         to allow for the fact that we just pass a schema name around rather than the schema url
         or a schema JSON.
         """
-
+        
         schema = data_dict.pop("schema", None)
         if schema:
             schema_json = logic.validation_load_json_schema(schema)
-            data_dict[u'schema'] = schema_json
+            data_dict[u'schema_json'] = schema_json
 
         return data_dict
 
@@ -212,7 +212,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             _giftless_upload(context, resource, current=current)
             _update_resource_last_modified_date(resource, current=current)
             logic.validate_resource_upload_fields(context, resource)
-        return resource
+            context["_resource_create_call"] = True
+        return self._process_schema_fields(resource)
 
     def before_show(self, resource):
         if _data_dict_is_resource(resource):

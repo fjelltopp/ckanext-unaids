@@ -42,6 +42,11 @@ def get_schema_filepath(schema):
 
 def validation_load_json_schema(schema):
     try:
+        # When updating a resource there's already an existing JSON schema
+        # attached to the resource
+        if type(schema) == dict:
+            return schema
+
         if schema.startswith("http"):
             r = requests.get(schema)
             return r.json()
