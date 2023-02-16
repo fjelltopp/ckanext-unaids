@@ -9,6 +9,8 @@ organizations_per_pages = Blueprint("organization_pagination", __name__)
 
 
 # both of these are needed to override the default ckan group controller
+# Method below is copied from ckan/views/group.py with the only change being
+# the number of organizations per page
 @organizations_per_pages.route('/organization')
 @organizations_per_pages.route('/organization/')
 def index():
