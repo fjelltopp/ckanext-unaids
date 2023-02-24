@@ -164,14 +164,5 @@ def get_google_analytics_id():
     return from_env
 
 
-def is_an_estimates_dataset(word):
-    base_dir = os.path.realpath(__file__)
-    package_schema_folder = str(os.path.abspath(os.path.join(base_dir, "../../../../unaids_data_specifications/package_schemas/country_estimates/")))
-    data = []
-    for filename in os.listdir(package_schema_folder):
-        if filename.endswith('.json'):
-            with open(os.path.join(package_schema_folder, filename), 'r') as file:
-                data.append(json.load(file)['dataset_type'])
-    if word in data:
-        return True
-    return False
+def is_an_estimates_dataset(dataset_type_name):
+    return 'estimates' in dataset_type_name.lower()
