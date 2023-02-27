@@ -162,3 +162,7 @@ def get_google_analytics_id():
     if not from_env:
         return toolkit.config.get('ckan.google_analytics_id', None)
     return from_env
+
+
+def is_an_estimates_dataset(dataset_type_name):
+    return 'estimates' in dataset_type_name.lower()
