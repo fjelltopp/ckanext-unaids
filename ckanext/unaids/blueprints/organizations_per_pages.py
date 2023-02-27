@@ -1,7 +1,10 @@
 
-import ckan.plugins.toolkit as toolkit
 from flask import Blueprint
-from ckan.views.group import *
+from ckan.views.group import set_org
+import ckan.lib.helpers as h
+from ckan.common import g, config, request, _
+import ckan.model as model
+import ckan.lib.base as base
 from ckan.views.group import _check_access, _action, _get_group_template, _guess_group_type
 
 
@@ -92,6 +95,3 @@ def index():
     g.page = extra_vars["page"]
     return base.render(
         _get_group_template(u'index_template', group_type), extra_vars)
-
-
-
