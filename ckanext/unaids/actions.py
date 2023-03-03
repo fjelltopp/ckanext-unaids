@@ -1,10 +1,13 @@
 import logging
 import mimetypes
+import os
+
 import ckan.logic.schema as schema_
 import ckan.logic as logic
 import ckan.lib.navl.dictization_functions as dfunc
 import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
+from ckan.plugins import toolkit
 import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
 import ckanext.unaids.custom_user_profile as custom_user_profile
@@ -234,3 +237,27 @@ def user_show(original_action, context, data_dict):
 
 def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))
+
+
+@logic.side_effect_free
+def show_config_info(context, data_dict):
+    if not current_user_is_sysadmin():
+        raise NotAuthorized
+
+    current_directory = os.path.dirname(os.path.realpath(__file__))
+    submodules_path = os.path.normpath(current_directory + '../../../../')
+    from git import Repo
+
+    repo = Repo(submodules_path + "ckanext-unaids")
+
+    return submodules_path
+    # submodules_path.
+
+
+def current_user_is_sysadmin():
+    from ckanext.unaids.plugin import initialize_g_userobj_using_private_core_ckan_method
+
+    initialize_g_userobj_using_private_core_ckan_method()
+    is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
+
+    return is_sysadmin

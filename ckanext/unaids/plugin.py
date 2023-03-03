@@ -115,6 +115,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "populate_data_dictionary": actions.populate_data_dictionary,
             "user_show": actions.user_show,
             "time_ago_from_timestamp": actions.time_ago_from_timestamp,
+            "show_config_info": actions.show_config_info,
         }
 
     def dataset_facets(self, facet_dict, package_type):
