@@ -12,8 +12,12 @@ import ckan.plugins.toolkit as t
 import ckanext.validation.helpers as validation_helpers
 import ckanext.unaids.custom_user_profile as custom_user_profile
 from ckan.common import _
-from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
+from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, \
+    activity_dataset_show
 from ckanext.unaids.logic import populate_data_dictionary_from_schema
+from git import Repo
+from git.exc import InvalidGitRepositoryError, NoSuchPathError
+import json
 
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
@@ -243,15 +247,44 @@ def time_ago_from_timestamp(context, data_dict):
 def show_config_info(context, data_dict):
     if not current_user_is_sysadmin():
         raise NotAuthorized
+    try:
+        repo = Repo('/usr/lib/ckan', search_parent_directories=True)
+    except (InvalidGitRepositoryError, NoSuchPathError):
+        toolkit.abort(404, "No repository info")
 
-    current_directory = os.path.dirname(os.path.realpath(__file__))
-    submodules_path = os.path.normpath(current_directory + '../../../../')
-    from git import Repo
+    result = {"submodules": []}
+    add_repo_details(result, repo, "adx_develop")
+    for submodule in repo.submodules:
+        add_submodule_info(result, submodule)
 
-    repo = Repo(submodules_path + "ckanext-unaids")
+    return result
 
-    return submodules_path
-    # submodules_path.
+
+def add_submodule_info(result, submodule):
+    repo = submodule.module()
+
+    repo_details = {'name': submodule.name, 'branch': repo.branch.name, 'commit': str(repo.head.commit)}
+    remotes_dict = {}
+
+    for remote in repo.remotes:
+        remotes_dict[remote.name] = remote.url
+
+    repo_details['remotes'] = remotes_dict
+
+    result['submodules'].append(repo_details)
+
+
+def add_repo_details(result, repo, name):
+    result['name'] = name
+    result['branch'] = f"{repo.active_branch.name}"
+    result['commit'] = f"{repo.active_branch.commit}"
+    if repo.active_branch.tracking_branch():
+        result['tracking_branch'] = f"{repo.active_branch.tracking_branch().remote_name}"
+    remotes_dict = {}
+    for remote in repo.remotes:
+        remotes_dict[remote.name] = remote.url
+
+    result['remotes'] = remotes_dict
 
 
 def current_user_is_sysadmin():
