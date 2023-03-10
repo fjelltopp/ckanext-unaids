@@ -263,7 +263,8 @@ def show_config_info(context, data_dict):
 def add_submodule_info(result, submodule):
     repo = submodule.module()
 
-    repo_details = {'name': submodule.name, 'branch': repo.branch.name, 'commit': str(repo.head.commit)}
+    repo_details = {'name': submodule.name, 'branch': repo.branch.name if hasattr(repo, 'branch') else "none",
+                    'commit': str(repo.head.commit)}
     remotes_dict = {}
 
     for remote in repo.remotes:
