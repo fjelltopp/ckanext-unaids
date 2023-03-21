@@ -57,3 +57,5 @@ def _country_code_from_location_name(geo_location):
 
 
 svg_map_options.add_url_rule('/', view_func=map_options)
+
+
