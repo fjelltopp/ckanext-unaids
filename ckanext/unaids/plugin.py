@@ -233,15 +233,19 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return resp
 
     def decode_api_token(self, encoded, **kwargs):
-        if encoded:
-            decoded_token = auth_logic.validate_and_decode_token(encoded)
+        if encoded and encoded.startswith("Bearer"):
+            try:
+                decoded_token = auth_logic.validate_and_decode_token(encoded)
 
-            auth_logic.verify_required_scope(decoded_token)
-            ckan_token = auth_logic.get_or_create_ckan_token(decoded_token)
+                auth_logic.verify_required_scope(decoded_token)
+                ckan_token = auth_logic.get_or_create_ckan_token(decoded_token)
 
-            return {
-                "jti": ckan_token.id
-            }
+                return {
+                    "jti": ckan_token.id
+                }
+            except auth_logic.OAuth2Error as e:
+                log.debug(f"Incorrect auth token: {encoded}")
+                log.error(f"Couldn't decode access token: {e.message}")
 
 
 class UNAIDSReclineView(ReclineViewBase):
