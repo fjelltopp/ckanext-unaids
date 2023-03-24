@@ -35,6 +35,7 @@ from ckanext.unaids.helpers import (
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
+import ckanext.unaids.auth_logic as auth_logic
 from ckanext.unaids import auth, licenses, command, logic
 from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
@@ -80,6 +81,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(IResourceDownloadHandler, inherit=True)
     p.implements(IDataPusher, inherit=True)
     p.implements(p.IAuthenticator, inherit=True)
+    p.implements(p.IApiToken, inherit=True)
 
     # IClick
     def get_commands(self):
@@ -229,6 +231,17 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         custom_user_profile.read_saml_profile(user_obj, saml_attributes)
 
         return resp
+
+    def decode_api_token(self, encoded, **kwargs):
+        if encoded:
+            decoded_token = auth_logic.validate_and_decode_token(encoded)
+
+            auth_logic.verify_required_scope(decoded_token)
+            ckan_token = auth_logic.get_or_create_ckan_token(decoded_token)
+
+            return {
+                "jti": ckan_token.id
+            }
 
 
 class UNAIDSReclineView(ReclineViewBase):
