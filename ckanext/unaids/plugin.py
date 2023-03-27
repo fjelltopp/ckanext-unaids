@@ -258,7 +258,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                 "success": False
             }
             resp = Response(response=json.dumps(response))
-            resp.status_code = 401
+            resp.status_code = 403
             resp.content_type = "text/json"
 
             return resp
