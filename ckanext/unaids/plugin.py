@@ -1,4 +1,5 @@
 import datetime
+import json
 
 import ckan.plugins as p
 import logging
@@ -11,6 +12,7 @@ import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
+from flask import app, Response
 
 from ckan.views import _identify_user_default
 from ckanext.saml2auth.interfaces import ISaml2Auth
@@ -82,6 +84,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(IDataPusher, inherit=True)
     p.implements(p.IAuthenticator, inherit=True)
     p.implements(p.IApiToken, inherit=True)
+    p.implements(p.IMiddleware, inherit=True)
 
     # IClick
     def get_commands(self):
@@ -234,18 +237,33 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def decode_api_token(self, encoded, **kwargs):
         if encoded and encoded.startswith("Bearer"):
-            try:
-                decoded_token = auth_logic.validate_and_decode_token(encoded)
+            decoded_token = auth_logic.validate_and_decode_token(encoded)
 
-                auth_logic.verify_required_scope(decoded_token)
-                ckan_token = auth_logic.get_or_create_ckan_token(decoded_token)
+            auth_logic.verify_required_scope(decoded_token)
+            ckan_token = auth_logic.get_or_create_ckan_token(decoded_token)
 
-                return {
-                    "jti": ckan_token.id
-                }
-            except auth_logic.OAuth2Error as e:
-                log.debug(f"Incorrect auth token: {encoded}")
-                log.error(f"Couldn't decode access token: {e.message}")
+            return {
+                "jti": ckan_token.id
+            }
+
+    def make_middleware(self, app, config):
+
+        @app.errorhandler(auth_logic.OAuth2Error)
+        def handle_oauth2_error(error):
+            response = {
+                "error": {
+                    "__type": "Authorization error",
+                    "message": error.message
+                },
+                "success": False
+            }
+            resp = Response(response=json.dumps(response))
+            resp.status_code = 401
+            resp.content_type = "text/json"
+
+            return resp
+
+        return app
 
 
 class UNAIDSReclineView(ReclineViewBase):
