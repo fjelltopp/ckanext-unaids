@@ -1,10 +1,14 @@
 from ckantoolkit import config
 import json
+
+from repoze.who.interfaces import IChallengeDecider
 from six.moves.urllib.request import urlopen
 
 from flask import _request_ctx_stack
 from jose import jwt
+from zope.interface import directlyProvides
 
+from ckan.common import request, g
 from ckan.logic import ActionError
 from ckan.model import Session, User, ApiToken
 
@@ -18,7 +22,38 @@ class OAuth2Error(ActionError):
     pass
 
 
+def json_response_omitting_challenge_decider(environ, status, headers):
+    h_dict = dict(headers)
+    ct = h_dict.get('Content-Type')
+    if ct is not None:
+        return not ct.startswith('text/json') and status.startswith('401 ')
+
+    return status.startswith('401 ')
+
+
+directlyProvides(json_response_omitting_challenge_decider, IChallengeDecider)
+
+
 # based on work from https://auth0.com/docs/quickstart/backend/python/01-authorization
+def access_token_present_and_valid_and_user_authorized():
+    token = request.headers.get('Authorization', '')
+    if token:
+        access_token = validate_and_decode_token(token)
+        verify_required_scope(access_token)
+        subject = access_token['sub']
+
+        if not subject.startswith("auth0|"):
+            raise OAuth2Error(message=f"Only auth0 identity provider is supported, got '{subject}'")
+
+        user = find_user_by_saml_id(subject)
+        g.userobj = user
+        g.user = user.name
+
+        return True
+
+    return False
+
+
 def validate_and_decode_token(encoded):
     token = extract_token(encoded)
     jsonurl = urlopen("https://" + AUTH0_DOMAIN + "/.well-known/jwks.json")
@@ -83,38 +118,14 @@ def verify_required_scope(token):
     raise OAuth2Error(message=f"Invalid scope. Required: '{required_scope}'")
 
 
-def create_new_token(user_id):
-    token = ApiToken(user_id=user_id,name='CKAN-Remote')
-    Session.add(token)
-    Session.commit()
-
-    return token
-
-
-def get_or_create_ckan_token(decoded_token):
-    subject = decoded_token['sub']
-    if not subject.startswith("auth0|"):
-        raise OAuth2Error(message="Subject claim is not properly defined")
-
-    user = find_user(subject)
-    api_tokens = Session.query(ApiToken).filter(
-        ApiToken.user_id == user.id
-    ).all()
-
-    if len(api_tokens) > 0:
-        return api_tokens[0]
-    else:
-        return create_new_token(user.id)
-
-
-def find_user(subject):
+def find_user_by_saml_id(subject):
     users = Session.query(User).filter(
         User.plugin_extras["saml2auth", "saml_id"].astext == subject and User.state == 'active'
     ).all()
 
     if len(users) == 0:
-        raise OAuth2Error(message="User has not yet logged into ADR")
+        raise OAuth2Error(message=f"User '{subject}' has not yet logged into ADR")
     elif len(users) > 1:
-        raise OAuth2Error(message="User has more than 1 account, please remove unused accounts")
+        raise OAuth2Error(message=f"User '{subject}' has more than 1 account, please remove unused accounts")
 
     return users[0]

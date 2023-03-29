@@ -83,7 +83,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(IResourceDownloadHandler, inherit=True)
     p.implements(IDataPusher, inherit=True)
     p.implements(p.IAuthenticator, inherit=True)
-    p.implements(p.IApiToken, inherit=True)
     p.implements(p.IMiddleware, inherit=True)
 
     # IClick
@@ -221,7 +220,12 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         Allows requests to be sent "on behalf" of a substitute user for sysadmins only. This is
         done by setting a HTTP Header in the requests "CKAN-Substitute-User" to be the
         username or user id of another CKAN user.
+
+        Before that happens, OAuth2 access_token is being sought and validated if found.
         """
+        if auth_logic.access_token_present_and_valid_and_user_authorized():
+            return
+
         initialize_g_userobj_using_private_core_ckan_method()
         is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
         substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
@@ -235,16 +239,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return resp
 
-    def decode_api_token(self, encoded, **kwargs):
-        if encoded and encoded.startswith("Bearer"):
-            decoded_token = auth_logic.validate_and_decode_token(encoded)
-
-            auth_logic.verify_required_scope(decoded_token)
-            ckan_token = auth_logic.get_or_create_ckan_token(decoded_token)
-
-            return {
-                "jti": ckan_token.id
-            }
 
     def make_middleware(self, app, config):
 
@@ -258,7 +252,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                 "success": False
             }
             resp = Response(response=json.dumps(response))
-            resp.status_code = 403
+            resp.status_code = 401
             resp.content_type = "text/json"
 
             return resp
