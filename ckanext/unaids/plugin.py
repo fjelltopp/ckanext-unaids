@@ -12,7 +12,6 @@ import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
-from flask import app, Response
 
 from ckan.views import _identify_user_default
 from ckanext.saml2auth.interfaces import ISaml2Auth
@@ -215,6 +214,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     )
                 )
 
+    #IAuthenticator
     def identify(self):
         """
         Allows requests to be sent "on behalf" of a substitute user for sysadmins only. This is
@@ -239,23 +239,16 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return resp
 
-
+    #IMiddleware
     def make_middleware(self, app, config):
 
-        @app.errorhandler(auth_logic.OAuth2Error)
-        def handle_oauth2_error(error):
-            response = {
-                "error": {
-                    "__type": "Authorization error",
-                    "message": error.message
-                },
-                "success": False
-            }
-            resp = Response(response=json.dumps(response))
-            resp.status_code = 401
-            resp.content_type = "text/json"
+        @app.errorhandler(auth_logic.OAuth2AuthenticationError)
+        def handle_oauth2_authentication_error(error):
+            return auth_logic.create_response("Authentication error", error.message, 401)
 
-            return resp
+        @app.errorhandler(auth_logic.OAuth2AuthorizationError)
+        def handle_oauth2_authorization_error(error):
+            return auth_logic.create_response("Authorization error", error.message, 403)
 
         return app
 

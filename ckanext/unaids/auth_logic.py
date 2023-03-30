@@ -4,7 +4,7 @@ import json
 from repoze.who.interfaces import IChallengeDecider
 from six.moves.urllib.request import urlopen
 
-from flask import _request_ctx_stack
+from flask import _request_ctx_stack, Response
 from jose import jwt
 from zope.interface import directlyProvides
 
@@ -18,7 +18,11 @@ REQUIRED_SCOPE = config.get('ckanext.unaids.oauth2_required_scope')
 ALGORITHMS = ["RS256"]
 
 
-class OAuth2Error(ActionError):
+class OAuth2AuthenticationError(ActionError):
+    pass
+
+
+class OAuth2AuthorizationError(ActionError):
     pass
 
 
@@ -43,7 +47,7 @@ def access_token_present_and_valid_and_user_authorized():
         subject = access_token['sub']
 
         if not subject.startswith("auth0|"):
-            raise OAuth2Error(message=f"Only auth0 identity provider is supported, got '{subject}'")
+            raise OAuth2AuthenticationError(message=f"Only auth0 identity provider is supported, got '{subject}'")
 
         user = find_user_by_saml_id(subject)
         g.userobj = user
@@ -79,15 +83,15 @@ def validate_and_decode_token(encoded):
                 issuer="https://" + AUTH0_DOMAIN + "/"
             )
         except jwt.ExpiredSignatureError:
-            raise OAuth2Error(message="Token is expired")
+            raise OAuth2AuthenticationError(message="Token is expired")
         except jwt.JWTClaimsError:
-            raise OAuth2Error(message="Incorrect claims, please check the audience and issuer")
+            raise OAuth2AuthenticationError(message="Incorrect claims, please check the audience and issuer")
         except Exception:
-            raise OAuth2Error(message="Unable to parse authentication token")
+            raise OAuth2AuthenticationError(message="Unable to parse authentication token")
 
         _request_ctx_stack.top.current_user = payload
         return payload
-    raise OAuth2Error(message="Unable to find appropriate key")
+    raise OAuth2AuthenticationError(message="Unable to find appropriate key")
 
 
 def extract_token(encoded_token):
@@ -96,11 +100,11 @@ def extract_token(encoded_token):
     parts = encoded_token.split()
 
     if parts[0].lower() != "bearer":
-        raise OAuth2Error(message="Authorization header must start with Bearer")
+        raise OAuth2AuthenticationError(message="Authorization header must start with Bearer")
     elif len(parts) == 1:
-        raise OAuth2Error(message="Token not found")
+        raise OAuth2AuthenticationError(message="Token not found")
     elif len(parts) > 2:
-        raise OAuth2Error(message="Authorization header must be Bearer token")
+        raise OAuth2AuthenticationError(message="Authorization header must be Bearer token")
 
     token = parts[1]
     return token
@@ -115,7 +119,7 @@ def verify_required_scope(token):
             if token_scope == required_scope:
                 return
 
-    raise OAuth2Error(message=f"Invalid scope. Required: '{required_scope}'")
+    raise OAuth2AuthorizationError(message=f"Invalid scope. Required: '{required_scope}'")
 
 
 def find_user_by_saml_id(subject):
@@ -124,8 +128,24 @@ def find_user_by_saml_id(subject):
     ).all()
 
     if len(users) == 0:
-        raise OAuth2Error(message=f"User '{subject}' has not yet logged into ADR")
+        raise OAuth2AuthorizationError(message=f"User '{subject}' has not yet logged into ADR")
     elif len(users) > 1:
-        raise OAuth2Error(message=f"User '{subject}' has more than 1 account, please remove unused accounts")
+        raise OAuth2AuthorizationError(message=f"User '{subject}' has more than 1 account, please remove unused accounts")
 
     return users[0]
+
+
+def create_response(error_type, message, error_code):
+    response = {
+        "error": {
+            "__type": error_type,
+            "message": message
+        },
+        "success": False
+    }
+
+    resp = Response(response=json.dumps(response))
+    resp.status_code = error_code
+    resp.content_type = "text/json"
+
+    return resp
