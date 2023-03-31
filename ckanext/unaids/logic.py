@@ -34,7 +34,7 @@ def update_filename_in_resource_url(resource):
     if resource['url_type'] == 'upload':
         filename = model.Resource.get(resource['id']).url
         # core CKAN functionality fails for non ascii filenames
-        filename = substitute_ascii_equivalents(filename)
+        filename = substitute_ascii_equivalents(filename).replace('%', '-')
         url_segments = resource['url'].split('/')
         if filename and len(url_segments):
             new_url_segments = url_segments[:-1] + [filename]
