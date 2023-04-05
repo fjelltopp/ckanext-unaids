@@ -13,6 +13,10 @@ try:
     from html import escape as html_escape
 except ImportError:
     from cgi import escape as html_escape
+
+from urllib.parse import quote
+
+
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
 
@@ -166,3 +170,10 @@ def get_google_analytics_id():
 
 def is_an_estimates_dataset(dataset_type_name):
     return 'estimates' in dataset_type_name.lower()
+
+
+def filename_encode(url):
+    url_no_filename = url.split('/')[:-1]
+    url_no_filename = '/'.join(url_no_filename)
+    filename = url.split('/')[-1]
+    return url_no_filename + '/' + quote(filename, safe='')
