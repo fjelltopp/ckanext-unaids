@@ -56,10 +56,10 @@
 
 {% block resource_actions_inner %}
     {{ super() }}
-    <script type=application/javascript>
-        document.addEventListener('DOMContentLoaded', function() {
-          let link = document.querySelector('a.btn.btn-primary');
-          link.href = '{{ h.filename_encode(res.url) }}';
-        });
+    <script>
+        document.addEventListener('DOMContentLoaded', () =>  {
+          let link = document.querySelector('a.btn.btn-primary')
+          link.href = '{{ h.filename_encode(res.url) }}'
+        })
     </script>
 {% endblock %}
