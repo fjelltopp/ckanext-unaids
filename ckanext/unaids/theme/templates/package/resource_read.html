@@ -47,8 +47,19 @@
 {% endblock %}
 
 {% block download_resource_button %}
-    {# Datastore is avaiable only for the current version #}
+{#     Datastore is avaiable only for the current version#}
     {% if not activity_id %}
         {{ super() }}
     {% endif %}
+{% endblock %}
+
+
+{% block resource_actions_inner %}
+    {{ super() }}
+    <script type=application/javascript>
+        document.addEventListener('DOMContentLoaded', function() {
+          let link = document.querySelector('a.btn.btn-primary');
+          link.href = '{{ h.filename_encode(res.url) }}';
+        });
+    </script>
 {% endblock %}
