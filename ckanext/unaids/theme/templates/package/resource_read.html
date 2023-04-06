@@ -8,6 +8,13 @@
         {% set _ = res.update({'url': "%s?activity_id=%s" % (res.url, activity_id)}) %}
     {% endif %}
     {{ super() }}
+    {#    Encoding the url to avoid  url encoding issues #}
+    <script>
+        document.addEventListener('DOMContentLoaded', () =>  {
+          let link = document.querySelector('a.btn.btn-primary')
+          link.href = '{{ h.filename_encode(res.url) }}'
+        })
+    </script>
 {% endblock %}
 
 {% block resource_read_url %}
@@ -51,16 +58,4 @@
     {% if not activity_id %}
         {{ super() }}
     {% endif %}
-{% endblock %}
-
-
-{% block resource_actions_inner %}
-    {{ super() }}
-    {#    Encoding the url to avoid  url encoding issues #}
-    <script>
-        document.addEventListener('DOMContentLoaded', () =>  {
-          let link = document.querySelector('a.btn.btn-primary')
-          link.href = '{{ h.filename_encode(res.url) }}'
-        })
-    </script>
 {% endblock %}
