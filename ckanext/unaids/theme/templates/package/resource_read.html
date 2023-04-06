@@ -56,6 +56,7 @@
 
 {% block resource_actions_inner %}
     {{ super() }}
+    {#    Encoding the url to avoid  url encoding issues #}
     <script>
         document.addEventListener('DOMContentLoaded', () =>  {
           let link = document.querySelector('a.btn.btn-primary')
