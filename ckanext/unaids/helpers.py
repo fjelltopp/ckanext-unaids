@@ -173,8 +173,17 @@ def is_an_estimates_dataset(dataset_type_name):
 
 
 def filename_encode(url):
-    # Encoding the left part of the URL will generate a wrong URL, so we keep the original
-    url_no_filename_as_list = url.split('/')[:-1]
-    url_no_filename = '/'.join(url_no_filename_as_list)
-    encoded_filename = quote(url.split('/')[-1], safe='')
-    return url_no_filename + '/' + encoded_filename
+    # Find out if the url contains http or https then put it at index 0 of the list
+    if url.startswith("http://"):
+        url_as_list = ["http:/"] + url[7:].split('/')
+    elif url.startswith("https://"):
+        url_as_list = ["https:/"] + url[8:].split('/')
+    else:
+        url_as_list = url.split('/')
+
+    if url_as_list[0] in ["http:/", "https:/"]:
+        encoded_url_as_list = [url_as_list[0]] + [quote(part, safe='') for part in url_as_list[1:]]
+    else:
+        encoded_url_as_list = [quote(part, safe='') for part in url_as_list]
+
+    return '/'.join(encoded_url_as_list)
