@@ -8,7 +8,7 @@
         {% set _ = res.update({'url': "%s?activity_id=%s" % (res.url, activity_id)}) %}
     {% endif %}
     {# filename is not encoded in URL so we do it here #}
-    {% set _ = res.update({'url': h.filename_encode(res.url)}) %}
+    {% set _ = res.update({'url': h.url_encode(res.url)}) %}
     {{ super() }}
 
 {% endblock %}

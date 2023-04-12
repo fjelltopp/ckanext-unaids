@@ -172,7 +172,7 @@ def is_an_estimates_dataset(dataset_type_name):
     return 'estimates' in dataset_type_name.lower()
 
 
-def filename_encode(url):
+def url_encode(url):
     # Find out if the url contains http or https then put it at index 0 of the list
     if url.startswith("http://"):
         url_as_list = ["http:/"] + url[7:].split('/')
