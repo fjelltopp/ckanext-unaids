@@ -7,14 +7,10 @@
         {# duplication I update the param field #}
         {% set _ = res.update({'url': "%s?activity_id=%s" % (res.url, activity_id)}) %}
     {% endif %}
+    {# filename is not encoded in URL so we do it here #}
+    {% set _ = res.update({'url': h.filename_encode(res.url)}) %}
     {{ super() }}
-    {#    Encoding the url to avoid  url encoding issues #}
-    <script>
-        document.addEventListener('DOMContentLoaded', () =>  {
-          let link = document.querySelector('a.btn.btn-primary')
-          link.href = '{{ h.filename_encode(res.url) }}'
-        })
-    </script>
+
 {% endblock %}
 
 {% block resource_read_url %}

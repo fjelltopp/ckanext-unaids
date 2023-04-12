@@ -173,7 +173,8 @@ def is_an_estimates_dataset(dataset_type_name):
 
 
 def filename_encode(url):
-    url_no_filename = url.split('/')[:-1]
-    url_no_filename = '/'.join(url_no_filename)
-    filename = url.split('/')[-1]
-    return url_no_filename + '/' + quote(filename, safe='')
+    # Encoding the left part of the URL will generate a wrong URL, so we keep the original
+    url_no_filename_as_list = url.split('/')[:-1]
+    url_no_filename = '/'.join(url_no_filename_as_list)
+    encoded_filename = quote(url.split('/')[-1], safe='')
+    return url_no_filename + '/' + encoded_filename
