@@ -1,0 +1,77 @@
+{% ckan_extends %}
+
+{% block primary_content_inner %}
+{% set member_requests = h.get_member_request_list(organization.id) %}
+{% if member_requests %}
+  <h3>{% trans %}Membership requests{% endtrans %}</h3>
+
+  <table class="table table-striped table-bordered table-condensed">
+    <thead>
+      <tr>
+         <th>{% trans %}User{% endtrans %}</th>
+         <th>{% trans %}Job title{% endtrans %}</th>
+         <th>{% trans %}Affiliation{% endtrans %}</th>
+         <th>{% trans %}Role{% endtrans %}</th>
+         <th>{% trans %}Request date{% endtrans %}</th>
+         <th colspan="3">{% trans %}Action{% endtrans %} </th>
+      </tr>
+    </thead>
+    <tfoot> </tfoot>
+    <tbody>
+    {% for member_request in member_requests %}
+        {% set current_member = h.get_user(member_request.table_id) %}
+        {% set _ = member_request.update({'job_title': current_member.job_title if current_member.job_title is not none else '' }) %}
+        {% set _ = member_request.update({'affiliation': current_member.affiliation if current_member.affiliation is not none else '' }) %}
+        {% set _ = member_request.update({'fullname': current_member.fullname if current_member.fullname is not none else '' }) %}
+      <tr>
+        <td>{{ member_request.fullname }}</td>
+        <td>{{ member_request.job_title }}</td>
+        <td>{{ member_request.affiliation }}</td>
+        <td>{{ member_request.role }}</td>
+        <td>{{ member_request.request_date }}</td>
+        <td><a href="{{ h.url_for('member_request.approve', mrequest_id=member_request.mid) }}" class="btn btn-success">{% trans %}Approve{% endtrans %}</a></td>
+        <td><a href="{{ h.url_for('member_request.reject', mrequest_id=member_request.mid) }}" class="btn btn-danger">{% trans %}Reject{% endtrans %}</a></td>
+        <td><a href="{{ h.url_for('member_request.show', mrequest_id=member_request.mid) }}" class="btn btn-primary">{% trans %}Modify{% endtrans %}</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% set count = members|length %}
+  {% set members_count = ungettext('{count} member', '{count} members', count).format(count=count) %}
+  <h3 class="page-heading">{{ members_count }}</h3>
+  <table class="table table-header table-hover table-bordered">
+    <thead>
+      <tr>
+          <th>{{ _('User') }}</th>
+          <th>{{ _('Job title') }}</th>
+          <th>{{ _('Affiliation') }}</th>
+          <th>{{ _('Role') }}</th>
+          <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user_id, user, role in members %}
+        {% set current_member = h.get_user(user_id) %}
+        {% set job_title = current_member.job_title if current_member.job_title is not none else ''  %}
+        {% set affiliation = current_member.affiliation if current_member.affiliation is not none else '' %}
+        <tr>
+          <td class="media">
+            {{ h.linked_user(user_id, maxlength=20) }}
+          </td>
+            <td>{{ job_title }}</td>
+            <td>{{ affiliation }}</td>
+          <td>{{ role }}</td>
+          <td>
+            <div class="btn-group pull-right">
+                <a class="btn btn-default btn-sm" href="{{ h.url_for(group_type + '.member_new', id=group_dict.id, user=user_id) }}" title="{{ _('Edit') }}">
+                <i class="fa fa-wrench"></i>
+              </a>
+              <a class="btn btn-danger btn-sm" href="{{ h.url_for(group_type + '.member_delete', id=group_dict.id, user=user_id) }}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this member?') }}" title="{{ _('Delete') }}">{% block delete_button_text %}<i class="fa fa-times"></i>{% endblock %}</a>
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
