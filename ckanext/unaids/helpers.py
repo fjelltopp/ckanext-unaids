@@ -8,7 +8,7 @@ import os
 import json
 import six
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
-from six.moves.urllib.parse import quote
+
 try:
     from html import escape as html_escape
 except ImportError:
