@@ -722,7 +722,7 @@ msgstr "Ajouter le membre"
 
 #: ckanext/unaids/theme/templates/organization/members.html:6
 msgid "Membership requests"
-msgstr "Demande d'adhésion"
+msgstr "Demandes d'adhésion"
 
 #: ckanext/unaids/theme/templates/organization/members.html:11
 #: ckanext/unaids/theme/templates/organization/members.html:46
