@@ -79,9 +79,7 @@ class TestResourceUrlEncoding():
                 resource_id=resource["id"]
             )
         ressource_read_response = app.get(
-            url = resource_read_url
+            url=resource_read_url
         )
 
         assert quoted_filename in ressource_read_response.body
-
-
