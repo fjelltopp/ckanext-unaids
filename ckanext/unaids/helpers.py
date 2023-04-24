@@ -174,4 +174,3 @@ def is_an_estimates_dataset(dataset_type_name):
 
 def url_encode(url):
     return quote(url, safe='/:?=&')
-
