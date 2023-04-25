@@ -85,7 +85,8 @@ def validate_and_decode_token(encoded):
         except jwt.ExpiredSignatureError:
             raise OAuth2AuthenticationError(message="Token is expired")
         except jwt.JWTClaimsError as e:
-            raise OAuth2AuthenticationError(message=f"Incorrect claims, please check the audience and issuer. Original error: {e}")
+            raise OAuth2AuthenticationError(message=f"Incorrect claims, please check the audience and issuer."
+                                                    f"Expected audience: {API_AUDIENCE}, original error: {e}")
         except Exception:
             raise OAuth2AuthenticationError(message="Unable to parse authentication token")
 
