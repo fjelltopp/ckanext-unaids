@@ -1,3 +1,5 @@
+import logging
+
 from ckantoolkit import config
 import json
 
@@ -17,6 +19,7 @@ API_AUDIENCE = config.get('ckanext.unaids.oauth2_api_audience')
 REQUIRED_SCOPE = config.get('ckanext.unaids.oauth2_required_scope')
 ALGORITHMS = ["RS256"]
 
+log = logging.getLogger()
 
 class OAuth2AuthenticationError(ActionError):
     pass
@@ -85,8 +88,8 @@ def validate_and_decode_token(encoded):
         except jwt.ExpiredSignatureError:
             raise OAuth2AuthenticationError(message="Token is expired")
         except jwt.JWTClaimsError as e:
-            raise OAuth2AuthenticationError(message=f"Incorrect claims, please check the audience and issuer."
-                                                    f"Expected audience: {API_AUDIENCE}, original error: {e}")
+            log.debug(f"Incorrect claims, expected audience: {API_AUDIENCE}, original error: {e}")
+            raise OAuth2AuthenticationError(message=f"Incorrect claims, please check the audience and issuer.")
         except Exception:
             raise OAuth2AuthenticationError(message="Unable to parse authentication token")
 
