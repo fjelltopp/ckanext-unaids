@@ -1,6 +1,8 @@
+import flask.wrappers
+
 from ckan.common import g
 
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock, Mock
 from ckan.common import request
 
 import pytest
@@ -57,6 +59,7 @@ class TestVerifyRequiredScope(object):
         with pytest.raises(auth_logic.OAuth2AuthorizationError, match="Invalid scope. Required: 'access:adr'"):
             auth_logic.verify_required_scope(token)
 
+
 @pytest.mark.ckan_config('ckan.plugins', 'unaids')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins')
 class TestAccessTokenPresentAndValidAndUserAuthorized():
@@ -76,7 +79,6 @@ class TestAccessTokenPresentAndValidAndUserAuthorized():
         assert g.userobj == user
         assert g.user == "Some name"
 
-
     @patch('ckanext.unaids.auth_logic.validate_and_decode_token')
     @patch('ckanext.unaids.auth_logic.find_user_by_saml_id')
     def test_should_return_false_when_no_token(self, find_user_by_saml_id, validate_and_decode_token):
@@ -94,6 +96,53 @@ class TestAccessTokenPresentAndValidAndUserAuthorized():
         with pytest.raises(auth_logic.OAuth2AuthenticationError,
                            match="Only auth0 identity provider is supported, got 'google-oauth2|larry.page@gmail.com'"):
             auth_logic.access_token_present_and_valid_and_user_authorized()
+
+
+class TestFindUserBySamlId:
+
+    @patch('ckanext.unaids.auth_logic.Session')
+    def test_should_pass_when_user_found(self, session):
+        user = User()
+        session.query.return_value.filter.return_value.all.return_value = [user]
+        subject = "auth0|497d989fd03090sa"
+
+        assert auth_logic.find_user_by_saml_id(subject) == user
+
+    @patch('ckanext.unaids.auth_logic.Session')
+    def test_should_throw_when_user_not_found(self, session):
+        session.query.return_value.filter.return_value.all.return_value = []
+
+        subject = "auth0|497d989fd03090sa"
+
+        with pytest.raises(auth_logic.OAuth2AuthorizationError,
+                           match="User 'auth0|497d989fd03090sa' has not yet logged into ADR"):
+            auth_logic.find_user_by_saml_id(subject)
+
+    @patch('ckanext.unaids.auth_logic.Session')
+    def test_should_throw_when_multiple_users_found(self, session):
+        session.query.return_value.filter.return_value.all.return_value = [User(), User()]
+
+        subject = "auth0|497d989fd03090sa"
+
+        with pytest.raises(auth_logic.OAuth2AuthorizationError,
+                           match="User 'auth0|497d989fd03090sa' has more than 1 account, please remove unused accounts"):
+            auth_logic.find_user_by_saml_id(subject)
+
+
+class TestCreateResponse:
+    @pytest.mark.parametrize("error_type,message,error_code,expected ", [
+        ("Authorization", "Token is expired", 401,
+         b'{"error": {"__type": "Authorization", "message": "Token is expired"}, "success": false}'),
+        ("Authentication", "User 'User' has not yet logged into ADR", 404,
+         b'{"error": {"__type": "Authentication", '
+         b'"message": "User \'User\' has not yet logged into ADR"}, "success": false}')
+    ])
+    def test_should_create_response(self, error_type, message, error_code, expected):
+        response = auth_logic.create_response(error_type, message, error_code)
+
+        assert response.status_code == error_code
+        assert response.data == expected
+        assert response.content_type == "text/json"
 
 
 class User:
