@@ -1,6 +1,5 @@
-import flask.wrappers
-
 from ckan.common import g
+from jose import jwt
 
 from unittest.mock import patch, MagicMock, Mock
 from ckan.common import request
@@ -66,9 +65,12 @@ class TestAccessTokenPresentAndValidAndUserAuthorized():
 
     @patch('ckanext.unaids.auth_logic.validate_and_decode_token')
     @patch('ckanext.unaids.auth_logic.find_user_by_saml_id')
-    def test_should_set_user_when_token_correct_and_user_authorized(self, find_user_by_saml_id, validate_and_decode_token):
-        request.headers = {"Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6I"}
-        token = {"sub": "auth0|2fds21gfadsfj3", "scope": "access:adr email"}
+    def test_should_set_user_when_token_correct_and_user_authorized(self, find_user_by_saml_id,
+                                                                    validate_and_decode_token):
+        token_from_request = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6I"
+        request.headers = {"Authorization": token_from_request}
+        user_id = "auth0|2fds21gfadsfj3"
+        token = {"sub": user_id, "scope": "access:adr email"}
         validate_and_decode_token.return_value = token
         user = User()
         find_user_by_saml_id.return_value = user
@@ -78,17 +80,16 @@ class TestAccessTokenPresentAndValidAndUserAuthorized():
         assert auth_logic.access_token_present_and_valid_and_user_authorized()
         assert g.userobj == user
         assert g.user == "Some name"
+        find_user_by_saml_id.assert_called_once_with(user_id)
+        validate_and_decode_token.assert_called_once_with(token_from_request)
 
-    @patch('ckanext.unaids.auth_logic.validate_and_decode_token')
-    @patch('ckanext.unaids.auth_logic.find_user_by_saml_id')
-    def test_should_return_false_when_no_token(self, find_user_by_saml_id, validate_and_decode_token):
+    def test_should_return_false_when_no_token(self):
         request.headers = {}
 
         assert not auth_logic.access_token_present_and_valid_and_user_authorized()
 
     @patch('ckanext.unaids.auth_logic.validate_and_decode_token')
-    @patch('ckanext.unaids.auth_logic.find_user_by_saml_id')
-    def test_should_throw_when_subject_of_different_origin_than_auth0(self, find_user_by_saml_id, validate_and_decode_token):
+    def test_should_throw_when_subject_of_different_origin_than_auth0(self, validate_and_decode_token):
         request.headers = {"Authorization": "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6I"}
         token = {"sub": "google-oauth2|larry.page@gmail.com", "scope": "access:adr email"}
         validate_and_decode_token.return_value = token
@@ -115,7 +116,7 @@ class TestFindUserBySamlId:
         subject = "auth0|497d989fd03090sa"
 
         with pytest.raises(auth_logic.OAuth2AuthorizationError,
-                           match="User 'auth0|497d989fd03090sa' has not yet logged into ADR"):
+                           match="User 'auth0|497d989fd03090s' has not yet logged into ADR"):
             auth_logic.find_user_by_saml_id(subject)
 
     @patch('ckanext.unaids.auth_logic.Session')
@@ -125,7 +126,7 @@ class TestFindUserBySamlId:
         subject = "auth0|497d989fd03090sa"
 
         with pytest.raises(auth_logic.OAuth2AuthorizationError,
-                           match="User 'auth0|497d989fd03090sa' has more than 1 account, please remove unused accounts"):
+                           match="User 'auth0|497d989fd03090s' has more than 1 account, please remove unused accounts"):
             auth_logic.find_user_by_saml_id(subject)
 
 
@@ -143,6 +144,159 @@ class TestCreateResponse:
         assert response.status_code == error_code
         assert response.data == expected
         assert response.content_type == "text/json"
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.usefixtures('with_request_context', 'with_plugins')
+class TestValidateAndDecodeToken(object):
+    @patch('ckanext.unaids.auth_logic.jwt.decode')
+    @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
+    @patch('json.loads')
+    @patch('ckanext.unaids.auth_logic.urlopen')
+    def test_should_validate_and_decode_token(self, urlopen, loads, get_unverified_header, decode):
+        token = "eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        encoded = f"Bearer {token}"
+        payload = {"name": "somename"}
+        jsonurl_read = "jsonurl.read"
+        urlopen.return_value.read.return_value = jsonurl_read
+        key_c = {
+            "kid": "key_c",
+            "kty": "kty_c",
+            "use": "use_c",
+            "n": "n_c",
+            "e": "e_c"
+        }
+        loads.return_value = {
+            "keys": [{
+                "kid": "key_a"
+            }, {
+                "kid": "key_b"
+            }, key_c]
+        }
+        decode.return_value = payload
+        get_unverified_header.return_value = {"kid": "key_c"}
+
+        decoded_token = auth_logic.validate_and_decode_token(encoded)
+
+        assert decoded_token == payload
+        urlopen.assert_called_once_with("https://unittests.org/.well-known/jwks.json")
+        loads.assert_called_once_with(jsonurl_read)
+        get_unverified_header.assert_called_once_with(token)
+        decode.assert_called_once_with(token, key_c, algorithms=["RS256"], audience="http://api.unittests.org",
+                                       issuer="https://unittests.org/")
+
+    @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
+    @patch('json.loads')
+    @patch('ckanext.unaids.auth_logic.urlopen')
+    def test_should_throw_when_no_matching_rsa_key(self, urlopen, loads, get_unverified_header):
+        encoded = f"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        urlopen.return_value.read.return_value = "jsonurl.read"
+        loads.return_value = {
+            "keys": [{
+                "kid": "key_a"
+            }, {
+                "kid": "key_b"
+            }, {
+                "kid": "key_c"
+            }]
+        }
+        get_unverified_header.return_value = {"kid": "key_d"}
+
+        with pytest.raises(auth_logic.OAuth2AuthenticationError,
+                           match="Unable to find appropriate key"):
+            auth_logic.validate_and_decode_token(encoded)
+
+    @patch('ckanext.unaids.auth_logic.jwt.decode')
+    @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
+    @patch('json.loads')
+    @patch('ckanext.unaids.auth_logic.urlopen')
+    def test_should_throw_when_token_expired(self, urlopen, loads, get_unverified_header, decode):
+        token = "eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        encoded = f"Bearer {token}"
+        jsonurl_read = "jsonurl.read"
+        urlopen.return_value.read.return_value = jsonurl_read
+        key_c = {
+            "kid": "key_c",
+            "kty": "kty_c",
+            "use": "use_c",
+            "n": "n_c",
+            "e": "e_c"
+        }
+        loads.return_value = {
+            "keys": [{
+                "kid": "key_a"
+            }, {
+                "kid": "key_b"
+            }, key_c]
+        }
+        decode.side_effect = jwt.ExpiredSignatureError
+        get_unverified_header.return_value = {"kid": "key_c"}
+
+        with pytest.raises(auth_logic.OAuth2AuthenticationError,
+                           match="Token is expired"):
+            auth_logic.validate_and_decode_token(encoded)
+
+    @patch('ckanext.unaids.auth_logic.log')
+    @patch('ckanext.unaids.auth_logic.jwt.decode')
+    @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
+    @patch('json.loads')
+    @patch('ckanext.unaids.auth_logic.urlopen')
+    def test_should_throw_when_incorrect_claims(self, urlopen, loads, get_unverified_header, decode, log):
+        encoded = f"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        jsonurl_read = "jsonurl.read"
+        urlopen.return_value.read.return_value = jsonurl_read
+        key_c = {
+            "kid": "key_c",
+            "kty": "kty_c",
+            "use": "use_c",
+            "n": "n_c",
+            "e": "e_c"
+        }
+        loads.return_value = {
+            "keys": [{
+                "kid": "key_a"
+            }, {
+                "kid": "key_b"
+            }, key_c]
+        }
+        decode.side_effect = jwt.JWTClaimsError("something")
+        get_unverified_header.return_value = {"kid": "key_c"}
+
+        with pytest.raises(auth_logic.OAuth2AuthenticationError,
+                           match="Incorrect claims, please check the audience and issuer."):
+            auth_logic.validate_and_decode_token(encoded)
+
+        log.debug.assert_called_once_with(
+            "Incorrect claims, expected audience: http://api.unittests.org, original error: something")
+
+    @patch('ckanext.unaids.auth_logic.jwt.decode')
+    @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
+    @patch('json.loads')
+    @patch('ckanext.unaids.auth_logic.urlopen')
+    def test_should_throw_when_general_exception_thrown(self, urlopen, loads, get_unverified_header, decode):
+        encoded = f"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        jsonurl_read = "jsonurl.read"
+        urlopen.return_value.read.return_value = jsonurl_read
+        key_c = {
+            "kid": "key_c",
+            "kty": "kty_c",
+            "use": "use_c",
+            "n": "n_c",
+            "e": "e_c"
+        }
+        loads.return_value = {
+            "keys": [{
+                "kid": "key_a"
+            }, {
+                "kid": "key_b"
+            }, key_c]
+        }
+        decode.side_effect = Exception
+        get_unverified_header.return_value = {"kid": "key_c"}
+
+        with pytest.raises(auth_logic.OAuth2AuthenticationError,
+                           match="Unable to parse authentication token"):
+            auth_logic.validate_and_decode_token(encoded)
 
 
 class User:
