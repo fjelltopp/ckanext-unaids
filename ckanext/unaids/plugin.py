@@ -32,7 +32,8 @@ from ckanext.unaids.helpers import (
     get_language_code,
     build_pages_nav_main,
     get_google_analytics_id,
-    is_an_estimates_dataset
+    is_an_estimates_dataset,
+    url_encode
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
@@ -147,7 +148,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "get_language_code": get_language_code,
             "build_nav_main": build_pages_nav_main,
             "get_google_analytics_id": get_google_analytics_id,
-            "is_an_estimates_dataset": is_an_estimates_dataset
+            "is_an_estimates_dataset": is_an_estimates_dataset,
+            "url_encode": url_encode
         }
 
     # IAuthFunctions

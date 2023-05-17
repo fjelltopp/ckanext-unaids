@@ -8,11 +8,15 @@ import os
 import json
 import six
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
-from six.moves.urllib.parse import quote
+
 try:
     from html import escape as html_escape
 except ImportError:
     from cgi import escape as html_escape
+
+from urllib.parse import quote
+
+
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
 
@@ -166,3 +170,7 @@ def get_google_analytics_id():
 
 def is_an_estimates_dataset(dataset_type_name):
     return 'estimates' in dataset_type_name.lower()
+
+
+def url_encode(url):
+    return quote(url, safe='/:?=&')

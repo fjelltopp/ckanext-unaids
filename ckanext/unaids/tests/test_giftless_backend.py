@@ -5,8 +5,9 @@ from six import StringIO
 
 from ckan import model
 from ckan.plugins import toolkit
-from ckan.tests import factories
+from ckan.tests import factories, helpers
 from werkzeug.datastructures import FileStorage as FlaskFileStorage
+import ckan.lib.helpers as h
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'unaids authz_service blob_storage')
@@ -48,3 +49,37 @@ class TestGiftlessBackend(object):
         assert 'sha256' in resource
         assert 'lfs_prefix' in resource
         assert resource.get('name', None) == filename
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids pages blob_storage')
+class TestResourceUrlEncoding():
+    def test_resource_url_encoding_test(self, app):
+        user = factories.User()
+        org = factories.Organization(
+            users=[
+                {'name': user['name'], 'capacity': 'admin'},
+            ]
+        )
+        dataset = factories.Dataset(user=user, owner_org=org['id'])
+
+        unquoted_filename = 'file%.csv'
+        quoted_filename = 'file%25.csv'
+
+        resource = helpers.call_action('resource_create', package_id=dataset["id"], **{
+            'url_type': 'upload',
+            'url': unquoted_filename,
+            'lfs_prefix': 'prefix',
+            'sha256': 'acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79',
+            'size': 100,
+        })
+
+        resource_read_url = h.url_for(
+                "resource.read",
+                id=dataset["name"],
+                resource_id=resource["id"]
+            )
+        ressource_read_response = app.get(
+            url=resource_read_url
+        )
+
+        assert quoted_filename in ressource_read_response.body
