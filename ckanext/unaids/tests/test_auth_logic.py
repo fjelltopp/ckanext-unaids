@@ -1,10 +1,10 @@
-from ckan.common import g
+from unittest.mock import patch
+
 from jose import jwt
-
-from unittest.mock import patch, MagicMock, Mock
-from ckan.common import request
-
 import pytest
+
+from ckan.common import g
+from ckan.common import request
 import ckanext.unaids.auth_logic as auth_logic
 
 
@@ -189,7 +189,7 @@ class TestValidateAndDecodeToken(object):
     @patch('json.loads')
     @patch('ckanext.unaids.auth_logic.urlopen')
     def test_should_throw_when_no_matching_rsa_key(self, urlopen, loads, get_unverified_header):
-        encoded = f"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        encoded = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
         urlopen.return_value.read.return_value = "jsonurl.read"
         loads.return_value = {
             "keys": [{
@@ -242,7 +242,7 @@ class TestValidateAndDecodeToken(object):
     @patch('json.loads')
     @patch('ckanext.unaids.auth_logic.urlopen')
     def test_should_throw_when_incorrect_claims(self, urlopen, loads, get_unverified_header, decode, log):
-        encoded = f"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        encoded = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
         jsonurl_read = "jsonurl.read"
         urlopen.return_value.read.return_value = jsonurl_read
         key_c = {
@@ -274,7 +274,7 @@ class TestValidateAndDecodeToken(object):
     @patch('json.loads')
     @patch('ckanext.unaids.auth_logic.urlopen')
     def test_should_throw_when_general_exception_thrown(self, urlopen, loads, get_unverified_header, decode):
-        encoded = f"Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
+        encoded = "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6Ik"
         jsonurl_read = "jsonurl.read"
         urlopen.return_value.read.return_value = jsonurl_read
         key_c = {

@@ -1,18 +1,16 @@
 import logging
-
-from ckantoolkit import config
 import json
 
+from ckantoolkit import config
 from repoze.who.interfaces import IChallengeDecider
 from six.moves.urllib.request import urlopen
-
 from flask import _request_ctx_stack, Response
 from jose import jwt
 from zope.interface import directlyProvides
 
 from ckan.common import request, g
 from ckan.logic import ActionError
-from ckan.model import Session, User, ApiToken
+from ckan.model import Session, User
 
 AUTH0_DOMAIN = config.get('ckanext.unaids.auth0_domain')
 API_AUDIENCE = config.get('ckanext.unaids.oauth2_api_audience')
@@ -20,6 +18,7 @@ REQUIRED_SCOPE = config.get('ckanext.unaids.oauth2_required_scope')
 ALGORITHMS = ["RS256"]
 
 log = logging.getLogger()
+
 
 class OAuth2AuthenticationError(ActionError):
     pass
@@ -89,7 +88,7 @@ def validate_and_decode_token(encoded):
             raise OAuth2AuthenticationError(message="Token is expired")
         except jwt.JWTClaimsError as e:
             log.debug(f"Incorrect claims, expected audience: {API_AUDIENCE}, original error: {e}")
-            raise OAuth2AuthenticationError(message=f"Incorrect claims, please check the audience and issuer.")
+            raise OAuth2AuthenticationError(message="Incorrect claims, please check the audience and issuer.")
         except Exception:
             raise OAuth2AuthenticationError(message="Unable to parse authentication token")
 
@@ -134,7 +133,8 @@ def find_user_by_saml_id(subject):
     if len(users) == 0:
         raise OAuth2AuthorizationError(message=f"User '{subject}' has not yet logged into ADR")
     elif len(users) > 1:
-        raise OAuth2AuthorizationError(message=f"User '{subject}' has more than 1 account, please remove unused accounts")
+        raise OAuth2AuthorizationError(
+            message=f"User '{subject}' has more than 1 account, please remove unused accounts")
 
     return users[0]
 

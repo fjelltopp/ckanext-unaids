@@ -1,20 +1,19 @@
 import datetime
-import json
-
-import ckan.plugins as p
 import logging
 from collections import OrderedDict
+
 from giftless_client import LfsClient
+from werkzeug.datastructures import FileStorage as FlaskFileStorage
+from ckanext.saml2auth.interfaces import ISaml2Auth
+
+import ckan.plugins as p
 import ckan.model.license as core_licenses
 import ckan.model.package as package
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
-from werkzeug.datastructures import FileStorage as FlaskFileStorage
-
 from ckan.views import _identify_user_default
-from ckanext.saml2auth.interfaces import ISaml2Auth
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids import custom_user_profile
@@ -216,7 +215,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     )
                 )
 
-    #IAuthenticator
+    # IAuthenticator
     def identify(self):
         """
         Allows requests to be sent "on behalf" of a substitute user for sysadmins only. This is
@@ -241,7 +240,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return resp
 
-    #IMiddleware
+    # IMiddleware
     def make_middleware(self, app, config):
 
         @app.errorhandler(auth_logic.OAuth2AuthenticationError)
@@ -275,7 +274,7 @@ class UNAIDSReclineView(ReclineViewBase):
         resource = data_dict["resource"]
 
         if resource.get(
-            "datastore_active"
+                "datastore_active"
         ) or "_datastore_only_resource" in resource.get("url", ""):
             return True
         resource_format = resource.get("format", None)
@@ -288,10 +287,10 @@ class UNAIDSReclineView(ReclineViewBase):
 
 def _data_dict_is_resource(data_dict):
     return not (
-        "creator_user_id" in data_dict
-        or "owner_org" in data_dict
-        or "resources" in data_dict
-        or data_dict.get("type") == "dataset"
+            "creator_user_id" in data_dict
+            or "owner_org" in data_dict
+            or "resources" in data_dict
+            or data_dict.get("type") == "dataset"
     )
 
 
