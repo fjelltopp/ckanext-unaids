@@ -1,3 +1,5 @@
 giftless-client==0.1.1
 cssmin==0.2.0
 ckanext-saml2auth==1.2.3
+python-dotenv==1.0.0
+python-jose==3.3.0
