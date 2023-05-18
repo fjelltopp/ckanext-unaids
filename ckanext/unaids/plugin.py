@@ -1,19 +1,19 @@
 import datetime
-
-import ckan.plugins as p
 import logging
 from collections import OrderedDict
+
 from giftless_client import LfsClient
+from werkzeug.datastructures import FileStorage as FlaskFileStorage
+from ckanext.saml2auth.interfaces import ISaml2Auth
+
+import ckan.plugins as p
 import ckan.model.license as core_licenses
 import ckan.model.package as package
 import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
-from werkzeug.datastructures import FileStorage as FlaskFileStorage
-
 from ckan.views import _identify_user_default
-from ckanext.saml2auth.interfaces import ISaml2Auth
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids import custom_user_profile
@@ -36,6 +36,7 @@ from ckanext.unaids.helpers import (
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
+import ckanext.unaids.auth_logic as auth_logic
 from ckanext.unaids import auth, licenses, command, logic
 from ckanext.unaids.blueprints import blueprints
 from ckanext.reclineview.plugin import ReclineViewBase
@@ -81,6 +82,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(IResourceDownloadHandler, inherit=True)
     p.implements(IDataPusher, inherit=True)
     p.implements(p.IAuthenticator, inherit=True)
+    p.implements(p.IMiddleware, inherit=True)
 
     # IClick
     def get_commands(self):
@@ -213,12 +215,18 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     )
                 )
 
+    # IAuthenticator
     def identify(self):
         """
         Allows requests to be sent "on behalf" of a substitute user for sysadmins only. This is
         done by setting a HTTP Header in the requests "CKAN-Substitute-User" to be the
         username or user id of another CKAN user.
+
+        Before that happens, OAuth2 access_token is being sought and validated if found.
         """
+        if auth_logic.access_token_present_and_valid_and_user_authorized():
+            return
+
         initialize_g_userobj_using_private_core_ckan_method()
         is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
         substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
@@ -231,6 +239,19 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         custom_user_profile.read_saml_profile(user_obj, saml_attributes)
 
         return resp
+
+    # IMiddleware
+    def make_middleware(self, app, config):
+
+        @app.errorhandler(auth_logic.OAuth2AuthenticationError)
+        def handle_oauth2_authentication_error(error):
+            return auth_logic.create_response("Authentication error", error.message, 401)
+
+        @app.errorhandler(auth_logic.OAuth2AuthorizationError)
+        def handle_oauth2_authorization_error(error):
+            return auth_logic.create_response("Authorization error", error.message, 403)
+
+        return app
 
 
 class UNAIDSReclineView(ReclineViewBase):
@@ -253,7 +274,7 @@ class UNAIDSReclineView(ReclineViewBase):
         resource = data_dict["resource"]
 
         if resource.get(
-            "datastore_active"
+                "datastore_active"
         ) or "_datastore_only_resource" in resource.get("url", ""):
             return True
         resource_format = resource.get("format", None)
@@ -266,10 +287,10 @@ class UNAIDSReclineView(ReclineViewBase):
 
 def _data_dict_is_resource(data_dict):
     return not (
-        "creator_user_id" in data_dict
-        or "owner_org" in data_dict
-        or "resources" in data_dict
-        or data_dict.get("type") == "dataset"
+            "creator_user_id" in data_dict
+            or "owner_org" in data_dict
+            or "resources" in data_dict
+            or data_dict.get("type") == "dataset"
     )
 
 
