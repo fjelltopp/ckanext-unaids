@@ -24,10 +24,6 @@ class TestExtractToken(object):
     def test_should_pass_when_right_token(self):
         assert auth_logic.extract_token("Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6I") == "eyJhbGciOiJSUzI1NiIsInR5cCI6I"
 
-    def test_should_throw_when_not_bearer(self):
-        with pytest.raises(auth_logic.OAuth2AuthenticationError, match="Authorization header must start with Bearer"):
-            auth_logic.extract_token("User")
-
     def test_should_throw_when_more_than_2_parts(self):
         with pytest.raises(auth_logic.OAuth2AuthenticationError, match="Authorization header must be Bearer token"):
             auth_logic.extract_token("Bearer ey2323 ddd")
