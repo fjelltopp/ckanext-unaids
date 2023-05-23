@@ -1,11 +1,14 @@
+import json
 from unittest.mock import patch
 
 from jose import jwt
 import pytest
 
+from ckan.tests import factories
 from ckan.common import g
 from ckan.common import request
 import ckanext.unaids.auth_logic as auth_logic
+from ckan.tests.helpers import call_action
 
 
 @pytest.mark.parametrize("status,headers,expected ", [
@@ -293,6 +296,61 @@ class TestValidateAndDecodeToken(object):
         with pytest.raises(auth_logic.OAuth2AuthenticationError,
                            match="Unable to parse authentication token"):
             auth_logic.validate_and_decode_token(encoded)
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.usefixtures('with_request_context', 'with_plugins', 'clean_db')
+class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
+
+    def test_using_api_key(self, app):
+        user = factories.User(sysadmin=True)
+        authentication_element = user['apikey']
+
+        self.perform_test_using_authorization_header_value(app, authentication_element)
+
+    def test_using_api_token(self, app):
+        user = factories.User(sysadmin=True)
+        apitoken = call_action('api_token_create', {}, user=user['id'], name='testtoken')
+        authentication_element = apitoken['token']
+
+        self.perform_test_using_authorization_header_value(app, authentication_element)
+
+    def perform_test_using_authorization_header_value(self, app, authentication_element):
+        org = factories.Organization()
+        request_headers = {"Authorization": authentication_element}
+
+        result = self.search_for_dataset(app, request_headers)
+
+        assert result['count'] == 0
+
+        response = app.post(
+            '/api/action/package_create',
+            params={
+                'private_dataset': True,
+                'name': 'my-first-private-dataset',
+                'owner_org': org['id']
+            },
+            headers=request_headers
+        )
+        assert response.status_code == 200
+
+        result = self.search_for_dataset(app, request_headers)
+
+        assert result['count'] == 1
+
+    @staticmethod
+    def search_for_dataset(app, request_headers):
+        response = app.post(
+            '/api/action/package_search',
+            params={
+                'q': 'name:my-first-private-dataset',
+                'include_private': True
+            },
+            headers=request_headers
+        )
+        # print(response.body)
+
+        return json.loads(response.body)['result']
 
 
 class User:
