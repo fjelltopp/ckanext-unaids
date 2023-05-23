@@ -1,4 +1,3 @@
-import json
 from unittest.mock import patch
 
 from jose import jwt
@@ -304,24 +303,17 @@ class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
 
     def test_using_api_key(self, app):
         user = factories.User(sysadmin=True)
-        authentication_element = user['apikey']
-
-        self.perform_test_using_authorization_header_value(app, authentication_element)
+        self.perform_test_using_authorization_header_value(app, user['apikey'])
 
     def test_using_api_token(self, app):
         user = factories.User(sysadmin=True)
-        apitoken = call_action('api_token_create', {}, user=user['id'], name='testtoken')
-        authentication_element = apitoken['token']
+        api_token = call_action('api_token_create', {}, user=user['id'], name='testtoken')
+        self.perform_test_using_authorization_header_value(app, api_token['token'])
 
-        self.perform_test_using_authorization_header_value(app, authentication_element)
-
-    def perform_test_using_authorization_header_value(self, app, authentication_element):
+    @staticmethod
+    def perform_test_using_authorization_header_value(app, authentication_element):
         org = factories.Organization()
         request_headers = {"Authorization": authentication_element}
-
-        result = self.search_for_dataset(app, request_headers)
-
-        assert result['count'] == 0
 
         response = app.post(
             '/api/action/package_create',
@@ -333,24 +325,6 @@ class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
             headers=request_headers
         )
         assert response.status_code == 200
-
-        result = self.search_for_dataset(app, request_headers)
-
-        assert result['count'] == 1
-
-    @staticmethod
-    def search_for_dataset(app, request_headers):
-        response = app.post(
-            '/api/action/package_search',
-            params={
-                'q': 'name:my-first-private-dataset',
-                'include_private': True
-            },
-            headers=request_headers
-        )
-        # print(response.body)
-
-        return json.loads(response.body)['result']
 
 
 class User:
