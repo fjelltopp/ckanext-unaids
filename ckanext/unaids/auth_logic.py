@@ -43,7 +43,7 @@ directlyProvides(json_response_omitting_challenge_decider, IChallengeDecider)
 # based on work from https://auth0.com/docs/quickstart/backend/python/01-authorization
 def access_token_present_and_valid_and_user_authorized():
     token = request.headers.get('Authorization', '')
-    if token:
+    if token and token.startswith("Bearer "):
         access_token = validate_and_decode_token(token)
         verify_required_scope(access_token)
         subject = access_token['sub']
@@ -102,9 +102,7 @@ def extract_token(encoded_token):
     """
     parts = encoded_token.split()
 
-    if parts[0].lower() != "bearer":
-        raise OAuth2AuthenticationError(message="Authorization header must start with Bearer")
-    elif len(parts) == 1:
+    if len(parts) == 1:
         raise OAuth2AuthenticationError(message="Token not found")
     elif len(parts) > 2:
         raise OAuth2AuthenticationError(message="Authorization header must be Bearer token")

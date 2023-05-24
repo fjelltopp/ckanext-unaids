@@ -3,9 +3,11 @@ from unittest.mock import patch
 from jose import jwt
 import pytest
 
+from ckan.tests import factories
 from ckan.common import g
 from ckan.common import request
 import ckanext.unaids.auth_logic as auth_logic
+from ckan.tests.helpers import call_action
 
 
 @pytest.mark.parametrize("status,headers,expected ", [
@@ -23,10 +25,6 @@ def test_json_response_omitting_challenge_decider(status, headers, expected):
 class TestExtractToken(object):
     def test_should_pass_when_right_token(self):
         assert auth_logic.extract_token("Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6I") == "eyJhbGciOiJSUzI1NiIsInR5cCI6I"
-
-    def test_should_throw_when_not_bearer(self):
-        with pytest.raises(auth_logic.OAuth2AuthenticationError, match="Authorization header must start with Bearer"):
-            auth_logic.extract_token("User")
 
     def test_should_throw_when_more_than_2_parts(self):
         with pytest.raises(auth_logic.OAuth2AuthenticationError, match="Authorization header must be Bearer token"):
@@ -297,6 +295,36 @@ class TestValidateAndDecodeToken(object):
         with pytest.raises(auth_logic.OAuth2AuthenticationError,
                            match="Unable to parse authentication token"):
             auth_logic.validate_and_decode_token(encoded)
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.usefixtures('with_request_context', 'with_plugins', 'clean_db')
+class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
+
+    def test_using_api_key(self, app):
+        user = factories.User(sysadmin=True)
+        self.perform_test_using_authorization_header_value(app, user['apikey'])
+
+    def test_using_api_token(self, app):
+        user = factories.User(sysadmin=True)
+        api_token = call_action('api_token_create', {}, user=user['id'], name='testtoken')
+        self.perform_test_using_authorization_header_value(app, api_token['token'])
+
+    @staticmethod
+    def perform_test_using_authorization_header_value(app, authentication_element):
+        org = factories.Organization()
+        request_headers = {"Authorization": authentication_element}
+
+        response = app.post(
+            '/api/action/package_create',
+            params={
+                'private_dataset': True,
+                'name': 'my-first-private-dataset',
+                'owner_org': org['id']
+            },
+            headers=request_headers
+        )
+        assert response.status_code == 200
 
 
 class User:
