@@ -16,8 +16,11 @@
 {% set dataset_id = pkg.id if is_activity_archive else pkg.name %}
 {{ h.build_nav_icon(dataset_type ~ '.read', _('Dataset'), id=dataset_id,
 icon='sitemap') }}
-{{ h.build_nav_icon(dataset_type ~ '.activity', _('Activity Stream'), id=dataset_id,
-icon='clock-o') }}
+{% if h.is_ckan_at_least_2_10() %}
+    {{ h.build_nav_icon('activity.package_activity', _('Activity Stream'), id=dataset_id, icon='clock-o') }}
+{% else %}
+    {{ h.build_nav_icon(dataset_type ~ '.activity', _('Activity Stream'), id=dataset_id, icon='clock-o') }}
+{% endif %}
 {{ h.build_nav_icon('unaids_dataset_releases.list_releases', _('Releases'), dataset_type=dataset_type, dataset_id=dataset_id, icon='code-fork') }}
 {% endblock %}
 

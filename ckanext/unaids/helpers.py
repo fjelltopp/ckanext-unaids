@@ -1,6 +1,6 @@
 # encoding: utf-8
 from ckan.lib.helpers import url_for_static_or_external, check_access
-from ckan.plugins.toolkit import get_action, request
+from ckan.plugins.toolkit import get_action, request, check_ckan_version
 from ckan.plugins import toolkit
 from ckan.common import _, g
 import logging
@@ -174,3 +174,7 @@ def is_an_estimates_dataset(dataset_type_name):
 
 def url_encode(url):
     return quote(url, safe='/:?=&')
+
+
+def is_ckan_at_least_2_10():
+    return check_ckan_version(min_version='2.10')

@@ -5,7 +5,11 @@
       {% link_for _('Profile settings'), named_route='user.edit', id=user.name, class_='btn btn-default', icon='cog' %}
     </div>
     <ul class="nav nav-tabs">
-      {{ h.build_nav_icon('dashboard.index', _('News feed'), icon='list') }}
+    {% if h.is_ckan_at_least_2_10() %}
+        {{ h.build_nav_icon('activity.dashboard', _('News feed'), icon='list') }}
+    {% else %}
+      {{ h.build_nav_icon('dashboard', _('News feed'), icon='list') }}
+    {% endif %}
       {{ h.build_nav_icon('dashboard.datasets', _('My Datasets'), icon='sitemap') }}
       {{ h.build_nav_icon('dashboard.organizations', _('My Organizations'), icon='building-o') }}
     </ul>
