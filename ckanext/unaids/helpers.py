@@ -1,12 +1,14 @@
 # encoding: utf-8
-from ckan.lib.helpers import url_for_static_or_external, check_access
-from ckan.plugins.toolkit import get_action, request
-from ckan.plugins import toolkit
-from ckan.common import _, g
 import logging
 import os
 import json
+
 import six
+
+from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url
+from ckan.plugins.toolkit import get_action, request
+from ckan.plugins import toolkit
+from ckan.common import _, g, config
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
 
 try:
@@ -75,6 +77,10 @@ def get_all_organizations():
 
 def get_bulk_file_uploader_default_fields():
     return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})
+
+
+def get_ape_url():
+    return config.get("ckanext.unaids.ape_url", "") + "?return_url=" + full_current_url()
 
 
 def get_current_dataset_release(dataset_id, activity_id=None):
