@@ -6,7 +6,7 @@
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
 
-      <p>To change your profile settings, please <a href="{{ h.get_ape_url() }}">click here</a>.</p>
+      <p>{{ _('To change your profile settings, please') }} <a href="{{ h.get_ape_url() }}">{{ _('click here') }}</a>.</p>
     
     {{ form.input('name', label=_('Username'), id='field-username', value=data.name, error=errors.name, classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
 
