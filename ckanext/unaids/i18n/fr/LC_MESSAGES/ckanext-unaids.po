@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-04-24 09:22+0000\n"
+"POT-Creation-Date: 2023-07-03 09:16+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: \n"
 "Language: fr\n"
@@ -27,7 +27,7 @@ msgstr "Ressource introuvable."
 msgid "TaskStatus was not found."
 msgstr "L'état actuel de la tâche est introuvable."
 
-#: ckanext/unaids/helpers.py:149
+#: ckanext/unaids/helpers.py:159
 msgid "title"
 msgstr "Titre"
 
@@ -37,28 +37,28 @@ msgstr ""
 "Licence Creative Commons Attribution pour les organisations "
 "intergouvernementales"
 
-#: ckanext/unaids/plugin.py:122
+#: ckanext/unaids/plugin.py:126
 #: ckanext/unaids/theme/templates/request/show.html:10
 msgid "Organization"
 msgstr "Organisation"
 
-#: ckanext/unaids/plugin.py:123
+#: ckanext/unaids/plugin.py:127
 msgid "Data Type"
 msgstr "Type de données"
 
-#: ckanext/unaids/plugin.py:124
+#: ckanext/unaids/plugin.py:128
 msgid "Tags"
 msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:125
+#: ckanext/unaids/plugin.py:129
 msgid "Year"
 msgstr "Année"
 
-#: ckanext/unaids/plugin.py:126
+#: ckanext/unaids/plugin.py:130
 msgid "Location"
 msgstr "Lieu"
 
-#: ckanext/unaids/plugin.py:247
+#: ckanext/unaids/plugin.py:272
 msgid "Data Explorer"
 msgstr "Explorateur de données"
 
@@ -888,19 +888,19 @@ msgstr ""
 msgid "Add Release"
 msgstr "Ajouter une publication"
 
-#: ckanext/unaids/theme/templates/package/resource_read.html:15
+#: ckanext/unaids/theme/templates/package/resource_read.html:18
 msgid "Resource ID:"
 msgstr "ID de la ressource :"
 
-#: ckanext/unaids/theme/templates/package/resource_read.html:19
-#: ckanext/unaids/theme/templates/package/resource_read.html:21
-#: ckanext/unaids/theme/templates/package/resource_read.html:25
-#: ckanext/unaids/theme/templates/package/resource_read.html:27
+#: ckanext/unaids/theme/templates/package/resource_read.html:22
+#: ckanext/unaids/theme/templates/package/resource_read.html:24
+#: ckanext/unaids/theme/templates/package/resource_read.html:28
+#: ckanext/unaids/theme/templates/package/resource_read.html:30
 msgid "URL:"
 msgstr "URL :"
 
-#: ckanext/unaids/theme/templates/package/resource_read.html:35
-#: ckanext/unaids/theme/templates/package/resource_read.html:42
+#: ckanext/unaids/theme/templates/package/resource_read.html:38
+#: ckanext/unaids/theme/templates/package/resource_read.html:45
 msgid "Imported from:"
 msgstr "Importé à partir de:"
 
@@ -1208,6 +1208,14 @@ msgstr "Mes organisations"
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:7
 msgid "Change details"
 msgstr "Changer les détails"
+
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:9
+msgid "To change your profile settings, please"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:9
+msgid "click here"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:13
 msgid "Full name"
