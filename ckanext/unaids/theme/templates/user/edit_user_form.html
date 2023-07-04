@@ -6,8 +6,10 @@
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
 
+    {% if h.user_is_editing_his_page() %}
       <p>{{ _('To change your profile settings, please') }} <a href="{{ h.get_ape_url() }}">{{ _('click here') }}</a>.</p>
-    
+    {% endif %}
+
     {{ form.input('name', label=_('Username'), id='field-username', value=data.name, error=errors.name, classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
 
     {{ form.input('fullname', label=_('Full name'), id='field-fullname', value=data.fullname, error=errors.fullname, placeholder=_('eg. Joe Bloggs'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
