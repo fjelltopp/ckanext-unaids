@@ -2,10 +2,12 @@
 import logging
 import os
 import json
+import re
 
 import six
 
 from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url
+from ckan.lib.i18n import get_lang
 from ckan.plugins.toolkit import get_action, request
 from ckan.plugins import toolkit
 from ckan.common import _, g, config
@@ -16,8 +18,7 @@ try:
 except ImportError:
     from cgi import escape as html_escape
 
-from urllib.parse import quote
-
+from urllib.parse import quote, urlencode
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
@@ -80,7 +81,25 @@ def get_bulk_file_uploader_default_fields():
 
 
 def get_ape_url():
-    return config.get("ckanext.unaids.ape_url", "") + "?return_url=" + full_current_url()
+    query_params = {
+        "return_url": full_current_url(),
+        "lang": get_lang()
+    }
+    domain_part = config.get("ckanext.unaids.ape_url", "")
+    encoded_query_params = urlencode(query_params)
+
+    return f"{domain_part}?{encoded_query_params}"
+
+
+def user_is_editing_his_page():
+    current_url = full_current_url()
+    username = toolkit.g.userobj.name
+    log.error(f"User3: {username}")
+    return url_is_edit_url_for_username(current_url, username)
+
+
+def url_is_edit_url_for_username(current_url, username):
+    return re.search(f"/user/edit/{username}($|/|\\?)", current_url) is not None
 
 
 def get_current_dataset_release(dataset_id, activity_id=None):
@@ -145,8 +164,8 @@ def build_pages_nav_main(*args):
         is_current_page = toolkit.get_endpoint() in (('pages', 'show'), ('pages', 'blog_show'))
     else:
         is_current_page = (
-            hasattr(toolkit.c, 'action') and toolkit.c.action in ('pages_show', 'blog_show')
-            and toolkit.c.controller == 'ckanext.pages.controller:PagesController')
+                hasattr(toolkit.c, 'action') and toolkit.c.action in ('pages_show', 'blog_show')
+                and toolkit.c.controller == 'ckanext.pages.controller:PagesController')
     if is_current_page:
         page_name = toolkit.request.path.split('/')[-1]
 
