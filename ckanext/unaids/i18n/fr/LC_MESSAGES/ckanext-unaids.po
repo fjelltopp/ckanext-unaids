@@ -1210,12 +1210,12 @@ msgid "Change details"
 msgstr "Changer les détails"
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:9
-msgid "To change your profile settings, please"
-msgstr ""
+msgid "To change your profile settings, please "
+msgstr "Pour changer les paramètres de votre profil, veuillez "
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:9
 msgid "click here"
-msgstr ""
+msgstr "cliquer ici"
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:13
 msgid "Full name"
