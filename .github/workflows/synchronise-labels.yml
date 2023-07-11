@@ -17,4 +17,4 @@ jobs:
                   from: https://raw.githubusercontent.com/fjelltopp/.github/master/.github/labels.yml
                   skip-delete: true
               env:
-                  GITHUB_TOKEN: ${{ secrets.ROBOT_TOKEN  }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN  }}
