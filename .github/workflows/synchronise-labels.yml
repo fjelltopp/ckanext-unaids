@@ -14,7 +14,7 @@ jobs:
             - name: synchronize labels
               uses: julbme/gh-action-manage-label@v1
               with:
-                  from: https://raw.githubusercontent.com/fjelltopp/.github/main/.github/labels.yml
+                  from: https://raw.githubusercontent.com/fjelltopp/.github/master/.github/labels.yml
                   skip-delete: true
               env:
                   GITHUB_TOKEN: ${{ secrets.ROBOT_TOKEN  }}
