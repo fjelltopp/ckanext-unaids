@@ -28,18 +28,20 @@ def receive():
         audience = url_for('ape_data_receiver.accept', _external=True)
         query_params = {
             "scope": "openid profile email",
-            "audience": audience,
+            # "audience": audience,
             "response_type": "code",
             "client_id": client_id,
             "client_secret": client_secret,
             "redirect_uri": redirect_url,
             "state": state,
-            "prompt": "none"
+            # "prompt": "none"
         }
         auth_url = base_url + "?" + urlencode(query_params)
         silent_response = requests.get(auth_url)
+
         # return redirect('http://adr.local/user/edit/admin')
-        return jsonify({"message": "Silent authentication initiated.", "args": request.args, "silent_response": silent_response.text})
+        # return jsonify({"message": "Silent authentication initiated.", "args": request.args, "silent_response": silent_response.text})
+        return redirect(auth_url)
 @ape_data_receiver.route('/ape_callback', methods=['GET'])
 def refresh():
     return request.args
