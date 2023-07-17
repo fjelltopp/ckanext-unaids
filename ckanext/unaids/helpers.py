@@ -2,7 +2,6 @@
 import logging
 import os
 import json
-import re
 
 import six
 
@@ -89,17 +88,6 @@ def get_ape_url():
     encoded_query_params = urlencode(query_params)
 
     return f"{domain_part}?{encoded_query_params}"
-
-
-def user_is_editing_his_page():
-    current_url = full_current_url()
-    username = toolkit.g.userobj.name
-    log.error(f"User3: {username}")
-    return url_is_edit_url_for_username(current_url, username)
-
-
-def url_is_edit_url_for_username(current_url, username):
-    return re.search(f"/user/edit/{username}($|/|\\?)", current_url) is not None
 
 
 def get_current_dataset_release(dataset_id, activity_id=None):
