@@ -1,12 +1,16 @@
 import json
 
-from flask import Blueprint, redirect, request, jsonify
+from flask import Blueprint, redirect, request, flash
 import requests
 from ckan.common import _, g
 from ckan.lib.helpers import url_for
 from ckan.plugins import toolkit
 
 from urllib.parse import urlparse
+
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization, hashes
+from cryptography.hazmat.primitives.asymmetric import padding
 
 ape_data_receiver = Blueprint("ape_data_receiver", __name__)
 
@@ -32,23 +36,46 @@ def get_mgmt_token():
 
 def get_user_data():
     user_id = request.args.get('user_id')
+    if user_id == "":
+        flash(_("User ID is empty"), 'error')
+        return redirect(url_for('user.read', id=g.user))
+
+    private_key = serialization.load_pem_private_key(
+        toolkit.config.get('adr_private_key').encode(),
+        password=None,
+        backend=default_backend()
+    )
+
+    user_id = private_key.decrypt(
+        bytes.fromhex(user_id),
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    ).decode()
+
     mgmt_token = get_mgmt_token()
     headers = {
         'Authorization': f'Bearer {mgmt_token}',
         'Content-Type': 'application/json'
     }
-
+    print(mgmt_token)
     url = f'{auth0_domain}/api/v2/users/{user_id}'
     res_json = requests.get(url, headers=headers).json()
+
     return res_json
 
 @ape_data_receiver.route('/ape_data_receiver', methods=['GET'])
 def receive():
+    import pydevd_pycharm
+    pydevd_pycharm.settrace('172.17.0.1', port=9999, stdoutToServer=True, stderrToServer=True)
     if not g.user:
         return toolkit.abort(403, _('You must be logged in to access this page'))
     else:
         user_data = get_user_data()
         user_metadata = user_data.get("user_metadata", {})
+
 
         user_dict = {
             "id": g.user,
@@ -69,6 +96,7 @@ def receive():
             toolkit.get_action('user_update')(context, user_dict)
         except:
             pass
-        return redirect(url_for('user.edit', id=g.user))
+        return json.dumps(user_data, indent=4)
+        # return redirect(url_for('user.edit', id=g.user))
 
 
