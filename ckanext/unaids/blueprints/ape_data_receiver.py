@@ -14,11 +14,9 @@ from cryptography.hazmat.primitives.asymmetric import padding
 
 ape_data_receiver = Blueprint("ape_data_receiver", __name__)
 
-parsed_url = urlparse(toolkit.config.get('ckanext.saml2auth.idp_metadata.remote_url'))
-auth0_domain = parsed_url.scheme + "://" + parsed_url.netloc
+auth0_domain = toolkit.config.get('auth0_url')
 client_id = toolkit.config.get('ape_client_id')
 client_secret = toolkit.config.get('ape_client_secret')
-redirect_url = toolkit.config.get('ape_callback_url')
 state = toolkit.config.get('ape_state')
 
 
