@@ -40,32 +40,13 @@ def get_user_data():
         flash(_("User ID is empty"), 'error')
         return redirect(url_for('user.edit', id=g.user))
 
-    try:
-        private_key = serialization.load_pem_private_key(
-            toolkit.config.get('adr_private_key').encode(),
-            password=None,
-            backend=default_backend()
-        )
-
-        decrypted_user_id = private_key.decrypt(
-            bytes.fromhex(user_id),
-            padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                algorithm=hashes.SHA256(),
-                label=None
-            )
-        ).decode()
-    except:
-        flash(_("Error with User ID"), 'error')
-        return redirect(url_for('user.edit', id=g.user))
-
     mgmt_token = get_mgmt_token()
     headers = {
         'Authorization': f'Bearer {mgmt_token}',
         'Content-Type': 'application/json'
     }
     print(mgmt_token)
-    url = f'{auth0_domain}/api/v2/users/{decrypted_user_id}'
+    url = f'{auth0_domain}/api/v2/users/{user_id}'
     res_json = requests.get(url, headers=headers).json()
 
     return res_json
