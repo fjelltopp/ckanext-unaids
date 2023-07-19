@@ -43,7 +43,6 @@ def get_user_data():
         'Authorization': f'Bearer {mgmt_token}',
         'Content-Type': 'application/json'
     }
-    print(mgmt_token)
     url = f'{auth0_domain}/api/v2/users/{user_id}'
     res_json = requests.get(url, headers=headers).json()
 
