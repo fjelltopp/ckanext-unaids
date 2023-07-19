@@ -40,20 +40,24 @@ def get_user_data():
         flash(_("User ID is empty"), 'error')
         return redirect(url_for('user.read', id=g.user))
 
-    private_key = serialization.load_pem_private_key(
-        toolkit.config.get('adr_private_key').encode(),
-        password=None,
-        backend=default_backend()
-    )
-
-    user_id = private_key.decrypt(
-        bytes.fromhex(user_id),
-        padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
+    try:
+        private_key = serialization.load_pem_private_key(
+            toolkit.config.get('adr_private_key').encode(),
+            password=None,
+            backend=default_backend()
         )
-    ).decode()
+
+        user_id = private_key.decrypt(
+            bytes.fromhex(user_id),
+            padding.OAEP(
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None
+            )
+        ).decode()
+    except:
+        flash(_("Error with User ID"), 'error')
+        return redirect(url_for('user.read', id=g.user))
 
     mgmt_token = get_mgmt_token()
     headers = {
