@@ -6,15 +6,9 @@
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
 
-    {% with message = get_flashed_messages() %}
-        {% if message %}
-            <p>{{ message }} {{ _('To change your profile settings, please ')  }}<a href="{{ h.get_ape_url() }}">{{ _('click here') }}</a>.</p>
-        {% else %}
-        {% if h.user_is_editing_his_page() %}
-          <p>{{ _('To change your profile settings, please ') }}<a href="{{ h.get_ape_url() }}">{{ _('click here') }}</a>.</p>
-        {% endif %}
-        {% endif %}
-    {% endwith %}
+    {% if h.user_is_editing_his_page() %}
+      <p>{{ _('To change your profile settings, please ') }}<a href="{{ h.get_ape_url() }}">{{ _('click here') }}</a>.</p>
+    {% endif %}
 
     {{ form.input('name', label=_('Username'), id='field-username', value=data.name, error=errors.name, classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
 
