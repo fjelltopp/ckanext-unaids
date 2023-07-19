@@ -28,6 +28,13 @@ def get_mgmt_token():
 
 def get_user_data():
     user_id = request.args.get('user_id')
+    # try:
+    #     saml_id = toolkit.get_action('user_show')({'ignore_auth': True}, {'id': g.user, 'include_plugin_extras': True})['plugin_extras']['saml_id']
+    #     if saml_id:
+    #         user_id = saml_id
+    # except KeyError:
+    #     pass
+
     if user_id == "":
         flash(_("User ID is empty"), 'error')
         return redirect(url_for('user.edit', id=g.user))
@@ -47,30 +54,28 @@ def receive():
     if not g.user:
         return toolkit.abort(403, _('You must be logged in to access this page'))
     else:
-        user_show = toolkit.get_action('user_show', id=g.user)
-        return user_show
-        # user_data = get_user_data()
-        # user_metadata = user_data.get("user_metadata", {})
-        #
-        # user_dict = {
-        #     "id": g.user,
-        #     "email": user_data.get("email", ""),
-        #     "fullname": user_metadata.get("full_name", ""),
-        #     "plugin_extras": {
-        #         "unaids":{
-        #             "job_title": user_metadata.get("jobtitle", ""),
-        #             "affiliation": user_metadata.get("orgname", ""),
-        #         }
-        #     }
-        # }
-        # context = {
-        #     "user": g.user,
-        #     "ignore_auth": True
-        # }
-        # try:
-        #     toolkit.get_action('user_update')(context, user_dict)
-        # except:
-        #     pass
-        # return redirect(url_for('user.edit', id=g.user))
-        #
-        #
+        user_data = get_user_data()
+        user_metadata = user_data.get("user_metadata", {})
+
+        user_dict = {
+            "id": g.user,
+            "email": user_data.get("email", ""),
+            "fullname": user_metadata.get("full_name", ""),
+            "plugin_extras": {
+                "unaids":{
+                    "job_title": user_metadata.get("jobtitle", ""),
+                    "affiliation": user_metadata.get("orgname", ""),
+                }
+            }
+        }
+        context = {
+            "user": g.user,
+            "ignore_auth": True
+        }
+        try:
+            toolkit.get_action('user_update')(context, user_dict)
+        except:
+            pass
+        return redirect(url_for('user.edit', id=g.user))
+
+
