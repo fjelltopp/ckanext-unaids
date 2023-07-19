@@ -38,7 +38,7 @@ def get_user_data():
     user_id = request.args.get('user_id')
     if user_id == "":
         flash(_("User ID is empty"), 'error')
-        return redirect(url_for('user.read', id=g.user))
+        return redirect(url_for('user.edit', id=g.user))
 
     try:
         private_key = serialization.load_pem_private_key(
@@ -57,7 +57,7 @@ def get_user_data():
         ).decode()
     except:
         flash(_("Error with User ID"), 'error')
-        return redirect(url_for('user.read', id=g.user))
+        return redirect(url_for('user.edit', id=g.user))
 
     mgmt_token = get_mgmt_token()
     headers = {
