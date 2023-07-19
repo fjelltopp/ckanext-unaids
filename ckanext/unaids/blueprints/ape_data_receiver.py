@@ -47,7 +47,7 @@ def get_user_data():
             backend=default_backend()
         )
 
-        user_id = private_key.decrypt(
+        decrypted_user_id = private_key.decrypt(
             bytes.fromhex(user_id),
             padding.OAEP(
                 mgf=padding.MGF1(algorithm=hashes.SHA256()),
@@ -65,7 +65,7 @@ def get_user_data():
         'Content-Type': 'application/json'
     }
     print(mgmt_token)
-    url = f'{auth0_domain}/api/v2/users/{user_id}'
+    url = f'{auth0_domain}/api/v2/users/{decrypted_user_id}'
     res_json = requests.get(url, headers=headers).json()
 
     return res_json
