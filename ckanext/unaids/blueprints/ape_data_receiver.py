@@ -68,14 +68,11 @@ def get_user_data():
 
 @ape_data_receiver.route('/ape_data_receiver', methods=['GET'])
 def receive():
-    import pydevd_pycharm
-    pydevd_pycharm.settrace('172.17.0.1', port=9999, stdoutToServer=True, stderrToServer=True)
     if not g.user:
         return toolkit.abort(403, _('You must be logged in to access this page'))
     else:
         user_data = get_user_data()
         user_metadata = user_data.get("user_metadata", {})
-
 
         user_dict = {
             "id": g.user,
@@ -96,7 +93,6 @@ def receive():
             toolkit.get_action('user_update')(context, user_dict)
         except:
             pass
-        return json.dumps(user_data, indent=4)
-        # return redirect(url_for('user.edit', id=g.user))
+        return redirect(url_for('user.edit', id=g.user))
 
 
