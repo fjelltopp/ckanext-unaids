@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-07-03 09:16+0000\n"
+"Report-Msgid-Bugs-To: info@fjelltopp.org\n"
+"POT-Creation-Date: 2023-07-20 12:56+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
-"Last-Translator: \n"
+"Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -27,7 +27,7 @@ msgstr "Ressource introuvable."
 msgid "TaskStatus was not found."
 msgstr "L'état actuel de la tâche est introuvable."
 
-#: ckanext/unaids/helpers.py:159
+#: ckanext/unaids/helpers.py:166
 msgid "title"
 msgstr "Titre"
 
@@ -92,6 +92,19 @@ msgstr "iframe"
 #: ckanext/unaids/assets/frictionless-js.js:19
 msgid ",m[42]="
 msgstr ",m[42]="
+
+#: ckanext/unaids/blueprints/ape_data_receiver.py:12
+msgid "You must be logged in to access this page"
+msgstr "Vous devez être connecté pour accéder à cette page"
+
+#: ckanext/unaids/blueprints/ape_data_receiver.py:14
+#, fuzzy
+msgid ""
+"User profile successfully saved. You need to log in again to see the "
+"changes."
+msgstr ""
+"Le profil utilisateur a été enregistré avec succès. Vous devez vous "
+"connecter à nouveau pour voir les modifications."
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:16
 msgid "Something went wrong. Please try again."

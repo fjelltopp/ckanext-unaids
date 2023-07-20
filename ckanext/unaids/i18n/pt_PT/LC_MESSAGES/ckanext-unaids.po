@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-07-03 09:16+0000\n"
+"Report-Msgid-Bugs-To: info@fjelltopp.org\n"
+"POT-Creation-Date: 2023-07-20 12:56+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
 "Language-Team: pt_PT <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
@@ -27,7 +27,7 @@ msgstr "Recurso não encontrado."
 msgid "TaskStatus was not found."
 msgstr "O TaskStatus não foi encontrado."
 
-#: ckanext/unaids/helpers.py:159
+#: ckanext/unaids/helpers.py:166
 msgid "title"
 msgstr "título"
 
@@ -90,6 +90,18 @@ msgstr "iframe"
 #: ckanext/unaids/assets/frictionless-js.js:19
 msgid ",m[42]="
 msgstr ",m[42]="
+
+#: ckanext/unaids/blueprints/ape_data_receiver.py:12
+msgid "You must be logged in to access this page"
+msgstr "Você precisa estar conectado para acessar esta página"
+
+#: ckanext/unaids/blueprints/ape_data_receiver.py:14
+msgid ""
+"User profile successfully saved. You need to log in again to see the "
+"changes."
+msgstr ""
+"Perfil de usuário salvo com sucesso. Você precisa fazer login novamente para ver "
+"as alterações."
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:16
 msgid "Something went wrong. Please try again."
@@ -431,8 +443,8 @@ msgid ""
 "Please click <a href=\"#\" onClick={resetErrorBoundary}>here</a> to try "
 "again."
 msgstr ""
-"Clique em <a href=\"#\" onClick={resetErrorBoundary}>here</a> "
-"para tentar novamente."
+"Clique em <a href=\"#\" onClick={resetErrorBoundary}>here</a> para tentar"
+" novamente."
 
 #: ckanext/unaids/react/components/FileInputComponent/src/DisplayUploadedFile.js:14
 #: ckanext/unaids/react/components/FileInputComponent/src/UrlUploader.js:26
@@ -1333,4 +1345,10 @@ msgstr "Criar uma conta"
 
 #~ msgid "VMMC Data"
 #~ msgstr "Dados VMMC"
+
+#~ msgid ""
+#~ "User profile successfully saved, you "
+#~ "need to log in again to see "
+#~ "the changes."
+#~ msgstr ""
 
