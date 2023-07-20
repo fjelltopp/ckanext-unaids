@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-07-20 12:56+0000\n"
+"POT-Creation-Date: 2023-07-20 14:23+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -100,8 +100,8 @@ msgid ""
 "User profile successfully saved. You need to log in again to see the "
 "changes."
 msgstr ""
-"Perfil de usuário salvo com sucesso. Você precisa fazer login novamente para ver "
-"as alterações."
+"Perfil de usuário salvo com sucesso. Você precisa fazer login novamente "
+"para ver as alterações."
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:16
 msgid "Something went wrong. Please try again."
@@ -182,7 +182,7 @@ msgstr "Entradas e Saídas Naomi"
 #: ckanext/unaids/i18n/extra_translations.py:12
 #: ckanext/unaids/theme/templates/footer.html:10
 #: ckanext/unaids/theme/templates/organization/read_base.html:12
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:21
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:32
 msgid "About"
 msgstr "Sobre"
 
@@ -287,7 +287,6 @@ msgid "URL"
 msgstr "URL"
 
 #: ckanext/unaids/i18n/extra_translations.py:37
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:15
 #: ckanext/unaids/theme/templates/user/new_user_form.html:22
 msgid "Email"
 msgstr "Email"
@@ -656,7 +655,7 @@ msgstr "Com o apoio de"
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
 #: ckanext/unaids/theme/templates/package/releases/delete.html:12
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:63
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:46
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:57
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -696,7 +695,6 @@ msgstr ""
 "descrição das funções."
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:16
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:14
 msgid "Username"
@@ -748,7 +746,6 @@ msgstr "Cargo"
 #: ckanext/unaids/theme/templates/organization/members.html:13
 #: ckanext/unaids/theme/templates/organization/members.html:48
 #: ckanext/unaids/theme/templates/request/show.html:32
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:19
 #: ckanext/unaids/theme/templates/user/new_user_form.html:20
 #, fuzzy
 msgid "Affiliation"
@@ -1223,71 +1220,39 @@ msgstr "As Minhas Organizações"
 msgid "Change details"
 msgstr "Alterar detalhes"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:9
-msgid "To change your profile settings, please "
-msgstr "Para alterar as configurações do seu perfil, "
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:26
+msgid "Update data"
+msgstr "Atualizar dados"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:9
-msgid "click here"
-msgstr "clique aqui"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:13
-msgid "Full name"
-msgstr "Nome completo"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:13
-msgid "eg. Joe Bloggs"
-msgstr "por exemplo Joe Bloggs"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:15
-msgid "eg. joe@example.com"
-msgstr "por exemplo joe@example.com"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:17
-#: ckanext/unaids/theme/templates/user/new_user_form.html:18
-msgid "Job Title"
-msgstr "Cargo"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:17
-#: ckanext/unaids/theme/templates/user/new_user_form.html:18
-#, fuzzy
-msgid "Data Scientist"
-msgstr "Conjuntos de dados"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:19
-#: ckanext/unaids/theme/templates/user/new_user_form.html:20
-msgid "WHO"
-msgstr "WHO"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:21
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:32
 msgid "A little information about yourself"
 msgstr "Um pouco de informação sobre você"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:24
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:35
 msgid "Subscribe to notification emails"
 msgstr "Assinar e-mails de notificação"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:33
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:44
 msgid "Profile picture"
 msgstr "Foto do perfil"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:33
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:44
 msgid "Profile picture URL"
 msgstr "URL da foto do perfil"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:46
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:57
 msgid "Are you sure you want to delete this User?"
 msgstr "Pretende apagar este membro?"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:51
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:62
 msgid "Are you sure you want to regenerate the API key?"
 msgstr "Tem certeza de que deseja gerar novamente a chave de API?"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:51
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:62
 msgid "Regenerate API Key"
 msgstr "Gerar chave de API novamente"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:54
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:65
 msgid "Update Profile"
 msgstr "Atualizar perfil"
 
@@ -1306,6 +1271,19 @@ msgstr "Joe Bloggs"
 #, fuzzy
 msgid "username"
 msgstr "Nome de utilizador"
+
+#: ckanext/unaids/theme/templates/user/new_user_form.html:18
+msgid "Job Title"
+msgstr "Cargo"
+
+#: ckanext/unaids/theme/templates/user/new_user_form.html:18
+#, fuzzy
+msgid "Data Scientist"
+msgstr "Conjuntos de dados"
+
+#: ckanext/unaids/theme/templates/user/new_user_form.html:20
+msgid "WHO"
+msgstr "WHO"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:22
 #: ckanext/unaids/theme/templates/user/new_user_form.html:24
@@ -1351,4 +1329,19 @@ msgstr "Criar uma conta"
 #~ "need to log in again to see "
 #~ "the changes."
 #~ msgstr ""
+
+#~ msgid "To change your profile settings, please "
+#~ msgstr "Para alterar as configurações do seu perfil, "
+
+#~ msgid "click here"
+#~ msgstr "clique aqui"
+
+#~ msgid "Full name"
+#~ msgstr "Nome completo"
+
+#~ msgid "eg. Joe Bloggs"
+#~ msgstr "por exemplo Joe Bloggs"
+
+#~ msgid "eg. joe@example.com"
+#~ msgstr "por exemplo joe@example.com"
 
