@@ -6,17 +6,28 @@
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
 
-    <p>{{ _('To change your profile settings, please ') }}<a href="{{ h.get_ape_url() }}">{{ _('click here') }}</a>.</p>
+    <p style="font-weight: bold; margin-bottom: 0.4em">Profile data:</p>
 
-    {{ form.input('name', label=_('Username'), id='field-username', value=data.name, error=errors.name, classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
-
-    {{ form.input('fullname', label=_('Full name'), id='field-fullname', value=data.fullname, error=errors.fullname, placeholder=_('eg. Joe Bloggs'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
-
-    {{ form.input('email', label=_('Email'), id='field-email', type='email', value=data.email, error=errors.email, placeholder=_('eg. joe@example.com'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
-
-    {{ form.input("job_title",id="field-job-title",label=_("Job Title"),placeholder=_("Data Scientist"),value=data.job_title,classes=["control-medium"], attrs={'readonly': '', 'class': 'form-control'}) }}
-        
-    {{ form.input("affiliation",id="field-affiliation",label=_("Affiliation"),placeholder=_("WHO"),value=data.affiliation,classes=["control-medium"], attrs={'readonly': '', 'class': 'form-control'}) }}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-6" style="padding-top: 0">
+              <ul class="list-unstyled">
+                  <li><strong>{{ data.fullname }}</strong> ({{ data.name }})</li>
+                  <li>{{ data.email }}</li>
+                  <li>&nbsp;</li>
+                  <li>{{ data.job_title }}</li>
+                  <li>{{ data.affiliation }}</li>
+              </ul>
+          </div>
+        </div>
+          <div class="row">
+          <div class="col-xs-12 text-right" style="padding-bottom: 0">
+            <a class="btn btn-primary" href="{{ h.get_ape_url() }}">{{ _('Update data') }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     {{ form.markdown('about', label=_('About'), id='field-about', value=data.about, error=errors.about, placeholder=_('A little information about yourself')) }}
 
