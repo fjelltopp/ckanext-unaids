@@ -433,9 +433,8 @@ msgid "Uploaded"
 msgstr "Carregado"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:41
-#, fuzzy
 msgid "Unfortunately an error has occurred."
-msgstr "Ocorreu um erro desconhecido."
+msgstr "Infelizmente, ocorreu um erro.."
 
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:46
 msgid ""
@@ -513,15 +512,13 @@ msgid "Loading"
 msgstr "Carregamento"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:74
-#, fuzzy
 msgid "Search existing resources"
-msgstr "Sobregravar Recurso Existente"
+msgstr "Pesquisar recursos existentes"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:177
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:256
-#, fuzzy
 msgid "Modified"
-msgstr "Última modificação"
+msgstr "Modificado"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:187
 msgid "Checking access..."
@@ -548,9 +545,8 @@ msgid "Import Latest Data"
 msgstr "Importar dados mais recentes"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:379
-#, fuzzy
 msgid "Select Different Resource"
-msgstr "Reordenar recursos"
+msgstr "Selecionar Recurso Diferente"
 
 #: ckanext/unaids/theme/templates/footer.html:16
 msgid "Terms and Conditions"
@@ -614,9 +610,8 @@ msgid "HIV Estimates<br />Navigator"
 msgstr "Navegador<br />de estimativas sobre o VIH"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:51
-#, fuzzy
 msgid "Instructions to upload your<br />Country Estimates 2023 Data"
-msgstr "Instruções para carregar os seus<br>dados de Estimativas do país 2022"
+msgstr "Instruções para carregar os seus<br>dados de Estimativas do país 2023"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:55
 msgid "Unsure what to do next?"
@@ -733,9 +728,8 @@ msgstr "Solicitação de associação"
 #: ckanext/unaids/theme/templates/organization/members.html:11
 #: ckanext/unaids/theme/templates/organization/members.html:46
 #: ckanext/unaids/theme/templates/request/show.html:14
-#, fuzzy
 msgid "User"
-msgstr "Nome de utilizador"
+msgstr "Utilizador"
 
 #: ckanext/unaids/theme/templates/organization/members.html:12
 #: ckanext/unaids/theme/templates/organization/members.html:47
@@ -747,7 +741,6 @@ msgstr "Cargo"
 #: ckanext/unaids/theme/templates/organization/members.html:48
 #: ckanext/unaids/theme/templates/request/show.html:32
 #: ckanext/unaids/theme/templates/user/new_user_form.html:20
-#, fuzzy
 msgid "Affiliation"
 msgstr "Organização"
 
@@ -757,9 +750,8 @@ msgid "Request date"
 msgstr "Data do Pedido"
 
 #: ckanext/unaids/theme/templates/organization/members.html:16
-#, fuzzy
 msgid "Action"
-msgstr "Localização"
+msgstr "Ação"
 
 #: ckanext/unaids/theme/templates/organization/members.html:32
 #: ckanext/unaids/theme/templates/request/show.html:59
@@ -908,9 +900,8 @@ msgstr "URL:"
 
 #: ckanext/unaids/theme/templates/package/resource_read.html:38
 #: ckanext/unaids/theme/templates/package/resource_read.html:45
-#, fuzzy
 msgid "Imported from:"
-msgstr "Com o apoio de"
+msgstr "Importado de:"
 
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:9
 msgid "Existing User"
@@ -1039,12 +1030,10 @@ msgid "State"
 msgstr "Estado"
 
 #: ckanext/unaids/theme/templates/request/show.html:58
-#, fuzzy
 msgid "Are you sure you want approve this request?"
 msgstr "Pretende aprovar esta solicitação?"
 
 #: ckanext/unaids/theme/templates/request/show.html:61
-#, fuzzy
 msgid "Are you sure you want reject this request?"
 msgstr "Pretende rejeitar esta solicitação?"
 
@@ -1105,7 +1094,6 @@ msgstr[1] "{number} {type} conjuntos de dados encontrados"
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:22
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:27
-#, fuzzy
 msgid "No datasets found"
 msgstr "Nenhum conjunto de dados encontrado"
 
@@ -1116,7 +1104,6 @@ msgstr[0] "{number} conjunto de dados encontrado para \"{query}\""
 msgstr[1] "{number} conjuntos de dados encontrados para \"{query}\""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:26
-#, fuzzy
 msgid "{number} dataset found"
 msgid_plural "{number} datasets found"
 msgstr[0] "{number} conjunto de dados encontrado"
@@ -1159,7 +1146,6 @@ msgstr[0] "{number} organização encontrada"
 msgstr[1] "{number} organizações encontradas"
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:40
-#, fuzzy
 msgid "No organizations found"
 msgstr "Nenhuma organização encontrada"
 
@@ -1272,18 +1258,17 @@ msgstr "Joe Bloggs"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:14
-#, fuzzy
+
 msgid "username"
-msgstr "Nome de utilizador"
+msgstr "nome de usuário"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:18
 msgid "Job Title"
 msgstr "Cargo"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:18
-#, fuzzy
 msgid "Data Scientist"
-msgstr "Conjuntos de dados"
+msgstr "Cientista de Dados"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:20
 msgid "WHO"
