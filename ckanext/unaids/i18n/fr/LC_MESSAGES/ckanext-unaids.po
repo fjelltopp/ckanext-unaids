@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-07-20 14:23+0000\n"
+"POT-Creation-Date: 2023-07-20 14:30+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: fr\n"
@@ -98,7 +98,6 @@ msgid "You must be logged in to access this page"
 msgstr "Vous devez être connecté pour accéder à cette page"
 
 #: ckanext/unaids/blueprints/ape_data_receiver.py:14
-#, fuzzy
 msgid ""
 "User profile successfully saved. You need to log in again to see the "
 "changes."
@@ -1218,6 +1217,10 @@ msgstr "Mes organisations"
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:7
 msgid "Change details"
 msgstr "Changer les détails"
+
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:9
+msgid "Profile data"
+msgstr "Données de profil"
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:26
 msgid "Update data"
