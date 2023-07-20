@@ -1,4 +1,4 @@
-from flask import Blueprint, redirect, request, jsonify
+from flask import Blueprint, redirect
 from ckan.common import _, g
 from ckan.lib.helpers import url_for
 from ckan.plugins import toolkit
