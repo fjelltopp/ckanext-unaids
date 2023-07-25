@@ -6,12 +6,12 @@
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
 
-    <p style="font-weight: bold; margin-bottom: 0.4em">{{ _('Profile data') }}:</p>
+    <label>{{ _('Profile data') }}</label>
 
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="row">
-          <div class="col-xs-6" style="padding-top: 0">
+          <div class="col-xs-6 no-top-padding">
               <ul class="list-unstyled">
                   <li><strong>{{ data.fullname }}</strong> ({{ data.name }})</li>
                   <li>{{ data.email }}</li>
@@ -22,7 +22,7 @@
           </div>
         </div>
           <div class="row">
-          <div class="col-xs-12 text-right" style="padding-bottom: 0">
+          <div class="col-xs-12 text-right no-bottom-padding">
             <a class="btn btn-primary" href="{{ h.get_ape_url() }}">{{ _('Update data') }}</a>
           </div>
         </div>
