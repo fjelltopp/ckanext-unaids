@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-07-20 14:30+0000\n"
+"POT-Creation-Date: 2023-07-26 09:43+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: fr\n"
@@ -1219,8 +1219,16 @@ msgid "Change details"
 msgstr "Changer les détails"
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:9
-msgid "Profile data"
-msgstr "Données de profil"
+msgid "HIV Tools Profile Data"
+msgstr "Données de profil Outils VIH"
+
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:19
+msgid "No job title specified"
+msgstr "Titre de poste non spécifié"
+
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:20
+msgid "No organisation specified"
+msgstr "Organisation non spécifiée"
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:26
 msgid "Update data"

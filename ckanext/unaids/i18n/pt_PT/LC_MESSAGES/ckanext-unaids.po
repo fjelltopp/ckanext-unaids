@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-07-20 14:30+0000\n"
+"POT-Creation-Date: 2023-07-26 09:43+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -1207,8 +1207,16 @@ msgid "Change details"
 msgstr "Alterar detalhes"
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:9
-msgid "Profile data"
-msgstr "Dados do perfil"
+msgid "HIV Tools Profile Data"
+msgstr "Dados do Perfil de Ferramentas de HIV"
+
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:19
+msgid "No job title specified"
+msgstr "Sem título de cargo especificado"
+
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:20
+msgid "No organisation specified"
+msgstr "Organização não especificada"
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:26
 msgid "Update data"
@@ -1258,7 +1266,6 @@ msgstr "Joe Bloggs"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:14
-
 msgid "username"
 msgstr "nome de usuário"
 
