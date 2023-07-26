@@ -16,8 +16,8 @@
                   <li><strong>{{ data.fullname }}</strong> ({{ data.name }})</li>
                   <li>{{ data.email }}</li>
                   <li>&nbsp;</li>
-                  <li>{{ data.job_title }}</li>
-                  <li>{{ data.affiliation }}</li>
+                  <li>{% if data.job_title %}{{ data.job_title }}{% else %} {{_('No job title specified')}} {% endif %}</li>
+                   <li>{% if data.affiliation %}{{ data.affilitation }}{% else %} {{_('No organisation specified')}} {% endif %}</li>
               </ul>
           </div>
         </div>
