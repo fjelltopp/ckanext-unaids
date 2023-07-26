@@ -6,7 +6,7 @@
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
 
-    <label>{{ _('Profile data') }}</label>
+    <label>{{ _('HIV Tools Profile Data') }}</label>
 
     <div class="panel panel-default">
       <div class="panel-body">
@@ -17,7 +17,7 @@
                   <li>{{ data.email }}</li>
                   <li>&nbsp;</li>
                   <li>{% if data.job_title %}{{ data.job_title }}{% else %} {{_('No job title specified')}} {% endif %}</li>
-                   <li>{% if data.affiliation %}{{ data.affilitation }}{% else %} {{_('No organisation specified')}} {% endif %}</li>
+                   <li>{% if data.affiliation %}{{ data.affiliation }}{% else %} {{_('No organisation specified')}} {% endif %}</li>
               </ul>
           </div>
         </div>
