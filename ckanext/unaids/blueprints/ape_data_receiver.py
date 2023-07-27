@@ -6,6 +6,7 @@ from ckan.plugins import toolkit
 
 ape_data_receiver = Blueprint("ape_data_receiver", __name__)
 
+
 @ape_data_receiver.route('/ape_data_receiver', methods=['GET'])
 def receive():
     if not g.user:
