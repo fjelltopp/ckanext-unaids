@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-07-26 09:43+0000\n"
+"POT-Creation-Date: 2023-07-27 11:48+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -91,13 +91,14 @@ msgstr "iframe"
 msgid ",m[42]="
 msgstr ",m[42]="
 
-#: ckanext/unaids/blueprints/ape_data_receiver.py:12
+#: ckanext/unaids/blueprints/ape_data_receiver.py:13
 msgid "You must be logged in to access this page"
 msgstr "Você precisa estar conectado para acessar esta página"
 
-#: ckanext/unaids/blueprints/ape_data_receiver.py:14
+#: ckanext/unaids/blueprints/ape_data_receiver.py:15
+#, fuzzy
 msgid ""
-"User profile successfully saved. You need to log in again to see the "
+"User profile successfully saved, you need to log in again to see the "
 "changes."
 msgstr ""
 "Perfil de usuário salvo com sucesso. Você precisa fazer login novamente "
