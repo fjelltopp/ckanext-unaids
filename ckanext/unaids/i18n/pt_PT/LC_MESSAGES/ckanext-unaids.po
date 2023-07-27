@@ -96,7 +96,6 @@ msgid "You must be logged in to access this page"
 msgstr "Você precisa estar conectado para acessar esta página"
 
 #: ckanext/unaids/blueprints/ape_data_receiver.py:15
-#, fuzzy
 msgid ""
 "User profile successfully saved, you need to log in again to see the "
 "changes."
