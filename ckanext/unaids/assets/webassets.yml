@@ -64,12 +64,12 @@ MapSelectorCSS:
     filters: cssmin
     output: unaids/%(version)s_MapSelector.css
 
-validation_css:
+ValidationBadgeCSS:
     output: unaids/%(version)s_ValidationBadge.css
     contents:
         - css/validation.css
 
-validation_js:
+ValidationBadgeJS:
     contents:
       - js/validation-badge.js
     output: unaids/%(version)s_ValidationBadge.js
