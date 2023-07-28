@@ -65,6 +65,7 @@ MapSelectorCSS:
     output: unaids/%(version)s_MapSelector.css
 
 ValidationBadgeCSS:
+    filters: cssmin
     output: unaids/%(version)s_ValidationBadge.css
     contents:
         - css/validation.css
