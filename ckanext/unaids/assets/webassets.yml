@@ -70,6 +70,10 @@ ValidationBadgeCSS:
         - css/validation.css
 
 ValidationBadgeJS:
+    filters: rjsmin
     contents:
       - js/validation-badge.js
     output: unaids/%(version)s_ValidationBadge.js
+    extra:
+      preload:
+        - base/main
