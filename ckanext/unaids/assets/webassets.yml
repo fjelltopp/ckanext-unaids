@@ -7,6 +7,7 @@ main:
     - text_template.js
     - bootstrap_table.js
     - format_update.js
+    - validation-badge.js
   extra:
     preload:
       - base/main
@@ -70,11 +71,3 @@ ValidationBadgeCSS:
     contents:
         - css/validation.css
 
-ValidationBadgeJS:
-    filters: rjsmin
-    contents:
-      - js/validation-badge.js
-    output: unaids/%(version)s_ValidationBadge.js
-    extra:
-      preload:
-        - base/main
