@@ -10,6 +10,7 @@ import requests
 import six
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
 
+
 try:
     from html import escape as html_escape
 except ImportError:
@@ -219,14 +220,14 @@ def url_encode(url):
     return quote(url, safe='/:?=&')
 
 
-def get_validation_badge(resource, in_listing=False):
+def unaids_get_validation_badge(resource, in_listing=False):
 
     if in_listing and not asbool(
             toolkit.config.get('ckanext.validation.show_badges_in_listings', True)):
-        return ''
+        return '<h2>listings</h2>'
 
     if not resource.get('validation_status'):
-        return ''
+        return '<h2>Validation status unknown</h2>'
 
     messages = {
         'success': _('Valid data'),
@@ -246,7 +247,7 @@ def get_validation_badge(resource, in_listing=False):
         resource_id=resource['id'])
 
     badge_url = url_for_static_or_external(
-        '/images/badges/en-{}.gif'.format(status))
+        '/images/badges/{}-{}.gif'.format(_('en'), status))
 
     return '''
 <a href="{validation_url}" class="validation-badge">
