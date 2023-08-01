@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2023-04-24 09:22+0000\n"
+"POT-Creation-Date: 2023-08-01 17:46+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: \n"
 "Language: fr\n"
@@ -27,9 +27,29 @@ msgstr "Ressource introuvable."
 msgid "TaskStatus was not found."
 msgstr "L'état actuel de la tâche est introuvable."
 
-#: ckanext/unaids/helpers.py:149
+#: ckanext/unaids/helpers.py:197
 msgid "title"
 msgstr "Titre"
+
+#: ckanext/unaids/helpers.py:233
+msgid "Valid data"
+msgstr "Données valides"
+
+#: ckanext/unaids/helpers.py:234
+msgid "Invalid data"
+msgstr "Données invalides"
+
+#: ckanext/unaids/helpers.py:235
+msgid "Error during validation"
+msgstr "Erreur durant la validation"
+
+#: ckanext/unaids/helpers.py:236
+msgid "Data validation unknown"
+msgstr "Validation de données inconnue"
+
+#: ckanext/unaids/helpers.py:250
+msgid "en"
+msgstr "fr"
 
 #: ckanext/unaids/licenses.py:13
 msgid "Creative Commons Attribution for Intergovernmental Organisations"
@@ -37,28 +57,28 @@ msgstr ""
 "Licence Creative Commons Attribution pour les organisations "
 "intergouvernementales"
 
-#: ckanext/unaids/plugin.py:122
+#: ckanext/unaids/plugin.py:126
 #: ckanext/unaids/theme/templates/request/show.html:10
 msgid "Organization"
 msgstr "Organisation"
 
-#: ckanext/unaids/plugin.py:123
+#: ckanext/unaids/plugin.py:127
 msgid "Data Type"
 msgstr "Type de données"
 
-#: ckanext/unaids/plugin.py:124
+#: ckanext/unaids/plugin.py:128
 msgid "Tags"
 msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:125
+#: ckanext/unaids/plugin.py:129
 msgid "Year"
 msgstr "Année"
 
-#: ckanext/unaids/plugin.py:126
+#: ckanext/unaids/plugin.py:130
 msgid "Location"
 msgstr "Lieu"
 
-#: ckanext/unaids/plugin.py:247
+#: ckanext/unaids/plugin.py:288
 msgid "Data Explorer"
 msgstr "Explorateur de données"
 
@@ -442,7 +462,7 @@ msgstr ""
 #: ckanext/unaids/react/components/FileInputComponent/src/DisplayUploadedFile.js:14
 #: ckanext/unaids/react/components/FileInputComponent/src/UrlUploader.js:26
 #: ckanext/unaids/theme/templates/scheming/form_snippets/upload.html:46
-#: ckanext/unaids/theme/templates/snippets/search_form.html:14
+#: ckanext/unaids/theme/templates/snippets/search_form.html:17
 msgid "Remove"
 msgstr "Supprimer"
 
@@ -647,7 +667,7 @@ msgstr "Avec l’appui de"
 #: ckanext/unaids/theme/templates/organization/members.html:70
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
 #: ckanext/unaids/theme/templates/package/releases/delete.html:12
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:63
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:65
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:46
 msgid "Delete"
 msgstr "Supprimer"
@@ -655,7 +675,7 @@ msgstr "Supprimer"
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:42
 #: ckanext/unaids/theme/templates/organization/members.html:67
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:31
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:55
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:57
 msgid "Edit"
 msgstr "Modifier"
 
@@ -799,12 +819,12 @@ msgstr "Ajouter une nouvelle ressource"
 msgid "New resource"
 msgstr "Nouvelle ressource"
 
-#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:30
+#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:32
 #: ckanext/unaids/theme/templates/package/snippets/bulk_file_uploader.html:4
 msgid "Bulk Upload"
 msgstr "Transfert groupé"
 
-#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:31
+#: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:33
 msgid "Bulk upload is not possible for this resource."
 msgstr "Cette ressource ne permet pas le transfert groupé."
 
@@ -888,19 +908,19 @@ msgstr ""
 msgid "Add Release"
 msgstr "Ajouter une publication"
 
-#: ckanext/unaids/theme/templates/package/resource_read.html:15
+#: ckanext/unaids/theme/templates/package/resource_read.html:18
 msgid "Resource ID:"
 msgstr "ID de la ressource :"
 
-#: ckanext/unaids/theme/templates/package/resource_read.html:19
-#: ckanext/unaids/theme/templates/package/resource_read.html:21
-#: ckanext/unaids/theme/templates/package/resource_read.html:25
-#: ckanext/unaids/theme/templates/package/resource_read.html:27
+#: ckanext/unaids/theme/templates/package/resource_read.html:22
+#: ckanext/unaids/theme/templates/package/resource_read.html:24
+#: ckanext/unaids/theme/templates/package/resource_read.html:28
+#: ckanext/unaids/theme/templates/package/resource_read.html:30
 msgid "URL:"
 msgstr "URL :"
 
-#: ckanext/unaids/theme/templates/package/resource_read.html:35
-#: ckanext/unaids/theme/templates/package/resource_read.html:42
+#: ckanext/unaids/theme/templates/package/resource_read.html:38
+#: ckanext/unaids/theme/templates/package/resource_read.html:45
 msgid "Imported from:"
 msgstr "Importé à partir de:"
 
@@ -1000,27 +1020,27 @@ msgstr "Restaurer"
 msgid "Not Set"
 msgstr "Non défini"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:18
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:20
 msgid "Last modified"
 msgstr "Dernière modification"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:28
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:30
 msgid "Preview"
 msgstr "Aperçu"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:31
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:33
 msgid "More information"
 msgstr "Plus d'informations"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:41
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:43
 msgid "Download"
 msgstr "Télécharger"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:46
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:48
 msgid "Go to resource"
 msgstr "Aller à la ressource"
 
-#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:61
+#: ckanext/unaids/theme/templates/package/snippets/resource_item.html:63
 msgid "Are you sure you want to delete this resource?"
 msgstr "Êtes-vous sûr de vouloir supprimer cette ressource ?"
 
@@ -1040,15 +1060,15 @@ msgstr "Êtes-vous sûr de vouloir approuver cette requête?"
 msgid "Are you sure you want reject this request?"
 msgstr "Êtes-vous sûr de vouloir rejeter cette requête?"
 
-#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:13
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:15
 msgid "No organisation"
 msgstr "Aucune organisation"
 
-#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:32
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:35
 msgid "Transfer Dataset"
 msgstr "Transférer l'ensemble de données"
 
-#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:43
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:46
 msgid "How dataset transfers work:"
 msgstr "Comment fonctionnent les transferts d’ensemble de données :"
 
@@ -1074,7 +1094,7 @@ msgstr "Données générales"
 msgid "Add Dataset"
 msgstr "Ajouter un ensemble de données"
 
-#: ckanext/unaids/theme/templates/snippets/search_form.html:20
+#: ckanext/unaids/theme/templates/snippets/search_form.html:23
 msgid "Filter Results"
 msgstr "Filtrer les résultats"
 
@@ -1303,6 +1323,19 @@ msgstr "Confirmer le mot de passe"
 #: ckanext/unaids/theme/templates/user/new_user_form.html:37
 msgid "Create Account"
 msgstr "Créer un compte"
+
+#: ckanext/unaids/theme/templates/validation/validation_read.html:4
+msgid "Validation Report"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/validation/validation_read.html:27
+msgid "Validation timestamp"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/validation/validation_read.html:29
+#, fuzzy
+msgid "Duration"
+msgstr "Lieu"
 
 #~ msgid "Click below for more information on uploading data:"
 #~ msgstr "Pour plus d'informations sur le téléchargement cliquez ci-dessous:"
