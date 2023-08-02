@@ -7,10 +7,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"Report-Msgid-Bugs-To: info@fjelltopp.org\n"
 "POT-Creation-Date: 2023-08-01 17:46+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
-"Last-Translator: \n"
+"Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
@@ -1326,11 +1326,11 @@ msgstr "Créer un compte"
 
 #: ckanext/unaids/theme/templates/validation/validation_read.html:4
 msgid "Validation Report"
-msgstr ""
+msgstr "Raport de validation"
 
 #: ckanext/unaids/theme/templates/validation/validation_read.html:27
 msgid "Validation timestamp"
-msgstr ""
+msgstr "Horaire de validation"
 
 #: ckanext/unaids/theme/templates/validation/validation_read.html:29
 #, fuzzy
