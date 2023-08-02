@@ -163,14 +163,16 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "organization_id_exists": organization_id_exists_validator,
         }
 
-    def can_validate(self, context, data_dict):
-        if data_dict.get("validate_package"):
+    def can_validate(self, context, pkg_dict):
+        if pkg_dict.get("schema"):
+            return True
+        
+    def after_create(self, context, pkg_dict):
+        if pkg_dict.get("validate_package"):
             logging.warning("VALIDATING ENTIRE PACKAGE")
             toolkit.get_action("resource_validation_run_batch")(
-                context, {"dataset_ids": data_dict["package_id"]}
+                context, {"dataset_ids": pkg_dict["package_id"]}
             )
-        if data_dict.get("schema"):
-            return True
 
     # IPackageController
     def after_update(self, context, pkg_dict):
@@ -185,6 +187,11 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     dataset_id=pkg_dict["id"],
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
+        if pkg_dict.get("validate_package"):
+            logging.warning("VALIDATING ENTIRE PACKAGE")
+            toolkit.get_action("resource_validation_run_batch")(
+                context, {"dataset_ids": pkg_dict["package_id"]}
+            )
 
     # IResourceController
     def _process_schema_fields(self, data_dict):
