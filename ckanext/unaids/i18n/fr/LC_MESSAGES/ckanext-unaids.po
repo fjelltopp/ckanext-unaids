@@ -607,10 +607,10 @@ msgid "HIV Estimates<br />Navigator"
 msgstr "Navigateur<br />pour les Estimations du VIH"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:51
-msgid "Instructions to upload your<br />Country Estimates 2023 Data"
+msgid "Instructions to upload your<br />Country Estimates 2024 Data"
 msgstr ""
 "Instructions pour mettre en ligne vos<br />données sur les estimations "
-"2023"
+"2024"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:55
 msgid "Unsure what to do next?"
