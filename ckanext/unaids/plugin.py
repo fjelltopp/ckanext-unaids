@@ -186,7 +186,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
 
-
     # IResourceController
     def _process_schema_fields(self, data_dict):
         """
@@ -201,6 +200,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             data_dict[u'schema_json'] = schema_json
 
         return data_dict
+
     def before_create(self, context, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource)
@@ -208,8 +208,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             logic.validate_resource_upload_fields(context, resource)
             context["_resource_create_call"] = True
         return self._process_schema_fields(resource)
-    def before_update(self, context, current, resource):
 
+    def before_update(self, context, current, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
             _update_resource_last_modified_date(resource, current=current)
@@ -218,7 +218,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return self._process_schema_fields(resource)
 
     def before_show(self, resource):
-
         if _data_dict_is_resource(resource):
             return logic.update_filename_in_resource_url(resource)
 
