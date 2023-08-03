@@ -172,7 +172,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if data_dict.get("schema"):
             return True
 
-
     # IPackageController
     def after_update(self, context, pkg_dict):
         if "extras" in pkg_dict:
@@ -201,7 +200,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             data_dict[u'schema_json'] = schema_json
 
         return data_dict
-
 
     def before_create(self, context, resource):
         if _data_dict_is_resource(resource):
