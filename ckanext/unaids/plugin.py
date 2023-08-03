@@ -166,9 +166,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     def can_validate(self, context, data_dict):
         if data_dict.get("validate_package"):
             logging.warning("VALIDATING ENTIRE PACKAGE")
-            toolkit.get_action("resource_validation_run_batch")(
-                context, {"dataset_ids": data_dict["package_id"]}
-            )
+            toolkit.get_action("resource_validation_run_batch")(context, {"dataset_ids": data_dict["package_id"]})
         if data_dict.get("schema"):
             return True
 
@@ -315,7 +313,7 @@ def _data_dict_is_resource(data_dict):
 def _giftless_upload(context, resource, current=None):
     attached_file = resource.pop("upload", None)
     if attached_file:
-        if isinstance(attached_file, FlaskFileStorage):
+        if type(attached_file) == FlaskFileStorage:
             dataset_id = resource.get("package_id")
             if not dataset_id:
                 dataset_id = current["package_id"]
