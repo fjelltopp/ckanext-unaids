@@ -186,6 +186,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
 
+
     # IResourceController
     def _process_schema_fields(self, data_dict):
         """
@@ -216,6 +217,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             logic.validate_resource_upload_fields(context, resource)
             context["_resource_create_call"] = True
         return self._process_schema_fields(resource)
+
 
     def before_show(self, resource):
         if _data_dict_is_resource(resource):
