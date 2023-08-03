@@ -224,10 +224,10 @@ def unaids_get_validation_badge(resource, in_listing=False):
 
     if in_listing and not asbool(
             toolkit.config.get('ckanext.validation.show_badges_in_listings', True)):
-        return '<h2>listings</h2>'
+        return ''
 
     if not resource.get('validation_status'):
-        return '<h2>Validation status unknown</h2>'
+        return ''
 
     messages = {
         'success': _('Valid data'),
