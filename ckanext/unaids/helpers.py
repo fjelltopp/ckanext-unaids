@@ -1,12 +1,13 @@
 # encoding: utf-8
-from ckan.lib.helpers import url_for_static_or_external, check_access
-from ckan.plugins.toolkit import get_action, request
-from ckan.plugins import toolkit
-from ckan.common import _, g
 import logging
 import os
 import json
 import six
+from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url
+from ckan.lib.i18n import get_lang
+from ckan.plugins.toolkit import get_action, request
+from ckan.plugins import toolkit
+from ckan.common import _, g, config
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
 
 try:
@@ -14,8 +15,7 @@ try:
 except ImportError:
     from cgi import escape as html_escape
 
-from urllib.parse import quote
-
+from urllib.parse import quote, urlencode
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
@@ -75,6 +75,17 @@ def get_all_organizations():
 
 def get_bulk_file_uploader_default_fields():
     return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})
+
+
+def get_ape_url():
+    query_params = {
+        "return_url": full_current_url(),
+        "lang": get_lang()
+    }
+    domain_part = config.get("ckanext.unaids.ape_url", "")
+    encoded_query_params = urlencode(query_params)
+
+    return f"{domain_part}?{encoded_query_params}"
 
 
 def get_current_dataset_release(dataset_id, activity_id=None):
@@ -139,8 +150,8 @@ def build_pages_nav_main(*args):
         is_current_page = toolkit.get_endpoint() in (('pages', 'show'), ('pages', 'blog_show'))
     else:
         is_current_page = (
-            hasattr(toolkit.c, 'action') and toolkit.c.action in ('pages_show', 'blog_show')
-            and toolkit.c.controller == 'ckanext.pages.controller:PagesController')
+                hasattr(toolkit.c, 'action') and toolkit.c.action in ('pages_show', 'blog_show')
+                and toolkit.c.controller == 'ckanext.pages.controller:PagesController')
     if is_current_page:
         page_name = toolkit.request.path.split('/')[-1]
 

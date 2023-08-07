@@ -836,3 +836,11 @@ div.ckanext-datapreview{
 .homepage .help-panel{
   padding: 60px 0px;
 }
+
+.no-top-padding {
+  padding-top: 0;
+}
+
+.no-bottom-padding {
+  padding-bottom: 0;
+}

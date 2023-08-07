@@ -6,17 +6,28 @@
   <fieldset>
     <legend>{{ _('Change details') }}</legend>
 
-    <p>If you need to change any disabled field, please contact <a href="mailto:estimates@unaids.org">estimates@unaids.org</a> for assistance.</p>
-    
-    {{ form.input('name', label=_('Username'), id='field-username', value=data.name, error=errors.name, classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
+    <label>{{ _('HIV Tools Profile Data') }}</label>
 
-    {{ form.input('fullname', label=_('Full name'), id='field-fullname', value=data.fullname, error=errors.fullname, placeholder=_('eg. Joe Bloggs'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
-
-    {{ form.input('email', label=_('Email'), id='field-email', type='email', value=data.email, error=errors.email, placeholder=_('eg. joe@example.com'), classes=['control-medium'], attrs={'readonly': '', 'class': 'form-control'}) }}
-
-    {{ form.input("job_title",id="field-job-title",label=_("Job Title"),placeholder=_("Data Scientist"),value=data.job_title,classes=["control-medium"], attrs={'readonly': '', 'class': 'form-control'}) }}
-        
-    {{ form.input("affiliation",id="field-affiliation",label=_("Affiliation"),placeholder=_("WHO"),value=data.affiliation,classes=["control-medium"], attrs={'readonly': '', 'class': 'form-control'}) }}
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-xs-6 no-top-padding">
+              <ul class="list-unstyled">
+                  <li><strong>{{ data.fullname }}</strong> ({{ data.name }})</li>
+                  <li>{{ data.email }}</li>
+                  <li>&nbsp;</li>
+                  <li>{% if data.job_title %}{{ data.job_title }}{% else %} {{_('No job title specified')}} {% endif %}</li>
+                   <li>{% if data.affiliation %}{{ data.affiliation }}{% else %} {{_('No organisation specified')}} {% endif %}</li>
+              </ul>
+          </div>
+        </div>
+          <div class="row">
+          <div class="col-xs-12 text-right no-bottom-padding">
+            <a class="btn btn-primary" href="{{ h.get_ape_url() }}">{{ _('Update data') }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
     {{ form.markdown('about', label=_('About'), id='field-about', value=data.about, error=errors.about, placeholder=_('A little information about yourself')) }}
 
