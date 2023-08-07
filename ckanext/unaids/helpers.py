@@ -2,9 +2,7 @@
 import logging
 import os
 import json
-
 import six
-
 from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url
 from ckan.lib.i18n import get_lang
 from ckan.plugins.toolkit import get_action, request
