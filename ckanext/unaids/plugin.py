@@ -170,7 +170,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             return True
 
     def after_create(self, context, pkg_dict):
-        if pkg_dict.get("validate_package"):
+        if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
             logging.warning("VALIDATING ENTIRE PACKAGE")
             toolkit.get_action("resource_validation_run_batch")(
                 context, {"dataset_ids": pkg_dict["package_id"]}
@@ -189,7 +189,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     dataset_id=pkg_dict["id"],
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
-        if pkg_dict.get("validate_package"):
+        if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
             logging.warning("VALIDATING ENTIRE PACKAGE")
             toolkit.get_action("resource_validation_run_batch")(
                 context, {"dataset_ids": pkg_dict["package_id"]}

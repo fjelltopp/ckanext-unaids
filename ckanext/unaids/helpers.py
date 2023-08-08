@@ -255,16 +255,34 @@ def unaids_get_validation_badge(resource, in_listing=False):
     validation_url = toolkit.url_for(
         'validation_read',
         id=resource['package_id'],
-        resource_id=resource['id'])
+        resource_id=resource['id']
+    )
+
+    tags = ""
+    if status == 'unknown':
+        tags += "data-module='validation-badge' data-module-resource='{}'".format(
+            resource['id']
+        )
 
     badge_url = url_for_static_or_external(
-        '/images/badges/{}-{}.gif'.format(_('en'), status))
+        '/images/badges/{}-{}.gif'.format(toolkit.h.lang(), status))
 
-    return '''
-<a href="{validation_url}" class="validation-badge">
+    link_visibility = ""
+    if status in ['success', 'unknown']:
+        link_visibility = 'hidden'
+
+    badge_html = '''
+<a href="{validation_url}" {tags} class="validation-badge">
     <img src="{badge_url}" alt="{alt}" title="{title}"/>
+    <p class="small badge-link {link_visibility}">{badge_link}</p>
 </a>'''.format(
         validation_url=validation_url,
+        tags=tags,
         badge_url=badge_url,
         alt=messages[status],
-        title=resource.get('validation_timestamp', ''))
+        title=resource.get('validation_timestamp', ''),
+        link_visibility=link_visibility,
+        badge_link=_('View Error Report')
+    )
+
+    return badge_html
