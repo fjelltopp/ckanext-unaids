@@ -87,11 +87,22 @@
 
       {% set groups = h.get_featured_groups(0) %}
       {% for group in groups %}
-      <div class="col-md-6 col2">
-        <div class="box">
-          {% snippet 'snippets/group_item.html', group=group, truncate=50, truncate_title=35 %}
-        </div>
-      </div>
+          {% if group.name != "administrative-boundaries" %}
+              <div class="col-md-6 col2">
+                <div class="box">
+                  {% snippet 'snippets/group_item.html', group=group, truncate=50, truncate_title=35 %}
+                </div>
+              </div>
+          {% endif %}
+      {% endfor %}
+      {% for group in groups %}
+          {% if group.name == "administrative-boundaries" %}
+            <div class="admin-boundaries-group col-md-12 col2">
+                <div class="box">
+                    {% snippet 'snippets/group_item.html', group=group, truncate=50, truncate_title=35 %}
+                </div>
+            </div>
+          {% endif %}
       {% endfor %}
     </div>
   </div>
