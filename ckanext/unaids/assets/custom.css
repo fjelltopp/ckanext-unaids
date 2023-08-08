@@ -844,3 +844,7 @@ div.ckanext-datapreview{
 .no-bottom-padding {
   padding-bottom: 0;
 }
+
+.admin-boundaries-group {
+  margin-top: 1em;
+}
