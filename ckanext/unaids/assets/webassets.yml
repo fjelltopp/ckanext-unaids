@@ -7,6 +7,7 @@ main:
     - text_template.js
     - bootstrap_table.js
     - format_update.js
+    - validation-badge.js
   extra:
     preload:
       - base/main
@@ -63,4 +64,10 @@ MapSelectorCSS:
         - dependancies/svgMap.min.css
     filters: cssmin
     output: unaids/%(version)s_MapSelector.css
+
+ValidationBadgeCSS:
+    filters: cssmin
+    output: unaids/%(version)s_ValidationBadge.css
+    contents:
+        - css/validation.css
 

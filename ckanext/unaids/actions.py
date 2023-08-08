@@ -6,11 +6,11 @@ import ckan.lib.navl.dictization_functions as dfunc
 import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
-import ckanext.validation.helpers as validation_helpers
 import ckanext.unaids.custom_user_profile as custom_user_profile
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 from ckanext.unaids.logic import populate_data_dictionary_from_schema
+from ckanext.unaids.helpers import validation_load_json_schema
 
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
@@ -41,7 +41,7 @@ def get_table_schema(context, data_dict):
     schema_name = resource.get('schema')
     schema = False
     if schema_name:
-        schema = validation_helpers.validation_load_json_schema(schema_name)
+        schema = validation_load_json_schema(schema_name)
     if not schema:
         schema = {}
     return schema
