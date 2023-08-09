@@ -2,19 +2,16 @@ import pytest
 
 from ckan.tests import factories
 from ckanext.unaids.tests import unaids_db_setup, create_version
-from ckanext.validation.tests import validation_db_setup
 from ckanext.versions.tests import versions_db_setup
 from ckanext.validation.model import tables_exist, create_tables
 
 
-def validation_db_setup():
-    if not tables_exist():
-        create_tables()
-
 
 @pytest.fixture(autouse=True)
 def unaids_setup(clean_db):
-    validation_db_setup()
+    if not tables_exist():
+        create_tables()
+
     versions_db_setup()
     unaids_db_setup()
 
