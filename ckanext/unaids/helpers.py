@@ -4,7 +4,7 @@ import os
 import json
 import requests
 import six
-from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url
+from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url, lang
 from ckan.lib.i18n import get_lang
 from ckan.plugins.toolkit import get_action, request
 from ckan.plugins import toolkit
@@ -123,7 +123,8 @@ def get_bulk_file_uploader_default_fields():
 
 def get_ape_url():
     query_params = {
-        "return_url": full_current_url(),
+        "back_url": full_current_url(),
+        "after_save_url": _get_ape_save_callback(),
         "lang": get_lang()
     }
     domain_part = config.get("ckanext.unaids.ape_url", "")
@@ -286,3 +287,12 @@ def unaids_get_validation_badge(resource, in_listing=False):
     )
 
     return badge_html
+
+
+def _get_ape_save_callback():
+    default_locale = config.get("ckan.locale_default")
+    current_lang = lang()
+    site_url = config.get("ckan.site_url")
+    lang_in_url = ("/" + current_lang) if current_lang and current_lang != default_locale else ""
+
+    return f"{site_url}{lang_in_url}/ape_data_receiver"
