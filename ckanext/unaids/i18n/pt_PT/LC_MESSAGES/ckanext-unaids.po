@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-08-01 17:46+0000\n"
+"POT-Creation-Date: 2023-08-10 10:59+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -27,56 +27,56 @@ msgstr "Recurso não encontrado."
 msgid "TaskStatus was not found."
 msgstr "O TaskStatus não foi encontrado."
 
-#: ckanext/unaids/helpers.py:197
+#: ckanext/unaids/helpers.py:209
 msgid "title"
 msgstr "titulo"
 
-#: ckanext/unaids/helpers.py:233
+#: ckanext/unaids/helpers.py:245
 msgid "Valid data"
 msgstr "Dados válidos"
 
-#: ckanext/unaids/helpers.py:234
+#: ckanext/unaids/helpers.py:246
 msgid "Invalid data"
 msgstr "Dados inválidos"
 
-#: ckanext/unaids/helpers.py:235
+#: ckanext/unaids/helpers.py:247
 msgid "Error during validation"
 msgstr "Erro durante a validação"
 
-#: ckanext/unaids/helpers.py:236
+#: ckanext/unaids/helpers.py:248
 msgid "Data validation unknown"
 msgstr "Validação de dados desconhecida"
 
-#: ckanext/unaids/helpers.py:250
-msgid "en"
-msgstr "pt_PT"
+#: ckanext/unaids/helpers.py:286
+msgid "View Error Report"
+msgstr "Exibir relatório de erros"
 
 #: ckanext/unaids/licenses.py:13
 msgid "Creative Commons Attribution for Intergovernmental Organisations"
 msgstr "Atribuição Creative Commons para Organizações Intergovernamentais"
 
-#: ckanext/unaids/plugin.py:126
+#: ckanext/unaids/plugin.py:127
 #: ckanext/unaids/theme/templates/request/show.html:10
 msgid "Organization"
 msgstr "Organização"
 
-#: ckanext/unaids/plugin.py:127
+#: ckanext/unaids/plugin.py:128
 msgid "Data Type"
 msgstr "Tipo de dados"
 
-#: ckanext/unaids/plugin.py:128
+#: ckanext/unaids/plugin.py:129
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: ckanext/unaids/plugin.py:129
+#: ckanext/unaids/plugin.py:130
 msgid "Year"
 msgstr "Ano"
 
-#: ckanext/unaids/plugin.py:130
+#: ckanext/unaids/plugin.py:131
 msgid "Location"
 msgstr "Localização"
 
-#: ckanext/unaids/plugin.py:288
+#: ckanext/unaids/plugin.py:296
 msgid "Data Explorer"
 msgstr "Explorador de dados"
 
@@ -111,13 +111,13 @@ msgstr "iframe"
 msgid ",m[42]="
 msgstr ",m[42]="
 
-#: ckanext/unaids/blueprints/ape_data_receiver.py:12
+#: ckanext/unaids/blueprints/ape_data_receiver.py:13
 msgid "You must be logged in to access this page"
 msgstr "Você precisa estar conectado para acessar esta página"
 
-#: ckanext/unaids/blueprints/ape_data_receiver.py:14
+#: ckanext/unaids/blueprints/ape_data_receiver.py:15
 msgid ""
-"User profile successfully saved. You need to log in again to see the "
+"User profile successfully saved, you need to log in again to see the "
 "changes."
 msgstr ""
 "Perfil de usuário salvo com sucesso. Você precisa fazer login novamente "
@@ -307,7 +307,6 @@ msgid "URL"
 msgstr "URL"
 
 #: ckanext/unaids/i18n/extra_translations.py:37
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:15
 #: ckanext/unaids/theme/templates/user/new_user_form.html:22
 msgid "Email"
 msgstr "Email"
@@ -674,7 +673,7 @@ msgstr "Com o apoio de"
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
 #: ckanext/unaids/theme/templates/package/releases/delete.html:12
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:65
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:46
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:57
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -764,7 +763,6 @@ msgstr "Título do cargo"
 #: ckanext/unaids/theme/templates/organization/members.html:13
 #: ckanext/unaids/theme/templates/organization/members.html:48
 #: ckanext/unaids/theme/templates/request/show.html:32
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:19
 #: ckanext/unaids/theme/templates/user/new_user_form.html:20
 msgid "Affiliation"
 msgstr "Organização"
@@ -1062,7 +1060,7 @@ msgstr "Tem certeza de que deseja aprovar este pedido?"
 msgid "Are you sure you want reject this request?"
 msgstr "Tem certeza de que deseja rejeitar este pedido?"
 
-#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:13
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:15
 msgid "No organisation"
 msgstr "Nenhuma organização"
 
@@ -1231,14 +1229,6 @@ msgstr "As Minhas Organizações"
 msgid "Change details"
 msgstr "Alterar detalhes"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:13
-msgid "eg. Joe Bloggs"
-msgstr "ex. Joe Bloggs"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:15
-msgid "eg. joe@example.com"
-msgstr "ex. joe@example.com"
-
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:9
 msgid "HIV Tools Profile Data"
 msgstr "Dados do Perfil de Ferramentas de HIV"
@@ -1271,7 +1261,7 @@ msgstr "Foto do perfil"
 msgid "Profile picture URL"
 msgstr "URL da foto de perfil"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:46
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:57
 msgid "Are you sure you want to delete this User?"
 msgstr "Pretende apagar este membro?"
 
@@ -1279,11 +1269,11 @@ msgstr "Pretende apagar este membro?"
 msgid "Are you sure you want to regenerate the API key?"
 msgstr "Tem certeza de que deseja gerar novamente a chave de API?"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:51
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:62
 msgid "Regenerate API Key"
 msgstr "Regenerar chave de API"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:48
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:65
 msgid "Update Profile"
 msgstr "Atualizar Perfil"
 
@@ -1382,8 +1372,11 @@ msgstr "Duração"
 #~ msgstr "Nome completo"
 
 #~ msgid "eg. Joe Bloggs"
-#~ msgstr "por exemplo Joe Bloggs"
+#~ msgstr "ex. Joe Bloggs"
 
 #~ msgid "eg. joe@example.com"
-#~ msgstr "por exemplo joe@example.com"
+#~ msgstr "ex. joe@example.com"
+
+#~ msgid "en"
+#~ msgstr "pt_PT"
 

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-08-01 17:46+0000\n"
+"POT-Creation-Date: 2023-08-10 10:59+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: fr\n"
@@ -27,29 +27,29 @@ msgstr "Ressource introuvable."
 msgid "TaskStatus was not found."
 msgstr "L'état actuel de la tâche est introuvable."
 
-#: ckanext/unaids/helpers.py:197
+#: ckanext/unaids/helpers.py:209
 msgid "title"
 msgstr "Titre"
 
-#: ckanext/unaids/helpers.py:233
+#: ckanext/unaids/helpers.py:245
 msgid "Valid data"
 msgstr "Données valides"
 
-#: ckanext/unaids/helpers.py:234
+#: ckanext/unaids/helpers.py:246
 msgid "Invalid data"
 msgstr "Données invalides"
 
-#: ckanext/unaids/helpers.py:235
+#: ckanext/unaids/helpers.py:247
 msgid "Error during validation"
 msgstr "Erreur durant la validation"
 
-#: ckanext/unaids/helpers.py:236
+#: ckanext/unaids/helpers.py:248
 msgid "Data validation unknown"
 msgstr "Validation de données inconnue"
 
-#: ckanext/unaids/helpers.py:250
-msgid "en"
-msgstr "fr"
+#: ckanext/unaids/helpers.py:286
+msgid "View Error Report"
+msgstr "Consulter le rapport d'erreur"
 
 #: ckanext/unaids/licenses.py:13
 msgid "Creative Commons Attribution for Intergovernmental Organisations"
@@ -57,28 +57,28 @@ msgstr ""
 "Licence Creative Commons Attribution pour les organisations "
 "intergouvernementales"
 
-#: ckanext/unaids/plugin.py:126
+#: ckanext/unaids/plugin.py:127
 #: ckanext/unaids/theme/templates/request/show.html:10
 msgid "Organization"
 msgstr "Organisation"
 
-#: ckanext/unaids/plugin.py:127
+#: ckanext/unaids/plugin.py:128
 msgid "Data Type"
 msgstr "Type de données"
 
-#: ckanext/unaids/plugin.py:128
+#: ckanext/unaids/plugin.py:129
 msgid "Tags"
 msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:129
+#: ckanext/unaids/plugin.py:130
 msgid "Year"
 msgstr "Année"
 
-#: ckanext/unaids/plugin.py:130
+#: ckanext/unaids/plugin.py:131
 msgid "Location"
 msgstr "Lieu"
 
-#: ckanext/unaids/plugin.py:288
+#: ckanext/unaids/plugin.py:296
 msgid "Data Explorer"
 msgstr "Explorateur de données"
 
@@ -113,13 +113,13 @@ msgstr "iframe"
 msgid ",m[42]="
 msgstr ",m[42]="
 
-#: ckanext/unaids/blueprints/ape_data_receiver.py:12
+#: ckanext/unaids/blueprints/ape_data_receiver.py:13
 msgid "You must be logged in to access this page"
 msgstr "Vous devez être connecté pour accéder à cette page"
 
-#: ckanext/unaids/blueprints/ape_data_receiver.py:14
+#: ckanext/unaids/blueprints/ape_data_receiver.py:15
 msgid ""
-"User profile successfully saved. You need to log in again to see the "
+"User profile successfully saved, you need to log in again to see the "
 "changes."
 msgstr ""
 "Le profil utilisateur a été enregistré avec succès. Vous devez vous "
@@ -311,7 +311,6 @@ msgid "URL"
 msgstr "URL"
 
 #: ckanext/unaids/i18n/extra_translations.py:37
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:15
 #: ckanext/unaids/theme/templates/user/new_user_form.html:22
 msgid "Email"
 msgstr "e-mail"
@@ -680,7 +679,7 @@ msgstr "Avec l’appui de"
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
 #: ckanext/unaids/theme/templates/package/releases/delete.html:12
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:65
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:46
+#: ckanext/unaids/theme/templates/user/edit_user_form.html:57
 msgid "Delete"
 msgstr "Supprimer"
 
@@ -720,7 +719,6 @@ msgstr ""
 " descriptions de rôle."
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:16
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:14
 msgid "Username"
@@ -771,7 +769,6 @@ msgstr "Titre de poste"
 #: ckanext/unaids/theme/templates/organization/members.html:13
 #: ckanext/unaids/theme/templates/organization/members.html:48
 #: ckanext/unaids/theme/templates/request/show.html:32
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:19
 #: ckanext/unaids/theme/templates/user/new_user_form.html:20
 msgid "Affiliation"
 msgstr "Affiliation"
@@ -1245,19 +1242,6 @@ msgstr "Changer les détails"
 msgid "HIV Tools Profile Data"
 msgstr "Données de profil Outils VIH"
 
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:13
-msgid "Full name"
-msgstr "Nom complet"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:13
-msgid "eg. Joe Bloggs"
-msgstr "par ex. Joe Bloggs"
-
-#: ckanext/unaids/theme/templates/user/edit_user_form.html:15
-msgid "eg. joe@example.com"
-msgstr "par ex. joe@example.com"
-
-
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:19
 msgid "No job title specified"
 msgstr "Titre de poste non spécifié"
@@ -1407,4 +1391,7 @@ msgstr "Lieu"
 
 #~ msgid "eg. joe@example.com"
 #~ msgstr "par ex. joe@example.com"
+
+#~ msgid "en"
+#~ msgstr "fr"
 
