@@ -127,7 +127,7 @@ def get_profile_editor_url():
         "after_save_url": _get_profile_editor_save_callback(),
         "lang": get_lang()
     }
-    domain_part = config.get("ckanext.unaids.ape_url", "")
+    domain_part = config.get("ckanext.unaids.profile_editor_url", "")
     encoded_query_params = urlencode(query_params)
 
     return f"{domain_part}?{encoded_query_params}"
