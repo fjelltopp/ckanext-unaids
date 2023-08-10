@@ -33,7 +33,7 @@ from ckanext.unaids.helpers import (
     get_google_analytics_id,
     is_an_estimates_dataset,
     url_encode,
-    get_ape_url,
+    get_profile_editor_url,
     unaids_get_validation_badge
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
@@ -151,7 +151,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "get_google_analytics_id": get_google_analytics_id,
             "is_an_estimates_dataset": is_an_estimates_dataset,
             "url_encode": url_encode,
-            "get_ape_url": get_ape_url,
+            "get_profile_editor_url": get_profile_editor_url,
             "unaids_get_validation_badge": unaids_get_validation_badge,
         }
 
