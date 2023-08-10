@@ -1,7 +1,7 @@
 from ckan import model
 from ckan.lib.munge import substitute_ascii_equivalents
 from ckan.plugins import toolkit
-from ckanext.validation.helpers import validation_load_json_schema
+from ckanext.unaids.helpers import validation_load_json_schema
 
 
 def validate_resource_upload_fields(context, resource_dict):

@@ -33,7 +33,8 @@ from ckanext.unaids.helpers import (
     get_google_analytics_id,
     is_an_estimates_dataset,
     url_encode,
-    get_ape_url
+    get_ape_url,
+    unaids_get_validation_badge
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
@@ -150,7 +151,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "get_google_analytics_id": get_google_analytics_id,
             "is_an_estimates_dataset": is_an_estimates_dataset,
             "url_encode": url_encode,
-            "get_ape_url": get_ape_url
+            "get_ape_url": get_ape_url,
+            "unaids_get_validation_badge": unaids_get_validation_badge,
         }
 
     # IAuthFunctions
@@ -172,6 +174,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if data_dict.get("schema"):
             return True
 
+
     # IPackageController
     def after_update(self, context, pkg_dict):
         if "extras" in pkg_dict:
@@ -185,21 +188,42 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     dataset_id=pkg_dict["id"],
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
+        if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
+            logging.warning("VALIDATING ENTIRE PACKAGE")
+            toolkit.get_action("resource_validation_run_batch")(
+                context, {"dataset_ids": pkg_dict["package_id"]}
+            )
 
     # IResourceController
+    def _process_schema_fields(self, data_dict):
+        """
+        Here we overload the default schema processing (from frictionlessdata/ckanext-validation)
+        to allow for the fact that we just pass a schema name around rather than the schema url
+        or a schema JSON.
+        """
+
+        schema = data_dict.pop("schema", None)
+        if schema:
+            schema_json = logic.validation_load_json_schema(schema)
+            data_dict[u'schema_json'] = schema_json
+
+        return data_dict
+
     def before_create(self, context, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource)
             _update_resource_last_modified_date(resource)
             logic.validate_resource_upload_fields(context, resource)
-        return resource
+            context["_resource_create_call"] = True
+        return self._process_schema_fields(resource)
 
     def before_update(self, context, current, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
             _update_resource_last_modified_date(resource, current=current)
             logic.validate_resource_upload_fields(context, resource)
-        return resource
+            context["_resource_create_call"] = True
+        return self._process_schema_fields(resource)
 
     def before_show(self, resource):
         if _data_dict_is_resource(resource):
@@ -299,7 +323,7 @@ def _data_dict_is_resource(data_dict):
 def _giftless_upload(context, resource, current=None):
     attached_file = resource.pop("upload", None)
     if attached_file:
-        if type(attached_file) == FlaskFileStorage:
+        if isinstance(attached_file, FlaskFileStorage):
             dataset_id = resource.get("package_id")
             if not dataset_id:
                 dataset_id = current["package_id"]

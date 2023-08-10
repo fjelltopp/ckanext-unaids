@@ -2,15 +2,15 @@
 import logging
 import os
 import json
-
+import requests
 import six
-
-from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url
+from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url, lang
 from ckan.lib.i18n import get_lang
 from ckan.plugins.toolkit import get_action, request
 from ckan.plugins import toolkit
-from ckan.common import _, g, config
+from ckan.common import _, g, asbool, config
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
+
 
 try:
     from html import escape as html_escape
@@ -21,6 +21,48 @@ from urllib.parse import quote, urlencode
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
+
+log = logging.getLogger(__name__)
+
+
+def _files_from_directory(path, extension=".json"):
+    listed_files = {}
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if extension in file:
+                name = file.split(".json")[0]
+                listed_files[name] = os.path.join(root, file)
+    return listed_files
+
+
+def get_schema_filepath(schema):
+    schema_directory = toolkit.config["ckanext.unaids.schema_directory"]
+    schemas = _files_from_directory(schema_directory)
+    return schemas.get(schema)
+
+
+def validation_load_json_schema(schema):
+    try:
+        # When updating a resource there's already an existing JSON schema
+        # attached to the resource
+        if isinstance(schema, dict):
+            return schema
+
+        if schema.startswith("http"):
+            r = requests.get(schema)
+            return r.json()
+
+        schema_filepath = get_schema_filepath(schema)
+        if schema_filepath:
+            with open(schema_filepath, "rb") as schema_file:
+                return json.load(schema_file)
+
+        return json.loads(schema)
+
+    except json.JSONDecodeError as e:
+        log.error("Error loading schema: " + schema)
+        log.exception(e)
+        return None
 
 
 def get_all_package_downloads(pkg_dict):
@@ -81,7 +123,8 @@ def get_bulk_file_uploader_default_fields():
 
 def get_ape_url():
     query_params = {
-        "return_url": full_current_url(),
+        "back_url": full_current_url(),
+        "after_save_url": _get_ape_save_callback(),
         "lang": get_lang()
     }
     domain_part = config.get("ckanext.unaids.ape_url", "")
@@ -187,3 +230,69 @@ def is_an_estimates_dataset(dataset_type_name):
 
 def url_encode(url):
     return quote(url, safe='/:?=&')
+
+
+def unaids_get_validation_badge(resource, in_listing=False):
+
+    if in_listing and not asbool(
+            toolkit.config.get('ckanext.validation.show_badges_in_listings', True)):
+        return ''
+
+    if not resource.get('validation_status'):
+        return ''
+
+    messages = {
+        'success': _('Valid data'),
+        'failure': _('Invalid data'),
+        'error': _('Error during validation'),
+        'unknown': _('Data validation unknown'),
+    }
+
+    if resource['validation_status'] in ['success', 'failure', 'error']:
+        status = resource['validation_status']
+    else:
+        status = 'unknown'
+
+    validation_url = toolkit.url_for(
+        'validation_read',
+        id=resource['package_id'],
+        resource_id=resource['id']
+    )
+
+    tags = ""
+    if status == 'unknown':
+        tags += "data-module='validation-badge' data-module-resource='{}'".format(
+            resource['id']
+        )
+
+    badge_url = url_for_static_or_external(
+        '/images/badges/{}-{}.gif'.format(toolkit.h.lang(), status))
+
+    link_visibility = ""
+    if status in ['success', 'unknown']:
+        link_visibility = 'hidden'
+
+    badge_html = '''
+<a href="{validation_url}" {tags} class="validation-badge">
+    <img src="{badge_url}" alt="{alt}" title="{title}"/>
+    <p class="small badge-link {link_visibility}">{badge_link}</p>
+</a>'''.format(
+        validation_url=validation_url,
+        tags=tags,
+        badge_url=badge_url,
+        alt=messages[status],
+        title=resource.get('validation_timestamp', ''),
+        link_visibility=link_visibility,
+        badge_link=_('View Error Report')
+    )
+
+    return badge_html
+
+
+def _get_ape_save_callback():
+    default_locale = config.get("ckan.locale_default")
+    current_lang = lang()
+    site_url = config.get("ckan.site_url")
+    lang_in_url = ("/" + current_lang) if current_lang and current_lang != default_locale else ""
+
+    return f"{site_url}{lang_in_url}/ape_data_receiver"

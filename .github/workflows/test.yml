@@ -31,7 +31,7 @@ jobs:
             requirements-dev: "dev-requirements.py3.txt"
             ckanext-requirements: |
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
-              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.py3.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/d83751760cd93836e4ca44b46ffb629907f06576/requirements.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py3.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-restricted/development/requirements.txt
@@ -41,7 +41,7 @@ jobs:
             requirements-dev: "dev-requirements.py3.txt"
             ckanext-requirements: |
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-scheming/development/requirements.txt
-              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/development/requirements.py3.txt
+              pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-validation/d83751760cd93836e4ca44b46ffb629907f06576/requirements.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-blob-storage/development/requirements.py3.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-versions/development/requirements.txt
               pip install -r https://raw.githubusercontent.com/fjelltopp/ckanext-restricted/development/requirements.txt 

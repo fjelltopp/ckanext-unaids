@@ -55,3 +55,10 @@
         {{ super() }}
     {% endif %}
 {% endblock %}
+
+{% block resource_read_title %}
+  <h1 class="page-heading">{{ h.resource_display_name(res) | truncate(50) }}
+  </h1>
+  {{ h.unaids_get_validation_badge(res)|safe }}
+  {% asset 'ckanext-unaids/ValidationBadgeCSS' %}
+{% endblock %}
