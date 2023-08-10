@@ -4,10 +4,10 @@ from ckan.lib.helpers import url_for
 from ckan.plugins import toolkit
 
 
-ape_data_receiver = Blueprint("ape_data_receiver", __name__)
+profile_editor_data_receiver = Blueprint("profile_editor_data_receiver", __name__)
 
 
-@ape_data_receiver.route('/ape_data_receiver', methods=['GET'])
+@profile_editor_data_receiver.route('/profile_editor_data_receiver', methods=['GET'])
 def receive():
     if not g.user:
         return toolkit.abort(403, _('You must be logged in to access this page'))

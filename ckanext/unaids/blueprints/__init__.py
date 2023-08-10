@@ -3,7 +3,7 @@ from ckanext.unaids.blueprints.unaids_dataset_transfer import unaids_dataset_tra
 from ckanext.unaids.blueprints.user_info_blueprint import user_info_blueprint
 from ckanext.unaids.blueprints.unaids_dataset_releases import unaids_dataset_releases
 from ckanext.unaids.blueprints.login_register_catch import login_register_catch
-from ckanext.unaids.blueprints.ape_data_receiver import ape_data_receiver
+from ckanext.unaids.blueprints.profile_editor_data_receiver import profile_editor_data_receiver
 
 blueprints = [
     unaids_dataset_transfer,
@@ -11,5 +11,5 @@ blueprints = [
     unaids_dataset_releases,
     svg_map_options,
     login_register_catch,
-    ape_data_receiver
+    profile_editor_data_receiver
 ]

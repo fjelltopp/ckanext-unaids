@@ -121,10 +121,10 @@ def get_bulk_file_uploader_default_fields():
     return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})
 
 
-def get_ape_url():
+def get_profile_editor_url():
     query_params = {
         "back_url": full_current_url(),
-        "after_save_url": _get_ape_save_callback(),
+        "after_save_url": _get_profile_editor_save_callback(),
         "lang": get_lang()
     }
     domain_part = config.get("ckanext.unaids.ape_url", "")
@@ -289,10 +289,10 @@ def unaids_get_validation_badge(resource, in_listing=False):
     return badge_html
 
 
-def _get_ape_save_callback():
+def _get_profile_editor_save_callback():
     default_locale = config.get("ckan.locale_default")
     current_lang = lang()
     site_url = config.get("ckan.site_url")
     lang_in_url = ("/" + current_lang) if current_lang and current_lang != default_locale else ""
 
-    return f"{site_url}{lang_in_url}/ape_data_receiver"
+    return f"{site_url}{lang_in_url}/profile_editor_data_receiver"
