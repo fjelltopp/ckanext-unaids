@@ -174,7 +174,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if data_dict.get("schema"):
             return True
 
-
     # IPackageController
     def after_update(self, context, pkg_dict):
         if "extras" in pkg_dict:
