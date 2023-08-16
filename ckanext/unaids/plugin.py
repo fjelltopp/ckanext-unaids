@@ -166,13 +166,15 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         }
 
     def can_validate(self, context, data_dict):
-        if data_dict.get("validate_package"):
-            logging.warning("VALIDATING ENTIRE PACKAGE")
-            toolkit.get_action("resource_validation_run_batch")(
-                context, {"dataset_ids": data_dict["package_id"]}
-            )
         if data_dict.get("schema"):
             return True
+
+    def after_create(self, context, pkg_dict):
+        if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
+            logging.warning("VALIDATING ENTIRE PACKAGE")
+            toolkit.get_action("resource_validation_run_batch")(
+                context, {"dataset_ids": pkg_dict["package_id"]}
+            )
 
     # IPackageController
     def after_update(self, context, pkg_dict):
