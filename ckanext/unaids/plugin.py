@@ -168,7 +168,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     def can_validate(self, context, data_dict):
         if data_dict.get("schema"):
             return True
-        
+
     def after_create(self, context, pkg_dict):
         if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
             logging.warning("VALIDATING ENTIRE PACKAGE")
