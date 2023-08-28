@@ -1,13 +1,13 @@
 {% ckan_extends %}
 
 {% block package_item %}
-    {% if not package.groups | selectattr('name', 'equalto', 'administrative-boundaries') | list | length > 0 or request.path == '/group/administrative-boundaries' %}
+    {% if not package.groups | selectattr('name', 'equalto', 'administrative-boundaries') | list | length > 0 or '/group/administrative-boundaries' in request.path %}
       <li class="{{ item_class or "dataset-item" }}">
     {% endif %}
         {% block content %}
             {{ super() }}
         {% endblock %}
-    {% if not package.groups | selectattr('name', 'equalto', 'administrative-boundaries') | list | length > 0 or request.path == '/group/administrative-boundaries' %}
+    {% if not package.groups | selectattr('name', 'equalto', 'administrative-boundaries') | list | length > 0 or '/group/administrative-boundaries' in request.path %}
         </li>
     {% endif %}
 {% endblock %}
