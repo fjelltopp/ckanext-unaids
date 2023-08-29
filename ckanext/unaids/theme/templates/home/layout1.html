@@ -112,7 +112,7 @@
                             <div class="row">
                         {% endif %}
                         <div class="col-xs-6 admin-boundaries-column left">
-                            {% snippet 'snippets/package_item.html', package=package %}
+                            {% snippet 'snippets/package_item.html', package=package, admin_boundaries=true %}
                         </div>
                         {% if loop.last %}
                             </div>
@@ -122,7 +122,7 @@
                             <div class="row">
                         {% endif %}
                         <div class="col-xs-6 admin-boundaries-column right">
-                            {% snippet 'snippets/package_item.html', package=package %}
+                            {% snippet 'snippets/package_item.html', package=package, admin_boundaries=true %}
                         </div>
                         {% if loop.last %}
                             </div>
@@ -132,7 +132,7 @@
 
                   <div class="col-md-12 col2">
                     <div class="admin-boundaries-group-description">
-                        <a href="{{ h.url_for('group.read', id=group.name) }}" target="_blank">{{ _('View All') }}</a>
+                        <a href="{{ h.url_for('group.read', id=group.name) }}">{{ _('View All') }}</a>
                     </div>
                 </div>
                 </div>
