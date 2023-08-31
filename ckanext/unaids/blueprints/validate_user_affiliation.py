@@ -33,11 +33,11 @@ def check_user_affiliation():
         validate_plugin_extras_provided(unaids_extras)
     except (toolkit.ValidationError, AttributeError):
         return h.redirect_to(helpers.get_profile_editor_url(
-            after_save_url=h.url_for("validate_user_affiliation.success_callback"),
-            back_url=h.url_for('dashboard.index'),
-            flash_message=_("UNAIDS requests that further information be added "
+            after_save_url=h.url_for("validate_user_affiliation.success_callback", _external=True),
+            back_url=h.url_for('dashboard.index', _external=True),
+            flash_message=_("UNAIDS asks that further information be added "
             "to your user profile. Please complete the required "
-            "fields below before continuing...")
+            "fields missing below before continuing...")
         ))
 
     return h.redirect_to('dashboard.index')
