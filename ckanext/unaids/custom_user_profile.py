@@ -59,6 +59,7 @@ def format_plugin_extras(plugin_extras):
         out_dict[field["name"]] = plugin_extras.get(field["name"], field["default"])
     return out_dict
 
+
 def validate_plugin_extras_provided(data_dict):
     for field in CUSTOM_FIELDS:
         if not data_dict.get(field["name"]):

@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 validate_user_affiliation = Blueprint(
     'validate_user_affiliation',
     __name__,
-    url_prefix = '/validate-user-affiliation'
+    url_prefix='/validate-user-affiliation'
 )
 
 
@@ -36,8 +36,8 @@ def check_user_affiliation():
             after_save_url=h.url_for("validate_user_affiliation.success_callback", _external=True),
             back_url=h.url_for('dashboard.index', _external=True),
             flash_message=_("UNAIDS asks that further information be added "
-            "to your user profile. Please complete the required "
-            "fields missing below before continuing...")
+                "to your user profile. Please complete the required "
+                "fields missing below before continuing...")
         ))
 
     return h.redirect_to('dashboard.index')
