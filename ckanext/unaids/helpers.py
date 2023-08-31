@@ -121,12 +121,13 @@ def get_bulk_file_uploader_default_fields():
     return toolkit.config.get(BULK_FILE_UPLOADER_DEFAULT_FIELDS, {})
 
 
-def get_profile_editor_url():
+def get_profile_editor_url(**extra_query_params):
     query_params = {
         "back_url": full_current_url(),
         "after_save_url": _get_profile_editor_save_callback(),
         "lang": get_lang()
     }
+    query_params.update(extra_query_params)
     domain_part = config.get("ckanext.unaids.profile_editor_url", "")
     encoded_query_params = urlencode(query_params)
 
