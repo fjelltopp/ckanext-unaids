@@ -297,3 +297,20 @@ def _get_profile_editor_save_callback():
     lang_in_url = ("/" + current_lang) if current_lang and current_lang != default_locale else ""
 
     return f"{site_url}{lang_in_url}/profile_editor_data_receiver"
+
+
+def get_administrative_boundaries():
+    context = {'user': toolkit.g.user}
+    try:
+        group = toolkit.get_action('group_show')(
+            context,
+            {'id': 'administrative-boundaries'}
+        )
+    except toolkit.ObjectNotFound:
+        return []
+    packages_list_from_group = toolkit.get_action('group_package_show')(
+        context,
+        {'id': 'administrative-boundaries', 'limit': 4}
+    )
+    group['packages'] = packages_list_from_group
+    return group

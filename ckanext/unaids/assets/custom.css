@@ -844,3 +844,25 @@ div.ckanext-datapreview{
 .no-bottom-padding {
   padding-bottom: 0;
 }
+
+.admin-boundaries-group-header {
+  margin-top: 3.5em;
+  margin-bottom: 0px;
+}
+
+.admin-boundaries-group-description {
+  margin-bottom: 2em;
+}
+
+.admin-boundaries-column.left {
+    text-align: right;
+    border-right: 1px solid #ccc;
+    margin-right: -1px;
+}
+
+.admin-boundaries-column.right {
+    text-align: left;
+    border-left: 1px solid #ccc;
+    margin-left: -1px;
+}
+

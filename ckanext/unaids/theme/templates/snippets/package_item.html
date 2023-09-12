@@ -1,0 +1,15 @@
+{% ckan_extends %}
+
+{% set admin_boundaries = admin_boundaries or false %}
+
+{% block package_item %}
+    {% if not admin_boundaries %}
+      <li class="{{ item_class or "dataset-item" }}">
+    {% endif %}
+        {% block content %}
+            {{ super() }}
+        {% endblock %}
+    {% if not admin_boundaries %}
+        </li>
+    {% endif %}
+{% endblock %}
