@@ -87,25 +87,60 @@
 
       {% set groups = h.get_featured_groups(0) %}
       {% for group in groups %}
-          {% if group.name != "administrative-boundaries" %}
-              <div class="col-md-6 col2">
-                <div class="box">
-                  {% snippet 'snippets/group_item.html', group=group, truncate=50, truncate_title=35 %}
-                </div>
-              </div>
-          {% endif %}
-      {% endfor %}
-      {% for group in groups %}
-          {% if group.name == "administrative-boundaries" %}
-            <div class="admin-boundaries-group col-md-12 col2">
-                <div class="box">
-                    {% snippet 'snippets/group_item.html', group=group, truncate=50, truncate_title=35 %}
-                </div>
-            </div>
-          {% endif %}
+      <div class="col-md-6 col2">
+      {% if group.name != "administrative-boundaries" %}
+        <div class="box">
+          {% snippet 'snippets/group_item.html', group=group, truncate=50, truncate_title=35 %}
+        </div>
+      {% endif %}
+      </div>
       {% endfor %}
     </div>
-  </div>
+    {% set group = h.get_administrative_boundaries() %}
+        {% if group.packages|length > 0 %}
+          <div class="row">
+          <div class="col-xs-12 text-center">
+            <H2 class="admin-boundaries-group-header"> {{_('Administrative Boundaries')}} </H2>
+              <div class="row row2">
+                      <div class="col-md-12 col2">
+                        <div class="admin-boundaries-group-description">
+                            {{ group.description }}
+                        </div>
+
+                    {% for package in group.packages %}
+                        {% if loop.index is odd %}
+                            {% if loop.first %}
+                                <div class="row">
+                            {% endif %}
+                            <div class="col-xs-6 admin-boundaries-column left">
+                                {% snippet 'snippets/package_item.html', package=package, admin_boundaries=true %}
+                            </div>
+                            {% if loop.last %}
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            {% if loop.first %}
+                                <div class="row">
+                            {% endif %}
+                            <div class="col-xs-6 admin-boundaries-column right">
+                                {% snippet 'snippets/package_item.html', package=package, admin_boundaries=true %}
+                            </div>
+                            {% if loop.last %}
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+
+                      <div class="col-md-12 col2">
+                        <div class="admin-boundaries-group-description">
+                            <a href="{{ h.url_for('group.read', id=group.name) }}">{{ _('View All') }}</a>
+                        </div>
+                    </div>
+                    </div>
+          </div>
+        </div>
+      </div>
+  {% endif %}
 </div>
 <div class="homepage-partners">
   <div class="container">
