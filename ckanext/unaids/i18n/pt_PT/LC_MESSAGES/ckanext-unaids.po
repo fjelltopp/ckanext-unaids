@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-09-12 08:11+0000\n"
+"POT-Creation-Date: 2023-09-12 11:42+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -176,10 +176,12 @@ msgid ""
 "UNAIDS asks that further information be added to your user profile. "
 "Please complete the required fields missing below before continuing..."
 msgstr ""
+"O UNAIDS solicita que mais informações sejam adicionadas ao seu perfil de usuário."
+"Por favor, complete os campos obrigatórios em falta abaixo antes de continuar..."
 
 #: ckanext/unaids/blueprints/validate_user_affiliation.py:49
 msgid "Thank you for updating your profile information."
-msgstr ""
+msgstr "Obrigado por atualizar as informações do seu perfil."
 
 #: ckanext/unaids/dataset_transfer/logic.py:74
 msgid "Dataset Transfer"
