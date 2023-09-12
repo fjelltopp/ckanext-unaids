@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-08-10 11:59+0000\n"
+"POT-Creation-Date: 2023-09-12 08:11+0000\n"
 "PO-Revision-Date: 2020-12-14 12:15+0300\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: fr\n"
@@ -27,27 +27,27 @@ msgstr "Ressource introuvable."
 msgid "TaskStatus was not found."
 msgstr "L'état actuel de la tâche est introuvable."
 
-#: ckanext/unaids/helpers.py:209
+#: ckanext/unaids/helpers.py:210
 msgid "title"
 msgstr "Titre"
 
-#: ckanext/unaids/helpers.py:245
+#: ckanext/unaids/helpers.py:246
 msgid "Valid data"
 msgstr "Données valides"
 
-#: ckanext/unaids/helpers.py:246
+#: ckanext/unaids/helpers.py:247
 msgid "Invalid data"
 msgstr "Données invalides"
 
-#: ckanext/unaids/helpers.py:247
+#: ckanext/unaids/helpers.py:248
 msgid "Error during validation"
 msgstr "Erreur durant la validation"
 
-#: ckanext/unaids/helpers.py:248
+#: ckanext/unaids/helpers.py:249
 msgid "Data validation unknown"
 msgstr "Validation de données inconnue"
 
-#: ckanext/unaids/helpers.py:286
+#: ckanext/unaids/helpers.py:287
 msgid "View Error Report"
 msgstr "Consulter le rapport d'erreur"
 
@@ -57,28 +57,28 @@ msgstr ""
 "Licence Creative Commons Attribution pour les organisations "
 "intergouvernementales"
 
-#: ckanext/unaids/plugin.py:127
+#: ckanext/unaids/plugin.py:128
 #: ckanext/unaids/theme/templates/request/show.html:10
 msgid "Organization"
 msgstr "Organisation"
 
-#: ckanext/unaids/plugin.py:128
+#: ckanext/unaids/plugin.py:129
 msgid "Data Type"
 msgstr "Type de données"
 
-#: ckanext/unaids/plugin.py:129
+#: ckanext/unaids/plugin.py:130
 msgid "Tags"
 msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:130
+#: ckanext/unaids/plugin.py:131
 msgid "Year"
 msgstr "Année"
 
-#: ckanext/unaids/plugin.py:131
+#: ckanext/unaids/plugin.py:132
 msgid "Location"
 msgstr "Lieu"
 
-#: ckanext/unaids/plugin.py:295
+#: ckanext/unaids/plugin.py:299
 msgid "Data Explorer"
 msgstr "Explorateur de données"
 
@@ -174,6 +174,16 @@ msgid ""
 msgstr ""
 "Votre clé API est: <code style=\"word-break:break-all;\"> {token}</code> "
 "{copy}"
+
+#: ckanext/unaids/blueprints/validate_user_affiliation.py:38
+msgid ""
+"UNAIDS asks that further information be added to your user profile. "
+"Please complete the required fields missing below before continuing..."
+msgstr ""
+
+#: ckanext/unaids/blueprints/validate_user_affiliation.py:49
+msgid "Thank you for updating your profile information."
+msgstr ""
 
 #: ckanext/unaids/dataset_transfer/logic.py:74
 msgid "Dataset Transfer"
@@ -666,10 +676,18 @@ msgid "Featured Organisations"
 msgstr "Organisations mis en exergue"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:103
+msgid "Administrative Boundaries"
+msgstr "Limites Administratives"
+
+#: ckanext/unaids/theme/templates/home/layout1.html:136
+msgid "View All"
+msgstr "Tout Voir"
+
+#: ckanext/unaids/theme/templates/home/layout1.html:149
 msgid "The AIDS Data Repository is a project by"
 msgstr "Le Réferentiel de Données sur le SIDA est un projet de"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:115
+#: ckanext/unaids/theme/templates/home/layout1.html:161
 msgid "With support from"
 msgstr "Avec l’appui de"
 
@@ -1343,9 +1361,8 @@ msgid "Validation timestamp"
 msgstr "Horaire de validation"
 
 #: ckanext/unaids/theme/templates/validation/validation_read.html:29
-#, fuzzy
 msgid "Duration"
-msgstr "Lieu"
+msgstr "Durée"
 
 #~ msgid "Click below for more information on uploading data:"
 #~ msgstr "Pour plus d'informations sur le téléchargement cliquez ci-dessous:"

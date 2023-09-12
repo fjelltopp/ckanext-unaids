@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-08-10 11:59+0000\n"
+"POT-Creation-Date: 2023-09-12 08:11+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -27,27 +27,27 @@ msgstr "Recurso não encontrado."
 msgid "TaskStatus was not found."
 msgstr "O TaskStatus não foi encontrado."
 
-#: ckanext/unaids/helpers.py:209
+#: ckanext/unaids/helpers.py:210
 msgid "title"
 msgstr "titulo"
 
-#: ckanext/unaids/helpers.py:245
+#: ckanext/unaids/helpers.py:246
 msgid "Valid data"
 msgstr "Dados válidos"
 
-#: ckanext/unaids/helpers.py:246
+#: ckanext/unaids/helpers.py:247
 msgid "Invalid data"
 msgstr "Dados inválidos"
 
-#: ckanext/unaids/helpers.py:247
+#: ckanext/unaids/helpers.py:248
 msgid "Error during validation"
 msgstr "Erro durante a validação"
 
-#: ckanext/unaids/helpers.py:248
+#: ckanext/unaids/helpers.py:249
 msgid "Data validation unknown"
 msgstr "Validação de dados desconhecida"
 
-#: ckanext/unaids/helpers.py:286
+#: ckanext/unaids/helpers.py:287
 msgid "View Error Report"
 msgstr "Exibir relatório de erros"
 
@@ -55,28 +55,28 @@ msgstr "Exibir relatório de erros"
 msgid "Creative Commons Attribution for Intergovernmental Organisations"
 msgstr "Atribuição Creative Commons para Organizações Intergovernamentais"
 
-#: ckanext/unaids/plugin.py:127
+#: ckanext/unaids/plugin.py:128
 #: ckanext/unaids/theme/templates/request/show.html:10
 msgid "Organization"
 msgstr "Organização"
 
-#: ckanext/unaids/plugin.py:128
+#: ckanext/unaids/plugin.py:129
 msgid "Data Type"
 msgstr "Tipo de dados"
 
-#: ckanext/unaids/plugin.py:129
+#: ckanext/unaids/plugin.py:130
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: ckanext/unaids/plugin.py:130
+#: ckanext/unaids/plugin.py:131
 msgid "Year"
 msgstr "Ano"
 
-#: ckanext/unaids/plugin.py:131
+#: ckanext/unaids/plugin.py:132
 msgid "Location"
 msgstr "Localização"
 
-#: ckanext/unaids/plugin.py:295
+#: ckanext/unaids/plugin.py:299
 msgid "Data Explorer"
 msgstr "Explorador de dados"
 
@@ -170,6 +170,16 @@ msgid ""
 msgstr ""
 "A sua chave api é: <code style=\"word-break:break-all;\"> {token}</code> "
 "{copy}"
+
+#: ckanext/unaids/blueprints/validate_user_affiliation.py:38
+msgid ""
+"UNAIDS asks that further information be added to your user profile. "
+"Please complete the required fields missing below before continuing..."
+msgstr ""
+
+#: ckanext/unaids/blueprints/validate_user_affiliation.py:49
+msgid "Thank you for updating your profile information."
+msgstr ""
 
 #: ckanext/unaids/dataset_transfer/logic.py:74
 msgid "Dataset Transfer"
@@ -537,7 +547,6 @@ msgstr "Pesquisar recursos existentes"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:177
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:256
-#, fuzzy
 msgid "Modified"
 msgstr "Modificado"
 
@@ -566,7 +575,6 @@ msgid "Import Latest Data"
 msgstr "Importar Dados Atualizados"
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:379
-#, fuzzy
 msgid "Select Different Resource"
 msgstr "Selecionar Recurso Diferente"
 
@@ -632,7 +640,6 @@ msgid "HIV Estimates<br />Navigator"
 msgstr "Navegador<br />de estimativas sobre o VIH"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:51
-#, fuzzy
 msgid "Instructions to upload your<br />Country Estimates 2024 Data"
 msgstr "Instruções para carregar os seus<br>dados de Estimativas do país 2024"
 
@@ -660,10 +667,18 @@ msgid "Featured Organisations"
 msgstr "Organizações em Destaque"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:103
+msgid "Administrative Boundaries"
+msgstr "Limites Administrativos"
+
+#: ckanext/unaids/theme/templates/home/layout1.html:136
+msgid "View All"
+msgstr "Ver Todos"
+
+#: ckanext/unaids/theme/templates/home/layout1.html:149
 msgid "The AIDS Data Repository is a project by"
 msgstr "O Repositório de Dados sobre a SIDA é um projeto de"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:115
+#: ckanext/unaids/theme/templates/home/layout1.html:161
 msgid "With support from"
 msgstr "Com o apoio de"
 
@@ -1289,7 +1304,6 @@ msgstr "Joe Bloggs"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:14
-#, fuzzy
 msgid "username"
 msgstr "nome de utilizador"
 
