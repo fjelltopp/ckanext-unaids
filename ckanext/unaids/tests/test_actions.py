@@ -14,7 +14,7 @@ from ckanext.unaids.tests import get_context, create_dataset_with_releases
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestGetTableSchema(object):
 
@@ -41,7 +41,7 @@ class TestGetTableSchema(object):
         assert response == {}
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids versions restricted blob_storage')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids versions restricted blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetShowForRelease(object):
 
@@ -148,7 +148,7 @@ class TestDatasetShowForRelease(object):
         pytest.fail("Couldn't find user with required role %s", user_role)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids versions')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids versions scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPackageActivityList(object):
 
@@ -194,7 +194,7 @@ class TestUserShowMe(object):
         assert response['name'] == user['name']
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPopulateDataDictionary(object):
 

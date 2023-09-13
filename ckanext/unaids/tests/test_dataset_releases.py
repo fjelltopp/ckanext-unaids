@@ -42,7 +42,7 @@ def assert_releases_are_exactly(user, dataset_id, expected_releases):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseCreateAndEdit(object):
 
     def _create_or_edit(self, app, user, dataset, release, activity_id=None):
@@ -138,7 +138,7 @@ class TestDatasetReleaseCreateAndEdit(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseDelete(object):
 
     def _delete(self, app, user, dataset, release):
@@ -179,7 +179,7 @@ class TestDatasetReleaseDelete(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseRestore(object):
 
     def _restore(self, app, user, dataset, release):
@@ -223,7 +223,7 @@ class TestDatasetReleaseRestore(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseListView(object):
 
     def test_no_releases_created(self, app):
@@ -261,7 +261,7 @@ class TestDatasetReleaseListView(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage versions pages scheming_datasets')
 class TestDatasetRead(object):
 
     def _get_dataset_release_sidebar(self, app, user, dataset, activity_id=None):
