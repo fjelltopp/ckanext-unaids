@@ -120,6 +120,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "user_show_me": actions.user_show_me,
             "populate_data_dictionary": actions.populate_data_dictionary,
             "user_show": actions.user_show,
+            "user_list": actions.user_list,
             "time_ago_from_timestamp": actions.time_ago_from_timestamp,
         }
 

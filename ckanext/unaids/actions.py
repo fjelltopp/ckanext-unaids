@@ -232,5 +232,21 @@ def user_show(original_action, context, data_dict):
     return user
 
 
+@logic.side_effect_free
+@t.chained_action
+def user_list(original_action, context, data_dict):
+    users = original_action(context, data_dict)
+    for user in users:
+        if type(user) is dict:
+            user_obj = custom_user_profile.get_user_obj({
+                'model': context['model'],
+                'user': user['name']
+            })
+            extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
+            extras = custom_user_profile.format_plugin_extras(extras["unaids"])
+            user.update(extras)
+    return users
+
+
 def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))

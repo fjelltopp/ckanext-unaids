@@ -229,3 +229,35 @@ class TestUserAffiliation(object):
         response = call_action("user_show", id=user["id"])
         assert response.get("job_title", False) == "Data Scientist"
         assert response.get("affiliation", False) == "Fjelltopp"
+
+    def test_user_list_all_fields_with_affiliation(self):
+        for i in range(4):
+            user = factories.User(name=f"test-user-{i}")
+            user_obj = model.User.get(user["id"])
+
+            read_saml_profile(
+                user_obj,
+                {
+                    "job_title": ["Data Scientist"],
+                    "affiliation": ["Fjelltopp"],
+                },
+            )
+        response = call_action("user_list")
+        for user in response:
+            assert user.get("job_title", False) == "Data Scientist"
+            assert user.get("affiliation", False) == "Fjelltopp"
+
+    def test_user_list_usernames(self):
+        for i in range(4):
+            user = factories.User(name=f"test-user-{i}")
+            user_obj = model.User.get(user["id"])
+
+            read_saml_profile(
+                user_obj,
+                {
+                    "job_title": ["Data Scientist"],
+                    "affiliation": ["Fjelltopp"],
+                },
+            )
+        response = call_action("user_list", all_fields=False)
+        assert set(response) == {'test-user-0', 'test-user-1', 'test-user-2', 'test-user-3'}
