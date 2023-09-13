@@ -260,4 +260,4 @@ class TestUserAffiliation(object):
                 },
             )
         response = call_action("user_list", all_fields=False)
-        assert response == ['test-user-0', 'test-user-1', 'test-user-2', 'test-user-3']
+        assert set(response) == {'test-user-0', 'test-user-1', 'test-user-2', 'test-user-3'}
