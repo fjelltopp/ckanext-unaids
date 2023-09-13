@@ -866,3 +866,6 @@ div.ckanext-datapreview{
     margin-left: -1px;
 }
 
+.resource-fork-details-tile .resource-metadata{
+  margin-left: 47px;
+}
