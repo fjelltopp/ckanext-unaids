@@ -237,7 +237,7 @@ def user_show(original_action, context, data_dict):
 def user_list(original_action, context, data_dict):
     users = original_action(context, data_dict)
     for user in users:
-        if type(user) == dict:
+        if type(user) is dict:
             user_obj = custom_user_profile.get_user_obj({
                 'model': context['model'],
                 'user': user['name']
