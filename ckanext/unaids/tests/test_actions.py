@@ -14,7 +14,7 @@ from ckanext.unaids.tests import get_context, create_dataset_with_releases
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestGetTableSchema(object):
 
@@ -41,7 +41,7 @@ class TestGetTableSchema(object):
         assert response == {}
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids versions restricted blob_storage')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids versions restricted blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetShowForRelease(object):
 
@@ -148,7 +148,7 @@ class TestDatasetShowForRelease(object):
         pytest.fail("Couldn't find user with required role %s", user_role)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids versions')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids versions scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPackageActivityList(object):
 
@@ -194,7 +194,7 @@ class TestUserShowMe(object):
         assert response['name'] == user['name']
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPopulateDataDictionary(object):
 
@@ -261,3 +261,43 @@ class TestUserAffiliation(object):
             )
         response = call_action("user_list", all_fields=False)
         assert set(response) == {'test-user-0', 'test-user-1', 'test-user-2', 'test-user-3'}
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
+@pytest.mark.usefixtures('with_plugins')
+class TestPackageCreate():
+
+    def test_should_complain_with_exception_when_dataset_type_invalid(self):
+        organization = factories.Organization()
+        exception_message = "Type 'baad-type' is invalid, valid types are"
+        with pytest.raises(toolkit.ValidationError, match=exception_message):
+            call_action(
+                'package_create',
+                name="some-name",
+                type="baad-type",
+                owner_org=organization['name'],
+                title="Dataset with missing title"
+            )
+
+    def test_create_dataset_without_type_creates_one_with_default_type_of_dataset(self):
+        organization = factories.Organization()
+        dataset = call_action(
+            'package_create',
+            name="some-name",
+            owner_org=organization['name'],
+            title="Dataset without type"
+        )
+
+        assert dataset["type"] == "dataset"
+
+    def test_create_dataset_with_valid_type(self):
+        organization = factories.Organization()
+        dataset = call_action(
+            'package_create',
+            name="some-name",
+            type="test-schema",
+            title="Dataset with valid type",
+            owner_org=organization['name']
+        )
+
+        assert dataset["type"] == "test-schema"

@@ -297,7 +297,7 @@ class TestValidateAndDecodeToken(object):
             auth_logic.validate_and_decode_token(encoded)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins', 'clean_db')
 class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
 

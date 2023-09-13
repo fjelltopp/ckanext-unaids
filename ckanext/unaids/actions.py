@@ -248,5 +248,19 @@ def user_list(original_action, context, data_dict):
     return users
 
 
+@t.chained_action
+def package_create(next_action, context, data_dict):
+    dataset_type = data_dict.get('type', '')
+    valid_types = t.get_action("scheming_dataset_schema_list")(context, {})
+    valid_types = set(valid_types) | {'dataset'}
+    if dataset_type:
+        if dataset_type not in valid_types:
+            raise t.ValidationError(
+                f"Type '{dataset_type}' is invalid, valid types are: '"
+                f"{', '.join(valid_types)}'"
+            )
+    return next_action(context, data_dict)
+
+
 def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))
