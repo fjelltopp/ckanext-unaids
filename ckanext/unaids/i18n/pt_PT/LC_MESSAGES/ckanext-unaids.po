@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-09-12 11:42+0000\n"
+"POT-Creation-Date: 2023-09-18 13:09+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -55,28 +55,28 @@ msgstr "Exibir relatório de erros"
 msgid "Creative Commons Attribution for Intergovernmental Organisations"
 msgstr "Atribuição Creative Commons para Organizações Intergovernamentais"
 
-#: ckanext/unaids/plugin.py:128
+#: ckanext/unaids/plugin.py:130
 #: ckanext/unaids/theme/templates/request/show.html:10
 msgid "Organization"
 msgstr "Organização"
 
-#: ckanext/unaids/plugin.py:129
+#: ckanext/unaids/plugin.py:131
 msgid "Data Type"
 msgstr "Tipo de dados"
 
-#: ckanext/unaids/plugin.py:130
+#: ckanext/unaids/plugin.py:132
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: ckanext/unaids/plugin.py:131
+#: ckanext/unaids/plugin.py:133
 msgid "Year"
 msgstr "Ano"
 
-#: ckanext/unaids/plugin.py:132
+#: ckanext/unaids/plugin.py:134
 msgid "Location"
 msgstr "Localização"
 
-#: ckanext/unaids/plugin.py:299
+#: ckanext/unaids/plugin.py:301
 msgid "Data Explorer"
 msgstr "Explorador de dados"
 
@@ -176,8 +176,9 @@ msgid ""
 "UNAIDS asks that further information be added to your user profile. "
 "Please complete the required fields missing below before continuing..."
 msgstr ""
-"O UNAIDS solicita que mais informações sejam adicionadas ao seu perfil de usuário."
-"Por favor, complete os campos obrigatórios em falta abaixo antes de continuar..."
+"O UNAIDS solicita que mais informações sejam adicionadas ao seu perfil de"
+" usuário.Por favor, complete os campos obrigatórios em falta abaixo antes"
+" de continuar..."
 
 #: ckanext/unaids/blueprints/validate_user_affiliation.py:49
 msgid "Thank you for updating your profile information."
@@ -672,15 +673,15 @@ msgstr "Organizações em Destaque"
 msgid "Administrative Boundaries"
 msgstr "Limites Administrativos"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:136
-msgid "View All"
-msgstr "Ver Todos"
+#: ckanext/unaids/theme/templates/home/layout1.html:138
+msgid "Browse all Administrative Boundaries"
+msgstr "Navegar por todas as Fronteiras Administrativas"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:149
+#: ckanext/unaids/theme/templates/home/layout1.html:152
 msgid "The AIDS Data Repository is a project by"
 msgstr "O Repositório de Dados sobre a SIDA é um projeto de"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:161
+#: ckanext/unaids/theme/templates/home/layout1.html:164
 msgid "With support from"
 msgstr "Com o apoio de"
 
@@ -1395,4 +1396,7 @@ msgstr "Duração"
 
 #~ msgid "en"
 #~ msgstr "pt_PT"
+
+#~ msgid "View All"
+#~ msgstr "Ver Todos"
 
