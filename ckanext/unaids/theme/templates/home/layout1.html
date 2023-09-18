@@ -104,7 +104,7 @@
               <div class="row row2">
                       <div class="col-md-12 col2">
                         <div class="admin-boundaries-group-description">
-                            {{ group.description }}
+                            {{ h.render_markdown(group.description) }}
                         </div>
 
                     {% for package in group.packages %}
@@ -133,7 +133,10 @@
 
                       <div class="col-md-12 col2">
                         <div class="admin-boundaries-group-description">
-                            <a href="{{ h.url_for('group.read', id=group.name) }}">{{ _('View All') }}</a>
+                            <a class="btn btn-primary btn-lg admin-boundaries-browse-all" href="{{ h.url_for('group.read', id=group.name) }}">
+                                <i class="fa fa-globe"></i>
+                                <span>{{ _('Browse all Administrative Boundaries') }}</span>
+                            </a>
                         </div>
                     </div>
                     </div>
