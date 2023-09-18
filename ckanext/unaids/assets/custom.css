@@ -748,8 +748,12 @@ float: right;
   width: 100%;
 }
 
+.avenir-logo {
+  margin: -10px auto;
+}
+
 .fjelltopp-logo{
-  margin: 0 auto;
+  margin: 5px auto;
 }
 
 .imperial-logo{
