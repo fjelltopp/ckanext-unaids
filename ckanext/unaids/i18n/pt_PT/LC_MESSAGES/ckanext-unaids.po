@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-unaids 0.0\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
-"POT-Creation-Date: 2023-09-12 08:11+0000\n"
+"POT-Creation-Date: 2023-09-18 04:55+0000\n"
 "PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: pt_PT\n"
@@ -670,15 +670,15 @@ msgstr "Organizações em Destaque"
 msgid "Administrative Boundaries"
 msgstr "Limites Administrativos"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:136
-msgid "View All"
-msgstr "Ver Todos"
+#: ckanext/unaids/theme/templates/home/layout1.html:138
+msgid "Browse all Administrative Boundaries"
+msgstr "Navegar por todas as Fronteiras Administrativas"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:149
+#: ckanext/unaids/theme/templates/home/layout1.html:152
 msgid "The AIDS Data Repository is a project by"
 msgstr "O Repositório de Dados sobre a SIDA é um projeto de"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:161
+#: ckanext/unaids/theme/templates/home/layout1.html:164
 msgid "With support from"
 msgstr "Com o apoio de"
 
@@ -1393,4 +1393,7 @@ msgstr "Duração"
 
 #~ msgid "en"
 #~ msgstr "pt_PT"
+
+#~ msgid "View All"
+#~ msgstr "Ver Todos"
 
