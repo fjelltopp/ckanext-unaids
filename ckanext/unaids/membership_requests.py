@@ -95,7 +95,6 @@ def unaids_create_member_request(context, data_dict):
     )
     return member
 
-
 def send_mail_for_new_membership_request(locale, admin, group_name, url, user_name, user_email, user_job_title, user_affiliation):
     with force_locale('en'):
         subject = _SUBJECT_MEMBERSHIP_REQUEST() % {
@@ -115,14 +114,9 @@ def send_mail_for_new_membership_request(locale, admin, group_name, url, user_na
     except Exception:
         log.exception("Mail could not be sent")
 
-
-
-
-
 def _SUBJECT_MEMBERSHIP_REQUEST():
     return _(
             "New membership request (%(organization)s)")
-
 
 def _MESSAGE_MEMBERSHIP_REQUEST():
     return _(
