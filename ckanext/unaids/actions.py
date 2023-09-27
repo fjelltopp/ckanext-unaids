@@ -274,6 +274,9 @@ def time_ago_from_timestamp(context, data_dict):
 
 @p.toolkit.chained_action
 def member_request_create(next_action, context, data_dict):
+    '''
+    overrides member_request_create action from ckanext-ytp-request plugin, purposely to add job_title and affiliation in the mail sent to the admins
+    '''
     logic.check_access('member_request_create', context, data_dict)
     member = unaids_create_member_request(context, data_dict)
     return model_dictize.member_dictize(member, context)
