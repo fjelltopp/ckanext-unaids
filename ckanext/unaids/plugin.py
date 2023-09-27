@@ -123,6 +123,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "user_list": actions.user_list,
             "package_create": actions.package_create,
             "time_ago_from_timestamp": actions.time_ago_from_timestamp,
+            "member_request_create": actions.member_request_create
         }
 
     def dataset_facets(self, facet_dict, package_type):

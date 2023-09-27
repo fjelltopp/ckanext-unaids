@@ -12,6 +12,12 @@ from ckanext.versions.logic.dataset_version_action import get_activity_id_from_d
 from ckanext.unaids.logic import populate_data_dictionary_from_schema
 from ckanext.unaids.helpers import validation_load_json_schema
 
+
+import ckan.plugins as p
+from ckanext.unaids.membership_requests import unaids_create_member_request
+from ckan import model, logic
+from ckan.lib.dictization import model_dictize
+
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
 _check_access = logic.check_access
@@ -264,3 +270,10 @@ def package_create(next_action, context, data_dict):
 
 def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))
+
+
+@p.toolkit.chained_action
+def member_request_create(next_action, context, data_dict):
+    logic.check_access('member_request_create', context, data_dict)
+    member = unaids_create_member_request(context, data_dict)
+    return model_dictize.member_dictize(member, context)
