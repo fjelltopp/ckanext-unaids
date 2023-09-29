@@ -328,8 +328,11 @@ def member_request_create(next_action, context, data_dict):
     purposely to add job_title and affiliation in the mail sent to the admins
     """
     global user_job_title, user_affiliation
-    user_job_title = context["auth_user_obj"].plugin_extras["unaids"]["job_title"]
-    user_affiliation = context["auth_user_obj"].plugin_extras["unaids"]["affiliation"]
+    try:
+        user_job_title = context["auth_user_obj"].plugin_extras["unaids"]["job_title"]
+        user_affiliation = context["auth_user_obj"].plugin_extras["unaids"]["affiliation"]
+    except Exception:
+        log.exception("Error finding user job title and affiliation")
 
     with _override_ytp_request_new_membership_mail_request(_unaids_mail_for_new_membership_request):
         return next_action(context, data_dict)
