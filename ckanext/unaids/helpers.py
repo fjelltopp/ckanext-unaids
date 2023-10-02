@@ -304,13 +304,13 @@ def get_administrative_boundaries():
     try:
         group = toolkit.get_action('group_show')(
             context,
-            {'id': 'administrative-boundaries'}
+            {'id': 'geographic-health-boundaries'}
         )
     except toolkit.ObjectNotFound:
         return []
     packages_list_from_group = toolkit.get_action('group_package_show')(
         context,
-        {'id': 'administrative-boundaries', 'limit': 4}
+        {'id': 'geographic-health-boundaries', 'limit': 4}
     )
     group['packages'] = packages_list_from_group
     return group
