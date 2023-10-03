@@ -84,23 +84,12 @@
         </div>
       </div>
       {% endfor %}
-
-      {% set groups = h.get_featured_groups(0) %}
-      {% for group in groups %}
-      <div class="col-md-6 col2">
-      {% if group.name != "administrative-boundaries" %}
-        <div class="box">
-          {% snippet 'snippets/group_item.html', group=group, truncate=50, truncate_title=35 %}
-        </div>
-      {% endif %}
-      </div>
-      {% endfor %}
     </div>
     {% set group = h.get_administrative_boundaries() %}
         {% if group.packages|length > 0 %}
           <div class="row">
           <div class="col-xs-12 text-center">
-            <H2 class="admin-boundaries-group-header"> {{_('Administrative Boundaries')}} </H2>
+            <H2 class="admin-boundaries-group-header"> {{_('Geographic Health Boundaries')}} </H2>
               <div class="row row2">
                       <div class="col-md-12 col2">
                         <div class="admin-boundaries-group-description">
@@ -135,7 +124,7 @@
                         <div class="admin-boundaries-group-description">
                             <a class="btn btn-primary btn-lg admin-boundaries-browse-all" href="{{ h.url_for('group.read', id=group.name) }}">
                                 <i class="fa fa-globe"></i>
-                                <span>{{ _('Browse all Administrative Boundaries') }}</span>
+                                <span>{{ _('Browse all Geographic Health Boundaries') }}</span>
                             </a>
                         </div>
                     </div>
