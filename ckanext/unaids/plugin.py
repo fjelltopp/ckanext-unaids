@@ -19,6 +19,7 @@ from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
     if_empty_guess_format,
     organization_id_exists_validator,
+    read_only
 )
 from ckanext.unaids.helpers import (
     get_logo_path,
@@ -64,7 +65,7 @@ def initialize_g_userobj_using_private_core_ckan_method():
     _identify_user_default()
 
 
-class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
+class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation, toolkit.DefaultDatasetForm):
     """
     This plugin implements the configurations needed for AIDS data exchange
 
@@ -85,9 +86,50 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     p.implements(p.IActions)
     p.implements(IDataValidation)
     p.implements(IResourceDownloadHandler, inherit=True)
+    p.implements(p.IDatasetForm)
     p.implements(IDataPusher, inherit=True)
     p.implements(p.IAuthenticator, inherit=True)
     p.implements(p.IMiddleware, inherit=True)
+
+    # IDatasetForm
+    def create_package_schema(self):
+        schema = super(UNAIDSPlugin, self).create_package_schema()
+        schema["locked"] = [
+            toolkit.get_validator('ignore_missing'),
+            toolkit.get_validator('read_only'),
+            toolkit.get_validator('boolean_validator'),
+            toolkit.get_converter('convert_to_extras')
+        ]
+        return schema
+
+    def update_package_schema(self):
+        schema = super(UNAIDSPlugin, self).update_package_schema()
+        schema["locked"] = [
+            toolkit.get_validator('ignore_missing'),
+            toolkit.get_validator('read_only'),
+            toolkit.get_validator('boolean_validator'),
+            toolkit.get_converter('convert_to_extras')
+        ]
+        return schema
+
+    def show_package_schema(self):
+        schema = super(UNAIDSPlugin, self).show_package_schema()
+        schema["locked"] = [
+            toolkit.get_converter('convert_from_extras'),
+            toolkit.get_validator('ignore_missing'),
+            toolkit.get_validator('boolean_validator')
+        ]
+        return schema
+
+    def is_fallback(self):
+        # Return True to register this plugin as the default handler for
+        # package types not handled by any other IDatasetForm plugin.
+        return True
+
+    def package_types(self):
+        # This plugin doesn't handle any special package types, it just
+        # registers itself as the default (above).
+        return []
 
     # IClick
     def get_commands(self):
@@ -126,6 +168,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "package_create": actions.package_create,
             "time_ago_from_timestamp": actions.time_ago_from_timestamp,
             "member_request_create": custom_user_profile_actions.member_request_create,
+            "dataset_lock": actions.dataset_lock,
+            "dataset_unlock": actions.dataset_unlock
         }
 
     def dataset_facets(self, facet_dict, package_type):
@@ -171,6 +215,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return {
             "if_empty_guess_format": if_empty_guess_format,
             "organization_id_exists": organization_id_exists_validator,
+            "read_only": read_only
         }
 
     def can_validate(self, context, data_dict):
