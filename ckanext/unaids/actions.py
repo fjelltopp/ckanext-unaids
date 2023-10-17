@@ -264,3 +264,29 @@ def package_create(next_action, context, data_dict):
 
 def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))
+
+
+def dataset_lock(context, data_dict):
+    patch_dict = {
+        "id": t.get_or_bust(data_dict, "id"),
+        "locked": True
+    }
+    context['bypass_read_only'] = True
+    t.get_action("package_patch")(
+        context,
+        patch_dict
+    )
+
+
+def dataset_unlock(context, data_dict):
+    t.get_or_bust(data_dict, "id")
+    patch_dict = {
+        "id": t.get_or_bust(data_dict, "id"),
+        "locked": False
+    }
+    context['bypass_read_only'] = True
+    t.get_action("package_patch")(
+        context,
+        patch_dict
+    )
+
