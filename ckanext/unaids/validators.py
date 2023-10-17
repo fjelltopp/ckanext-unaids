@@ -33,3 +33,20 @@ def organization_id_exists_validator(key, data, errors, context):
         ]
         if not is_valid:
             raise df.Invalid(_('Invalid organization'))
+
+
+def read_only(key, data, errors, context):
+    bypass_read_only = context.get('bypass_read_only', False)
+    if bypass_read_only:
+        return
+    if context.get('package', False):
+        old_locked_status = context.get('package', {}).get('locked', False)
+        if data[key] != old_locked_status:
+            raise toolkit.Invalid(
+                f'Cannot change value of "{key[-1]}" from {old_locked_status}'
+                f' to {data[key]}. This key is read-only'
+            )
+    else:
+        raise toolkit.Invalid(
+            f'Cannot set value of "{key[-1]}" to {data[key]}. This key is read-only.'
+        )
