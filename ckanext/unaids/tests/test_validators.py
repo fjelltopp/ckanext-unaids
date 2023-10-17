@@ -4,7 +4,13 @@
 from ckan.tests import factories
 import pytest
 import ckan.lib.navl.dictization_functions as df
-from ckanext.unaids.validators import organization_id_exists_validator, if_empty_guess_format
+from contextlib import nullcontext as does_not_raise
+import ckan.plugins.toolkit as toolkit
+from ckanext.unaids.validators import (
+    organization_id_exists_validator,
+    if_empty_guess_format,
+    read_only
+)
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets')
@@ -44,3 +50,18 @@ class TestValidators(object):
         }
         if_empty_guess_format(key, data, {}, {})
         assert data[key] == result
+
+    @pytest.mark.parametrize("context, result", [
+        ({},  pytest.raises(toolkit.Invalid)),
+        ({'bypass_read_only': True},  does_not_raise()),
+        ({'bypass_read_only': False},  pytest.raises(toolkit.Invalid)),
+        ({'package': {'locked': True}}, does_not_raise()),
+        ({'package': {'locked': False}}, pytest.raises(toolkit.Invalid)),
+        ({'package': {'locked': True}, 'bypass_read_only': True}, does_not_raise()),
+        ({'package': {'locked': False}, 'bypass_read_only': True}, does_not_raise()),
+        ({'package': {'locked': True}, 'bypass_read_only': False}, does_not_raise()),
+        ({'package': {'locked': False}, 'bypass_read_only': False}, pytest.raises(toolkit.Invalid))
+    ])
+    def test_read_only(self, context, result):
+        with result:
+            read_only('locked', {'locked': True}, [], context)
