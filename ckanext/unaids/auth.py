@@ -4,6 +4,14 @@ import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 
+def dataset_lock(context, data_dict):
+    # Sysadmins only
+    return {
+        'success': False,
+        'msg': 'You cannot carry out this action'
+    }
+
+
 def unaids_organization_update(context, data_dict=None):
     user_organizations = \
         logic.get_action('organization_list_for_user')(

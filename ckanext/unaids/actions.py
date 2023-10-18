@@ -267,6 +267,7 @@ def time_ago_from_timestamp(context, data_dict):
 
 
 def dataset_lock(context, data_dict):
+    _check_access('dataset_lock', context, data_dict)
     patch_dict = {
         "id": t.get_or_bust(data_dict, "id"),
         "locked": True
@@ -279,6 +280,7 @@ def dataset_lock(context, data_dict):
 
 
 def dataset_unlock(context, data_dict):
+    _check_access('dataset_lock', context, data_dict)
     t.get_or_bust(data_dict, "id")
     patch_dict = {
         "id": t.get_or_bust(data_dict, "id"),

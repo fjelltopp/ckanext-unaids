@@ -209,7 +209,10 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation, toolkit.DefaultDataset
 
     # IAuthFunctions
     def get_auth_functions(self):
-        return {"unaids_organization_update": auth.unaids_organization_update}
+        return {
+            "unaids_organization_update": auth.unaids_organization_update,
+            "dataset_lock": auth.dataset_lock
+        }
 
     def get_validators(self):
         return {
