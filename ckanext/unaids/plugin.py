@@ -16,7 +16,6 @@ from ckan.logic import get_action
 from ckan.views import _identify_user_default
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
-from ckanext.unaids import custom_user_profile
 from ckanext.unaids.validators import (
     if_empty_guess_format,
     organization_id_exists_validator,
@@ -46,6 +45,8 @@ from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
 from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
 from ckanext.datapusher.interfaces import IDataPusher
+import ckanext.unaids.custom_user_profile.actions as custom_user_profile_actions
+import ckanext.unaids.custom_user_profile.logic as custom_user_profile_logic
 
 log = logging.getLogger(__name__)
 
@@ -123,7 +124,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "user_list": actions.user_list,
             "package_create": actions.package_create,
             "time_ago_from_timestamp": actions.time_ago_from_timestamp,
-            "member_request_create": actions.member_request_create,
+            "member_request_create": custom_user_profile_actions.member_request_create,
         }
 
     def dataset_facets(self, facet_dict, package_type):
@@ -268,7 +269,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def after_saml2_login(self, resp, saml_attributes):
         user_obj = toolkit.g.userobj
-        custom_user_profile.read_saml_profile(user_obj, saml_attributes)
+        custom_user_profile_logic.user.read_saml_profile(user_obj, saml_attributes)
 
         return resp
 

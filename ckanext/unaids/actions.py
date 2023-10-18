@@ -6,19 +6,11 @@ import ckan.lib.navl.dictization_functions as dfunc
 import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
-import ckanext.unaids.custom_user_profile as custom_user_profile
+import ckanext.unaids.custom_user_profile.logic as custom_user_profile_logic
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 from ckanext.unaids.logic import populate_data_dictionary_from_schema
 from ckanext.unaids.helpers import validation_load_json_schema
-
-from ckan.lib.mailer import mail_user
-from flask_babel import force_locale
-from contextlib import contextmanager
-import ckanext.ytp_request.logic.action.create as create_module
-
-user_job_title = ""
-user_affiliation = ""
 
 NotFound = logic.NotFound
 NotAuthorized = logic.NotAuthorized
@@ -231,10 +223,10 @@ def populate_data_dictionary(context, data_dict):
 @t.chained_action
 def user_show(original_action, context, data_dict):
     user = original_action(context, data_dict)
-    user_obj = custom_user_profile.get_user_obj(context)
+    user_obj = custom_user_profile_logic.get_user_obj(context)
 
-    extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
-    extras = custom_user_profile.format_plugin_extras(extras["unaids"])
+    extras = custom_user_profile_logic.init_plugin_extras(user_obj.plugin_extras)
+    extras = custom_user_profile_logic.format_plugin_extras(extras["unaids"])
 
     user.update(extras)
     return user
@@ -246,12 +238,12 @@ def user_list(original_action, context, data_dict):
     users = original_action(context, data_dict)
     for user in users:
         if type(user) is dict:
-            user_obj = custom_user_profile.get_user_obj({
+            user_obj = custom_user_profile_logic.get_user_obj({
                 'model': context['model'],
                 'user': user['name']
             })
-            extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
-            extras = custom_user_profile.format_plugin_extras(extras["unaids"])
+            extras = custom_user_profile_logic.init_plugin_extras(user_obj.plugin_extras)
+            extras = custom_user_profile_logic.format_plugin_extras(extras["unaids"])
             user.update(extras)
     return users
 
@@ -272,67 +264,3 @@ def package_create(next_action, context, data_dict):
 
 def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))
-
-
-
-def _unaids_mail_for_new_membership_request(locale, admin, group_name, url, user_name, user_email):
-    """
-    Overrides the mail_new_membership_request function from ckanext-ytp-request plugin
-    """
-    global user_job_title, user_affiliation
-    with force_locale('en'):
-        subject = _(
-            "New membership request (%(organization)s)") % {
-            'organization': group_name
-        }
-        message = _(
-        """\
-        User %(user)s (%(email)s), %(job_title)s at %(affiliation)s, has requested membership to organization %(organization)s.
-
-        %(link)s
-
-        Best wishes,
-        The AIDS Data Repository
-        """
-    ) % {
-            'user': user_name,
-            'email': user_email,
-            'organization': group_name,
-            'link': url,
-            'job_title': user_job_title,
-            'affiliation': user_affiliation
-        }
-    try:
-        mail_user(admin, subject, message)
-    except Exception:
-        log.exception("Mail could not be sent")
-
-
-@contextmanager
-def _override_ytp_request_new_membership_mail_request(updated_fn):
-    """
-    Decorator that help override the mail_new_membership_request function from ckanext-ytp-request plugin
-    """
-    original_fn = create_module.mail_new_membership_request
-    create_module.mail_new_membership_request = updated_fn
-    try:
-        yield
-    finally:
-        create_module.mail_new_membership_request = original_fn
-
-
-@t.chained_action
-def member_request_create(next_action, context, data_dict):
-    """
-    overrides member_request_create action from ckanext-ytp-request plugin,
-    purposely to add job_title and affiliation in the mail sent to the admins
-    """
-    global user_job_title, user_affiliation
-    try:
-        user_job_title = context["auth_user_obj"].plugin_extras["unaids"]["job_title"]
-        user_affiliation = context["auth_user_obj"].plugin_extras["unaids"]["affiliation"]
-    except Exception:
-        log.exception("Error finding user job title and affiliation")
-
-    with _override_ytp_request_new_membership_mail_request(_unaids_mail_for_new_membership_request):
-        return next_action(context, data_dict)

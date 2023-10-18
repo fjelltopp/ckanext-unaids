@@ -8,7 +8,7 @@ import ckan.model as model
 import pytest
 import logging
 from pprint import pformat
-from ckanext.unaids.custom_user_profile import read_saml_profile
+from ckanext.unaids.custom_user_profile.logic import read_saml_profile
 from ckanext.unaids.tests import get_context, create_dataset_with_releases
 
 log = logging.getLogger(__name__)

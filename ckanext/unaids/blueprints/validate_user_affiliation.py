@@ -5,7 +5,7 @@ from flask import Blueprint
 from ckan.common import g, _
 from ckan.plugins import toolkit
 from ckanext.unaids import helpers
-from ckanext.unaids.custom_user_profile import validate_plugin_extras_provided
+from ckanext.unaids.custom_user_profile.logic import validate_plugin_extras_provided
 
 log = logging.getLogger(__name__)
 
