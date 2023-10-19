@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 from ckan.tests import factories, helpers
+from ckan import model
 from contextlib import nullcontext as does_not_raise
 import ckan.plugins.toolkit as toolkit
 from ckanext.unaids.auth import (
@@ -9,7 +10,6 @@ from ckanext.unaids.auth import (
 )
 import pytest
 import logging
-import mock
 
 log = logging.getLogger(__name__)
 
@@ -42,8 +42,35 @@ class TestAuth(object):
     ])
     def test_dataset_lock(self, sysadmin, outcome):
         user = factories.User(sysadmin=sysadmin)
-        mock_model = mock.MagicMock()
-        mock_model.User.get.return_value = user
-        context = {'user': user['name'], 'model': mock_model}
+        context = {'user': user['name'], 'model': model}
         with outcome:
             helpers.call_auth('dataset_lock', context)
+
+    @pytest.mark.parametrize("sysadmin, editor, locked, outcome", [
+        (False, False, False, pytest.raises(toolkit.NotAuthorized)),
+        (False, True, False, does_not_raise()),
+        (False, False, True, pytest.raises(toolkit.NotAuthorized)),
+        (False, True, True, pytest.raises(toolkit.NotAuthorized)),
+        (True, False, False, does_not_raise()),
+        (True, True, False, does_not_raise()),
+        (True, False, True, pytest.raises(toolkit.NotAuthorized)),
+        (True, True, True, pytest.raises(toolkit.NotAuthorized))
+    ])
+    def test_locked_package_update(self, sysadmin, editor, locked, outcome):
+        user = factories.User(sysadmin=sysadmin)
+        capacity = 'member'
+        if editor:
+            capacity = 'editor'
+        org = factories.Organization(users=[
+            {'name': user['id'], 'capacity': capacity}
+        ])
+        dataset = factories.Dataset(owner_org=org['id'])
+        if locked:
+            helpers.call_action('dataset_lock', id=dataset['id'])
+        dataset = helpers.call_action('package_show', id=dataset['id'])
+        with outcome:
+            helpers.call_auth(
+                'package_update',
+                context={'user': user['name'], 'model': model},
+                id=dataset['id']
+            )
