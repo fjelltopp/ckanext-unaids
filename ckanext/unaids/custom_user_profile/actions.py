@@ -10,7 +10,7 @@ from ckan.lib.mailer import mail_user
 from ckan.plugins import toolkit
 from ckan.plugins.toolkit import config
 from ckanext.ytp_request.helper import get_safe_locale
-from ckanext.ytp_request.logic.action.create import _get_ckan_admins, _get_organization_admins
+import ckanext.ytp_request.logic.action.create as ytp_request_action_create
 from ckanext.ytp_request.model import MemberRequest
 
 log = logging.getLogger(__name__)
@@ -125,11 +125,11 @@ def _create_member_request(context, data_dict):
         log.exception("Error finding user job title and affiliation")
 
     if role == 'admin':
-        for admin in _get_ckan_admins():
+        for admin in ytp_request_action_create._get_ckan_admins():
             mail_new_membership_request(
                 locale, admin, group.display_name, url, userobj.display_name, userobj.email, user_job_title, user_affiliation)
     else:
-        for admin in _get_organization_admins(group.id):
+        for admin in ytp_request_action_create._get_organization_admins(group.id):
             mail_new_membership_request(
                 locale, admin, group.display_name, url, userobj.display_name, userobj.email, user_job_title, user_affiliation)
     flash_success(
@@ -150,5 +150,5 @@ def member_request_create(next_action, context, data_dict):
     except Exception:
         log.exception("Error finding user job title and affiliation")
 
-    ckanext.ytp_request.logic.action.create._create_member_request = _create_member_request
+    ytp_request_action_create._create_member_request = _create_member_request
     return next_action(context, data_dict)
