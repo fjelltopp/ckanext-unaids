@@ -41,15 +41,6 @@ class TestGetTableSchema(object):
         assert response == {}
 
 
-<<<<<<< HEAD
-@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids versions restricted blob_storage scheming_datasets')
-@pytest.mark.usefixtures('with_plugins')
-class TestDatasetShowForRelease(object):
-=======
->>>>>>> 6f3a499 (ADX-854 Refactor actions tests)
-
-
-
 @pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids versions scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPackageActivityList(object):
