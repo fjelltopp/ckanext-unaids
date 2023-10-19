@@ -268,27 +268,53 @@ def time_ago_from_timestamp(context, data_dict):
 
 def dataset_lock(context, data_dict):
     _check_access('dataset_lock', context, data_dict)
-    patch_dict = {
-        "id": t.get_or_bust(data_dict, "id"),
-        "locked": True
-    }
+    dataset_id = t.get_or_bust(data_dict, "id")
+    locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
     t.get_action("package_patch")(
         context,
-        patch_dict
+        {"id": dataset_id, "locked": True}
     )
+    try:
+        t.get_action("dataset_version_create")(context, {
+            "dataset_id": dataset_id,
+            "name": locked_name,
+            "notes": t._("This dataset has been locked by a system "
+                         "administrator, meaning no further editing should take place.")
+        })
+    except t.ValidationError:
+        t.get_action("package_patch")(
+            context,
+            {"id": dataset_id, "locked": False}
+        )
+        raise t.ValidationError(t._(
+            f"Couldn't lock dataset because release named \"{locked_name}\" already "
+            "exists. Please rename or delete this release first. "
+        ))
 
 
 def dataset_unlock(context, data_dict):
     _check_access('dataset_lock', context, data_dict)
-    t.get_or_bust(data_dict, "id")
-    patch_dict = {
-        "id": t.get_or_bust(data_dict, "id"),
-        "locked": False
-    }
+    dataset_id = t.get_or_bust(data_dict, "id")
+    locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
     t.get_action("package_patch")(
         context,
-        patch_dict
+        {"id": dataset_id, "locked": False}
     )
-
+    try:
+        versions = t.get_action("dataset_version_list")(
+            context,
+            {"dataset_id": data_dict["id"]}
+        )
+        assert versions, "No versions exist"
+        latest_version = versions[-1]
+        assert latest_version["name"] == locked_name, f"Expected latest version name '{locked_name}'"
+        t.get_action("version_delete")(context, {"version_id": latest_version['id']})
+    except Exception as e:
+        log.exception(f"Failed to delete version \"{locked_name}\" "
+                      f"whilst unlocking dataset {dataset_id}: {e}")
+        raise t.ObjectNotFound(t._(
+            "Failed to delete the release that was created when this dataset was locked."
+            "Please mannually review the releases list and cleanup as appropriate."
+        ))
