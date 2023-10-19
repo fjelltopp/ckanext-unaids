@@ -26,7 +26,7 @@ _MESSAGE_MEMBERSHIP_REQUEST = _("""\
     """)
 
 
-def mail_new_membership_request(locale, admin, group_name, url, user_name, user_email,user_job_title, user_affiliation):
+def mail_new_membership_request(locale, admin, group_name, url, user_name, user_email, user_job_title, user_affiliation):
     """
     Overrides the mail_new_membership_request function from ckanext-ytp-request plugin
     """
@@ -46,7 +46,6 @@ def mail_new_membership_request(locale, admin, group_name, url, user_name, user_
         mail_user(admin, subject, message)
     except Exception:
         log.exception("Mail could not be sent")
-
 
 
 def _create_member_request(context, data_dict):
@@ -136,6 +135,7 @@ def _create_member_request(context, data_dict):
         _("Membership request sent to organisation administrator")
     )
     return member
+
 
 @toolkit.chained_action
 def member_request_create(next_action, context, data_dict):
