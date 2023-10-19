@@ -1,0 +1,52 @@
+{% ckan_extends %}
+
+{% block form_actions %}
+    <div class="form-actions">
+        {% block disclaimer %}
+        {{ super() }}
+        {% endblock %}
+        {% block save_button %}
+        {{ super() }}
+        {% endblock %}
+    </div>
+    <div class="danger-zone">
+        <h2>{{_('Danger Zone')}}</h2>
+        {{_('Proceed with care. These actions carry significant consequences.')}}
+        <ul class="list-group">
+            <li class="list-group-item">
+                <strong>{{_('Delete this dataset')}}</strong><br/>
+                {{_('Only a system administrator can undo this action.')}}
+                {% block delete_button_text %}
+                <a class="btn btn-danger pull-right"
+                   href="{% url_for dataset_type ~ '.delete', id=data.id %}"
+                   data-module="confirm-action"
+                   data-module-content="{{ _('Are you sure you want to delete this dataset?') }}">
+                    {{ _('Delete Dataset') }}
+                </a>
+                {% endblock %}
+            </li>
+            <li class="list-group-item">
+                <strong>{{_('Transfer this dataset')}}</strong><br/>
+                {{_('You can request that another organisation takes over ownership of this dataset.')}}
+                <a class="btn btn-danger pull-right"
+                   href="#"
+                   data-module="confirm-action"
+                   data-module-content="{{ _('Who should the dataset be transfered to?') }}">
+                    {{ _('Transfer Dataset') }}
+                </a>
+            </li>
+            {% if h.check_access('sysadmin') %}
+            <li class="list-group-item">
+                <strong>{{_('Lock this dataset')}}</strong><br/>
+                {{_('System administrators may lock this dataset to prevent further editing.')}}
+                <a class="btn btn-danger pull-right"
+                   href="#"
+                   data-module="confirm-action"
+                   data-module-content="{{ _('Are you sure you want to lock this dataset?') }}">
+                    {{ _('Lock Dataset') }}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+{% endblock %}
