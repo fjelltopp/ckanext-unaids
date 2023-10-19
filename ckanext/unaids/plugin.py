@@ -212,7 +212,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation, toolkit.DefaultDataset
         return {
             "unaids_organization_update": auth.unaids_organization_update,
             "dataset_lock": auth.dataset_lock,
-            "package_update": auth.package_update
+            "package_update": auth.package_update,
+            "package_delete": auth.package_update
         }
 
     def get_validators(self):
