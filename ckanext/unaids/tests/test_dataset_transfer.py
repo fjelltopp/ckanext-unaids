@@ -12,7 +12,7 @@ from ckanext.unaids.dataset_transfer.logic import (
 
 
 @pytest.mark.ckan_config('ckan.auth.allow_dataset_collaborators', True)
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets versions blob_storage pages')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets versions blob_storage pages')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetTransfer(object):
 

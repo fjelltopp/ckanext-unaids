@@ -8,13 +8,13 @@ import ckan.model as model
 import pytest
 import logging
 from pprint import pformat
-from ckanext.unaids.custom_user_profile import read_saml_profile
+from ckanext.unaids.custom_user_profile.logic import read_saml_profile
 from ckanext.unaids.tests import get_context, create_dataset_with_releases
 
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestGetTableSchema(object):
 
@@ -41,7 +41,7 @@ class TestGetTableSchema(object):
         assert response == {}
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids versions restricted blob_storage scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids versions restricted blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetShowForRelease(object):
 
@@ -148,7 +148,7 @@ class TestDatasetShowForRelease(object):
         pytest.fail("Couldn't find user with required role %s", user_role)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids versions scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids versions scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPackageActivityList(object):
 
@@ -161,7 +161,7 @@ class TestPackageActivityList(object):
         pass
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids')
 @pytest.mark.usefixtures('with_plugins')
 class TestFormatGuess(object):
 
@@ -179,7 +179,7 @@ class TestFormatGuess(object):
         assert response.get('format') == format
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids')
 @pytest.mark.usefixtures('with_plugins')
 class TestUserShowMe(object):
 
@@ -194,7 +194,7 @@ class TestUserShowMe(object):
         assert response['name'] == user['name']
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPopulateDataDictionary(object):
 
@@ -212,7 +212,7 @@ class TestPopulateDataDictionary(object):
         mock_populate_data_dictionary_from_schema.assert_called_once_with(mocker.ANY, resource)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids')
 @pytest.mark.usefixtures('with_plugins')
 class TestUserAffiliation(object):
     def test_user_show_with_affiliation(self):
@@ -263,7 +263,7 @@ class TestUserAffiliation(object):
         assert set(response) == {'test-user-0', 'test-user-1', 'test-user-2', 'test-user-3'}
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPackageCreate():
 

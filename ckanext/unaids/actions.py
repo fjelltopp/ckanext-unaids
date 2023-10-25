@@ -6,7 +6,7 @@ import ckan.lib.navl.dictization_functions as dfunc
 import ckan.lib.dictization.model_save as model_save
 import ckan.lib.dictization.model_dictize as model_dictize
 import ckan.plugins.toolkit as t
-import ckanext.unaids.custom_user_profile as custom_user_profile
+import ckanext.unaids.custom_user_profile.logic as custom_user_profile_logic
 from ckan.common import _
 from ckanext.versions.logic.dataset_version_action import get_activity_id_from_dataset_version_name, activity_dataset_show
 from ckanext.unaids.logic import populate_data_dictionary_from_schema
@@ -223,10 +223,10 @@ def populate_data_dictionary(context, data_dict):
 @t.chained_action
 def user_show(original_action, context, data_dict):
     user = original_action(context, data_dict)
-    user_obj = custom_user_profile.get_user_obj(context)
+    user_obj = custom_user_profile_logic.get_user_obj(context)
 
-    extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
-    extras = custom_user_profile.format_plugin_extras(extras["unaids"])
+    extras = custom_user_profile_logic.init_plugin_extras(user_obj.plugin_extras)
+    extras = custom_user_profile_logic.format_plugin_extras(extras["unaids"])
 
     user.update(extras)
     return user
@@ -238,12 +238,12 @@ def user_list(original_action, context, data_dict):
     users = original_action(context, data_dict)
     for user in users:
         if type(user) is dict:
-            user_obj = custom_user_profile.get_user_obj({
+            user_obj = custom_user_profile_logic.get_user_obj({
                 'model': context['model'],
                 'user': user['name']
             })
-            extras = custom_user_profile.init_plugin_extras(user_obj.plugin_extras)
-            extras = custom_user_profile.format_plugin_extras(extras["unaids"])
+            extras = custom_user_profile_logic.init_plugin_extras(user_obj.plugin_extras)
+            extras = custom_user_profile_logic.format_plugin_extras(extras["unaids"])
             user.update(extras)
     return users
 

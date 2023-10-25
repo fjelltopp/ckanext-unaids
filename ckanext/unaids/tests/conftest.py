@@ -4,6 +4,7 @@ from ckan.tests import factories
 from ckanext.unaids.tests import unaids_db_setup, create_version
 from ckanext.versions.tests import versions_db_setup
 from ckanext.validation.model import tables_exist, create_tables
+from ckanext.ytp_request.tests import ytp_request_db_setup
 
 
 @pytest.fixture(autouse=True)
@@ -12,6 +13,7 @@ def unaids_setup(clean_db):
         create_tables()
 
     versions_db_setup()
+    ytp_request_db_setup()
     unaids_db_setup()
 
 
