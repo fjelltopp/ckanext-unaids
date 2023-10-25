@@ -7,7 +7,7 @@ import ckan.lib.navl.dictization_functions as df
 from ckanext.unaids.validators import organization_id_exists_validator, if_empty_guess_format
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestValidators(object):
 

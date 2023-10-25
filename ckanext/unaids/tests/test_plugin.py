@@ -66,7 +66,7 @@ def resource_with_link_and_updated_metadata():
     return updated_resource
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids blob_storage scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestPlugin(object):
     '''Tests for the ckanext.example_iauthfunctions.plugin module.
