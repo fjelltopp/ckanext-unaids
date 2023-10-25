@@ -25,27 +25,26 @@ def org_member_download(group_id):
             {"id": member[0]}
         )
         user_list.append({
-            "username": user_dict.get('name'),
-            "full_name": user_dict.get('fullname'),
-            "email": user_dict.get('email'),
-            "affiliation": user_dict.get("affiliation"),
-            "job_title": user_dict.get('job_title'),
-            "adr_org": group_id,
-            "adr_org_role": member[2]
+            toolkit._("Username"): user_dict.get('name'),
+            toolkit._("Full Name"): user_dict.get('fullname'),
+            toolkit._("Email"): user_dict.get('email'),
+            toolkit._("Affiliation"): user_dict.get("affiliation"),
+            toolkit._("Job Title"): user_dict.get('job_title'),
+            toolkit._("ADR Org"): group_id,
+            toolkit._("ADR Org Role"): member[2]
         })
 
     df = pandas.DataFrame.from_records(user_list)
     csv = df.to_csv(index=False)
-
     output = StringIO()
     output.write(csv)
     output.seek(0)
-
+    filename = toolkit._(f"{group_id}_adr_membership.csv")
     return Response(
                 output,
                 mimetype="application/json",
                 headers={"Content-disposition":
-                         "attachment; filename=org_members.csv"}
+                         f"attachment; filename={filename}"}
             )
 
 
