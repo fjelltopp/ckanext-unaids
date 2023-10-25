@@ -269,7 +269,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def after_saml2_login(self, resp, saml_attributes):
         user_obj = toolkit.g.userobj
-        custom_user_profile_logic.user.read_saml_profile(user_obj, saml_attributes)
+        custom_user_profile_logic.read_saml_profile(user_obj, saml_attributes)
 
         return resp
 
