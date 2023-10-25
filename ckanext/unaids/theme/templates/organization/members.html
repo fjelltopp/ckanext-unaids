@@ -1,5 +1,11 @@
 {% ckan_extends %}
 
+{% block page_primary_action %}
+  {{ super() }}
+  <a class="btn btn-primary" href="{{h.url_for('user_lists.org_member_download', group_id=organization.name)}}">
+    <i class="fa fa-download"></i> Download Members List</a>
+{% endblock %}
+
 {% block primary_content_inner %}
 {% set member_requests = h.get_member_request_list(organization.id) %}
 {% if member_requests %}
@@ -39,15 +45,15 @@
   {% endif %}
   {% set count = members|length %}
   {% set members_count = ungettext('{count} member', '{count} members', count).format(count=count) %}
-  <h3 class="page-heading">{{ members_count }}</h3>
-  <table class="table table-header table-hover table-bordered">
+  {% set show_emails = True %}
+  <h3 class="page-heading">{{ members_count }}   </h3>
+
+  <table class="table table-header table-hover table-responsive org-membership">
     <thead>
       <tr>
-          <th>{{ _('User') }}</th>
-          <th>{{ _('Job title') }}</th>
-          <th>{{ _('Affiliation') }}</th>
-          <th>{{ _('Role') }}</th>
-          <th></th>
+          <th class="user">{{ _('User') }}</th>
+          <th class="affiliation">{{ _('Affiliation') }}</th>
+          <th class="membership">{{ _('Membership') }}</th>
       </tr>
     </thead>
     <tbody>
@@ -57,12 +63,20 @@
         {% set affiliation = current_member.affiliation if current_member.affiliation is not none else '' %}
         <tr>
           <td class="media">
-            {{ h.linked_user(user_id, maxlength=20) }}
+            <div class="avatar">{{ h.user_image(user_id, 30) }}</div>
+            <div class="details">
+              <a href="{{ h.url_for('user.read', id=user_id) }}">
+                <span> {{current_member.fullname}} </span><br />
+                <span class="small"> ({{current_member.name}}) </span><br />
+              </a>
+              {% if current_member.get("email") %}
+                <span class="small"> {{current_member.email}} </span>
+              {% endif %}
+            </div>
           </td>
-          <td>{{ job_title }}</td>
-          <td>{{ affiliation }}</td>
-          <td>{{ role }}</td>
+          <td>{{ affiliation }} <br /> <span class="small"> {{ job_title }} </span></td>
           <td>
+            {{ role }}
             <div class="btn-group pull-right">
                 <a class="btn btn-default btn-sm" href="{{ h.url_for(group_type + '.member_new', id=group_dict.id, user=user_id) }}" title="{{ _('Edit') }}">
                 <i class="fa fa-wrench"></i>
@@ -74,4 +88,7 @@
       {% endfor %}
     </tbody>
   </table>
+
+
+
 {% endblock %}
