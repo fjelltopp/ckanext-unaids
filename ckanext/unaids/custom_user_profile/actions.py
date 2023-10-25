@@ -49,7 +49,10 @@ def mail_new_membership_request(locale, admin, group_name, url, user_name, user_
 
 
 def _create_member_request(context, data_dict):
-    """ Helper to create member request """
+    """
+    Whole method copied over from ckanext-ytp-request plugin
+    Helper to create member request
+    """
     role = data_dict.get('role', None)
     if not role:
         raise logic.NotFound
