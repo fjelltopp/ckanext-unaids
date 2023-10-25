@@ -3,7 +3,7 @@
 {% block page_primary_action %}
   {{ super() }}
   <a class="btn btn-primary" href="{{h.url_for('user_lists.org_member_download', group_id=organization.name)}}">
-    <i class="fa fa-download"></i> Download Members List</a>
+    <i class="fa fa-download"></i> {{_('Download Members List')}} </a>
 {% endblock %}
 
 {% block primary_content_inner %}
