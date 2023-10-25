@@ -3,7 +3,6 @@ from flask import Blueprint, Response
 from io import StringIO
 import logging
 import pandas
-import json
 
 log = logging.getLogger(__name__)
 user_lists = Blueprint(
@@ -13,12 +12,25 @@ user_lists = Blueprint(
 
 
 def org_member_download(group_id):
-    memberships = toolkit.get_action("member_list")(
-        {},
-        {"id": group_id, "object_type": "user"}
-    )
+    try:
+        toolkit.check_access(
+            'group_edit_permissions',
+            {'user': toolkit.g.user},
+            {'id': group_id}
+        )
+        memberships = toolkit.get_action("member_list")(
+            {},
+            {"id": group_id, "object_type": "user"}
+        )
+    except toolkit.ObjectNotFound:
+        toolkit.abort(404, toolkit._('Group not found'))
+    except toolkit.NotAuthorized:
+        toolkit.abort(
+            403,
+            toolkit._(f'User {toolkit.g.user} not '
+                      f'authorized to download members of {group_id}')
+        )
     user_list = []
-
     for member in memberships:
         user_dict = toolkit.get_action("user_show")(
             {'keep_email': True},
