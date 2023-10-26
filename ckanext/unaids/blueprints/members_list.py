@@ -5,12 +5,13 @@ import logging
 import pandas
 
 log = logging.getLogger(__name__)
-user_lists = Blueprint(
-    'user_lists',
+members_list = Blueprint(
+    'members_list',
     __name__
 )
 
 
+@members_list.route('/organization/members/<group_id>/download')
 def org_member_download(group_id):
     try:
         toolkit.check_access(
@@ -45,7 +46,6 @@ def org_member_download(group_id):
             toolkit._("ADR Org"): group_id,
             toolkit._("ADR Org Role"): member[2]
         })
-
     df = pandas.DataFrame.from_records(user_list)
     csv = df.to_csv(index=False)
     output = StringIO()
@@ -54,13 +54,7 @@ def org_member_download(group_id):
     filename = toolkit._(f"{group_id}_adr_membership.csv")
     return Response(
                 output,
-                mimetype="application/json",
+                mimetype="text/csv",
                 headers={"Content-disposition":
                          f"attachment; filename={filename}"}
             )
-
-
-user_lists.add_url_rule(
-    '/organization/members/<group_id>/download',
-    view_func=org_member_download
-)

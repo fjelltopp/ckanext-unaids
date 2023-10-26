@@ -2,7 +2,7 @@
 
 {% block page_primary_action %}
   {{ super() }}
-  <a class="btn btn-primary" href="{{h.url_for('user_lists.org_member_download', group_id=organization.name)}}">
+  <a class="btn btn-primary" href="{{h.url_for('members_list.org_member_download', group_id=organization.name)}}">
     <i class="fa fa-download"></i> {{_('Members\' Emails')}} </a>
 {% endblock %}
 
@@ -45,9 +45,7 @@
   {% endif %}
   {% set count = members|length %}
   {% set members_count = ungettext('{count} member', '{count} members', count).format(count=count) %}
-  {% set show_emails = True %}
   <h3 class="page-heading">{{ members_count }}   </h3>
-
   <table class="table table-header table-hover table-responsive org-membership">
     <thead>
       <tr>
