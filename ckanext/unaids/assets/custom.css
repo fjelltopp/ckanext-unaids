@@ -878,3 +878,17 @@ div.ckanext-datapreview{
   font-size: 18px;
   margin-top: 1em;
 }
+
+.org-membership.table .avatar{
+  float:left;
+  width: 50px;
+  padding: 5px;
+}
+
+.org-membership.table .details{
+  float:left;
+}
+
+.org-membership.table .membership{
+  width: 175px;
+}
