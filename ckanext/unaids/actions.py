@@ -269,6 +269,8 @@ def time_ago_from_timestamp(context, data_dict):
 def dataset_lock(context, data_dict):
     _check_access('dataset_lock', context, data_dict)
     dataset_id = t.get_or_bust(data_dict, "id")
+    if not t.h.dataset_lockable(dataset_id):
+        raise t.ValidationError(t._("Datasets of this type are not lockable"))
     locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
     t.get_action("package_patch")(
@@ -296,6 +298,8 @@ def dataset_lock(context, data_dict):
 def dataset_unlock(context, data_dict):
     _check_access('dataset_lock', context, data_dict)
     dataset_id = t.get_or_bust(data_dict, "id")
+    if not t.h.dataset_lockable(dataset_id):
+        raise t.ValidationError(t._("Datasets of this type are not lockable/unlockable"))
     locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
     t.get_action("package_patch")(

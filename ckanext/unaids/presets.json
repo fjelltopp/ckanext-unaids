@@ -98,6 +98,17 @@
           "data-module-trigger": "#FileInputComponent"
         }
       }
+    },
+    {
+      "preset_name": "locked",
+      "values": {
+        "label": "Locked",
+        "validators": "ignore_missing autofill read_only boolean_validator",
+        "output_validators": "boolean_validator",
+        "form_snippet": null,
+        "display_snippet": null,
+        "field_value": false
+      }
     }
   ]
 }

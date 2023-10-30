@@ -323,3 +323,14 @@ def get_administrative_boundaries():
     )
     group['packages'] = packages_list_from_group
     return group
+
+
+def dataset_lockable(dataset_id):
+    dataset = toolkit.get_action("package_show")({}, {"id": dataset_id})
+    dataset_type = dataset.get('type', 'dataset')
+    dataset_schema = toolkit.h.scheming_get_dataset_schema(dataset_type)
+    dataset_fields = []
+    if dataset_schema:
+        dataset_fields = dataset_schema.get('dataset_fields', [])
+    dataset_field_names = [field['field_name'] for field in dataset_fields]
+    return "locked" in dataset_field_names

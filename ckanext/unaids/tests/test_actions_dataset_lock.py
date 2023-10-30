@@ -8,7 +8,7 @@ from ckan.plugins import toolkit
 @pytest.fixture
 def locked_dataset():
     user = factories.User(sysadmin=True)
-    dataset = factories.Dataset()
+    dataset = factories.Dataset(type="test-schema")
     context = get_context(user['name'])
     context['auth_user_obj'] = context['model'].User.get(user['name'])
     call_action('dataset_lock', context, id=dataset['id'])
@@ -28,7 +28,7 @@ class TestDatasetLock(object):
 
     def test_version_already_created(self):
         user = factories.User(sysadmin=True)
-        dataset = factories.Dataset()
+        dataset = factories.Dataset(type="test-schema")
         context = get_context(user['name'])
         context['auth_user_obj'] = context['model'].User.get(user['name'])
         call_action(

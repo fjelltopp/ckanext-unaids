@@ -36,7 +36,8 @@ from ckanext.unaids.helpers import (
     get_profile_editor_url,
     unaids_get_validation_badge,
     get_administrative_boundaries,
-    get_localized_page_url
+    get_localized_page_url,
+    dataset_lockable
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
@@ -86,50 +87,9 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation, toolkit.DefaultDataset
     p.implements(p.IActions)
     p.implements(IDataValidation)
     p.implements(IResourceDownloadHandler, inherit=True)
-    p.implements(p.IDatasetForm)
     p.implements(IDataPusher, inherit=True)
     p.implements(p.IAuthenticator, inherit=True)
     p.implements(p.IMiddleware, inherit=True)
-
-    # IDatasetForm
-    def create_package_schema(self):
-        schema = super(UNAIDSPlugin, self).create_package_schema()
-        schema["locked"] = [
-            toolkit.get_validator('ignore_missing'),
-            toolkit.get_validator('read_only'),
-            toolkit.get_validator('boolean_validator'),
-            toolkit.get_converter('convert_to_extras')
-        ]
-        return schema
-
-    def update_package_schema(self):
-        schema = super(UNAIDSPlugin, self).update_package_schema()
-        schema["locked"] = [
-            toolkit.get_validator('ignore_missing'),
-            toolkit.get_validator('read_only'),
-            toolkit.get_validator('boolean_validator'),
-            toolkit.get_converter('convert_to_extras')
-        ]
-        return schema
-
-    def show_package_schema(self):
-        schema = super(UNAIDSPlugin, self).show_package_schema()
-        schema["locked"] = [
-            toolkit.get_converter('convert_from_extras'),
-            toolkit.get_validator('ignore_missing'),
-            toolkit.get_validator('boolean_validator')
-        ]
-        return schema
-
-    def is_fallback(self):
-        # Return True to register this plugin as the default handler for
-        # package types not handled by any other IDatasetForm plugin.
-        return True
-
-    def package_types(self):
-        # This plugin doesn't handle any special package types, it just
-        # registers itself as the default (above).
-        return []
 
     # IClick
     def get_commands(self):
@@ -204,7 +164,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation, toolkit.DefaultDataset
             "get_profile_editor_url": get_profile_editor_url,
             "unaids_get_validation_badge": unaids_get_validation_badge,
             "get_administrative_boundaries": get_administrative_boundaries,
-            "get_localized_page_url": get_localized_page_url
+            "get_localized_page_url": get_localized_page_url,
+            "dataset_lockable": dataset_lockable
         }
 
     # IAuthFunctions

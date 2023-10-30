@@ -50,7 +50,7 @@
                 {{_('You can request that another organisation takes over ownership of this dataset.')}}
             </li>
             {% endif %}
-            {% if h.check_access('sysadmin') %}
+            {% if h.dataset_lockable(data.id) and h.check_access('sysadmin') %}
             <li class="list-group-item">
                 <a class="btn btn-danger pull-right"
                    href="{% url_for 'dataset_lock.lock', dataset_id=data.id %}"
