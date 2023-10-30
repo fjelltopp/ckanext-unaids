@@ -81,8 +81,9 @@
       "values": {
         "label": "Transfer to",
         "validators": "organization_id_exists ignore_missing unicode",
-        "form_snippet": "org_to_allow_transfer_to.html",
-        "display_snippet": null
+        "form_snippet": "hidden_fields.html",
+        "display_snippet": null,
+        "field_value": ""
       }
     },
     {

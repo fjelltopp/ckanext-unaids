@@ -8,6 +8,7 @@ main:
     - bootstrap_table.js
     - format_update.js
     - validation-badge.js
+    - transfer_dataset.js
   extra:
     preload:
       - base/main

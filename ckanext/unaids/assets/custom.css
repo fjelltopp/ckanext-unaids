@@ -879,6 +879,7 @@ div.ckanext-datapreview{
   margin-top: 1em;
 }
 
+
 .org-membership.table .avatar{
   float:left;
   width: 50px;
@@ -891,4 +892,29 @@ div.ckanext-datapreview{
 
 .org-membership.table .membership{
   width: 175px;
+}
+
+#s2id_transfer_to{
+  width: 100%;
+}
+
+.danger-zone{
+  margin-top: 70px;
+}
+
+.danger-zone .list-group-item{
+  border: 1px solid #e31837;
+  padding: 20px 15px;
+}
+
+.danger-zone .btn-danger{
+  background: #eee;
+  border: 1px solid #bfbfbf;
+  color: #e31837;
+}
+
+.danger-zone .btn-danger:hover{
+  background: #e31837;
+  border: 1px solid #e31837;
+  color: #fff;
 }
