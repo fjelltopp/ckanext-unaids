@@ -66,7 +66,7 @@ def initialize_g_userobj_using_private_core_ckan_method():
     _identify_user_default()
 
 
-class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation, toolkit.DefaultDatasetForm):
+class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     """
     This plugin implements the configurations needed for AIDS data exchange
 
