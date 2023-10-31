@@ -16,7 +16,7 @@ def locked_dataset():
     return locked_dataset
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets versions')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetLock(object):
     def test_metadata_updated(self, locked_dataset):
@@ -43,7 +43,7 @@ class TestDatasetLock(object):
         assert not dataset["locked"], "Dataset shouldn't be locked if release not created"
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets versions')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetUnlock(object):
     def test_metadata_updated(self, locked_dataset):

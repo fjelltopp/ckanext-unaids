@@ -16,7 +16,7 @@ def dataset_lock(context, data_dict):
 def package_update(next_auth_action, context, data_dict):
     result = next_auth_action(context, data_dict)
     locked = context['package'].extras.get("locked", 'false')
-    if locked == 'true':
+    if locked in ['true', True]:
         return {
             'success': False,
             'msg': ('Dataset must first be unlocked by a sysadmin.')

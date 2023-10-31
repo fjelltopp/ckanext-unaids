@@ -8,13 +8,14 @@ import ckan.plugins.toolkit as toolkit
 from ckanext.unaids.auth import (
     unaids_organization_update
 )
+from ckanext.unaids.tests import get_context
 import pytest
 import logging
 
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestAuth(object):
 
@@ -64,9 +65,11 @@ class TestAuth(object):
         org = factories.Organization(users=[
             {'name': user['id'], 'capacity': capacity}
         ])
-        dataset = factories.Dataset(owner_org=org['id'])
+        dataset = factories.Dataset(owner_org=org['id'], type="test-schema")
+        context = get_context(user['name'])
+        context['auth_user_obj'] = context['model'].User.get(user['name'])
         if locked:
-            helpers.call_action('dataset_lock', id=dataset['id'])
+            helpers.call_action('dataset_lock', context, id=dataset['id'])
         dataset = helpers.call_action('package_show', id=dataset['id'])
         with outcome:
             helpers.call_auth(
