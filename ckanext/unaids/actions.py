@@ -270,7 +270,7 @@ def dataset_lock(context, data_dict):
     _check_access('dataset_lock', context, data_dict)
     dataset_id = t.get_or_bust(data_dict, "id")
     if not t.h.dataset_lockable(dataset_id):
-        raise t.ValidationError(t._("Datasets of this type are not lockable"))
+        raise t.ValidationError(t._("Datasets of this type cannot be locked."))
     locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
     t.get_action("package_patch")(
@@ -281,8 +281,7 @@ def dataset_lock(context, data_dict):
         t.get_action("dataset_version_create")(context, {
             "dataset_id": dataset_id,
             "name": locked_name,
-            "notes": t._("This dataset has been locked by a system "
-                         "administrator, meaning no further editing should take place.")
+            "notes": t._("This dataset has been made read-only by a system administrator")
         })
     except t.ValidationError:
         t.get_action("package_patch")(
@@ -290,8 +289,8 @@ def dataset_lock(context, data_dict):
             {"id": dataset_id, "locked": False}
         )
         raise t.ValidationError(t._(
-            f"Couldn't lock dataset because release named \"{locked_name}\" already "
-            "exists. Please rename or delete this release first. "
+            "Couldn't lock dataset because a release named '{}' already "
+            "exists. Please rename or delete this release first. ".format(locked_name)
         ))
 
 
@@ -299,7 +298,7 @@ def dataset_unlock(context, data_dict):
     _check_access('dataset_lock', context, data_dict)
     dataset_id = t.get_or_bust(data_dict, "id")
     if not t.h.dataset_lockable(dataset_id):
-        raise t.ValidationError(t._("Datasets of this type are not lockable/unlockable"))
+        raise t.ValidationError(t._("Datasets of this type cannot be locked / unlocked."))
     locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
     context['ignore_auth'] = True
@@ -314,13 +313,12 @@ def dataset_unlock(context, data_dict):
         )
         assert versions, "No versions exist"
         latest_version = versions[-1]
-        assert latest_version["name"] == locked_name, f"Expected latest version name '{locked_name}'"
+        assert latest_version["name"] == locked_name, f"Expected latest version '{locked_name}'"
         t.get_action("version_delete")(context, {"version_id": latest_version['id']})
     except Exception as e:
-        log.exception(f"Failed to delete version \"{locked_name}\" "
+        log.exception(f"Failed to delete version '{locked_name}'' "
                       f"whilst unlocking dataset {dataset_id}: {e}")
         raise t.ObjectNotFound(t._(
-            "Dataset unlocked, but system failed to delete the release that was created "
-            "when this dataset was originally locked. Please mannually review the "
-            "releases list and cleanup as appropriate."
+            "Dataset is unlocked, but the associated release could not be deleted. "
+            "Please manually review the releases list and cleanup if necessary."
         ))

@@ -1,8 +1,8 @@
 # Portuguese (Portugal) translations for ckanext-unaids.
-# Copyright (C) 2022 ORGANIZATION
+# Copyright (C) 2023 ORGANIZATION
 # This file is distributed under the same license as the ckanext-unaids
 # project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 msgid ""
 msgstr ""
@@ -21,35 +21,59 @@ msgstr ""
 
 #: ckanext/unaids/actions.py:40
 msgid "Resource not found."
-msgstr "Recurso não encontrado."
+msgstr ""
 
 #: ckanext/unaids/actions.py:88
 msgid "TaskStatus was not found."
-msgstr "O TaskStatus não foi encontrado."
+msgstr ""
+
+#: ckanext/unaids/actions.py:273
+msgid "Datasets of this type cannot be locked."
+msgstr ""
+
+#: ckanext/unaids/actions.py:284
+msgid "This dataset has been made read-only by a system administrator"
+msgstr ""
+
+#: ckanext/unaids/actions.py:293
+msgid ""
+"Couldn't lock dataset because a release named '{}' already exists. Please"
+" rename or delete this release first. "
+msgstr ""
+
+#: ckanext/unaids/actions.py:301
+msgid "Datasets of this type cannot be locked / unlocked."
+msgstr ""
+
+#: ckanext/unaids/actions.py:321
+msgid ""
+"Dataset is unlocked, but the associated release could not be deleted. "
+"Please manually review the releases list and cleanup if necessary."
+msgstr ""
 
 #: ckanext/unaids/helpers.py:202
 msgid "title"
-msgstr "titulo"
+msgstr ""
 
 #: ckanext/unaids/helpers.py:250
 msgid "Valid data"
-msgstr "Dados válidos"
+msgstr ""
 
 #: ckanext/unaids/helpers.py:251
 msgid "Invalid data"
-msgstr "Dados inválidos"
+msgstr ""
 
 #: ckanext/unaids/helpers.py:252
 msgid "Error during validation"
-msgstr "Erro durante a validação"
+msgstr ""
 
 #: ckanext/unaids/helpers.py:253
 msgid "Data validation unknown"
-msgstr "Validação de dados desconhecida"
+msgstr ""
 
 #: ckanext/unaids/helpers.py:291
 msgid "View Error Report"
-msgstr "Exibir relatório de erros"
+msgstr ""
 
 #: ckanext/unaids/licenses.py:13
 msgid "Creative Commons Attribution for Intergovernmental Organisations"
@@ -77,40 +101,98 @@ msgstr "Ano"
 msgid "Location"
 msgstr "Localização"
 
-#: ckanext/unaids/plugin.py:305
+#: ckanext/unaids/plugin.py:138
+#: ckanext/unaids/theme/templates/package/read_base.html:25
+msgid "Locked"
+msgstr ""
+
+#: ckanext/unaids/plugin.py:311
 msgid "Data Explorer"
-msgstr "Explorador de dados"
+msgstr ""
 
 #: ckanext/unaids/validators.py:35
 msgid "Invalid organization"
-msgstr "Organização inválida"
+msgstr ""
 
 #: ckanext/unaids/assets/autocomplete-without-creating-new-options.js:198
 msgid "Start typing…"
-msgstr "Comece a escrever..."
+msgstr ""
 
 #: ckanext/unaids/assets/autocomplete-without-creating-new-options.js:198
 msgid "No matches found"
-msgstr "Não foram encontradas correspondências"
+msgstr ""
 
 #: ckanext/unaids/assets/autocomplete-without-creating-new-options.js:207
 #, python-format
 msgid "Input is too short, must be at least one character"
 msgid_plural "Input is too short, must be at least %(num)d characters"
-msgstr[0] "A entrada é muito curta, deve ter pelo menos um carácter"
-msgstr[1] "A entrada é muito curta, deve ter pelo menos %(num)d caracteres"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/assets/bootstrap_table.js:10
 msgid "div"
-msgstr "div"
+msgstr ""
 
 #: ckanext/unaids/assets/bootstrap_table.js:10
 msgid "iframe"
-msgstr "iframe"
+msgstr ""
 
 #: ckanext/unaids/assets/frictionless-js.js:19
 msgid ",m[42]="
-msgstr ",m[42]="
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:12
+msgid "No Organisation"
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:46
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:47
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:35
+msgid "Transfer Dataset"
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:49
+msgid ""
+"This feature allows you to transfer ownership of this dataset to another "
+"organisation you do not have editor rights for:"
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:50
+msgid ""
+"First, select the organisation who will receive the dataset using the "
+"dropdown below."
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:51
+msgid ""
+"Upon clicking \"Transfer\" below, an administrator of the recipient "
+"organisation will need to visit the dataset page and accept the transfer."
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:52
+msgid "You will lose control of the dataset once they have accepted the transfer."
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:54
+msgid "Transfer to"
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:60
+#: ckanext/unaids/theme/templates/package/releases/base.html:21
+msgid "Cancel"
+msgstr ""
+
+#: ckanext/unaids/assets/transfer_dataset.js:61
+msgid "Transfer"
+msgstr ""
+
+#: ckanext/unaids/blueprints/dataset_lock.py:19
+msgid "Successfully locked this dataset. This dataset is now read only."
+msgstr ""
+
+#: ckanext/unaids/blueprints/dataset_lock.py:31
+msgid "Successfully unlocked this dataset. This dataset can now be edited."
+msgstr ""
 
 #: ckanext/unaids/blueprints/members_list.py:27
 #, fuzzy
@@ -168,76 +250,69 @@ msgstr ""
 
 #: ckanext/unaids/blueprints/profile_editor_data_receiver.py:14
 msgid "You must be logged in to access this page"
-msgstr "Você precisa estar conectado para acessar esta página"
+msgstr ""
 
 #: ckanext/unaids/blueprints/profile_editor_data_receiver.py:18
 msgid ""
 "User profile successfully saved, you need to log in again to see the "
 "changes."
 msgstr ""
-"Perfil de usuário salvo com sucesso. Você precisa fazer login novamente "
-"para ver as alterações."
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:16
 msgid "Something went wrong. Please try again."
-msgstr "Alguma coisa correu mal. Por favor, tente novamente."
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:18
 msgid "You are not authorized to carry out this action"
-msgstr "Não está autorizado a realizar esta ação"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:20
 msgid "A release already exists for this version of the dataset"
-msgstr "Já existe um lançamento para esta versão do conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:22
 msgid "Release names must be unique per dataset"
-msgstr "Os nomes de lançamento devem ser únicos por conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:136
 msgid "Release {} updated"
-msgstr "Lançamento {} atualizado"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:140
 msgid "Release {} added"
-msgstr "Lançamento {} adicionado"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:169
 msgid "Release {} deleted"
-msgstr "Lançamento {} eliminado"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_releases.py:201
 msgid "Release {} restored"
-msgstr "Lançamento {} restaurado"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_transfer.py:36
 msgid "You cannot carry out this action"
-msgstr "Não pode realizar esta ação"
+msgstr ""
 
 #: ckanext/unaids/blueprints/unaids_dataset_transfer.py:51
 msgid "Dataset moved to"
-msgstr "O conjunto de dados mudou para"
+msgstr ""
 
 #: ckanext/unaids/blueprints/user_info_blueprint.py:40
 msgid ""
 "Your api key is: <code style=\"word-break:break-all;\"> {token}</code> "
 "{copy}"
 msgstr ""
-"A sua chave api é: <code style=\"word-break:break-all;\"> {token}</code> "
-"{copy}"
 
 #: ckanext/unaids/blueprints/validate_user_affiliation.py:38
 msgid ""
 "UNAIDS asks that further information be added to your user profile. "
 "Please complete the required fields missing below before continuing..."
 msgstr ""
-"O UNAIDS solicita que mais informações sejam adicionadas ao seu perfil de"
-" usuário.Por favor, complete os campos obrigatórios em falta abaixo antes"
-" de continuar..."
 
 #: ckanext/unaids/blueprints/validate_user_affiliation.py:49
 msgid "Thank you for updating your profile information."
-msgstr "Obrigado por atualizar as informações do seu perfil."
+msgstr ""
 
 #: ckanext/unaids/custom_user_profile/actions.py:18
 #, fuzzy, python-format
@@ -288,350 +363,345 @@ msgstr ""
 
 #: ckanext/unaids/dataset_transfer/logic.py:74
 msgid "Dataset Transfer"
-msgstr "Transferência do conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:6
 msgid "Programmatic Data"
-msgstr "Dados Programáticos"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:7
 msgid "Geographic Data"
-msgstr "Dados Geográficos"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:8
 msgid "Spectrum File"
-msgstr "Ficheiro Spectrum"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:9
 msgid "Population Data"
-msgstr "Dados Populacionais"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:10
 msgid "Survey Data"
-msgstr "Dados da Pesquisa"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:11
 msgid "Naomi Inputs and Outputs"
-msgstr "Entradas e Saídas Naomi"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:12
 #: ckanext/unaids/theme/templates/footer.html:10
 #: ckanext/unaids/theme/templates/organization/read_base.html:12
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:32
 msgid "About"
-msgstr "Sobre"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:13
 msgid "ANC Data"
-msgstr "Dados ANC"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:14
 msgid "A validated ANC dataset."
-msgstr "Um conjunto de dados ANC validado."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:15
 msgid "ART Data"
-msgstr "Dados ART"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:16
 msgid "eg. 2019 ART Numbers"
-msgstr "por exemplo. números ART 2019"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:17
 msgid "A validated ART dataset."
-msgstr "Um conjunto de dados ART validado."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:18
 msgid "Please share some information about the source of this data."
-msgstr "Por favor, compartilhe algumas informações sobre a fonte destes dados."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:19
 msgid "Restricted to specified users and organizations"
-msgstr "Restrito a utilizadores e organizações específicas"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:20
 msgid "Access Restriction"
-msgstr "Restrição de Acesso"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:21
 msgid "National Spectrum File Version 5.0"
-msgstr "Ficheiro Nacional Spectrum Versão 5.0"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:22
 msgid "Geographical Location"
-msgstr "Localização Geográfica"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:23
 msgid "Country or province"
-msgstr "País ou província"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:24
 msgid "Location Hierarchy"
-msgstr "Hierarquia de Localização"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:25
 msgid "A validated location hierarchy."
-msgstr "Uma Hierarquia de localização validada."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:26
 msgid "Areas Metadata"
-msgstr "Metadados das Áreas"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:27
 msgid "A validated areas metadata table."
-msgstr "Uma tabela de metadados de áreas validadas."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:28
 msgid "Regional Geometry"
-msgstr "Geometria Regional"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:29
 msgid "A validated geometry file in SHP or GeoJSON format."
-msgstr "Um ficheiro de geometria validado em formato SHP ou GeoJSON."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:30
 msgid "Area ID Crosswalk Table"
-msgstr "Tabela de identificação da área de Passarela"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:31
 msgid "Area ID"
-msgstr "Identificação da área"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:32
 msgid "Crosswalk table between area IDs and other systems e.g. dhis2."
 msgstr ""
-"Tabela de passarela entre os IDs de área e outros sistemas, por exemplo, "
-"dhis2."
 
 #: ckanext/unaids/i18n/extra_translations.py:33
 msgid "A validated population data file."
-msgstr "Um ficheiro de dados da população validado."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:34
 msgid "Source/Notes"
-msgstr "Fonte/Notas"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:35
 msgid "General"
-msgstr "Geral"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:36
 #: ckanext/unaids/react/components/FileInputComponent/src/UrlUploader.js:8
 #: ckanext/unaids/theme/templates/scheming/form_snippets/upload.html:38
 msgid "URL"
-msgstr "URL"
+msgstr ""
+
+#: ckanext/unaids/i18n/extra_translations.py:37
+#: ckanext/unaids/theme/templates/user/new_user_form.html:22
+msgid "Email"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:38
 msgid "Naomi Data Package"
-msgstr "Pacote de Dados Naomi"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:39
 msgid "Description/Source"
-msgstr "Descrição/Fonte"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:40
 msgid ""
 "Inputs and corresponding outputs for the Naomi subnational estimation "
 "model."
 msgstr ""
-"Entradas e saídas correspondentes para o modelo de estimação subnacional "
-"Naomi."
 
 #: ckanext/unaids/i18n/extra_translations.py:41
 msgid ""
 "A ZIP file containing the input and output of the Naomi and Spectrum "
 "models"
-msgstr "Um ficheiro ZIP contendo a entrada e saída dos modelos Naomi e Spectrum"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:42
 msgid ""
 "The JSON file created by \"File Save\" in the top left corner of the "
 "Naomi UI."
 msgstr ""
-"O ficheiro JSON criado por \"File Save\" no canto superior esquerdo da UI"
-" Naomi."
 
 #: ckanext/unaids/i18n/extra_translations.py:43
 msgid "A validated Naomi ANC dataset."
-msgstr "Um conjunto de dados ANC validado da Naomi."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:44
 msgid "A validated Naomi ART dataset."
-msgstr "Um conjunto de dados ART validado da Naomi."
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:45
 msgid "A validated Naomi survey dataset"
-msgstr "Um conjunto de dados validado do inquérito Naomi"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:46
 msgid "A validated Naomi population dataset"
-msgstr "Um conjunto de dados validado da população Naomi"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:47
 msgid "A validated Naomi geographic dataset"
-msgstr "Um conjunto de dados geográficos validados da Naomi"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:48
 msgid "A spectrum file used to run the Naomi model"
-msgstr "Um ficheiro spectrum usado para executar o modelo Naomi"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:49
 msgid ""
 "License definitions and additional information can be found at "
 "http://opendefinition.org/"
 msgstr ""
-"As definições das licenças e informações adicionais podem ser encontradas"
-" em http://opendefinition.org/"
 
 #: ckanext/unaids/i18n/extra_translations.py:50
 msgid "Reorder resources"
-msgstr "Reordenar recursos"
+msgstr ""
 
 #: ckanext/unaids/i18n/extra_translations.py:51
 msgid "Organisation Name / ID"
-msgstr "Nome / ID da organização"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/App.js:32
 msgid "Extra Resource"
-msgstr "Recurso Extra"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:28
 msgid "Error: Resources cannot be larger than ${maxResourceSize} megabytes."
-msgstr "Erro: Os recursos não podem ser maiores que ${maxResourceSize} megabytes."
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:31
 msgid "Error: Unable To Load File."
-msgstr "Erro: Não foi possível carregar o ficheiro."
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:59
 msgid "Drop files to upload them"
-msgstr "Lançar ficheiros para carregá-los"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:68
 msgid "Drop files here to upload them to the dataset"
-msgstr "Lançar ficheiros aqui para carregá-los para o conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/FileUploader.js:75
 #: ckanext/unaids/theme/templates/package/snippets/bulk_file_uploader.html:9
 msgid "Add files"
-msgstr "Adicionar ficheiros"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/Modal.js:19
 msgid "Upload Resources"
-msgstr "Carregar Recursos"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:46
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:26
 msgid "Authorisation Error"
-msgstr "Erro de Autorização"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:54
 msgid "File Upload Error"
-msgstr "Erro de Upload de Ficheiro"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:71
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:235
 msgid "Resource Create Error"
-msgstr "Erro de Criação de Recurso"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:134
 msgid "Overwrite Existing Resource"
-msgstr "Sobregravar Recurso Existente"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:138
 msgid "Upload new resource"
-msgstr "Upload de novo recurso"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:151
 msgid "Duplicate option selected"
-msgstr "Opção Duplicar selecionada"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:200
 msgid "Upload Files"
-msgstr "Carregar ficheiros"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:214
 msgid "Finish"
-msgstr "Terminar"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ModalBody.js:235
 msgid "Please refresh this page and try again"
-msgstr "Por favor, atualize esta página e tente novamente"
+msgstr ""
 
 #: ckanext/unaids/react/components/BulkFileUploaderComponent/src/ProgressBar.js:17
 msgid "Uploaded"
-msgstr "Carregado"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:41
 msgid "Unfortunately an error has occurred."
-msgstr "Infelizmente, ocorreu um erro.."
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/App.js:46
 msgid ""
 "Please click <a href=\"#\" onClick={resetErrorBoundary}>here</a> to try "
 "again."
 msgstr ""
-"Clique em <a href=\"#\" onClick={resetErrorBoundary}>here</a> para tentar"
-" novamente."
 
 #: ckanext/unaids/react/components/FileInputComponent/src/DisplayUploadedFile.js:14
 #: ckanext/unaids/react/components/FileInputComponent/src/UrlUploader.js:26
 #: ckanext/unaids/theme/templates/scheming/form_snippets/upload.html:46
 #: ckanext/unaids/theme/templates/snippets/search_form.html:17
 msgid "Remove"
-msgstr "Remover"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:27
 msgid "You are not authorized to upload this resource."
-msgstr "Não está autorizado a carregar este recurso."
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:41
 msgid "Server Error"
-msgstr "Erro do Servidor"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:42
 msgid "An unknown server error has occurred."
-msgstr "Ocorreu um erro desconhecido no servidor."
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:71
 msgid "Too many files"
-msgstr "Demasiados ficheiros"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:72
 msgid "You can only upload one file for each resource."
-msgstr "Apenas pode carregar um ficheiro para cada recurso."
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:76
 msgid "File Too Large"
-msgstr "Ficheiro muito grande"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:77
 msgid "Resources cannot be larger than ${maxResourceSize} megabytes."
-msgstr "Os recursos não podem ser maiores que ${maxResourceSize} megabytes."
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:81
 msgid "Unknown Error"
-msgstr "Erro Desconhecido"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:82
 msgid "An unknown error has occurred."
-msgstr "Ocorreu um erro desconhecido."
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:92
 msgid "Upload a file"
-msgstr "Fazer upload de um ficheiro"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:101
 msgid "Link"
-msgstr "Link"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:110
 msgid "Import from another dataset"
-msgstr "Importar de outro conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/FileUploader.js:122
 msgid "Drag a file into this box or"
-msgstr "Arraste um ficheiro para esta caixa ou"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ProgressBar.js:18
 #: ckanext/unaids/theme/templates/package/releases/list.html:50
@@ -639,60 +709,60 @@ msgstr "Arraste um ficheiro para esta caixa ou"
 #: ckanext/unaids/theme/templates/scheming/form_snippets/upload.html:42
 #: ckanext/unaids/theme/templates/scheming/form_snippets/upload.html:53
 msgid "Loading"
-msgstr "Carregamento"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:74
 msgid "Search existing resources"
-msgstr "Pesquisar recursos existentes"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:177
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:256
 msgid "Modified"
-msgstr "Modificado"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:187
 msgid "Checking access..."
-msgstr "Verificando o acesso..."
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:193
 msgid "Request Access"
-msgstr "Solicitar Acesso"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:198
 msgid "Circular Import"
-msgstr "Importação Circular"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:264
 msgid "Data out of date"
-msgstr "Dados desatualizados"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:331
 msgid "Import data from another resource:"
-msgstr "Importar dados de outro recurso:"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:373
 msgid "Import Latest Data"
-msgstr "Importar Dados Atualizados"
+msgstr ""
 
 #: ckanext/unaids/react/components/FileInputComponent/src/ResourceForker.js:379
 msgid "Select Different Resource"
-msgstr "Selecionar Recurso Diferente"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/footer.html:16
 msgid "Terms and Conditions"
-msgstr "Termos e Condições"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/footer.html:17
 msgid "Cookie Policy"
-msgstr "Política de Cookies"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/footer.html:18
 msgid "Github Source Code"
-msgstr "Código Fonte Github"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/footer.html:19
 msgid "Report a Bug"
-msgstr "Relatar um Bug"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/footer.html:26
 msgid ""
@@ -701,10 +771,6 @@ msgid ""
 "for UNAIDS by <a class=\"hide-text\" target=\"_blank\" "
 "href=\"http://fjelltopp.org\"><strong>Fjelltopp</strong></a>."
 msgstr ""
-"Um projeto open source <a class=\"hide-text\" target=\"_blank\" "
-"href=\"https://ckan.org/\"><strong>CKAN</strong></a> ,<br/> construído "
-"para a UNAIDS por <a class=\"hide-text\" target=\"_blank\" "
-"href=\"http://fjelltopp.org\"><strong>Fjelltopp</strong></a>."
 
 #: ckanext/unaids/theme/templates/header.html:21
 msgid "2024 Instructions"
@@ -723,33 +789,22 @@ msgid ""
 "bold;\">manage<br />and share </span><span style=\"font-size: 2em; color:"
 " grey;\">their HIV data.</span>"
 msgstr ""
-"<span style=\"font-size: 1.75em; color: grey;\">O Repositório de Dados "
-"sobre a SIDA<br />tem como objetivo melhorar a</span><br /><span style"
-"=\"font-size: 2.5em; font-weight: bold;\">qualidade, a acessibilidade <br"
-" /> e a coerência</span><span style=\"font-size: 1.75em;\"> dos dados "
-"sobre o VIH<br />e das estimativas sobre o VIH </span><br /><span style"
-"=\"font-size: 2em; color: grey;\">fornecendo uma</span><br /><span style"
-"=\"font-size: 2.5em; font-weight: bold;\">plataforma "
-"centralizada</span><br /><span style=\"font-size: 2em;\">com ferramentas "
-"para ajudar os países </span><br /><span style=\"font-size: 2em; font-"
-"weight: bold;\">a gerire a partilhar </span><span style=\"font-size: 2em;"
-" color: grey;\">os seus dados sobre o VIH.</span>"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:12
 msgid "Find out more..."
-msgstr "Descubra mais..."
+msgstr ""
 
 #: ckanext/unaids/theme/templates/home/layout1.html:35
 msgid "HIV Estimates<br />Navigator"
-msgstr "Navegador<br />de estimativas sobre o VIH"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/home/layout1.html:41
 msgid "Instructions to upload your<br />Country Estimates 2024 Data"
-msgstr "Instruções para carregar os seus<br>dados de Estimativas do país 2024"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/home/layout1.html:45
 msgid "Unsure what to do next?"
-msgstr "Não sabe o que fazer a seguir?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/home/layout1.html:46
 msgid ""
@@ -757,18 +812,14 @@ msgid ""
 " Estimates process, or click on one of our instruction pages opposite for"
 " videos and guidance."
 msgstr ""
-"Utilize o Navegador de Estimativas sobre o VIH para o guiar passo a passo"
-" através do processo de Estimativas sobre o VIH, ou clique numa das "
-"nossas páginas de instruções ao lado para aceder aos vídeos e às "
-"orientações."
 
 #: ckanext/unaids/theme/templates/home/layout1.html:53
 msgid "Datasets by country"
-msgstr "Conjuntos de dados por país"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/home/layout1.html:65
 msgid "Featured Organisations"
-msgstr "Organizações em Destaque"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/home/layout1.html:82
 #, fuzzy
@@ -782,11 +833,11 @@ msgstr "Navegar por todas as Fronteiras Administrativas"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:131
 msgid "The AIDS Data Repository is a project by"
-msgstr "O Repositório de Dados sobre a SIDA é um projeto de"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/home/layout1.html:143
+#: ckanext/unaids/theme/templates/home/layout1.html:153
 msgid "With support from"
-msgstr "Com o apoio de"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:24
 #: ckanext/unaids/theme/templates/organization/member_new.html:38
@@ -796,60 +847,71 @@ msgstr "Com o apoio de"
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:65
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:57
 msgid "Delete"
-msgstr "Eliminar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:42
 #: ckanext/unaids/theme/templates/organization/members.html:79
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:31
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:57
 msgid "Edit"
-msgstr "Editar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:47
 #: ckanext/unaids/theme/templates/package/read.html:45
 msgid "Draft"
-msgstr "Projeto"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:49
 #: ckanext/unaids/theme/templates/package/read.html:48
 msgid "Deleted"
-msgstr "Eliminado"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:52
 #: ckanext/unaids/theme/templates/package/read.html:28
 msgid "Private"
-msgstr "Privado"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/bulk_process.html:65
 msgid "This organization has no datasets associated to it"
-msgstr "Esta organização não tem conjuntos de dados associados a ela"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:8
 msgid ""
 "Add a ckan user to your organisation by searching for their username and "
 "assigning them a role. See the note on the left about role descriptions."
 msgstr ""
-"Adicione um utilizador ckan à sua organização, procurando o seu nome de "
-"utilizador e atribuindo-lhe uma função. Veja a nota à esquerda sobre a "
-"descrição das funções."
+
+#: ckanext/unaids/theme/templates/organization/member_new.html:16
+#: ckanext/unaids/theme/templates/user/new_user_form.html:11
+#: ckanext/unaids/theme/templates/user/new_user_form.html:14
+msgid "Username"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:25
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:18
 msgid "Username / Email"
-msgstr "Nome de utilizador / Email"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/organization/member_new.html:33
+#: ckanext/unaids/theme/templates/organization/members.html:14
+#: ckanext/unaids/theme/templates/organization/members.html:49
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:27
+#: ckanext/unaids/theme/templates/request/show.html:44
+msgid "Role"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:38
 #: ckanext/unaids/theme/templates/organization/members.html:82
 msgid "Are you sure you want to delete this member?"
-msgstr "Pretende apagar este membro?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:40
 msgid "Update Member"
-msgstr "Atualizar membro"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:44
 msgid "Add Member"
-msgstr "Adicionar Membro"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:6
 msgid "Members' Emails"
@@ -857,47 +919,54 @@ msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:12
 msgid "Membership requests"
-msgstr "Solicitações de adesão"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:17
 #: ckanext/unaids/theme/templates/organization/members.html:52
 #: ckanext/unaids/theme/templates/request/show.html:14
 msgid "User"
-msgstr "Nome de utilizador"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:18
 #: ckanext/unaids/theme/templates/request/show.html:27
 msgid "Job title"
-msgstr "Título do cargo"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/organization/members.html:21
+#: ckanext/unaids/theme/templates/organization/members.html:13
+#: ckanext/unaids/theme/templates/organization/members.html:48
+#: ckanext/unaids/theme/templates/request/show.html:32
+#: ckanext/unaids/theme/templates/user/new_user_form.html:20
+msgid "Affiliation"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/organization/members.html:15
 #: ckanext/unaids/theme/templates/request/show.html:37
 msgid "Request date"
-msgstr "Data da solicitação"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:22
 msgid "Action"
-msgstr "Ação"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:38
 #: ckanext/unaids/theme/templates/request/show.html:59
 msgid "Approve"
-msgstr "Aprovar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:39
 #: ckanext/unaids/theme/templates/request/show.html:62
 msgid "Reject"
-msgstr "Rejeitar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:40
 msgid "Modify"
-msgstr "Modificar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:47
 msgid "{count} member"
 msgid_plural "{count} members"
-msgstr[0] "{count} membro"
-msgstr[1] "{count} membros"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/organization/members.html:54
 #, fuzzy
@@ -906,59 +975,59 @@ msgstr "Solicitações de adesão"
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:4
 msgid "Datasets"
-msgstr "Conjuntos de dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:8
 msgid "DHIS2 Sources"
-msgstr "Fontes DHIS2"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:11
-#: ckanext/unaids/theme/templates/package/read_base.html:21
+#: ckanext/unaids/theme/templates/package/read_base.html:35
 msgid "Activity Stream"
-msgstr "Fluxo de atividades"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:3
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:4
 msgid "Add resource"
-msgstr "Adicionar recurso"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:8
 msgid "Add New Resource"
-msgstr "Adicionar Novo Recurso"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:16
 msgid "New resource"
-msgstr "Novo recurso"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:32
 #: ckanext/unaids/theme/templates/package/snippets/bulk_file_uploader.html:4
 msgid "Bulk Upload"
-msgstr "Upload em massa"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/new_resource_not_draft.html:33
 msgid "Bulk upload is not possible for this resource."
-msgstr "O upload em massa não é possível para este recurso."
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read.html:10
 msgid " would like to transfer this dataset to your organisation"
-msgstr "gostaria de transferir este conjunto de dados para a sua organização"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read.html:14
 msgid "Transfer dataset to "
-msgstr "Transferir conjunto de dados para"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read.html:17
 #: ckanext/unaids/theme/templates/package/read.html:20
 msgid "This dataset is pending transfer to "
-msgstr "Este conjunto de dados está pendente de transferência para"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read.html:18
 msgid "Please ask an admin or editor of "
-msgstr "Por favor, pergunte a um administrador ou editor de"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read.html:18
 msgid " to accept the request."
-msgstr "para aceitar o pedido."
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read.html:34
 #, python-format
@@ -966,520 +1035,538 @@ msgid ""
 "You're currently viewing an old version of this dataset. To see the "
 "current version, click <a href=\"%(url)s\">here</a>."
 msgstr ""
-"Está a ver uma versão antiga deste conjunto de dados. Para ver a versão "
-"atual, clique em <a href=\"%(url)s\">aqui</a>."
 
 #: ckanext/unaids/theme/templates/package/read.html:64
 msgid "Download All"
-msgstr "Descarregar tudo"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read_base.html:9
 msgid "Navigator"
-msgstr "Navegador"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read_base.html:12
 msgid "Manage"
-msgstr "Gerenciar"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read_base.html:19
-msgid "Dataset"
-msgstr "Conjunto de dados"
+#: ckanext/unaids/theme/templates/package/read_base.html:18
+msgid ""
+"Are you sure you want to unlock this dataset?  This will allow others to "
+"edit it once more. "
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/read_base.html:20
+msgid "Unlock"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/read_base.html:23
-msgid "Releases"
-msgstr "Lançamentos"
+msgid "A system administrator has made this dataset read-only."
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read_base.html:32
+#: ckanext/unaids/theme/templates/package/read_base.html:33
+msgid "Dataset"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/read_base.html:37
+msgid "Releases"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/read_base.html:46
 #: ckanext/unaids/theme/templates/snippets/activities/changed_package.html:25
 #: ckanext/unaids/theme/templates/snippets/activities/new_package.html:21
 msgid "Release"
-msgstr "Lançamento"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read_base.html:39
+#: ckanext/unaids/theme/templates/package/read_base.html:53
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:23
 msgid "Description"
-msgstr "Descrição"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read_base.html:40
+#: ckanext/unaids/theme/templates/package/read_base.html:54
 msgid "None set"
-msgstr "Nenhum conjunto"
+msgstr ""
 
-#: ckanext/unaids/theme/templates/package/read_base.html:43
+#: ckanext/unaids/theme/templates/package/read_base.html:57
 msgid "There is no release associated with this version of the dataset yet."
 msgstr ""
-"Ainda não há nenhum lançamento associado a esta versão do conjunto de "
-"dados."
 
-#: ckanext/unaids/theme/templates/package/read_base.html:47
+#: ckanext/unaids/theme/templates/package/read_base.html:61
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:7
 #: ckanext/unaids/theme/templates/package/releases/list.html:21
 #: ckanext/unaids/theme/templates/snippets/activities/changed_package.html:35
 #: ckanext/unaids/theme/templates/snippets/activities/new_package.html:31
 msgid "Add Release"
-msgstr "Adicionar lançamento"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/resource_read.html:18
 msgid "Resource ID:"
-msgstr "Identificação do recurso:"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/resource_read.html:22
 #: ckanext/unaids/theme/templates/package/resource_read.html:24
 #: ckanext/unaids/theme/templates/package/resource_read.html:28
 #: ckanext/unaids/theme/templates/package/resource_read.html:30
 msgid "URL:"
-msgstr "URL:"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/resource_read.html:38
 #: ckanext/unaids/theme/templates/package/resource_read.html:45
 msgid "Imported from:"
-msgstr "Importado de:"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:9
 msgid "Existing User"
-msgstr "Utilizador Existente"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:34
 msgid "Are you sure you want to delete this collaborator?"
-msgstr "Pretende apagar este colaborador?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:36
 msgid "Update Collaborator"
-msgstr "Atualizar Colaborador"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:40
 msgid "Add Collaborator"
-msgstr "Adicionar Colaborador"
-
-#: ckanext/unaids/theme/templates/package/releases/base.html:21
-msgid "Cancel"
-msgstr "Cancelar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:7
 #: ckanext/unaids/theme/templates/package/releases/list.html:87
 msgid "Edit Release"
-msgstr "Editar Lançamento"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:14
 msgid "Name"
-msgstr "Nome"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:15
 msgid "Version 1.1"
-msgstr "Versão 1.1"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:31
 msgid "Add"
-msgstr "Adicionar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/delete.html:4
 #: ckanext/unaids/theme/templates/package/releases/list.html:92
 msgid "Delete Release"
-msgstr "Eliminar lançamento"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/delete.html:8
 msgid "Are you sure you want to delete the following release?"
-msgstr "Pretende apagar o seguinte lançamento?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:14
 msgid "The current version of the dataset is already used by release"
-msgstr "A versão actual do conjunto de dados já é utilizada pelo lançamento"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:16
 msgid "You can create a release from another version"
-msgstr "Pode criar um lançamento a partir de outra versão"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:16
 msgid "here"
-msgstr "aqui"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:29
 msgid "From <b>the latest version</b> of the dataset"
-msgstr "A partir da <b>última versão</b> do conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:34
 msgid "From <b>a past version</b> of the dataset"
-msgstr "De <b>uma versão passada</b> do conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:71
 msgid "Created by"
-msgstr "Criado por"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:82
 msgid "Make release the latest version"
-msgstr "Faça o lançamento da versão mais recente"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/list.html:126
 msgid "No releases have been created yet"
-msgstr "Ainda não foram criados lançamentos"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/restore.html:4
 msgid "Restore Release"
-msgstr "Restaurar Lançamento"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/restore.html:8
 msgid "Are you sure you want to restore the following release?"
-msgstr "Pretende restaurar o seguinte lançamento?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/restore.html:12
 msgid "Restore"
-msgstr "Restaurar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/releases/restore_or_delete.html:15
 msgid "Not Set"
-msgstr "Não definido"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:25
+msgid "Danger Zone"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:26
+msgid "Proceed with care. These actions carry significant consequences."
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:32
+msgid "Are you sure you want to delete this dataset?"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:33
+msgid "Delete Dataset"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:35
+msgid "Delete this dataset"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:36
+msgid "Only a system administrator can undo this action."
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:49
+msgid "Transfer this dataset"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:50
+msgid ""
+"You can request that another organisation takes over ownership of this "
+"dataset."
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:58
+msgid "Are you sure you want to lock this dataset?"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:59
+msgid "Lock Dataset"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:61
+msgid "Lock this dataset"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:62
+msgid "System administrators may lock this dataset to prevent further editing."
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:20
 msgid "Last modified"
-msgstr "Última modificação"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:30
 msgid "Preview"
-msgstr "Pré-visualização"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:33
 msgid "More information"
-msgstr "Mais informações"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:43
 msgid "Download"
-msgstr "Descarregar"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:48
 msgid "Go to resource"
-msgstr "Ir para o recurso"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:63
 msgid "Are you sure you want to delete this resource?"
-msgstr "Pretende apagar este recurso?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/request/show.html:6
 msgid "Organization membership request"
-msgstr "Pedido de associação à organização"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/request/show.html:10
+msgid "Organization"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/request/show.html:40
 msgid "State"
-msgstr "Estado"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/request/show.html:58
 msgid "Are you sure you want approve this request?"
-msgstr "Tem certeza de que deseja aprovar este pedido?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/request/show.html:61
 msgid "Are you sure you want reject this request?"
-msgstr "Tem certeza de que deseja rejeitar este pedido?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:15
 msgid "No organisation"
-msgstr "Nenhuma organização"
-
-#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:35
-msgid "Transfer Dataset"
-msgstr "Transferir o conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:46
 msgid "How dataset transfers work:"
-msgstr "Como funcionam as transferências de conjuntos de dados:"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/scheming/form_snippets/text_template.html:7
 msgid "This field is required"
-msgstr "Este campo é obrigatório"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/scheming/form_snippets/text_template.html:9
 msgid "Custom"
-msgstr "Personalizado"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/activity_stream.html:7
 msgid "Use the \"Add Release\" button to select a version of this dataset"
 msgstr ""
-"Use o botão \"Add Release\" para selecionar uma versão deste conjunto de "
-"dados"
 
 #: ckanext/unaids/theme/templates/snippets/add_dataset.html:9
 msgid "General Data"
-msgstr "Dados gerais"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/dataset_selector.html:3
 msgid "Add Dataset"
-msgstr "Adicionar conjunto de dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_form.html:23
 msgid "Filter Results"
-msgstr "Filtrar resultados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:19
 msgid "{number} {type} dataset found for \"{query}\""
 msgid_plural "{number} {type} datasets found for \"{query}\""
-msgstr[0] "{number} {type} conjunto de dados encontrado para \"{query}\""
-msgstr[1] "{number} {type} conjuntos de dados encontrados para \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:20
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:25
 msgid "No datasets found for \"{query}\""
-msgstr "Nenhum conjunto de dados encontrado para"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:21
 msgid "{number} {type} dataset found"
 msgid_plural "{number} {type} datasets found"
-msgstr[0] "{number} {type} conjunto de dados encontrado"
-msgstr[1] "{number} {type} conjuntos de dados encontrados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:22
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:27
 msgid "No datasets found"
-msgstr "Nenhum conjunto de dados encontrado"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:24
 msgid "{number} dataset found for \"{query}\""
 msgid_plural "{number} datasets found for \"{query}\""
-msgstr[0] "{number} conjunto de dados encontrado para \"{query}\""
-msgstr[1] "{number} conjuntos de dados encontrados para \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:26
 msgid "{number} dataset found"
 msgid_plural "{number} datasets found"
-msgstr[0] "{number} conjunto de dados encontrado"
-msgstr[1] "{number} conjuntos de dados encontrados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:31
 msgid "{number} group found for \"{query}\""
 msgid_plural "{number} groups found for \"{query}\""
-msgstr[0] "{number} grupo encontrado para \"{query}\""
-msgstr[1] "{number} grupos encontrados para \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:32
 msgid "No groups found for \"{query}\""
-msgstr "Nenhum grupo encontrado para \"{query}\""
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:33
 msgid "{number} group found"
 msgid_plural "{number} groups found"
-msgstr[0] "{number} grupo encontrado"
-msgstr[1] "{number} grupos encontrados"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:34
 msgid "No groups found"
-msgstr "Nenhum grupo encontrado"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:37
 msgid "{number} organization found for \"{query}\""
 msgid_plural "{number} organizations found for \"{query}\""
-msgstr[0] "{number} organização encontrada para \"{query}\""
-msgstr[1] "{number} organizações encontradas para \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:38
 msgid "No organizations found for \"{query}\""
-msgstr "Nenhuma organização encontrada para \"{query}\""
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:39
 msgid "{number} organization found"
 msgid_plural "{number} organizations found"
-msgstr[0] "{number} organização encontrada"
-msgstr[1] "{number} organizações encontradas"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:40
 msgid "No organizations found"
-msgstr "Nenhuma organização encontrada"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:43
 msgid "{number} DHIS2 source found for \"{query}\""
 msgid_plural "{number} DHIS2 sources found for \"{query}\""
-msgstr[0] "{number} fonte do DHIS2 encontrada para \"{query}\""
-msgstr[1] "{number} fontes do DHIS2 encontradas para \"{query}\""
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:44
 msgid "Sorry no DHIS2 sources found for \"{query}\""
-msgstr "Desculpe, nenhuma fonte do DHIS2 encontrada para \"{query}\""
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:45
 msgid "{number} DHIS2 source found"
 msgid_plural "{number} DHIS2 sources found"
-msgstr[0] "{number} fonte do DHIS2 encontrada"
-msgstr[1] "{number} fontes do DHIS2 encontradas"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ckanext/unaids/theme/templates/snippets/search_result_text.html:46
 msgid "Sorry no DHIS2 sources found"
-msgstr "Desculpe, nenhuma fonte do DHIS2 encontrada"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/activities/changed_package.html:6
 msgid "{actor} updated the dataset {dataset}"
-msgstr "{actor} atualizou o conjunto de dados {dataset}"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/activities/changed_package.html:16
 #: ckanext/unaids/theme/templates/snippets/activities/new_package.html:15
 msgid "View this version"
-msgstr "Ver esta versão"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/activities/changed_package.html:20
 msgid "Changes"
-msgstr "Mudanças"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/snippets/activities/new_package.html:5
 msgid "{actor} created the dataset {dataset}"
-msgstr "{actor} criou o conjunto de dados {dataset}"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/dashboard.html:5
 msgid "Profile settings"
-msgstr "Configurações de perfil"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/dashboard.html:8
 msgid "News feed"
-msgstr "Feed de notícias"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/dashboard.html:9
 msgid "My Datasets"
-msgstr "Os meus conjuntos de dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/dashboard.html:10
 msgid "My Organizations"
-msgstr "As Minhas Organizações"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:7
 msgid "Change details"
-msgstr "Alterar detalhes"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:9
 msgid "HIV Tools Profile Data"
-msgstr "Dados do Perfil de Ferramentas de HIV"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:19
 msgid "No job title specified"
-msgstr "Sem título de cargo especificado"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:20
 msgid "No organisation specified"
-msgstr "Organização não especificada"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:26
 msgid "Update data"
-msgstr "Atualizar dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:32
 msgid "A little information about yourself"
-msgstr "Um pouco de informação sobre você"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:35
 msgid "Subscribe to notification emails"
-msgstr "Inscrever-se para receber e-mails de notificação"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:44
 msgid "Profile picture"
-msgstr "Foto do perfil"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:44
 msgid "Profile picture URL"
-msgstr "URL da foto de perfil"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:57
 msgid "Are you sure you want to delete this User?"
-msgstr "Pretende apagar este membro?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:62
 msgid "Are you sure you want to regenerate the API key?"
-msgstr "Tem certeza de que deseja gerar novamente a chave de API?"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:62
 msgid "Regenerate API Key"
-msgstr "Regenerar chave de API"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/edit_user_form.html:65
 msgid "Update Profile"
-msgstr "Atualizar Perfil"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/user/new_user_form.html:9
+#: ckanext/unaids/theme/templates/user/new_user_form.html:15
+msgid "Full Name"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:9
 #: ckanext/unaids/theme/templates/user/new_user_form.html:15
 msgid "Joe Bloggs"
-msgstr "Joe Bloggs"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:11
 #: ckanext/unaids/theme/templates/user/new_user_form.html:14
 msgid "username"
-msgstr "nome de utilizador"
+msgstr ""
+
+#: ckanext/unaids/theme/templates/user/new_user_form.html:18
+msgid "Job Title"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:18
 msgid "Data Scientist"
-msgstr "Cientista de Dados"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:20
 msgid "WHO"
-msgstr "WHO"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:22
 #: ckanext/unaids/theme/templates/user/new_user_form.html:24
 msgid "joe@example.com"
-msgstr "joe@example.com"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:24
 msgid "Confirm Email"
-msgstr "Confirmar E-mail"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:26
 msgid "Password"
-msgstr "Senha"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:27
 msgid "Confirm Password"
-msgstr "Confirmar Senha"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:37
 msgid "Create Account"
-msgstr "Criar Conta"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/validation/validation_read.html:4
 msgid "Validation Report"
-msgstr "Relatório de Validação"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/validation/validation_read.html:27
 msgid "Validation timestamp"
-msgstr "Carimbo de tempo de validação"
+msgstr ""
 
 #: ckanext/unaids/theme/templates/validation/validation_read.html:29
 msgid "Duration"
-msgstr "Duração"
-
-#~ msgid "Naomi Geographic Data Input"
-#~ msgstr "Entrada de Dados Geográficos Naomi"
-
-#~ msgid "Geographic data formatted for the Naomi model."
-#~ msgstr "Dados geográficos formatados para o modelo Naomi."
-
-#~ msgid "Please refresh this page and try again."
-#~ msgstr "Por favor, atualize esta página e tente novamente."
-
-#~ msgid "Instructions to upload your<br /> VMMC Data"
-#~ msgstr "Instruções para carregar<br />os seus dados VMMC"
-
-#~ msgid "Autogenerated Resources"
-#~ msgstr "Recursos autogerados"
-
-#~ msgid "VMMC Data"
-#~ msgstr "Dados VMMC"
-
-#~ msgid ""
-#~ "User profile successfully saved, you "
-#~ "need to log in again to see "
-#~ "the changes."
-#~ msgstr ""
-
-#~ msgid "To change your profile settings, please "
-#~ msgstr "Para alterar as configurações do seu perfil, "
-
-#~ msgid "click here"
-#~ msgstr "clique aqui"
-
-#~ msgid "Full name"
-#~ msgstr "Nome completo"
-
-#~ msgid "eg. Joe Bloggs"
-#~ msgstr "ex. Joe Bloggs"
-
-#~ msgid "eg. joe@example.com"
-#~ msgstr "ex. joe@example.com"
-
-#~ msgid "en"
-#~ msgstr "pt_PT"
-
-#~ msgid "View All"
-#~ msgstr "Ver Todos"
+msgstr ""
 
 #~ msgid "Administrative Boundaries"
 #~ msgstr "Limites Administrativos"
