@@ -134,11 +134,12 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def dataset_facets(self, facet_dict, package_type):
         new_fd = OrderedDict()
-        new_fd["type_name"] = p.toolkit._("Data Type")
-        new_fd["geo-location"] = p.toolkit._("Location")
-        new_fd["year"] = p.toolkit._("Year")
+        new_fd["geo-location"] = p.toolkit._("Locations")
+        new_fd["type_name"] = p.toolkit._("Data Types")
         new_fd["tags"] = p.toolkit._("Tags")
-        new_fd["locked"] = p.toolkit._("Locked")
+        new_fd["year"] = p.toolkit._("Years")
+        new_fd["organization"] = p.toolkit._("Organizations")
+        new_fd["locked"] = p.toolkit._("Locked Datasets")
         return new_fd
 
     def organization_facets(self, facet_dict, org_type, package_type):
