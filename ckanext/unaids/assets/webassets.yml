@@ -9,6 +9,7 @@ main:
     - format_update.js
     - validation-badge.js
     - transfer_dataset.js
+    - tooltips.js
   extra:
     preload:
       - base/main

@@ -302,6 +302,7 @@ def dataset_unlock(context, data_dict):
         raise t.ValidationError(t._("Datasets of this type are not lockable/unlockable"))
     locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
+    context['ignore_auth'] = True
     t.get_action("package_patch")(
         context,
         {"id": dataset_id, "locked": False}
@@ -319,6 +320,7 @@ def dataset_unlock(context, data_dict):
         log.exception(f"Failed to delete version \"{locked_name}\" "
                       f"whilst unlocking dataset {dataset_id}: {e}")
         raise t.ObjectNotFound(t._(
-            "Failed to delete the release that was created when this dataset was locked."
-            "Please mannually review the releases list and cleanup as appropriate."
+            "Dataset unlocked, but system failed to delete the release that was created "
+            "when this dataset was originally locked. Please mannually review the "
+            "releases list and cleanup as appropriate."
         ))

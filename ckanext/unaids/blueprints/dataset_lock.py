@@ -16,14 +16,11 @@ dataset_lock = Blueprint(
 def lock(dataset_id):
     try:
         toolkit.get_action('dataset_lock')({}, {'id': dataset_id})
-    except toolkit.ObjectNotFound:
-        return toolkit.abort(404, toolkit._(f'Dataset {dataset_id} not found'))
-    except toolkit.NotAuthorized:
-        return toolkit.abort(
-            403,
-            toolkit._(f'Unauthorized to lock package {dataset_id}')
-        )
-    toolkit.h.flash_success(toolkit._("Successfully locked this dataset. This dataset is now read only."))
+        toolkit.h.flash_success(toolkit._(
+            "Successfully locked this dataset. This dataset is now read only."
+        ))
+    except (toolkit.ObjectNotFound, toolkit.NotAuthorized) as e:
+        toolkit.h.flash_error(e)
     return toolkit.h.redirect_to(toolkit.url_for('dataset.read', id=dataset_id))
 
 
@@ -31,12 +28,9 @@ def lock(dataset_id):
 def unlock(dataset_id):
     try:
         toolkit.get_action('dataset_unlock')({}, {'id': dataset_id})
-    except toolkit.ObjectNotFound:
-        return toolkit.abort(404, toolkit._(f'Dataset {dataset_id} not found'))
-    except toolkit.NotAuthorized:
-        return toolkit.abort(
-            403,
-            toolkit._(f'Unauthorized to lock package {dataset_id}')
-        )
-    toolkit.h.flash_success(toolkit._("Successfully unlocked this dataset. This dataset can now be edited."))
+        toolkit.h.flash_success(toolkit._(
+            "Successfully unlocked this dataset. This dataset can now be edited."
+        ))
+    except (toolkit.ObjectNotFound, toolkit.NotAuthorized) as e:
+        toolkit.h.flash_error(e)
     return toolkit.h.redirect_to(toolkit.url_for('dataset.read', id=dataset_id))

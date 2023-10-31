@@ -10,6 +10,20 @@
         </a>
       {% endif %}
       {% link_for _('Manage'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-default', icon='wrench' %}
+    {% elif h.check_access('dataset_lock', {'id': pkg.id}) and pkg.get('locked')  %}
+      <a class="btn btn-danger"
+         href="{{url_for('dataset_lock.unlock', dataset_id=pkg.id)}}"
+         target="_blank"
+         data-module="confirm-action"
+         data-module-content="{{ _('Are you sure you want to unlock this dataset?  This will allow others to edit it once more. ') }}">
+        <i class="fa fa-unlock"></i>
+        {{_('Unlock')}}
+      </a>
+    {% elif pkg.get('locked')  %}
+      <a class="btn btn-danger" disabled href="#" data-module="tooltips" data-toggle="tooltip" data-placement="left" title="{{_('A system administrator has made this dataset read-only.')}}">
+        <i class="fa fa-lock"></i>
+        {{_('Locked')}}
+      </a>
     {% endif %}
   {% endif %}
 {% endblock %}
