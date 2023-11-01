@@ -14,18 +14,10 @@
   {% endif %}
 {% endblock %}
 
-{% if h.lang() == 'fr' %}
-  {% set inputs_page = 'fr-inputs-unaids' %}
-{% elif h.lang() == 'pt_PT' %}
-  {% set inputs_page = 'pt-inputs-unaids' %}
-{% else %}
-  {% set inputs_page = 'inputs-unaids' %}
-{% endif %}
-
 {% block header_site_navigation_tabs %}
     {{ super() }}
     <li>
-        <a  href="{{h.lang()}}/pages/{{inputs_page}}">
+        <a  href="{{h.get_localized_page_url('inputs-unaids')}}">
             {{_('2024 Instructions')}}
         </a>
     </li>

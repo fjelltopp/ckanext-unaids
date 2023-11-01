@@ -3,7 +3,6 @@ import logging
 import os
 import json
 import requests
-import six
 from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url, lang
 from ckan.lib.i18n import get_lang
 from ckan.plugins.toolkit import get_action, request
@@ -209,6 +208,18 @@ def build_pages_nav_main(*args):
         output = output + li
 
     return output
+
+def get_localized_page_url(page_name):
+    lang = toolkit.h.lang()
+    if lang == 'fr':
+      raw_name = f'fr-{page_name}'
+    elif lang == 'pt_PT':
+      raw_name = f'pt-{page_name}'
+    else:
+      raw_name = page_name
+    name = quote(raw_name)
+
+    return '/{}/pages/{}'.format(lang, name)
 
 
 def get_google_analytics_id():

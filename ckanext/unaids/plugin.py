@@ -34,7 +34,8 @@ from ckanext.unaids.helpers import (
     url_encode,
     get_profile_editor_url,
     unaids_get_validation_badge,
-    get_administrative_boundaries
+    get_administrative_boundaries,
+    get_localized_page_url
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
@@ -158,7 +159,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "url_encode": url_encode,
             "get_profile_editor_url": get_profile_editor_url,
             "unaids_get_validation_badge": unaids_get_validation_badge,
-            "get_administrative_boundaries": get_administrative_boundaries
+            "get_administrative_boundaries": get_administrative_boundaries,
+            "get_localized_page_url": get_localized_page_url
         }
 
     # IAuthFunctions
