@@ -209,14 +209,15 @@ def build_pages_nav_main(*args):
 
     return output
 
+
 def get_localized_page_url(page_name):
     lang = toolkit.h.lang()
     if lang == 'fr':
-      raw_name = f'fr-{page_name}'
+        raw_name = f'fr-{page_name}'
     elif lang == 'pt_PT':
-      raw_name = f'pt-{page_name}'
+        raw_name = f'pt-{page_name}'
     else:
-      raw_name = page_name
+        raw_name = page_name
     name = quote(raw_name)
 
     return '/{}/pages/{}'.format(lang, name)
