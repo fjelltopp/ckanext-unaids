@@ -166,6 +166,10 @@ def get_language_code():
 
 
 def build_pages_nav_main(*args):
+    """
+    This helper is overriding build_pages_nav_main from ckanext-pages
+    to add localization to pages urls and titles
+    """
     about_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.about_menu', True))
     group_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.group_menu', True))
     org_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.organization_menu', True))
