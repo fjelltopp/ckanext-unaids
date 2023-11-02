@@ -266,32 +266,36 @@ def time_ago_from_timestamp(context, data_dict):
     return t.h.time_ago_from_timestamp(data_dict.get('timestamp'))
 
 
+def _get_named_version(dataset_id, name):
+    locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
+    versions = t.get_action("dataset_version_list")({}, {"dataset_id": dataset_id})
+    for version in versions:
+        if version['name'] == locked_name:
+            return version
+    return {}
+
+
 def dataset_lock(context, data_dict):
     _check_access('dataset_lock', context, data_dict)
     dataset_id = t.get_or_bust(data_dict, "id")
     if not t.h.dataset_lockable(dataset_id):
         raise t.ValidationError(t._("Datasets of this type cannot be locked."))
     locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
+    if _get_named_version(dataset_id, locked_name):
+        raise t.ValidationError(t._(
+            "Can't lock dataset because a release named '{}' already "
+            "exists. Please rename or delete this release first. ".format(locked_name)
+        ))
     context['bypass_read_only'] = True
     t.get_action("package_patch")(
         context,
         {"id": dataset_id, "locked": True}
     )
-    try:
-        t.get_action("dataset_version_create")(context, {
-            "dataset_id": dataset_id,
-            "name": locked_name,
-            "notes": t._("This dataset has been made read-only by a system administrator")
-        })
-    except t.ValidationError:
-        t.get_action("package_patch")(
-            context,
-            {"id": dataset_id, "locked": False}
-        )
-        raise t.ValidationError(t._(
-            "Couldn't lock dataset because a release named '{}' already "
-            "exists. Please rename or delete this release first. ".format(locked_name)
-        ))
+    t.get_action("dataset_version_create")(context, {
+        "dataset_id": dataset_id,
+        "name": locked_name,
+        "notes": t._("This dataset has been made read-only by a system administrator")
+    })
 
 
 def dataset_unlock(context, data_dict):
@@ -299,7 +303,6 @@ def dataset_unlock(context, data_dict):
     dataset_id = t.get_or_bust(data_dict, "id")
     if not t.h.dataset_lockable(dataset_id):
         raise t.ValidationError(t._("Datasets of this type cannot be locked / unlocked."))
-    locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
     context['bypass_read_only'] = True
     context['ignore_auth'] = True
     t.get_action("package_patch")(
@@ -307,16 +310,9 @@ def dataset_unlock(context, data_dict):
         {"id": dataset_id, "locked": False}
     )
     try:
-        versions = t.get_action("dataset_version_list")(
-            context,
-            {"dataset_id": data_dict["id"]}
-        )
-        for version in versions:
-            if version['name'] == locked_name:
-                t.get_action("version_delete")(context, {"version_id": version['id']})
-                break
-        else:
-            raise Exception("No version exists with name '{locked_name}'")
+        locked_name = t.config.get("ckanext.unaids.locked_release_name", "Locked")
+        locked_version = _get_named_version(dataset_id, locked_name)
+        t.get_action("version_delete")(context, {"version_id": locked_version['id']})
     except Exception:
         log.exception(f"Failed to delete version '{locked_name}'' "
                       f"whilst unlocking dataset {dataset_id}")
