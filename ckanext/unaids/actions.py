@@ -311,13 +311,15 @@ def dataset_unlock(context, data_dict):
             context,
             {"dataset_id": data_dict["id"]}
         )
-        assert versions, "No versions exist"
-        latest_version = versions[-1]
-        assert latest_version["name"] == locked_name, f"Expected latest version '{locked_name}'"
-        t.get_action("version_delete")(context, {"version_id": latest_version['id']})
-    except Exception as e:
+        for version in versions:
+            if version['name'] == locked_name:
+                t.get_action("version_delete")(context, {"version_id": version['id']})
+                break
+        else:
+            raise Exception("No version exists with name '{locked_name}'")
+    except Exception:
         log.exception(f"Failed to delete version '{locked_name}'' "
-                      f"whilst unlocking dataset {dataset_id}: {e}")
+                      f"whilst unlocking dataset {dataset_id}")
         raise t.ObjectNotFound(t._(
             "Dataset is unlocked, but the associated release could not be deleted. "
             "Please manually review the releases list and cleanup if necessary."
