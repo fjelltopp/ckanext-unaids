@@ -28,8 +28,10 @@ def org_member_download(group_id):
     except toolkit.NotAuthorized:
         toolkit.abort(
             403,
-            toolkit._(f'User {toolkit.g.user} not '
-                      f'authorized to download members of {group_id}')
+            toolkit._('User {username} not authorized to download members of {group_name}').format(
+                username=toolkit.g.user,
+                group_name=group_id
+            )
         )
     user_list = []
     for member in memberships:
@@ -51,7 +53,7 @@ def org_member_download(group_id):
     output = StringIO()
     output.write(csv)
     output.seek(0)
-    filename = toolkit._(f"{group_id}_adr_membership.csv")
+    filename = toolkit._("{group_name}_adr_membership.csv").format(group_name=group_id)
     return Response(
                 output,
                 mimetype="text/csv",

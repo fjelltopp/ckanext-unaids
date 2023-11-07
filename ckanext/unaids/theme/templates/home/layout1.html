@@ -28,16 +28,6 @@
   <div class="container">
     <div class='row'>
       <div class="col-xs-12 order-xs-2 col-md-6 col-lg-4 col-lg-offset-2">
-        {% if h.lang() == 'fr' %}
-          {% set inputs_page = 'fr-inputs-unaids' %}
-          {% set vmmc_page = 'fr-vmmc' %}
-        {% elif h.lang() == 'pt_PT' %}
-          {% set inputs_page = 'pt-inputs-unaids' %}
-          {% set vmmc_page = 'pt-vmmc' %}
-        {% else %}
-          {% set inputs_page = 'inputs-unaids' %}
-          {% set vmmc_page = 'vmmc' %}
-        {% endif %}
       <a class="btn btn-primary btn-lg guidance-button"
          href="https://navigator.unaids.org"
          target="_blank">
@@ -45,7 +35,7 @@
         <span class="button-text">{{_('HIV Estimates<br />Navigator')}}</span>
       </a>
       <a class="btn btn-primary btn-lg guidance-button"
-         href="/{{h.lang()}}/pages/{{inputs_page}}"
+         href="{{ h.get_localized_page_url('inputs-unaids') }}"
          target="_blank">
         <i class="fa fa-info-circle"></i>
         <span class="button-text">{{_('Instructions to upload your<br />Country Estimates 2024 Data')}}</span>

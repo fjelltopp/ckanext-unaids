@@ -3,7 +3,6 @@ import logging
 import os
 import json
 import requests
-import six
 from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url, lang
 from ckan.lib.i18n import get_lang
 from ckan.plugins.toolkit import get_action, request
@@ -167,6 +166,10 @@ def get_language_code():
 
 
 def build_pages_nav_main(*args):
+    """
+    This helper is overriding build_pages_nav_main from ckanext-pages
+    to add localization to pages urls and titles
+    """
     about_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.about_menu', True))
     group_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.group_menu', True))
     org_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.organization_menu', True))
@@ -192,21 +195,14 @@ def build_pages_nav_main(*args):
     pages_list = toolkit.get_action('ckanext_pages_list')(None, {'order': True, 'private': False})
 
     page_name = ''
-    if toolkit.check_ckan_version(u'2.9'):
-        is_current_page = toolkit.get_endpoint() in (('pages', 'show'), ('pages', 'blog_show'))
-    else:
-        is_current_page = (
-                hasattr(toolkit.c, 'action') and toolkit.c.action in ('pages_show', 'blog_show')
-                and toolkit.c.controller == 'ckanext.pages.controller:PagesController')
+    is_current_page = toolkit.get_endpoint() in (('pages', 'show'), ('pages', 'blog_show'))
+
     if is_current_page:
         page_name = toolkit.request.path.split('/')[-1]
 
     for page in pages_list:
         type_ = 'blog' if page['page_type'] == 'blog' else 'pages'
-        if six.PY2:
-            name = quote(page['name'].encode('utf-8')).decode('utf-8')
-        else:
-            name = quote(page['name'])
+        name = quote(page['name'])
         title = html_escape(_(page['title']))
         link = toolkit.h.literal(u'<a href="/{}/{}/{}">{}</a>'.format(toolkit.h.lang(), type_, name, title))
         if page['name'] == page_name:
@@ -216,6 +212,19 @@ def build_pages_nav_main(*args):
         output = output + li
 
     return output
+
+
+def get_localized_page_url(page_name):
+    lang = toolkit.h.lang()
+    if lang == 'fr':
+        raw_name = f'fr-{page_name}'
+    elif lang == 'pt_PT':
+        raw_name = f'pt-{page_name}'
+    else:
+        raw_name = page_name
+    name = quote(raw_name)
+
+    return '/{}/pages/{}'.format(lang, name)
 
 
 def get_google_analytics_id():

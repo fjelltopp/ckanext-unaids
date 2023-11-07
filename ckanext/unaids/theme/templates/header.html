@@ -13,3 +13,13 @@
     {% endif %}
   {% endif %}
 {% endblock %}
+
+{% block header_site_navigation_tabs %}
+    {{ super() }}
+    <li>
+        <a  href="{{h.get_localized_page_url('inputs-unaids')}}">
+            {{_('2024 Instructions')}}
+        </a>
+    </li>
+
+{% endblock %}
