@@ -4,7 +4,25 @@
 from ckan.tests import factories
 import pytest
 import ckan.lib.navl.dictization_functions as df
-from ckanext.unaids.validators import organization_id_exists_validator, if_empty_guess_format
+from contextlib import nullcontext as does_not_raise
+import ckan.plugins.toolkit as toolkit
+from ckan.tests.helpers import call_action
+from ckanext.unaids.validators import (
+    organization_id_exists_validator,
+    if_empty_guess_format,
+    read_only
+)
+from mock import MagicMock
+
+
+@pytest.fixture
+def read_only_validator():
+    test_schema = call_action('scheming_dataset_schema_show', type="test-schema")
+    read_only_field = None
+    for field in test_schema['dataset_fields']:
+        if field['field_name'] == 'locked':
+            read_only_field = field
+    return read_only(read_only_field, test_schema)
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets')
@@ -44,3 +62,26 @@ class TestValidators(object):
         }
         if_empty_guess_format(key, data, {}, {})
         assert data[key] == result
+
+    @pytest.mark.parametrize("context, result", [
+        ({},  pytest.raises(toolkit.Invalid)),
+        ({'bypass_read_only': True},  does_not_raise()),
+        ({'bypass_read_only': False},  pytest.raises(toolkit.Invalid)),
+        ({'package': MagicMock(extras={'locked': True})}, does_not_raise()),
+        ({'package': MagicMock(extras={'locked': False})}, pytest.raises(toolkit.Invalid)),
+        ({'package': MagicMock(extras={'locked': True}), 'bypass_read_only': True}, does_not_raise()),
+        ({'package': MagicMock(extras={'locked': False}), 'bypass_read_only': True}, does_not_raise()),
+        ({'package': MagicMock(extras={'locked': True}), 'bypass_read_only': False}, does_not_raise()),
+        ({'package': MagicMock(extras={'locked': False}), 'bypass_read_only': False}, pytest.raises(toolkit.Invalid))
+    ])
+    def test_read_only_raises(self, context, result, read_only_validator):
+        with result:
+            read_only_validator('locked', {'locked': True}, [], context)
+
+    @pytest.mark.parametrize("context, data, result", [
+        ({}, {}, 'false'),
+        ({'package': MagicMock(extras={})}, {}, 'false')
+    ])
+    def test_read_only_sets_default_value(self, context, data, result, read_only_validator):
+        read_only_validator(('locked',), data, [], context)
+        assert data.get(('locked',)) == result

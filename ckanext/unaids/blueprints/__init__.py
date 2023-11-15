@@ -6,6 +6,7 @@ from ckanext.unaids.blueprints.login_register_catch import login_register_catch
 from ckanext.unaids.blueprints.profile_editor_data_receiver import profile_editor_data_receiver
 from ckanext.unaids.blueprints.validate_user_affiliation import validate_user_affiliation
 from ckanext.unaids.blueprints.members_list import members_list
+from ckanext.unaids.blueprints.dataset_lock import dataset_lock
 
 blueprints = [
     unaids_dataset_transfer,
@@ -16,4 +17,5 @@ blueprints = [
     profile_editor_data_receiver,
     validate_user_affiliation,
     members_list,
+    dataset_lock
 ]

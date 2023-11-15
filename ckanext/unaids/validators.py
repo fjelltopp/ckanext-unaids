@@ -1,5 +1,6 @@
 import ckan.lib.navl.dictization_functions as df
 import ckan.plugins.toolkit as toolkit
+from ckanext.scheming.validation import scheming_validator
 from ckan.common import _
 
 
@@ -33,3 +34,31 @@ def organization_id_exists_validator(key, data, errors, context):
         ]
         if not is_valid:
             raise df.Invalid(_('Invalid organization'))
+
+
+@scheming_validator
+def read_only(field, schema):
+    default_value = field.get(u'field_value', field.get('default', ''))
+
+    def validator(key, data, errors, context):
+        bypass_read_only = context.get('bypass_read_only', False)
+        if bypass_read_only:
+            return
+        if context.get('package', False):  # package_update action
+            old_value = context.get('package').extras.get('locked')
+            new_value = data.get(key)
+            if toolkit.asbool(new_value) != toolkit.asbool(old_value):
+                raise toolkit.Invalid(_(
+                    'Cannot change value of "{}" from {} to {}. This key is read-only.'
+                ).format(key[-1], toolkit.asbool(old_value), toolkit.asbool(new_value)))
+            elif default_value and new_value is None and old_value is None:
+                data[key] = default_value
+        else:  # package_create action
+            if data.get(key):
+                raise toolkit.Invalid(_(
+                    'Cannot set value of "{}" to {}. This key is read-only.'
+                ).format(key[-1], data[key]))
+            elif default_value:
+                data[key] = default_value
+
+    return validator

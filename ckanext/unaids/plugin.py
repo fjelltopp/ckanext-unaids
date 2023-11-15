@@ -19,6 +19,7 @@ from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
     if_empty_guess_format,
     organization_id_exists_validator,
+    read_only
 )
 from ckanext.unaids.helpers import (
     get_logo_path,
@@ -35,7 +36,8 @@ from ckanext.unaids.helpers import (
     get_profile_editor_url,
     unaids_get_validation_badge,
     get_administrative_boundaries,
-    get_localized_page_url
+    get_localized_page_url,
+    dataset_lockable
 )
 import ckanext.blob_storage.helpers as blobstorage_helpers
 import ckanext.unaids.actions as actions
@@ -126,19 +128,21 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "package_create": actions.package_create,
             "time_ago_from_timestamp": actions.time_ago_from_timestamp,
             "member_request_create": custom_user_profile_actions.member_request_create,
+            "dataset_lock": actions.dataset_lock,
+            "dataset_unlock": actions.dataset_unlock
         }
 
     def dataset_facets(self, facet_dict, package_type):
         new_fd = OrderedDict()
-        new_fd["organization"] = p.toolkit._("Organization")
-        new_fd["type_name"] = p.toolkit._("Data Type")
+        new_fd["geo-location"] = p.toolkit._("Locations")
+        new_fd["type_name"] = p.toolkit._("Data Types")
         new_fd["tags"] = p.toolkit._("Tags")
-        new_fd["year"] = p.toolkit._("Year")
-        new_fd["geo-location"] = p.toolkit._("Location")
+        new_fd["year"] = p.toolkit._("Years")
+        new_fd["organization"] = p.toolkit._("Organizations")
+        new_fd["locked"] = p.toolkit._("Locked Datasets")
         return new_fd
 
     def organization_facets(self, facet_dict, org_type, package_type):
-
         return facet_dict
 
     # ITemplateHelpers
@@ -160,17 +164,24 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             "get_profile_editor_url": get_profile_editor_url,
             "unaids_get_validation_badge": unaids_get_validation_badge,
             "get_administrative_boundaries": get_administrative_boundaries,
-            "get_localized_page_url": get_localized_page_url
+            "get_localized_page_url": get_localized_page_url,
+            "dataset_lockable": dataset_lockable
         }
 
     # IAuthFunctions
     def get_auth_functions(self):
-        return {"unaids_organization_update": auth.unaids_organization_update}
+        return {
+            "unaids_organization_update": auth.unaids_organization_update,
+            "dataset_lock": auth.dataset_lock,
+            "package_update": auth.package_update,
+            "package_delete": auth.package_update
+        }
 
     def get_validators(self):
         return {
             "if_empty_guess_format": if_empty_guess_format,
             "organization_id_exists": organization_id_exists_validator,
+            "read_only": read_only
         }
 
     def can_validate(self, context, data_dict):

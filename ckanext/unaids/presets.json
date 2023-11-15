@@ -81,8 +81,9 @@
       "values": {
         "label": "Transfer to",
         "validators": "organization_id_exists ignore_missing unicode",
-        "form_snippet": "org_to_allow_transfer_to.html",
-        "display_snippet": null
+        "form_snippet": "hidden_fields.html",
+        "display_snippet": null,
+        "field_value": ""
       }
     },
     {
@@ -96,6 +97,17 @@
           "data-module-source": "/api/2/util/resource/format_autocomplete?incomplete=?",
           "data-module-trigger": "#FileInputComponent"
         }
+      }
+    },
+    {
+      "preset_name": "locked",
+      "values": {
+        "label": "Locked",
+        "validators": "read_only boolean_validator",
+        "output_validators": "boolean_validator",
+        "form_snippet": null,
+        "display_snippet": null,
+        "default": "false"
       }
     }
   ]

@@ -1,0 +1,67 @@
+{% ckan_extends %}
+
+{% block form_actions %}
+    <div class="form-actions">
+        {% block disclaimer %}
+        {{ super() }}
+        {% endblock %}
+        {% block save_button %}
+        {{ super() }}
+        {% endblock %}
+    </div>
+    {% if form_style == 'edit' %}
+    <div class="danger-zone">
+        <h2>{{_('Danger Zone')}}</h2>
+        <p>{{_('Proceed with care. These actions carry significant consequences.')}}</p>
+        <ul class="list-group">
+            {% if h.check_access('package_delete', {'id': data.id}) and not data.state == 'deleted' %}
+                <li class="list-group-item">
+                    <a class="btn btn-danger pull-right"
+                       href="{% url_for dataset_type ~ '.delete', id=data.id %}"
+                       data-module="confirm-action"
+                       data-module-content="{{ _('Are you sure you want to delete this dataset?') }}">
+                        {% block delete_button_text %}{{ _('Delete Dataset') }}{% endblock %}
+                    </a>
+                    <strong>{{_('Delete this dataset')}}</strong><br/>
+                    {{_('Only a system administrator can undo this action.')}}
+                </li>
+            {% endif %}
+            {%- set schema_fields = h.scheming_get_dataset_schema(dataset_type).dataset_fields | map(attribute="field_name") | list -%}
+            {% if 'org_to_allow_transfer_to' in schema_fields %}
+                {%- set transfer_options = [] -%}
+                {%- for organization in h.get_all_organizations() -%}
+                {%- if organization.id != data.get('organization', {'id': None}).id -%}
+                  {%- do transfer_options.append({
+                    'value': organization.id,
+                    'text': organization.display_name
+                  }) -%}
+                {%- endif -%}
+                {%- endfor -%}
+                <li class="list-group-item">
+                    <a class="btn btn-danger pull-right"
+                       href="#"
+                       data-module="transfer-dataset"
+                       data-module-orgs='{{transfer_options|tojson}}'
+                       data-module-value="{{data.get('org_to_allow_transfer_to')}}">
+                        {{ _('Transfer Dataset') }}
+                    </a>
+                    <strong>{{_('Transfer this dataset')}}</strong><br/>
+                    {{_('You can request that another organisation takes over ownership of this dataset.')}}
+                </li>
+            {% endif %}
+            {% if h.check_access('dataset_lock') and h.dataset_lockable(data.id) %}
+                <li class="list-group-item">
+                    <a class="btn btn-danger pull-right"
+                       href="{% url_for 'dataset_lock.lock', dataset_id=data.id %}"
+                       data-module="confirm-action"
+                       data-module-content="{{ _('Are you sure you want to lock this dataset?') }}">
+                        {{ _('Lock Dataset') }}
+                    </a>
+                    <strong>{{_('Lock this dataset')}}</strong><br/>
+                    {{_('System administrators may lock this dataset to prevent further editing.')}}
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+    {% endif %}
+{% endblock %}

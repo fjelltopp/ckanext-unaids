@@ -1,12 +1,33 @@
 # coding: utf
-import ckan.logic as logic
 import ckan.model as model
 import ckan.plugins.toolkit as toolkit
 
 
+def dataset_lock(context, data_dict):
+    # Sysadmins only
+    return {
+        'success': False,
+        'msg': 'You cannot carry out this action'
+    }
+
+
+@toolkit.chained_auth_function
+@toolkit.auth_sysadmins_check
+def package_update(next_auth_action, context, data_dict):
+    result = next_auth_action(context, data_dict)
+    locked = toolkit.asbool(context['package'].extras.get("locked", 'false'))
+    if locked:
+        return {
+            'success': False,
+            'msg': ('Dataset must first be unlocked by a sysadmin.')
+        }
+    else:
+        return result
+
+
 def unaids_organization_update(context, data_dict=None):
     user_organizations = \
-        logic.get_action('organization_list_for_user')(
+        toolkit.get_action('organization_list_for_user')(
             {'user': context['user']}, {}
         )
     valid = str(data_dict['id']) in [

@@ -9,15 +9,16 @@ msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: info@fjelltopp.org\n"
 "POT-Creation-Date: 2023-11-01 18:02+0000\n"
-"PO-Revision-Date: 2020-12-14 12:15+0300\n"
+"PO-Revision-Date: 2022-01-11 08:31+0000\n"
 "Last-Translator: Toavina A. <toavina@fjelltopp.org>\n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
+"X-Generator: PO File Editor https://pofile.net/free-po-editor\n"
 
 #: ckanext/unaids/actions.py:40
 msgid "Resource not found."
@@ -26,6 +27,39 @@ msgstr "Ressource introuvable."
 #: ckanext/unaids/actions.py:88
 msgid "TaskStatus was not found."
 msgstr "L'état actuel de la tâche est introuvable."
+
+#: ckanext/unaids/actions.py:273
+msgid "Datasets of this type cannot be locked."
+msgstr "Les ensembles de données de ce type ne peuvent pas être verrouillés."
+
+#: ckanext/unaids/actions.py:284
+msgid "This dataset has been made read-only by a system administrator"
+msgstr ""
+"Cet ensemble de données a été rendu en lecture seule par un administrateur "
+"système"
+
+#: ckanext/unaids/actions.py:293
+msgid ""
+"Couldn't lock dataset because a release named '{}' already exists. Please "
+"rename or delete this release first. "
+msgstr ""
+"Impossible de verrouiller l'ensemble de données, car une version nommée "
+"'{}' existe déjà. Veuillez d'abord renommer ou supprimer cette version."
+
+#: ckanext/unaids/actions.py:301
+msgid "Datasets of this type cannot be locked / unlocked."
+msgstr ""
+"Les ensembles de données de ce type ne peuvent pas être "
+"verrouillés/déverrouillés."
+
+#: ckanext/unaids/actions.py:321
+msgid ""
+"Dataset is unlocked, but the associated release could not be deleted. "
+"Please manually review the releases list and cleanup if necessary."
+msgstr ""
+"L'ensemble de données est déverrouillé, mais la version associée n'a pas pu "
+"être supprimée. Veuillez examiner manuellement la liste des versions et "
+"effectuer un nettoyage si nécessaire."
 
 #: ckanext/unaids/helpers.py:202
 msgid "title"
@@ -68,18 +102,23 @@ msgid "Data Type"
 msgstr "Type de données"
 
 #: ckanext/unaids/plugin.py:135
-msgid "Tags"
-msgstr "Mots clés"
+msgid "Location"
+msgstr "Lieu"
 
 #: ckanext/unaids/plugin.py:136
 msgid "Year"
 msgstr "Année"
 
 #: ckanext/unaids/plugin.py:137
-msgid "Location"
-msgstr "Lieu"
+msgid "Tags"
+msgstr "Mots clés"
 
-#: ckanext/unaids/plugin.py:305
+#: ckanext/unaids/plugin.py:138
+#: ckanext/unaids/theme/templates/package/read_base.html:25
+msgid "Locked"
+msgstr "Fermé à clé"
+
+#: ckanext/unaids/plugin.py:311
 msgid "Data Explorer"
 msgstr "Explorateur de données"
 
@@ -113,6 +152,73 @@ msgstr "iframe"
 #: ckanext/unaids/assets/frictionless-js.js:19
 msgid ",m[42]="
 msgstr ",m[42]="
+
+#: ckanext/unaids/assets/transfer_dataset.js:12
+msgid "No Organisation"
+msgstr "Aucune organisation"
+
+#: ckanext/unaids/assets/transfer_dataset.js:46
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:47
+#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:35
+msgid "Transfer Dataset"
+msgstr "Transférer l'ensemble de données"
+
+#: ckanext/unaids/assets/transfer_dataset.js:49
+msgid ""
+"This feature allows you to transfer ownership of this dataset to another "
+"organisation you do not have editor rights for:"
+msgstr ""
+"Cette fonctionnalité vous permet de transférer la propriété de cet ensemble "
+"de données à une autre organisation pour laquelle vous ne disposez pas des "
+"droits d'éditeur :"
+
+#: ckanext/unaids/assets/transfer_dataset.js:50
+msgid ""
+"First, select the organisation who will receive the dataset using the "
+"dropdown below."
+msgstr ""
+"Tout d’abord, sélectionnez l’organisation qui recevra l’ensemble de données "
+"à l’aide du menu déroulant ci-dessous."
+
+#: ckanext/unaids/assets/transfer_dataset.js:51
+msgid ""
+"Upon clicking \"Transfer\" below, an administrator of the recipient "
+"organisation will need to visit the dataset page and accept the transfer."
+msgstr ""
+"En cliquant sur \"Transférer\" ci-dessous, un administrateur de "
+"l'organisation destinataire devra visiter la page de l'ensemble de données "
+"et accepter le transfert."
+
+#: ckanext/unaids/assets/transfer_dataset.js:52
+msgid "You will lose control of the dataset once they have accepted the transfer."
+msgstr ""
+"Vous perdrez le contrôle de l’ensemble de données une fois qu’ils auront "
+"accepté le transfert."
+
+#: ckanext/unaids/assets/transfer_dataset.js:54
+msgid "Transfer to"
+msgstr "Transférer l'ensemble de données"
+
+#: ckanext/unaids/assets/transfer_dataset.js:60
+#: ckanext/unaids/theme/templates/package/releases/base.html:21
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ckanext/unaids/assets/transfer_dataset.js:61
+msgid "Transfer"
+msgstr "Transfert d’ensemble de données"
+
+#: ckanext/unaids/blueprints/dataset_lock.py:19
+msgid "Successfully locked this dataset. This dataset is now read only."
+msgstr ""
+"Cet ensemble de données a été verrouillé avec succès. Cet ensemble de "
+"données est désormais en lecture seule."
+
+#: ckanext/unaids/blueprints/dataset_lock.py:31
+msgid "Successfully unlocked this dataset. This dataset can now be edited."
+msgstr ""
+"Cet ensemble de données a été déverrouillé avec succès. Cet ensemble de "
+"données peut maintenant être modifié."
 
 #: ckanext/unaids/blueprints/members_list.py:27
 #, fuzzy
@@ -232,8 +338,8 @@ msgstr ""
 
 #: ckanext/unaids/blueprints/validate_user_affiliation.py:38
 msgid ""
-"UNAIDS asks that further information be added to your user profile. "
-"Please complete the required fields missing below before continuing..."
+"UNAIDS asks that further information be added to your user profile. Please "
+"complete the required fields missing below before continuing..."
 msgstr ""
 "L'ONUSIDA demande que des informations supplémentaires soient ajoutées à "
 "votre profil utilisateur.Veuillez compléter les champs obligatoires "
@@ -425,6 +531,11 @@ msgstr "Général"
 msgid "URL"
 msgstr "URL"
 
+#: ckanext/unaids/i18n/extra_translations.py:37
+#: ckanext/unaids/theme/templates/user/new_user_form.html:22
+msgid "Email"
+msgstr "e-mail"
+
 #: ckanext/unaids/i18n/extra_translations.py:38
 msgid "Naomi Data Package"
 msgstr "Paquet de données Naomi"
@@ -434,23 +545,19 @@ msgid "Description/Source"
 msgstr "Description/Source"
 
 #: ckanext/unaids/i18n/extra_translations.py:40
-msgid ""
-"Inputs and corresponding outputs for the Naomi subnational estimation "
-"model."
+msgid "Inputs and corresponding outputs for the Naomi subnational estimation model."
 msgstr "Entrées et sorties correspondantes pour le modèle Naomi"
 
 #: ckanext/unaids/i18n/extra_translations.py:41
-msgid ""
-"A ZIP file containing the input and output of the Naomi and Spectrum "
-"models"
+msgid "A ZIP file containing the input and output of the Naomi and Spectrum models"
 msgstr ""
 "Un fichier ZIP contenant les entrées et sorties des modèles Naomi et "
 "Spectrum"
 
 #: ckanext/unaids/i18n/extra_translations.py:42
 msgid ""
-"The JSON file created by \"File Save\" in the top left corner of the "
-"Naomi UI."
+"The JSON file created by \"File Save\" in the top left corner of the Naomi "
+"UI."
 msgstr ""
 "Le fichier JSON créé par \"Sauvegarde Fichier\" dans le coin supérieur "
 "gauche de l'interface Naomi."
@@ -721,27 +828,27 @@ msgstr "2024 Instructions"
 #: ckanext/unaids/theme/templates/home/layout1.html:9
 msgid ""
 "<span style=\"font-size: 2em; color: grey;\">The AIDS Data Repository<br "
-"/>aims to improve the</span><br /><span style=\"font-size: 2.75em; font-"
-"weight: bold;\">quality, accessibility <br /> and consistency</span><span"
-" style=\"font-size: 2em;\"> of HIV data<br />and HIV estimates by "
-"</span><span style=\"font-size: 2em; color: grey;\">providing a</span><br"
-" /><span style=\"font-size: 2.5em; font-weight: bold;\">centralised "
-"platform</span><br /><span style=\"font-size: 2em;\">with tools to help "
-"countries </span><span style=\"font-size: 2em; font-weight: "
-"bold;\">manage<br />and share </span><span style=\"font-size: 2em; color:"
-" grey;\">their HIV data.</span>"
+"/>aims to improve the</span><br /><span style=\"font-size: 2.75em; "
+"font-weight: bold;\">quality, accessibility <br /> and "
+"consistency</span><span style=\"font-size: 2em;\"> of HIV data<br />and HIV "
+"estimates by </span><span style=\"font-size: 2em; color: grey;\">providing "
+"a</span><br /><span style=\"font-size: 2.5em; font-weight: "
+"bold;\">centralised platform</span><br /><span style=\"font-size: "
+"2em;\">with tools to help countries </span><span style=\"font-size: 2em; "
+"font-weight: bold;\">manage<br />and share </span><span style=\"font-size: "
+"2em; color: grey;\">their HIV data.</span>"
 msgstr ""
-"<span style=\"font-size: 2em; color: grey;\">Le Réferentiel de Données "
-"sur le SIDA<br />a vocation à améliorer la</span><br /><span style"
-"=\"font-size: 2.75em; font-weight: bold;\">qualité, l’accessibilité et la"
-" cohérence</span><span style=\"font-size: 2em;\"> des données et "
-"estimations concernant le VIH.<br /></span><span style=\"font-size: 2em; "
-"color: grey;\">Pour ce faire, ce projet fournit aux pays</span><br "
-"/><span style=\"font-size: 2.5em; font-weight: bold;\">une plateforme "
+"<span style=\"font-size: 2em; color: grey;\">Le Réferentiel de Données sur "
+"le SIDA<br />a vocation à améliorer la</span><br /><span style=\"font-size: "
+"2.75em; font-weight: bold;\">qualité, l’accessibilité et la "
+"cohérence</span><span style=\"font-size: 2em;\"> des données et estimations "
+"concernant le VIH.<br /></span><span style=\"font-size: 2em; color: "
+"grey;\">Pour ce faire, ce projet fournit aux pays</span><br /><span "
+"style=\"font-size: 2.5em; font-weight: bold;\">une plateforme "
 "centralisée</span><br /><span style=\"font-size: 2em;\">accompagnée "
-"d’outils afin de les aider </span><span style=\"font-size: 2em; font-"
-"weight: bold;\">à gérer et partager </span><span style=\"font-size: 2em; "
-"color: grey;\">leurs données.</span>"
+"d’outils afin de les aider </span><span style=\"font-size: 2em; "
+"font-weight: bold;\">à gérer et partager </span><span style=\"font-size: "
+"2em; color: grey;\">leurs données.</span>"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:12
 msgid "Find out more..."
@@ -753,9 +860,7 @@ msgstr "Navigateur<br />pour les Estimations du VIH"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:41
 msgid "Instructions to upload your<br />Country Estimates 2024 Data"
-msgstr ""
-"Instructions pour mettre en ligne vos<br />données sur les estimations "
-"2024"
+msgstr "Instructions pour mettre en ligne vos<br />données sur les estimations 2024"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:45
 msgid "Unsure what to do next?"
@@ -763,12 +868,12 @@ msgstr "Vous hésitez sur la marche à suivre ?"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:46
 msgid ""
-"Use the HIV Estimates Navigator to guide you step-by-step through the HIV"
-" Estimates process, or click on one of our instruction pages opposite for"
-" videos and guidance."
+"Use the HIV Estimates Navigator to guide you step-by-step through the HIV "
+"Estimates process, or click on one of our instruction pages opposite for "
+"videos and guidance."
 msgstr ""
-"Utilisez le navigateur Estimations VIH pour vous guider pas à pas dans le"
-" processus des Estimations du VIH, ou cliquez sur l'une des pages "
+"Utilisez le navigateur Estimations VIH pour vous guider pas à pas dans le "
+"processus des Estimations du VIH, ou cliquez sur l'une des pages "
 "d'instructions ci-contre pour obtenir des vidéos et des conseils."
 
 #: ckanext/unaids/theme/templates/home/layout1.html:53
@@ -779,21 +884,19 @@ msgstr "Ensembles de données par pays"
 msgid "Featured Organisations"
 msgstr "Organisations mis en exergue"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:82
-#, fuzzy
+#: ckanext/unaids/theme/templates/home/layout1.html:92
 msgid "Geographic Health Boundaries"
 msgstr "Localisation"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:117
-#, fuzzy
+#: ckanext/unaids/theme/templates/home/layout1.html:127
 msgid "Browse all Geographic Health Boundaries"
 msgstr "Parcourir toutes les Limites Administratives"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:131
+#: ckanext/unaids/theme/templates/home/layout1.html:141
 msgid "The AIDS Data Repository is a project by"
 msgstr "Le Réferentiel de Données sur le SIDA est un projet de"
 
-#: ckanext/unaids/theme/templates/home/layout1.html:143
+#: ckanext/unaids/theme/templates/home/layout1.html:153
 msgid "With support from"
 msgstr "Avec l’appui de"
 
@@ -839,13 +942,27 @@ msgid ""
 "assigning them a role. See the note on the left about role descriptions."
 msgstr ""
 "Ajoutez un utilisateur ckan à votre organisation en recherchant son nom "
-"d'utilisateur et en lui attribuant un rôle. Voir la note à gauche sur les"
-" descriptions de rôle."
+"d'utilisateur et en lui attribuant un rôle. Voir la note à gauche sur les "
+"descriptions de rôle."
+
+#: ckanext/unaids/theme/templates/organization/member_new.html:16
+#: ckanext/unaids/theme/templates/user/new_user_form.html:11
+#: ckanext/unaids/theme/templates/user/new_user_form.html:14
+msgid "Username"
+msgstr "Nom d'utilisateur"
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:25
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:18
 msgid "Username / Email"
 msgstr "Nom d’utilisateur / E-mail"
+
+#: ckanext/unaids/theme/templates/organization/member_new.html:33
+#: ckanext/unaids/theme/templates/organization/members.html:14
+#: ckanext/unaids/theme/templates/organization/members.html:49
+#: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:27
+#: ckanext/unaids/theme/templates/request/show.html:44
+msgid "Role"
+msgstr "Rôle"
 
 #: ckanext/unaids/theme/templates/organization/member_new.html:38
 #: ckanext/unaids/theme/templates/organization/members.html:82
@@ -879,7 +996,14 @@ msgstr "Nom d'utilisateur"
 msgid "Job title"
 msgstr "Titre de poste"
 
-#: ckanext/unaids/theme/templates/organization/members.html:21
+#: ckanext/unaids/theme/templates/organization/members.html:13
+#: ckanext/unaids/theme/templates/organization/members.html:48
+#: ckanext/unaids/theme/templates/request/show.html:32
+#: ckanext/unaids/theme/templates/user/new_user_form.html:20
+msgid "Affiliation"
+msgstr "Affiliation"
+
+#: ckanext/unaids/theme/templates/organization/members.html:15
 #: ckanext/unaids/theme/templates/request/show.html:37
 msgid "Request date"
 msgstr "Date de la requête"
@@ -922,7 +1046,7 @@ msgid "DHIS2 Sources"
 msgstr "Sources DHIS2"
 
 #: ckanext/unaids/theme/templates/organization/read_base.html:11
-#: ckanext/unaids/theme/templates/package/read_base.html:21
+#: ckanext/unaids/theme/templates/package/read_base.html:35
 msgid "Activity Stream"
 msgstr "Flux d'activité"
 
@@ -972,12 +1096,11 @@ msgstr " pour accepter la demande."
 #: ckanext/unaids/theme/templates/package/read.html:34
 #, python-format
 msgid ""
-"You're currently viewing an old version of this dataset. To see the "
-"current version, click <a href=\"%(url)s\">here</a>."
+"You're currently viewing an old version of this dataset. To see the current "
+"version, click <a href=\"%(url)s\">here</a>."
 msgstr ""
 "Vous consultez actuellement une ancienne version de cet ensemble de "
-"données. Pour voir la version actuelle, cliquez <a "
-"href=\"%(url)s\">ici</a>."
+"données. Pour voir la version actuelle, cliquez <a href=\"%(url)s\">ici</a>."
 
 #: ckanext/unaids/theme/templates/package/read.html:64
 msgid "Download All"
@@ -991,36 +1114,52 @@ msgstr "Navigateur"
 msgid "Manage"
 msgstr "Gérer"
 
-#: ckanext/unaids/theme/templates/package/read_base.html:19
+#: ckanext/unaids/theme/templates/package/read_base.html:18
+msgid ""
+"Are you sure you want to unlock this dataset?  This will allow others to "
+"edit it once more. "
+msgstr ""
+"Êtes-vous sûr de vouloir déverrouiller cet ensemble de données ? Cela "
+"permettra à d’autres de le modifier une fois de plus."
+
+#: ckanext/unaids/theme/templates/package/read_base.html:20
+msgid "Unlock"
+msgstr "Ouvrir"
+
+#: ckanext/unaids/theme/templates/package/read_base.html:23
+msgid "A system administrator has made this dataset read-only."
+msgstr "Un administrateur système a rendu cet ensemble de données en lecture seule."
+
+#: ckanext/unaids/theme/templates/package/read_base.html:33
 msgid "Dataset"
 msgstr "Ensemble de données"
 
-#: ckanext/unaids/theme/templates/package/read_base.html:23
+#: ckanext/unaids/theme/templates/package/read_base.html:37
 msgid "Releases"
 msgstr "Publications"
 
-#: ckanext/unaids/theme/templates/package/read_base.html:32
+#: ckanext/unaids/theme/templates/package/read_base.html:46
 #: ckanext/unaids/theme/templates/snippets/activities/changed_package.html:25
 #: ckanext/unaids/theme/templates/snippets/activities/new_package.html:21
 msgid "Release"
 msgstr "Publication"
 
-#: ckanext/unaids/theme/templates/package/read_base.html:39
+#: ckanext/unaids/theme/templates/package/read_base.html:53
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:23
 msgid "Description"
 msgstr "Description"
 
-#: ckanext/unaids/theme/templates/package/read_base.html:40
+#: ckanext/unaids/theme/templates/package/read_base.html:54
 msgid "None set"
 msgstr "Aucun défini"
 
-#: ckanext/unaids/theme/templates/package/read_base.html:43
+#: ckanext/unaids/theme/templates/package/read_base.html:57
 msgid "There is no release associated with this version of the dataset yet."
 msgstr ""
 "Il n'existe pas encore de publication associée à cette version de "
 "l’ensemble de données."
 
-#: ckanext/unaids/theme/templates/package/read_base.html:47
+#: ckanext/unaids/theme/templates/package/read_base.html:61
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:7
 #: ckanext/unaids/theme/templates/package/releases/list.html:21
 #: ckanext/unaids/theme/templates/snippets/activities/changed_package.html:35
@@ -1059,10 +1198,6 @@ msgstr "Mettre à jour le collaborateur"
 #: ckanext/unaids/theme/templates/package/collaborators/collaborator_new.html:40
 msgid "Add Collaborator"
 msgstr "Ajouter un collaborateur"
-
-#: ckanext/unaids/theme/templates/package/releases/base.html:21
-msgid "Cancel"
-msgstr "Annuler"
 
 #: ckanext/unaids/theme/templates/package/releases/create_or_edit.html:7
 #: ckanext/unaids/theme/templates/package/releases/list.html:87
@@ -1140,6 +1275,62 @@ msgstr "Restaurer"
 msgid "Not Set"
 msgstr "Non défini"
 
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:25
+msgid "Danger Zone"
+msgstr "Zone dangereuse"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:26
+msgid "Proceed with care. These actions carry significant consequences."
+msgstr ""
+"Procédez avec précaution. Ces actions entraînent des conséquences "
+"importantes."
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:32
+msgid "Are you sure you want to delete this dataset?"
+msgstr "Êtes-vous sûr de vouloir supprimer cet utilisateur?"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:33
+msgid "Delete Dataset"
+msgstr "Supprimer la publication"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:35
+msgid "Delete this dataset"
+msgstr "Supprimer cet ensemble de données"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:36
+msgid "Only a system administrator can undo this action."
+msgstr "Seul un administrateur système peut annuler cette action."
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:49
+msgid "Transfer this dataset"
+msgstr "Transférer l'ensemble de données"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:50
+msgid ""
+"You can request that another organisation takes over ownership of this "
+"dataset."
+msgstr ""
+"Vous pouvez demander qu'une autre organisation prenne possession de cet "
+"ensemble de données."
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:58
+msgid "Are you sure you want to lock this dataset?"
+msgstr "Êtes-vous sûr de vouloir supprimer cet utilisateur?"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:59
+msgid "Lock Dataset"
+msgstr "Ensemble de données"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:61
+msgid "Lock this dataset"
+msgstr "Verrouiller cet ensemble de données"
+
+#: ckanext/unaids/theme/templates/package/snippets/package_form.html:62
+msgid "System administrators may lock this dataset to prevent further editing."
+msgstr ""
+"Les administrateurs système peuvent verrouiller cet ensemble de données "
+"pour empêcher toute modification ultérieure."
+
 #: ckanext/unaids/theme/templates/package/snippets/resource_item.html:20
 msgid "Last modified"
 msgstr "Dernière modification"
@@ -1168,6 +1359,10 @@ msgstr "Êtes-vous sûr de vouloir supprimer cette ressource ?"
 msgid "Organization membership request"
 msgstr "Demande d'adhésion à une Organisation"
 
+#: ckanext/unaids/theme/templates/request/show.html:10
+msgid "Organization"
+msgstr "Organisation"
+
 #: ckanext/unaids/theme/templates/request/show.html:40
 msgid "State"
 msgstr "Etat"
@@ -1183,10 +1378,6 @@ msgstr "Êtes-vous sûr de vouloir rejeter cette requête?"
 #: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:15
 msgid "No organisation"
 msgstr "Aucune organisation"
-
-#: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:35
-msgid "Transfer Dataset"
-msgstr "Transférer l'ensemble de données"
 
 #: ckanext/unaids/theme/templates/scheming/form_snippets/org_to_allow_transfer_to.html:46
 msgid "How dataset transfers work:"
@@ -1399,6 +1590,11 @@ msgstr "Mettre à jour le profil"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:9
 #: ckanext/unaids/theme/templates/user/new_user_form.html:15
+msgid "Full Name"
+msgstr "Nom complet"
+
+#: ckanext/unaids/theme/templates/user/new_user_form.html:9
+#: ckanext/unaids/theme/templates/user/new_user_form.html:15
 msgid "Joe Bloggs"
 msgstr "Joe Bloggs"
 
@@ -1406,6 +1602,10 @@ msgstr "Joe Bloggs"
 #: ckanext/unaids/theme/templates/user/new_user_form.html:14
 msgid "username"
 msgstr "Nom d'utilisateur"
+
+#: ckanext/unaids/theme/templates/user/new_user_form.html:18
+msgid "Job Title"
+msgstr "Titre de poste"
 
 #: ckanext/unaids/theme/templates/user/new_user_form.html:18
 msgid "Data Scientist"
@@ -1501,4 +1701,3 @@ msgstr "Durée"
 
 #~ msgid "Administrative Boundaries"
 #~ msgstr "Limites Administratives"
-
