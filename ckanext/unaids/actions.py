@@ -252,7 +252,7 @@ def user_list(original_action, context, data_dict):
 def package_create(next_action, context, data_dict):
     dataset_type = data_dict.get('type', '')
     valid_types = t.get_action("scheming_dataset_schema_list")(context, {})
-    valid_types = set(valid_types) | {'dataset'}
+    valid_types = set(valid_types) | {'dataset', 'harvest'}
     if dataset_type:
         if dataset_type not in valid_types:
             raise t.ValidationError(
