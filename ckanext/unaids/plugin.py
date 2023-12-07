@@ -71,7 +71,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     This plugin implements the configurations needed for AIDS data exchange
 
     """
-
+    resources_to_validate_package = {}
     p.implements(p.IClick)
     p.implements(p.IConfigurer)
     p.implements(p.IFacets, inherit=True)
@@ -208,7 +208,9 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     dataset_id=pkg_dict["id"],
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
-        if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
+
+        if pkg_dict['id'] in self.resources_to_validate_package and not context.get("_dont_validate"):
+            del self.resources_to_validate_package[pkg_dict['id']]
             logging.warning("VALIDATING ENTIRE PACKAGE")
             toolkit.get_action("resource_validation_run_batch")(
                 context, {"dataset_ids": pkg_dict["package_id"]}
@@ -238,6 +240,10 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return self._process_schema_fields(resource)
 
     def before_update(self, context, current, resource):
+        file_uploaded = current.get("url") != resource.get("url")
+        if file_uploaded and resource.get("validate_package"):
+            self.resources_to_validate_package[resource['id']] = True
+
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
             _update_resource_last_modified_date(resource, current=current)
