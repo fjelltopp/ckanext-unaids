@@ -17,7 +17,7 @@
                   <li>{{ data.email }}</li>
                   <li>&nbsp;</li>
                   <li>{% if data.job_title %}{{ data.job_title }}{% else %} {{_('No job title specified')}} {% endif %}</li>
-                   <li>{% if data.affiliation %}{{ data.affiliation }}{% else %} {{_('No organisation specified')}} {% endif %}</li>
+                  <li>{% if data.affiliation %}{{ data.affiliation }}{% else %} {{_('No organisation specified')}} {% endif %}</li>
               </ul>
           </div>
         </div>
@@ -45,10 +45,13 @@
 
   </fieldset>
 
-   <div>
+   <div class="hidden">
+      <!-- Hidden inputs required for the CKAN flask view to work -->
       <input type="hidden" name="old_password"/>
       <input type="hidden" name="password1"/>
       <input type="hidden" name="password2"/>
+      <input type="hidden" name="email" value="{{data.email}}" />
+      <input type="hidden" name="name" value="{{data.name}}" />
   </div>
 
   <div class="form-actions">
