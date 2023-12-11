@@ -190,7 +190,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def after_create(self, context, pkg_dict):
         if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
-            logging.warning("VALIDATING ENTIRE PACKAGE")
             toolkit.get_action("resource_validation_run_batch")(
                 context, {"dataset_ids": pkg_dict["package_id"]}
             )
@@ -211,7 +210,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         if pkg_dict['id'] in self.resources_to_validate_package and not context.get("_dont_validate"):
             del self.resources_to_validate_package[pkg_dict['id']]
-            logging.warning("VALIDATING ENTIRE PACKAGE")
             toolkit.get_action("resource_validation_run_batch")(
                 context, {"dataset_ids": pkg_dict["package_id"]}
             )
@@ -241,6 +239,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def before_update(self, context, current, resource):
         file_uploaded = current.get("url") != resource.get("url")
+
         if file_uploaded and resource.get("validate_package"):
             self.resources_to_validate_package[resource['id']] = True
 
