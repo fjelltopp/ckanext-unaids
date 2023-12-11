@@ -1,0 +1,15 @@
+{% ckan_extends %}
+
+{% block basic_fields %}
+
+{{ super() }}
+
+{% if data.get('validation_timestamp') %}
+   <input type="hidden" name="validation_timestamp" value="{{data.validation_timestamp}}" />
+{% endif %}
+
+{% if data.get('validation_status') %}
+   <input type="hidden" name="validation_status" value="{{data.validation_status}}" />
+{% endif %}
+
+{% endblock %}
