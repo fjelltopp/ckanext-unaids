@@ -1,9 +1,10 @@
 """Tests for plugin.py."""
 # encoding: utf-8
-from mock import patch
+from mock import patch, call
 
 from ckan.tests.helpers import call_action
 from ckan.tests import factories
+from ckan.plugins import toolkit
 import pytest
 from ckanext.unaids.plugin import (
     _update_resource_last_modified_date
@@ -98,6 +99,52 @@ class TestPlugin(object):
         with patch('ckanext.unaids.logic.validate_resource_upload_fields') as mock:
             call_action('resource_create', context, **resource)
             assert mock.called
+
+
+@pytest.fixture
+def validate_package_resource():
+    dataset = factories.Dataset(type="validate-package")
+    resource = {
+        'package_id': dataset["id"],
+        'url_type': 'upload',
+        'url': 'test.csv',
+        'lfs_prefix': 'prefix',
+        'sha256': 'acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79',
+        'size': 100,
+        'validate_package': True
+    }
+    resource["id"] = call_action('resource_create', **resource)["id"]
+    return resource
+
+
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids blob_storage authz_service validation scheming_datasets')
+@pytest.mark.usefixtures('with_plugins')
+class TestValidatePackage(object):
+
+    def test_validate_package(self, validate_package_resource):
+
+        def return_value(*args, **kwargs):
+            return toolkit.get_action(*args, **kwargs)
+
+        with patch('ckanext.unaids.plugin.toolkit.get_action', return_value=return_value) as mock:
+            call_action(
+                'resource_update', {},
+                **validate_package_resource
+            )
+            mock.assert_any_call('resource_validation_run_batch')
+
+    def test_metadata_change_does_not_validate_package(self, validate_package_resource):
+        del validate_package_resource['url']
+
+        def return_value(*args, **kwargs):
+            return toolkit.get_action(*args, **kwargs)
+
+        with patch('ckanext.unaids.plugin.toolkit.get_action', return_value=return_value) as mock:
+            call_action(
+                'resource_patch', {},
+                **validate_package_resource
+            )
+            assert call('resource_validation_run_batch') not in mock.mock_calls
 
 
 class TestResourceLastModified(object):
