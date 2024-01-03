@@ -71,7 +71,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     This plugin implements the configurations needed for AIDS data exchange
 
     """
-
     p.implements(p.IClick)
     p.implements(p.IConfigurer)
     p.implements(p.IFacets, inherit=True)
@@ -188,33 +187,35 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if data_dict.get("schema"):
             return True
 
+    # IResourceController
+    # IPackageController
+    resources_to_validate_package = {}
+
     def after_create(self, context, pkg_dict):
-        if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
-            logging.warning("VALIDATING ENTIRE PACKAGE")
+        if pkg_dict.get("validate_package"):
             toolkit.get_action("resource_validation_run_batch")(
                 context, {"dataset_ids": pkg_dict["package_id"]}
             )
 
-    # IPackageController
-    def after_update(self, context, pkg_dict):
-        if "extras" in pkg_dict:
+    def after_update(self, context, data_dict):
+        if "extras" in data_dict:
             org_to_allow_transfer_to = [
                 item["value"]
-                for item in pkg_dict["extras"]
+                for item in data_dict["extras"]
                 if item["key"] == "org_to_allow_transfer_to" and item["value"]
             ]
             if org_to_allow_transfer_to:
                 send_dataset_transfer_emails(
-                    dataset_id=pkg_dict["id"],
+                    dataset_id=data_dict["id"],
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
-        if pkg_dict.get("validate_package") and not context.get("_dont_validate"):
-            logging.warning("VALIDATING ENTIRE PACKAGE")
+
+        if data_dict['id'] in self.resources_to_validate_package:
+            del self.resources_to_validate_package[data_dict['id']]
             toolkit.get_action("resource_validation_run_batch")(
-                context, {"dataset_ids": pkg_dict["package_id"]}
+                context, {"dataset_ids": data_dict["package_id"]}
             )
 
-    # IResourceController
     def _process_schema_fields(self, data_dict):
         """
         Here we overload the default schema processing (from frictionlessdata/ckanext-validation)
@@ -243,6 +244,11 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             _update_resource_last_modified_date(resource, current=current)
             logic.validate_resource_upload_fields(context, resource)
             context["_resource_create_call"] = True
+            file_uploaded = current.get("url") != resource.get("url")
+
+            if file_uploaded and resource.get("validate_package"):
+                self.resources_to_validate_package[resource['id']] = True
+
         return self._process_schema_fields(resource)
 
     def before_show(self, resource):
