@@ -29,9 +29,13 @@ def map_options():
     values = defaultdict(dataset_count)
     for geo_location, count in six.iteritems(location_facet):
         if geo_location:
-            country_code = _country_code_from_location_name(geo_location)
-            values[country_code]["count"] = count
-            values[country_code]["link"] = u'/dataset/?geo-location={}'.format(geo_location)
+            try:
+                country_code = _country_code_from_location_name(geo_location)
+                values[country_code]["count"] = count
+                values[country_code]["link"] = u'/dataset/?geo-location={}'.format(geo_location)
+            except AttributeError:
+                # custom location not supported by pycountry
+                continue
 
     return jsonify({
         "data": {
