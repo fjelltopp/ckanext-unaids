@@ -20,11 +20,19 @@ FileInputComponentStyles:
     filters: cssmin
     output: unaids/%(version)s_FileInputComponent.css
 
+FrictionlessJS:
+  filters: rjsmin
+  contents:
+    - frictionless-js.js
+  output: unaids/%(version)s_Frictionless.js
+
 FileInputComponentScripts:
     filters: rjsmin
     contents:
-        - frictionless-js.js
         - build/FileInputComponent.js
+    extra:
+      preload:
+        - ckanext-unaids/FrictionlessJS
     output: unaids/%(version)s_FileInputComponent.js
 
 BulkFileUploaderComponentStyles:
@@ -36,8 +44,10 @@ BulkFileUploaderComponentStyles:
 BulkFileUploaderComponentScripts:
     filters: rjsmin
     contents:
-        - frictionless-js.js
         - build/BulkFileUploaderComponent.js
+    extra:
+      preload:
+        - ckanext-unaids/FrictionlessJS
     output: unaids/%(version)s_BulkFileUploaderComponent.js
 
 MapSelectorJS:
