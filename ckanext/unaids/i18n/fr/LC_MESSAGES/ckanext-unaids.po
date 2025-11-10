@@ -822,8 +822,8 @@ msgstr ""
 "href=\"http://fjelltopp.org\"><strong>Fjelltopp</strong></a>."
 
 #: ckanext/unaids/theme/templates/header.html:21
-msgid "2024 Instructions"
-msgstr "2024 Instructions"
+msgid "2026 Instructions"
+msgstr "2026 Instructions"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:9
 msgid ""
@@ -859,8 +859,8 @@ msgid "HIV Estimates<br />Navigator"
 msgstr "Navigateur<br />pour les Estimations du VIH"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:41
-msgid "Instructions to upload your<br />Country Estimates 2025 Data"
-msgstr "Instructions pour mettre en ligne vos<br />données sur les estimations 2025"
+msgid "Instructions to upload your<br />Country Estimates 2026 Data"
+msgstr "Instructions pour mettre en ligne vos<br />données sur les estimations 2026"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:45
 msgid "Unsure what to do next?"
