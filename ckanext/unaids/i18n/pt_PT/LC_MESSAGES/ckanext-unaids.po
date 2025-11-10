@@ -811,8 +811,8 @@ msgstr ""
 "href=\"http://fjelltopp.org\"><strong>Fjelltopp</strong></a>."
 
 #: ckanext/unaids/theme/templates/header.html:21
-msgid "2024 Instructions"
-msgstr "2024 Instruções"
+msgid "2026 Instructions"
+msgstr "2026 Instruções"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:9
 msgid ""
