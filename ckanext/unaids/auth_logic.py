@@ -4,7 +4,7 @@ import json
 from ckantoolkit import config
 from repoze.who.interfaces import IChallengeDecider
 from six.moves.urllib.request import urlopen
-from flask import _request_ctx_stack, Response
+from flask import Response
 from jose import jwt
 from zope.interface import directlyProvides
 
@@ -92,7 +92,7 @@ def validate_and_decode_token(encoded):
         except Exception:
             raise OAuth2AuthenticationError(message="Unable to parse authentication token")
 
-        _request_ctx_stack.top.current_user = payload
+        g.current_user = payload
         return payload
     raise OAuth2AuthenticationError(message="Unable to find appropriate key")
 

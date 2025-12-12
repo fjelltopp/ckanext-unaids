@@ -13,7 +13,7 @@ import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
-from ckan.views import _identify_user_default
+from ckan.views import identify_user
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
@@ -44,7 +44,7 @@ import ckanext.unaids.actions as actions
 import ckanext.unaids.auth_logic as auth_logic
 from ckanext.unaids import auth, licenses, command, logic
 from ckanext.unaids.blueprints import blueprints
-from ckanext.reclineview.plugin import ReclineViewBase
+# ReclineView was removed in CKAN 2.11.4, replaced by DataTablesView
 from ckanext.validation.interfaces import IDataValidation
 from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
 from ckanext.datapusher.interfaces import IDataPusher
@@ -63,7 +63,7 @@ def add_licenses():
 
 
 def initialize_g_userobj_using_private_core_ckan_method():
-    _identify_user_default()
+    identify_user()
 
 
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
@@ -306,20 +306,27 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return app
 
 
-class UNAIDSReclineView(ReclineViewBase):
+class UNAIDSDataTablesView(p.SingletonPlugin):
     """
-    This override of the recline view plugin allows data explorers to be auto
-    created for geojson files.
+    This data explorer view allows data tables to be auto-created for
+    CSV, XLS, XLSX, TSV, and GeoJSON files.
+    Replaces the deprecated ReclineView with DataTablesView.
     """
+    p.implements(p.IConfigurer, inherit=True)
+    p.implements(p.IResourceView, inherit=True)
+
+    def update_config(self, config):
+        toolkit.add_template_directory(config, 'theme/templates')
 
     def info(self):
         return {
-            "name": "unaids_recline_view",
+            "name": "unaids_datatables_view",
             "title": "Data Explorer",
             "filterable": True,
             "icon": "table",
             "requires_datastore": False,
             "default_title": p.toolkit._("Data Explorer"),
+            "preview_enabled": True,
         }
 
     def can_view(self, data_dict):
@@ -335,6 +342,12 @@ class UNAIDSReclineView(ReclineViewBase):
             return resource_format.lower() in ["csv", "xls", "xlsx", "tsv", "geojson"]
         else:
             return False
+
+    def view_template(self, context, data_dict):
+        return 'datatables/datatables_view.html'
+
+    def form_template(self, context, data_dict):
+        return 'datatables/datatables_form.html'
 
 
 def _data_dict_is_resource(data_dict):

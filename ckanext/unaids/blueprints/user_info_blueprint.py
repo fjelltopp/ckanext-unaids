@@ -1,9 +1,8 @@
 # encoding: utf-8
 import logging
-from ckan.common import g, _
+from ckan.common import g, _, current_user
 from ckan.lib import helpers as h
 from ckan.logic import get_action
-from ckan.views.user import before_request
 from six import ensure_str
 import dominate.tags as dom_tags
 from flask import Blueprint
@@ -15,7 +14,14 @@ user_info_blueprint = Blueprint(
     __name__,
     url_prefix=u'/me'
 )
-user_info_blueprint.before_request(before_request)
+
+
+@user_info_blueprint.before_request
+def before_request():
+    if current_user.is_anonymous:
+        h.flash_error(_(u'Not authorized to see this page'))
+        return h.redirect_to(u'user.login')
+    return None
 
 
 def display_user_details(locale=None):
