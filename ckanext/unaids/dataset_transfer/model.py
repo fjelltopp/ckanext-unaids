@@ -1,4 +1,4 @@
-from sqlalchemy import Column, types
+from sqlalchemy import Column, types, inspect
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
@@ -29,8 +29,25 @@ class DatasetTransferRequest(Base):
 
 
 def init_tables():
-    DatasetTransferRequest.__table__.create()
+    if metadata.bind is None:
+        from ckan.model import meta
+        engine = meta.engine
+    else:
+        engine = metadata.bind
+
+    DatasetTransferRequest.__table__.create(engine, checkfirst=True)
 
 
 def tables_exists():
-    return DatasetTransferRequest.__table__.exists()
+    if metadata.bind is None:
+        from ckan.model import meta
+        engine = meta.engine
+    else:
+        engine = metadata.bind
+
+    # Return False if engine is not available yet (e.g., during early startup)
+    if engine is None:
+        return False
+
+    inspector = inspect(engine)
+    return inspector.has_table(DatasetTransferRequest.__tablename__)
