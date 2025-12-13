@@ -13,7 +13,7 @@ import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
-from ckan.views import identify_user
+from ckan.common import g, current_user
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
@@ -63,7 +63,10 @@ def add_licenses():
 
 
 def initialize_g_userobj_using_private_core_ckan_method():
-    identify_user()
+    # In CKAN 2.11.4, directly set g.user and g.userobj from current_user
+    # instead of calling identify_user() which would cause infinite recursion
+    g.user = current_user.name
+    g.userobj = '' if current_user.is_anonymous else current_user
 
 
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
