@@ -1341,9 +1341,84 @@ ckanext.scheming.errors.SchemingException: preset 'locked' not defined
 
 ---
 
-## Current Test Status (After Batch 12)
+## Batch 13: test_giftless_backend.py - Activity Plugin User Context
 
-### ✅ Fully Passing (12 files)
+### Issue: Activity plugin requires user context for resource_create
+
+**Error Message:**
+```
+ckan.logic.ValidationError: None - {'user_id': ['User not found']}
+```
+
+**Root Cause:**
+- CKAN 2.11 activity plugin's `_get_user_or_raise` expects valid user in context
+- `helpers.call_action('resource_create', ...)` was not passing user context
+
+**Solution Applied:**
+1. Added `with_plugins` and `clean_db` fixtures for test isolation
+2. Changed call_action to pass user context:
+   ```python
+   resource = helpers.call_action(
+       'resource_create', 
+       {'user': user['name']},
+       package_id=dataset["id"],
+       ...
+   )
+   ```
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_giftless_backend.py`: Lines 53-82
+
+### Additional Investigation: test_giftless_resource_create Skip
+
+**Original Skip Reason:**
+```python
+@pytest.mark.skip(reason="Issue #24")  # Referenced ckanext-authz-service issue
+```
+
+**Investigation Results:**
+1. GitHub issue #24 in ckanext-authz-service was **CLOSED as completed** on May 20, 2021
+2. The fix was merged via:
+   - PR #25 in ckanext-authz-service (allows passing context to authorizer callbacks)
+   - PR #59 in ckanext-blob-storage (supports context as kwarg)
+   - PR #131 in ckanext-unaids (upgraded authz-service and blob-storage dependencies)
+
+**Attempted to Enable Test - Additional Fixes Applied:**
+1. Added `scheming_datasets` plugin and presets configuration
+2. Added `ckanext.authz_service.jwt_algorithm=none` config
+3. Added `ckanext.blob_storage.storage_service_url=none` config  
+4. Changed `from six import StringIO` → `from io import BytesIO` (Python 3)
+5. Changed `StringIO(b'...')` → `BytesIO(b'...')` for binary data
+
+**Current Failure - Infrastructure Issue:**
+```
+requests.exceptions.MissingSchema: Invalid URL 'none/.../objects/batch': No scheme supplied.
+```
+
+**Conclusion:**
+- The original code issue (#24) IS FIXED in the codebase
+- The test now fails because it's an **integration test** requiring a running giftless server
+- Re-added skip with updated reason explaining the actual situation:
+  ```python
+  @pytest.mark.skip(reason=(
+      "Integration test requires running giftless server. "
+      "Original issue #24 (context passing) was fixed in ckanext-authz-service PR#25 (May 2021). "
+      "Test now fails due to missing giftless infrastructure, not code issues."
+  ))
+  ```
+
+**Test Results After Fix:**
+- test_giftless_backend.py: **1 passed, 1 skipped** (was 1 failed)
+- The skipped test is intentionally marked with `@pytest.mark.skip`
+
+**Result:**
+✅ FIXED - test_giftless_backend.py is now fully passing
+
+---
+
+## Current Test Status (After Batch 13) - MIGRATION COMPLETE 🎉
+
+### ✅ All Test Files Passing (13 files)
 | File | Tests | Batch |
 |------|-------|-------|
 | test_validators.py | 17 | 2 |
@@ -1358,8 +1433,45 @@ ckanext.scheming.errors.SchemingException: preset 'locked' not defined
 | test_blueprints.py | 7 | 10 |
 | test_helpers.py | 3 | 11 |
 | test_plugin.py | 14 | 12 |
+| test_giftless_backend.py | 1 (+1 skipped) | 13 |
 
-### ⚠️ Remaining Failures (1 file)
-| File | Status | Priority |
-|------|--------|----------|
-| test_giftless_backend.py | 0 passed, 1 failed, 1 error | LOW |
+**Total: 160 tests passing, 1 intentionally skipped**
+
+---
+
+## Summary of Major CKAN 2.11 Migration Patterns
+
+### 1. Activity Plugin User Context
+All `call_action` calls that create or modify data (packages, resources, organizations, users) now require a `user` key in the context dict.
+
+**Pattern:**
+```python
+# Before (CKAN 2.10)
+call_action('resource_create', **resource)
+
+# After (CKAN 2.11)
+call_action('resource_create', {'user': user['name']}, **resource)
+```
+
+### 2. IResourceController Method Renames
+Interface methods were renamed for clarity:
+- `before_create` → `before_resource_create`
+- `before_update` → `before_resource_update`
+- `before_show` → `before_resource_show`
+- New: `after_resource_update` for resource-specific callbacks
+
+### 3. Flask API Changes
+- `_request_ctx_stack` removed → use `flask.g` for request-scoped storage
+
+### 4. SQLAlchemy 2.0 Compatibility
+- `Table.exists()` requires engine parameter: `Table.exists(bind=engine)`
+- `Table.create()` requires engine parameter: `Table.create(bind=engine)`
+
+### 5. Test Fixtures
+- `clean_db` fixture required for test isolation (database cleaned between tests)
+- `with_plugins` fixture required when tests depend on plugin infrastructure
+- Scheming config markers needed for custom dataset types
+
+### 6. Factory-generated Values
+- User emails are now factory-generated (random), not hardcoded
+- Must use actual fixture values instead of hardcoded expectations
