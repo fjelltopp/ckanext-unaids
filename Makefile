@@ -1,4 +1,4 @@
-.PHONY: help setup test test-fast test-file shell up down restart logs clean status
+.PHONY: help setup test test-fast test-file shell up down restart rebuild logs clean status
 
 # Default target
 help:
@@ -11,6 +11,7 @@ help:
 	@echo "  make up          - Start services"
 	@echo "  make down        - Stop services"
 	@echo "  make restart     - Restart services"
+	@echo "  make rebuild     - Rebuild and restart containers"
 	@echo "  make logs        - Show container logs"
 	@echo "  make status      - Show service status"
 	@echo "  make clean       - Stop and remove all containers/volumes"
@@ -54,6 +55,16 @@ down:
 restart:
 	@docker-compose -f docker-compose.test.yml restart
 	@echo "Services restarted."
+
+# Rebuild and restart containers
+rebuild:
+	@echo "Stopping services..."
+	@docker-compose -f docker-compose.test.yml down
+	@echo "Rebuilding containers..."
+	@docker-compose -f docker-compose.test.yml build --no-cache
+	@echo "Starting services..."
+	@docker-compose -f docker-compose.test.yml up -d
+	@echo "Rebuild complete. Run 'make status' to check."
 
 # Show logs
 logs:

@@ -58,12 +58,41 @@ ImportError: cannot import name '_request_ctx_stack' from 'flask'
 
 ## Current Status
 
-**Remaining Collection Errors: 5**
-1. test_blueprints.py - numpy/pandas binary incompatibility
-2. test_dataset_releases.py - nose framework deprecated
-3. test_dataset_transfer.py - mock module missing
-4. test_plugin.py - mock module missing
-5. test_validators.py - mock module missing
+**Remaining Collection Errors: 4**
+1. test_dataset_releases.py - nose framework deprecated
+2. test_dataset_transfer.py - mock module missing
+3. test_plugin.py - mock module missing
+4. test_validators.py - mock module missing
 
 **Next Issue:**
-Issue 2: numpy/pandas binary incompatibility
+Issue 3: nose framework deprecated
+
+---
+
+### Issue 2: numpy/pandas binary incompatibility
+
+**Error Message:**
+```
+ValueError: numpy.dtype size changed, may indicate binary incompatibility. Expected 96 from C header, got 88 from PyObject
+```
+
+**Root Cause:**
+- pandas 2.0.3 was compiled against numpy<2.0
+- Docker container has numpy 2.x installed
+- Binary ABI mismatch between pandas build and current numpy version
+
+**Solution Applied:**
+- Updated pandas from 2.0.3 to 2.2.0 in requirements.txt
+- pandas 2.2.0 supports numpy 2.x and was built against it
+
+**Files Modified:**
+- `requirements.txt`: Line 6 - Updated pandas version
+
+**Test Results After Fix:**
+- Collection errors: 4 (down from 5)
+- test_blueprints.py: ✅ FIXED - No longer has numpy/pandas error
+- Coverage improved: test_blueprints.py 9% → 49%
+- Total collected tests increased: 96 → 103 (test_blueprints.py now loading)
+
+**Result:**
+✅ FIXED
