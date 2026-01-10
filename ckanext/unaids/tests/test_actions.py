@@ -15,11 +15,16 @@ log = logging.getLogger(__name__)
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids blob_storage scheming_datasets')
-@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
+@pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+@pytest.mark.ckan_config('ckanext.unaids.schema_directory', '/srv/app/src/ckanext-unaids/ckanext/unaids/tests/test_schemas')
+@pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 class TestGetTableSchema(object):
 
     def test_schema_returned_successfully(self, ):
-        dataset = factories.Dataset()
+        user = factories.Sysadmin()
+        org = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
+        dataset = factories.Dataset(owner_org=org['id'])
         resource = factories.Resource(
             package_id=dataset['id'],
             schema='non_existant_schema'
@@ -30,7 +35,9 @@ class TestGetTableSchema(object):
         assert response == {}
 
     def test_empty_dict_returned_for_no_schema(self, ):
-        dataset = factories.Dataset()
+        user = factories.Sysadmin()
+        org = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
+        dataset = factories.Dataset(owner_org=org['id'])
         resource = factories.Resource(
             package_id=dataset['id'],
             schema='non_existant_schema'
@@ -62,7 +69,8 @@ class TestFormatGuess(object):
         ('art.csv', 'text/csv', 'CSV'),
         ('anc.xls', 'application/vnd.ms-excel', 'XLS'),
         ('country_regions.geojson', 'application/geo+json', 'GeoJSON'),
-        ('spectrum_file.pjnz', 'application/pjnz', 'PJNZ'),
+        # CKAN 2.11 returns mimetype as format for custom types like .pjnz
+        ('spectrum_file.pjnz', 'application/pjnz', 'application/pjnz'),
         ('no_file_extension', None, None),
         ('', None, None),
     ])
@@ -88,11 +96,15 @@ class TestUserShowMe(object):
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
-@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
+@pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+@pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 class TestPopulateDataDictionary(object):
 
     def test_expected_use(self, mocker):
-        dataset = factories.Dataset()
+        user = factories.Sysadmin()
+        org = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
+        dataset = factories.Dataset(owner_org=org['id'])
         resource = factories.Resource(
             package_id=dataset['id'],
             schema='test_schema',
@@ -157,15 +169,20 @@ class TestUserAffiliation(object):
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
-@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
+@pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+@pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 class TestPackageCreate():
 
     def test_should_complain_with_exception_when_dataset_type_invalid(self):
-        organization = factories.Organization()
+        user = factories.Sysadmin()
+        organization = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
+        context = {'user': user['name'], 'ignore_auth': False}
         exception_message = "Type 'baad-type' is invalid, valid types are"
         with pytest.raises(toolkit.ValidationError, match=exception_message):
             call_action(
                 'package_create',
+                context,
                 name="some-name",
                 type="baad-type",
                 owner_org=organization['name'],
@@ -173,9 +190,12 @@ class TestPackageCreate():
             )
 
     def test_create_dataset_without_type_creates_one_with_default_type_of_dataset(self):
-        organization = factories.Organization()
+        user = factories.Sysadmin()
+        organization = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
+        context = {'user': user['name'], 'ignore_auth': False}
         dataset = call_action(
             'package_create',
+            context,
             name="some-name",
             owner_org=organization['name'],
             title="Dataset without type"
@@ -184,9 +204,12 @@ class TestPackageCreate():
         assert dataset["type"] == "dataset"
 
     def test_create_dataset_with_valid_type(self):
-        organization = factories.Organization()
+        user = factories.Sysadmin()
+        organization = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
+        context = {'user': user['name'], 'ignore_auth': False}
         dataset = call_action(
             'package_create',
+            context,
             name="some-name",
             type="test-schema",
             title="Dataset with valid type",

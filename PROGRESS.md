@@ -969,3 +969,48 @@ ckan.logic.ValidationError: None - {'owner_org': ['An organization must be...
 
 **Result:**
 ✅ FIXED - test_logic.py is now fully passing
+
+---
+
+## Batch 8: test_actions.py - Organization, Schema Directory, and Activity Context Fixes
+
+### Issues Fixed:
+
+**1. Organization Ownership Required for Datasets**
+```
+ckan.logic.ValidationError: None - {'owner_org': ['An organization must be...
+```
+Same issue as previous batches - CKAN 2.11 requires organization ownership.
+
+**2. Missing schema_directory Config**
+```
+KeyError: 'ckanext.unaids.schema_directory'
+```
+Tests needing schema directory config didn't have the config marker.
+
+**3. Activity Plugin User Context Missing**
+```
+ckan.logic.ValidationError: None - {'user_id': ['User not found']}
+```
+CKAN 2.11 activity subscriptions require user context in call_action.
+
+**4. Format Guess Behavior Change**
+```
+AssertionError: assert 'application/pjnz' == 'PJNZ'
+```
+CKAN 2.11 returns mimetype as format for custom file types.
+
+**Solutions Applied:**
+1. Added org/user hierarchy to TestGetTableSchema and TestPopulateDataDictionary
+2. Added `ckanext.unaids.schema_directory` config marker to TestGetTableSchema
+3. Added user context to TestPackageCreate tests
+4. Updated format_guess test expectation for .pjnz files
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_actions.py`: Multiple test classes updated
+
+**Test Results After Fix:**
+- test_actions.py: **18 passed, 0 failed** (was 12 passed, 6 failed)
+
+**Result:**
+✅ FIXED - test_actions.py is now fully passing
