@@ -10,7 +10,6 @@ from ckanext.versions.logic.dataset_version_action import (
     dataset_version_list,
 )
 from ckanext.versions.tests import get_context
-from nose.tools import assert_equals, assert_in, assert_not_in
 from ckanext.unaids.blueprints.unaids_dataset_releases import (
     AUTHORIZATION_ERROR,
     RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR,
@@ -34,11 +33,8 @@ def assert_releases_are_exactly(user, dataset_id, expected_releases):
     releases = dataset_version_list(
         get_context(user), {'dataset_id': dataset_id}
     )
-    assert_equals(len(releases), len(expected_releases))
-    assert_equals(
-        sorted([x['name'] for x in releases]),
-        sorted([x['name'] for x in expected_releases])
-    )
+    assert len(releases) == len(expected_releases)
+    assert sorted([x['name'] for x in releases]) == sorted([x['name'] for x in expected_releases])
 
 
 @pytest.mark.usefixtures('with_plugins')
@@ -74,7 +70,7 @@ class TestDatasetReleaseCreateAndEdit(object):
         release = {'name': 'my-new-release', 'notes': 'example'}
         response = self._create_or_edit(app, user, dataset, release)
         flash_message = self._get_flash_message(response)
-        assert_in('Release {} added'.format(release['name']), flash_message)
+        assert 'Release {} added'.format(release['name']) in flash_message
         assert_releases_are_exactly(user, dataset['id'], releases + [release])
 
     def test_create_with_invalid_user(self, app):
@@ -85,7 +81,7 @@ class TestDatasetReleaseCreateAndEdit(object):
             app, user_2, dataset, release
         )
         flash_message = self._get_flash_message(response)
-        assert_in(AUTHORIZATION_ERROR, flash_message)
+        assert AUTHORIZATION_ERROR in flash_message
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
     def test_create_with_existing_activity_id(self, app):
@@ -97,7 +93,7 @@ class TestDatasetReleaseCreateAndEdit(object):
             activity_id=releases[0]['activity_id']
         )
         flash_message = self._get_flash_message(response)
-        assert_in(RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR, flash_message)
+        assert RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR in flash_message
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_create_with_existing_release_name(self, app):
@@ -108,7 +104,7 @@ class TestDatasetReleaseCreateAndEdit(object):
             app, user, dataset, release
         )
         form_errors = self._get_form_errors(response)
-        assert_in(RELEASE_NAME_NOT_UNIQUE_ERROR, form_errors)
+        assert RELEASE_NAME_NOT_UNIQUE_ERROR in form_errors
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_edit_with_valid_user(self, app):
@@ -120,8 +116,8 @@ class TestDatasetReleaseCreateAndEdit(object):
             app, user, dataset, updated_release
         )
         flash_message = self._get_flash_message(response)
-        assert_in('Release {} updated'.format(
-            updated_release['name']), flash_message)
+        assert 'Release {} updated'.format(
+            updated_release['name']) in flash_message
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_edit_with_invalid_user(self, app):
@@ -133,7 +129,7 @@ class TestDatasetReleaseCreateAndEdit(object):
             app, user_2, dataset, updated_release
         )
         flash_message = self._get_flash_message(response)
-        assert_in(AUTHORIZATION_ERROR, flash_message)
+        assert AUTHORIZATION_ERROR in flash_message
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
@@ -161,10 +157,7 @@ class TestDatasetReleaseDelete(object):
         dataset, releases = create_dataset_with_releases(user)
         deleted_release = releases.pop()
         flash_message = self._delete(app, user, dataset, deleted_release)
-        assert_in(
-            'Release {} deleted'.format(deleted_release['name']),
-            flash_message
-        )
+        assert 'Release {} deleted'.format(deleted_release['name']) in flash_message
         assert_releases_are_exactly(user, dataset['id'], releases)
 
     def test_delete_with_invalid_user(self, app):
@@ -174,7 +167,7 @@ class TestDatasetReleaseDelete(object):
         flash_message = self._delete(
             app, user_2, dataset, deleted_release
         )
-        assert_in(AUTHORIZATION_ERROR, flash_message)
+        assert AUTHORIZATION_ERROR in flash_message
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
@@ -202,10 +195,7 @@ class TestDatasetReleaseRestore(object):
         dataset, releases = create_dataset_with_releases(user)
         restored_release = releases[-1].copy()
         flash_message = self._restore(app, user, dataset, restored_release)
-        assert_in(
-            'Release {} restored'.format(restored_release['name']),
-            flash_message
-        )
+        assert 'Release {} restored'.format(restored_release['name']) in flash_message
         restored_release['name'] = 'restored_{}'.format(
             restored_release['name'])
         assert_releases_are_exactly(
@@ -218,7 +208,7 @@ class TestDatasetReleaseRestore(object):
         flash_message = self._restore(
             app, user_2, dataset, restored_release
         )
-        assert_in(AUTHORIZATION_ERROR, flash_message)
+        assert AUTHORIZATION_ERROR in flash_message
         assert_releases_are_exactly(user_1, dataset['id'], releases)
 
 
@@ -230,34 +220,34 @@ class TestDatasetReleaseListView(object):
         user = User()
         dataset, releases = create_dataset_with_releases(user, 0)
         response = get_listview(app, user, dataset)
-        assert_in('No releases have been created yet', response.body)
-        assert_not_in('ReleasesTableContainer', response.body)
+        assert 'No releases have been created yet' in response.body
+        assert 'ReleasesTableContainer' not in response.body
 
     def test_releases_are_listed_to_owners(self, app):
         user = User()
         dataset, releases = create_dataset_with_releases(user)
         response = get_listview(app, user, dataset)
         for release in releases:
-            assert_in(release['name'], response.body)
+            assert release['name'] in response.body
 
     def test_releases_are_listed_to_outsiders(self, app):
         user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         response = get_listview(app, user_2, dataset)
         for release in releases:
-            assert_in(release['name'], response.body)
+            assert release['name'] in response.body
 
     def test_add_release_button_is_shown_to_owners(self, app):
         user = User()
         dataset, releases = create_dataset_with_releases(user)
         response = get_listview(app, user, dataset)
-        assert_in('Add Release', response.body)
+        assert 'Add Release' in response.body
 
     def test_add_release_button_is_not_shown_to_outsiders(self, app):
         user_1, user_2 = User(), User()
         dataset, releases = create_dataset_with_releases(user_1)
         response = get_listview(app, user_2, dataset)
-        assert_not_in('Add Release', response.body)
+        assert 'Add Release' not in response.body
 
 
 @pytest.mark.usefixtures('with_plugins')
@@ -284,16 +274,16 @@ class TestDatasetRead(object):
         response = self._get_dataset_release_sidebar(
             app, user, dataset, activity_id=release['activity_id']
         )
-        assert_in(release['name'], response)
-        assert_in(release['notes'], response)
-        assert_not_in('Create Release', response)
+        assert release['name'] in response
+        assert release['notes'] in response
+        assert 'Create Release' not in response
 
     def test_when_no_release_for_dataset(self, app):
         user = User()
         dataset, releases = create_dataset_with_releases(user)
         response = self._get_dataset_release_sidebar(app, user, dataset)
-        assert_in('no release associated', response)
-        assert_in('Add Release', response)
+        assert 'no release associated' in response
+        assert 'Add Release' in response
 
     def test_when_on_latest_version_of_dataset_has_release(self, app):
         user = User()
@@ -307,6 +297,6 @@ class TestDatasetRead(object):
             }
         )
         response = self._get_dataset_release_sidebar(app, user, dataset)
-        assert_in(release['name'], response)
-        assert_in(release['notes'], response)
-        assert_not_in('Create Release', response)
+        assert release['name'] in response
+        assert release['notes'] in response
+        assert 'Create Release' not in response
