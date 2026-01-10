@@ -103,6 +103,7 @@ def test_update_filename_in_link_resource_url(link_url):
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
 @pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
 @pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+@pytest.mark.ckan_config('ckanext.unaids.schema_directory', '/srv/app/src/ckanext-unaids/ckanext/unaids/tests/test_schemas')
 @pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 class TestAutoPopulateDataDictionaries():
 
@@ -124,11 +125,13 @@ class TestAutoPopulateDataDictionaries():
         context = {}
         user = factories.Sysadmin()
         org = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=org['id'])
+        dataset = factories.Dataset(owner_org=org['id'], type='test-schema')
         resource = factories.Resource(
             package_id=dataset['id'],
             schema='test_schema'
         )
+        # CKAN 2.11: Schema field may be in extras, ensure it's at top level
+        resource['schema'] = 'test_schema'
         mock_load_json_schema = mocker.patch(
             'ckanext.unaids.logic.validation_load_json_schema',
             return_value=None
@@ -141,11 +144,13 @@ class TestAutoPopulateDataDictionaries():
         context = {}
         user = factories.Sysadmin()
         org = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=org['id'])
+        dataset = factories.Dataset(owner_org=org['id'], type='test-schema')
         resource = factories.Resource(
             package_id=dataset['id'],
             schema='test_schema'
         )
+        # CKAN 2.11: Schema field may be in extras, ensure it's at top level
+        resource['schema'] = 'test_schema'
         mock_load_json_schema = mocker.patch(
             'ckanext.unaids.logic.validation_load_json_schema',
             return_value={

@@ -33,6 +33,11 @@
       "upload_label": "Photo"
     },
     {
+      "field_name": "schema",
+      "label": "Schema",
+      "validators": "ignore_missing"
+    },
+    {
       "field_name": "camels_in_photo",
       "label": "Camels in Photo",
       "validators": "ignore_missing int_validator",

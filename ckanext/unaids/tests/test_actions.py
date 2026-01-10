@@ -98,13 +98,14 @@ class TestUserShowMe(object):
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
 @pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
 @pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+@pytest.mark.ckan_config('ckanext.unaids.schema_directory', '/srv/app/src/ckanext-unaids/ckanext/unaids/tests/test_schemas')
 @pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 class TestPopulateDataDictionary(object):
 
     def test_expected_use(self, mocker):
         user = factories.Sysadmin()
         org = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=org['id'])
+        dataset = factories.Dataset(owner_org=org['id'], type='test-schema')
         resource = factories.Resource(
             package_id=dataset['id'],
             schema='test_schema',

@@ -1473,5 +1473,59 @@ Interface methods were renamed for clarity:
 - Scheming config markers needed for custom dataset types
 
 ### 6. Factory-generated Values
+
+### 7. Resource Extra Fields Not at Top Level
+In CKAN 2.11, resource fields not defined in scheming `resource_fields` may be stored in `__extras` with `Missing` values. When testing logic functions directly:
+
+**Pattern:**
+```python
+# Before (CKAN 2.10) - schema was at top level in resource dict
+resource = factories.Resource(package_id=dataset['id'], schema='test_schema')
+logic.populate_data_dictionary_from_schema(context, resource)
+
+# After (CKAN 2.11) - manually ensure field is at top level
+resource = factories.Resource(package_id=dataset['id'], schema='test_schema')
+resource['schema'] = 'test_schema'  # Ensure schema is at top level
+logic.populate_data_dictionary_from_schema(context, resource)
+```
+
+---
+
+## Batch 14: Missing Config and Extra Fields Fixes
+
+### Issue 1: Missing schema_directory config
+**Error:**
+```
+KeyError: 'ckanext.unaids.schema_directory'
+```
+
+**Solution:**
+Added `ckanext.unaids.schema_directory` config marker to test classes:
+```python
+@pytest.mark.ckan_config('ckanext.unaids.schema_directory', '/srv/app/src/ckanext-unaids/ckanext/unaids/tests/test_schemas')
+```
+
+### Issue 2: Dataset type for scheming resource fields
+Resources created under wrong dataset type didn't get schema field from scheming.
+
+**Solution:**
+Changed `factories.Dataset(owner_org=org['id'])` to `factories.Dataset(owner_org=org['id'], type='test-schema')` to use the correct scheming dataset type.
+
+### Issue 3: Resource extras not at top level
+CKAN 2.11 doesn't promote custom resource fields to top level of resource dict when not defined in scheming.
+
+**Solution:**
+Manually set the schema field after resource creation:
+```python
+resource['schema'] = 'test_schema'
+```
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_actions.py`: Added schema_directory config, test-schema dataset type
+- `ckanext/unaids/tests/test_logic.py`: Added schema_directory config, test-schema dataset type, manual schema field
+- `ckanext/unaids/tests/test_scheming_schemas/test_schema.json`: Added schema resource field
+
+**Test Results:**
+- All 160 tests passing, 1 skipped (giftless integration test)
 - User emails are now factory-generated (random), not hardcoded
 - Must use actual fixture values instead of hardcoded expectations
