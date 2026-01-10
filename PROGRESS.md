@@ -445,3 +445,64 @@ sqlalchemy.exc.ProgrammingError: column activity.permission_labels does not exis
 
 **Result:**
 ✅ FIXED - Activity plugin permission_labels column issue resolved
+
+---
+
+## Batch 3: Test Factory vs Action Issues
+
+### Issue 11: factories.Dataset() doesn't create activities
+
+**Error Message:**
+```
+ckan.logic.NotFound: Activity not found
+```
+
+**Root Cause:**
+- 5 tests in test_actions_dataset_lock.py failing with "Activity not found"
+- Tests use `factories.Dataset()` to create datasets
+- Factories create database records directly without triggering actions
+- Activities are only created when actual CKAN actions are called
+- `dataset_version_create` action queries for activities but finds none
+- Similar to CKAN 2.11 factory behavior documented in ckan2.11-specific.md
+
+**Solution Applied:**
+- Use `factories.Dataset()` to create dataset (factories are faster and cleaner)
+- Call `package_patch` after factory to trigger activity creation
+- **Added `activity` plugin to ckan.plugins config** - activities won't be created without it!
+- Pattern from PROGRESS_FORK.md: `call_action('package_patch', context={'user': user['name']}, id=dataset['id'], notes='Trigger activity')`
+- Updated both `locked_dataset` fixture and `test_version_already_created` method
+- Added activity plugin to both TestDatasetLock and TestDatasetUnlock test classes
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_actions_dataset_lock.py`: Lines 8-24, 27, 36-58, 61
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+---
+
+### Issue 12: NameConflict with activity plugin's package_activity_list
+
+**Error Message:**
+```
+ckan.logic.NameConflict: The action 'package_activity_list' is already implemented in 'unaids'
+```
+
+**Root Cause:**
+- After adding `activity` plugin to test config (Issue 11), new error appeared
+- Both unaids extension and activity plugin implement `package_activity_list` action
+- CKAN doesn't allow two plugins to provide the same action unless one uses @chained_action
+- Unaids implementation was standalone, not chained
+- This causes NameConflict when activity plugin loads
+
+**Solution Applied:**
+- Changed `package_activity_list` to use `@t.chained_action` decorator (line 136)
+- Now chains the activity plugin's implementation instead of replacing it
+- Calls `original_action(context, data_dict)` to get activities from activity plugin
+- Then adds release names as before
+- Simplified implementation - no more direct database queries needed
+
+**Files Modified:**
+- `ckanext/unaids/actions.py`: Lines 136-161
+
+**Result:**
+⏳ PENDING - Waiting for test verification

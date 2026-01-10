@@ -8,7 +8,15 @@ from ckan.plugins import toolkit
 @pytest.fixture
 def locked_dataset():
     user = factories.User(sysadmin=True)
-    dataset = factories.Dataset(type="test-schema")
+    org = factories.Organization()
+    # Create dataset with factory first
+    dataset = factories.Dataset(owner_org=org['id'], type='test-schema')
+    # Trigger activity creation with package_patch (factories don't create activities)
+    call_action('package_patch', 
+                context={'user': user['name']}, 
+                id=dataset['id'], 
+                notes='Trigger activity')
+    
     context = get_context(user['name'])
     context['auth_user_obj'] = context['model'].User.get(user['name'])
     call_action('dataset_lock', context, id=dataset['id'])
@@ -16,7 +24,7 @@ def locked_dataset():
     return locked_dataset
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets versions')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets activity versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetLock(object):
     def test_metadata_updated(self, locked_dataset):
@@ -28,7 +36,15 @@ class TestDatasetLock(object):
 
     def test_version_already_created(self):
         user = factories.User(sysadmin=True)
-        dataset = factories.Dataset(type="test-schema")
+        org = factories.Organization()
+        # Create dataset with factory first
+        dataset = factories.Dataset(owner_org=org['id'], type='test-schema')
+        # Trigger activity creation with package_patch (factories don't create activities)
+        call_action('package_patch',
+                    context={'user': user['name']},
+                    id=dataset['id'],
+                    notes='Trigger activity')
+        
         context = get_context(user['name'])
         context['auth_user_obj'] = context['model'].User.get(user['name'])
         call_action(
@@ -43,7 +59,7 @@ class TestDatasetLock(object):
         assert not dataset["locked"], "Dataset shouldn't be locked if release not created"
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets versions')
+@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets activity versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetUnlock(object):
     def test_metadata_updated(self, locked_dataset):

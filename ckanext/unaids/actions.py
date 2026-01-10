@@ -133,38 +133,30 @@ def dataset_version_show(original_action, context, data_dict):
         return original_action(context, data_dict)
 
 
-@logic.side_effect_free
-def package_activity_list(context, data_dict):
+@t.chained_action
+@t.side_effect_free
+def package_activity_list(original_action, context, data_dict):
     """Get activity list for a package with release names added.
     
-    CKAN 2.11 removed package_activity_list action, but activity data
-    can still be queried. This reimplements it for backward compatibility.
+    CKAN 2.11 moved package_activity_list to activity plugin.
+    This chains it to add release names to activities.
     """
-    from ckan.logic import get_action as core_get_action
-    from ckan.model import Session, Activity, Package
+    # Get activities from the activity plugin
+    activity_list = original_action(context, data_dict)
     
     dataset_id = data_dict['id']
     
-    # Get package to ensure it exists
-    pkg = Package.get(dataset_id)
-    if not pkg:
-        raise logic.NotFound('Package not found')
-    
-    # Get activities for this package
-    activities = Session.query(Activity).filter(
-        Activity.object_id == pkg.id
-    ).order_by(Activity.timestamp.desc()).all()
-    
-    activity_list = [activity.as_dict() for activity in activities]
-    
-    # Add release names
-    releases_list = t.get_action('dataset_version_list')(
-        context,
-        {'dataset_id': dataset_id}
-    )
-    activity_to_release_name = {r['activity_id']: r['name'] for r in releases_list}
-    for activity in activity_list:
-        activity['release_name'] = activity_to_release_name.get(activity['id'])
+    # Add release names if versions plugin available
+    try:
+        releases_list = t.get_action('dataset_version_list')(
+            context,
+            {'dataset_id': dataset_id}
+        )
+        activity_to_release_name = {r['activity_id']: r['name'] for r in releases_list}
+        for activity in activity_list:
+            activity['release_name'] = activity_to_release_name.get(activity['id'])
+    except (logic.NotFound, KeyError):
+        pass
     
     return activity_list
 
