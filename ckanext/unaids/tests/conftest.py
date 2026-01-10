@@ -8,19 +8,49 @@ from ckanext.validation.model import tables_exist, create_tables
 from ckanext.ytp_request.tests import ytp_request_db_setup
 
 
+# SQL for creating ckanext_pages table (from ckanext-pages migrations)
+# This is needed because clean_db wipes the database and migrate_db_for("pages") 
+# requires the pages plugin to be loaded, but fixtures run before plugin markers
+CKANEXT_PAGES_TABLE_SQL = """
+CREATE TABLE IF NOT EXISTS ckanext_pages (
+    id TEXT PRIMARY KEY,
+    title TEXT DEFAULT '',
+    name TEXT DEFAULT '',
+    content TEXT DEFAULT '',
+    lang TEXT DEFAULT '',
+    "order" TEXT DEFAULT '',
+    private BOOLEAN DEFAULT TRUE,
+    group_id TEXT DEFAULT NULL,
+    user_id TEXT DEFAULT '',
+    publish_date TIMESTAMP,
+    page_type TEXT,
+    created TIMESTAMP,
+    modified TIMESTAMP,
+    extras TEXT DEFAULT '{}',
+    revisions JSONB
+);
+"""
+
+
 @pytest.fixture
 def clean_db_with_migrations(clean_db):
     """
-    Extends clean_db to add CKAN 2.11 activity plugin migrations.
+    Extends clean_db to add CKAN 2.11 plugin migrations.
     
     The clean_db fixture rebuilds the database fresh for test isolation,
-    which wipes out plugin migrations. This fixture adds the permission_labels
-    column that the activity plugin requires in CKAN 2.11.
+    which wipes out plugin migrations. This fixture adds:
+    - permission_labels column required by CKAN 2.11 activity plugin
+    - ckanext_pages table required by ckanext-pages plugin
+    
+    Note: We use SQL instead of migrate_db_for() because the pages plugin
+    isn't loaded when fixtures run (fixtures execute before test markers).
     """
     # Add permission_labels column to activity table (required by CKAN 2.11 activity plugin)
     model.Session.execute(
         "ALTER TABLE activity ADD COLUMN IF NOT EXISTS permission_labels text[]"
     )
+    # Create ckanext_pages table (required by ckanext-pages plugin)
+    model.Session.execute(CKANEXT_PAGES_TABLE_SQL)
     model.Session.commit()
 
 
