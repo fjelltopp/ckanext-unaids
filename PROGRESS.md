@@ -127,6 +127,36 @@ ImportError: cannot import name '_identify_user_default' from 'ckan.views'
 - `ckanext/unaids/plugin.py`: Lines 16, 65-66, 277-278
 
 **Result:**
+✅ FIXED - But revealed another issue (ReclineView removed)
+
+---
+
+### Issue 7: ckanext-reclineview removed in CKAN 2.11
+
+**Error Message:**
+```
+ModuleNotFoundError: No module named 'ckanext.reclineview'
+```
+
+**Root Cause:**
+- After fixing _identify_user_default, plugin.py tries to import ReclineViewBase
+- The Recline-based view plugins were completely removed in CKAN 2.11
+- ReclineViewBase from ckanext.reclineview.plugin no longer exists
+- CKAN 2.11 recommends using DataTables-based views instead
+
+**Solution Applied:**
+- Removed import of ReclineViewBase from ckanext.reclineview.plugin (line 46)
+- Changed UNAIDSReclineView to extend p.SingletonPlugin instead of ReclineViewBase
+- Implemented IResourceView interface directly
+- Added required methods:
+  - view_template() - returns "datatables/datatables_view.html"
+  - setup_template_variables() - sets up resource and view JSON data
+- Kept existing info() and can_view() methods for compatibility
+
+**Files Modified:**
+- `ckanext/unaids/plugin.py`: Lines 46, 304-342
+
+**Result:**
 ⏳ PENDING - Waiting for test verification
 
 ---

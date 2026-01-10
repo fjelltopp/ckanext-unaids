@@ -43,7 +43,6 @@ import ckanext.unaids.actions as actions
 import ckanext.unaids.auth_logic as auth_logic
 from ckanext.unaids import auth, licenses, command, logic
 from ckanext.unaids.blueprints import blueprints
-from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
 from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
 from ckanext.datapusher.interfaces import IDataPusher
@@ -302,11 +301,12 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return app
 
 
-class UNAIDSReclineView(ReclineViewBase):
+class UNAIDSReclineView(p.SingletonPlugin):
     """
-    This override of the recline view plugin allows data explorers to be auto
-    created for geojson files.
+    CKAN 2.11: Recline view was removed, now using DataTables-based view.
+    This override allows data explorers to be auto created for geojson files.
     """
+    p.implements(p.IResourceView, inherit=True)
 
     def info(self):
         return {
@@ -331,6 +331,15 @@ class UNAIDSReclineView(ReclineViewBase):
             return resource_format.lower() in ["csv", "xls", "xlsx", "tsv", "geojson"]
         else:
             return False
+
+    def view_template(self, context, data_dict):
+        return "datatables/datatables_view.html"
+
+    def setup_template_variables(self, context, data_dict):
+        return {
+            "resource_json": toolkit.h.json.dumps(data_dict.get("resource")),
+            "resource_view_json": toolkit.h.json.dumps(data_dict.get("resource_view"))
+        }
 
 
 def _data_dict_is_resource(data_dict):
