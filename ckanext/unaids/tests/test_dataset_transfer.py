@@ -13,7 +13,10 @@ from ckanext.unaids.dataset_transfer.logic import (
 
 @pytest.mark.ckan_config('ckan.auth.allow_dataset_collaborators', True)
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions blob_storage pages')
-@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
+@pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+@pytest.mark.ckan_config('ckanext.blob_storage.storage_service_url', 'none')
+@pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 class TestDatasetTransfer(object):
 
     def test_collaborator_transfering_dataset(self, app):

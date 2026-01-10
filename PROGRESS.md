@@ -1014,3 +1014,69 @@ CKAN 2.11 returns mimetype as format for custom file types.
 
 **Result:**
 ✅ FIXED - test_actions.py is now fully passing
+---
+
+## Batch 9: test_dataset_transfer.py - Blueprint and Config Fixes
+
+### Issues Fixed:
+
+**1. test-schema Type Not Recognized**
+```
+ckan.logic.ValidationError: None - {'message': "Type 'test-schema' is invalid...
+```
+Same scheming configuration issue as other test files.
+
+**2. Collaborator Cannot Move Dataset Between Organizations**
+```
+ckan.logic.ValidationError: None - {'owner_org': ['You cannot move this dataset to another organization']}
+```
+In CKAN 2.11, the owner_org validator checks if the user has permission to move datasets between organizations, even with `ignore_auth: True`. When the context user was the collaborator, they didn't have this permission.
+
+**3. Missing blob_storage Config**
+```
+Configuration option 'ckanext.blob_storage.storage_service_url' is not set
+```
+After transfer redirect, template rendering requires blob_storage config.
+
+**Solutions Applied:**
+
+**Test File Changes:**
+- Added scheming config markers to TestDatasetTransfer class:
+  - `scheming.dataset_schemas` pointing to test schema
+  - `scheming.presets` with required presets
+- Added `clean_db_with_migrations` fixture
+- Added `ckanext.blob_storage.storage_service_url` config marker
+
+**Blueprint Source Code Fix:**
+- Modified `ckanext/unaids/blueprints/unaids_dataset_transfer.py` (lines 43-49)
+- Changed from empty string user to using site_user for package_update:
+  ```python
+  # Before (CKAN 2.9):
+  toolkit.get_action('package_update')({
+      'user': '',
+      'model': model,
+      'session': model.Session,
+      'ignore_auth': True
+  }, dataset)
+  
+  # After (CKAN 2.11):
+  site_user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
+  toolkit.get_action('package_update')({
+      'user': site_user['name'],
+      'model': model,
+      'session': model.Session,
+      'ignore_auth': True
+  }, dataset)
+  ```
+- Site user is a sysadmin, bypassing the collaborator org-move restriction
+- Also satisfies activity plugin user context requirement
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_dataset_transfer.py`: Lines 14-18
+- `ckanext/unaids/blueprints/unaids_dataset_transfer.py`: Lines 43-49
+
+**Test Results After Fix:**
+- test_dataset_transfer.py: **10 passed, 0 failed** (was 5 passed, 5 failed)
+
+**Result:**
+✅ FIXED - test_dataset_transfer.py is now fully passing

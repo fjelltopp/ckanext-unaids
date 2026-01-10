@@ -39,8 +39,11 @@ def process_dataset_transfer(dataset_id):
         'owner_org': dataset['org_to_allow_transfer_to'],
         'org_to_allow_transfer_to': None
     })
+    # CKAN 2.11: Use site user for package_update to bypass org move validation
+    # and satisfy activity plugin user context requirement
+    site_user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
     toolkit.get_action('package_update')({
-        'user': '',
+        'user': site_user['name'],
         'model': model,
         'session': model.Session,
         'ignore_auth': True
