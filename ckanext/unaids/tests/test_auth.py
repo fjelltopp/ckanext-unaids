@@ -16,7 +16,9 @@ log = logging.getLogger(__name__)
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')
-@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
+@pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+@pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 class TestAuth(object):
 
     def test_unaids_organization_update_valid(self, app):

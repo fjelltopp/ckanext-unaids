@@ -901,3 +901,34 @@ TypeError: can only concatenate str (not "NoneType") to str
 
 **Result:**
 ✅ FIXED - test_auth_logic.py is now fully passing
+
+---
+
+## Batch 6: test_auth.py - Scheming Config for test-schema Type
+
+### Issue: test-schema Type Not Recognized
+
+**Error Message:**
+```
+ckan.logic.ValidationError: None - {'message': "Type 'test-schema' is inval...
+```
+
+**Root Cause:**
+- Tests using `factories.Dataset(type="test-schema")` but scheming not configured
+- Class had `scheming_datasets` plugin but no scheming schema configuration
+- CKAN 2.11 requires explicit scheming configuration when plugins override defaults
+
+**Solution Applied:**
+- Added scheming config markers to TestAuth class:
+  - `scheming.dataset_schemas` pointing to test schema
+  - `scheming.presets` with required presets
+- Added `clean_db_with_migrations` fixture for clean database state
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_auth.py`: Lines 17-20
+
+**Test Results After Fix:**
+- test_auth.py: **12 passed, 0 failed** (was 4 passed, 8 failed)
+
+**Result:**
+✅ FIXED - test_auth.py is now fully passing
