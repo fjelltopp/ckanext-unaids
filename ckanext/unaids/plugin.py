@@ -274,16 +274,19 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             return
 
         # CKAN 2.11: User identification is handled automatically by middleware
-        # g.userobj is populated by the time this method is called
-        is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
+        # g.userobj may not be set yet during early request processing
+        # Use hasattr to safely check for userobj attribute
+        userobj = getattr(toolkit.g, 'userobj', None)
+        is_sysadmin = userobj and userobj.sysadmin
         substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
 
         if is_sysadmin and substitute_user_id:
             return auth.substitute_user(substitute_user_id)
 
     def after_saml2_login(self, resp, saml_attributes):
-        user_obj = toolkit.g.userobj
-        custom_user_profile_logic.read_saml_profile(user_obj, saml_attributes)
+        user_obj = getattr(toolkit.g, 'userobj', None)
+        if user_obj:
+            custom_user_profile_logic.read_saml_profile(user_obj, saml_attributes)
 
         return resp
 

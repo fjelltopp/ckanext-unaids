@@ -688,3 +688,64 @@ ckan.logic.NotFound: The action 'member_request_create' is not found for chained
 
 **Result:**
 ⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 18: g.userobj AttributeError during request identification
+
+**Error Message:**
+```
+AttributeError: '_Globals' object has no attribute 'userobj'
+```
+
+**Root Cause:**
+- `plugin.py identify()` method accesses `toolkit.g.userobj` directly
+- During early request processing in tests, `g.userobj` may not be set yet
+- CKAN 2.11 Flask g object doesn't have `userobj` as a fallback attribute
+- Similar issue in `after_saml2_login()` method
+
+**Solution Applied (based on PROGRESS_RESTRICTED.md pattern):**
+- Changed `toolkit.g.userobj` to `getattr(toolkit.g, 'userobj', None)`
+- Updated both `identify()` and `after_saml2_login()` methods
+- Safe access pattern avoids AttributeError when userobj not set
+
+**Files Modified:**
+- `ckanext/unaids/plugin.py`: Lines 277-281 - Use getattr for safe userobj access
+- `ckanext/unaids/plugin.py`: Lines 286-290 - Same fix in after_saml2_login
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 19: member_request_create chained action missing base action
+
+**Error Message:**
+```
+ckan.logic.NotFound: The action 'member_request_create' is not found for chained action
+```
+AND after attempted fix:
+```
+ckan.logic.NameConflict: The action 'member_request_create' is already implemented in 'ytp_request'
+```
+
+**Root Cause:**
+- `custom_user_profile/actions.py` uses `@toolkit.chained_action` for `member_request_create`
+- The base action is provided by `ytp_request` plugin
+- One test class (`test_helpers.py`) was missing `ytp_request` in `ckan.plugins` config
+- When plugin not loaded, chained action fails at load time
+
+**Solution Applied (proper fix - update all test configs):**
+- **Keep** `@toolkit.chained_action` decorator (it's the proper CKAN pattern)
+- **Keep** function signature as `(next_action, context, data_dict)`
+- **Add** `ytp_request` to ALL test classes that override `ckan.plugins`
+- Searched all test files: only `test_helpers.py` was missing `ytp_request`
+- Updated `test_helpers.py` line 6: Added `ytp_request` to plugin list
+
+**Files Modified:**
+- `ckanext/unaids/custom_user_profile/actions.py`: Restored `@toolkit.chained_action` decorator
+- `ckanext/unaids/plugin.py`: Reverted to simple action registration
+- `ckanext/unaids/tests/test_helpers.py`: Line 6 - Added `ytp_request` to plugin list
+
+**Result:**
+⏳ PENDING - Waiting for test verification
