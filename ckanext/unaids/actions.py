@@ -138,13 +138,12 @@ def dataset_version_show(original_action, context, data_dict):
 def package_activity_list(original_action, context, data_dict):
     """Get activity list for a package with release names added.
     
-    CKAN 2.11 moved package_activity_list to activity plugin.
-    This chains it to add release names to activities.
+    This chains the activity plugin's package_activity_list to add release names.
     """
-    # Get activities from the activity plugin
-    activity_list = original_action(context, data_dict)
-    
     dataset_id = data_dict['id']
+    
+    # Call the original action from activity plugin
+    activity_list = original_action(context, data_dict)
     
     # Add release names if versions plugin available
     try:

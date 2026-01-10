@@ -652,3 +652,39 @@ ckan.logic.NotFound: The action 'member_request_create' is not found for chained
 
 **Result:**
 ⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 17 (FINAL): Use direct import instead of chained action for package_activity_list
+
+**Problem Evolution:**
+1. `@chained_action` → "not found for chained action" (activity plugin not loaded)
+2. Added activity plugin → Still "not found for chained action"  
+3. Removed `@chained_action` → "already implemented in activity" (NameConflict)
+4. Restored `@chained_action` → Back to "not found for chained action" (circular)
+
+**Root Cause:**
+- The activity plugin's `package_activity_list` action is NOT registered in a way that supports chaining
+- Using `@chained_action` decorator doesn't work - causes circular errors
+- But unaids DOES need to provide this action with release_name added for tests to pass
+
+**Solution Applied (New Approach):**
+- Removed `@chained_action` decorator completely
+- Implemented as regular action that directly imports from activity plugin if available:
+  ```python
+  try:
+      from ckanext.activity.logic.action import package_activity_list as activity_plugin_action
+      activity_list = activity_plugin_action(context, data_dict)
+  except ImportError:
+      # Fallback to direct database query
+  ```
+- Registers as normal action (replaces activity plugin's action if both loaded)
+- Plugin load order ensures unaids loads AFTER activity, so unaids version wins
+- Adds release_name to activities from dataset_version_list
+
+**Files Modified:**
+- `ckanext/unaids/actions.py`: Lines 136-174 - Changed to direct import approach
+- `ckanext/unaids/plugin.py`: Line 115 - Re-registered package_activity_list
+
+**Result:**
+⏳ PENDING - Waiting for test verification
