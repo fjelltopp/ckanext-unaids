@@ -504,5 +504,151 @@ ckan.logic.NameConflict: The action 'package_activity_list' is already implement
 **Files Modified:**
 - `ckanext/unaids/actions.py`: Lines 136-161
 
+**Test Results After Fix:**
+- test_actions_dataset_lock TestDatasetLock: **3 tests PASSING** ✅
+- test_actions_dataset_lock TestDatasetUnlock: 3 tests failing (needs same fix)
+- Reduced errors in these specific tests from "Activity not found" to actual test logic
+
+**Result:**
+✅ PARTIAL SUCCESS - TestDatasetLock tests fixed, TestDatasetUnlock needs update
+
+**Summary of Batch 3:**
+- Issue 10: Activity permission_labels column → ✅ FIXED
+- Issue 11: Activities not created by factories → ✅ FIXED (partial - TestDatasetLock only)
+- Issue 12: NameConflict with activity plugin → ✅ FIXED
+
+**Current Status:**
+- Focus: Fix remaining 3 TestDatasetUnlock tests
+- Then address other test errors related to activity plugin configuration
+
+---
+
+### Issue 13: Activity plugin not enabled in test.ini
+
+**Error Message:**
+```
+ckan.logic.NotFound: The action 'package_activity_list' is not found for chained action
+```
+
+**Root Cause:**
+- After fixing NameConflict in Issue 12 by using `@chained_action` decorator
+- Chained actions require a base action to chain to
+- The `activity` plugin provides the base `package_activity_list` action  
+- But `activity` plugin was NOT configured in `test.ini`
+- When plugins load, CKAN looks for base action to chain but finds nothing
+- Similar to PROGRESS_BLOB_STORAGE.md Issue 10 - same root cause
+
+**Analysis:**
+- In CKAN 2.11, activity stream functionality moved from core to `activity` plugin
+- Extension uses scheming configs → needs `scheming_datasets` plugin
+- Extension uses authz_authorize action → needs `authz_service` plugin
+- Extension itself needs to be loaded → needs `unaids` plugin
+- Missing `ckan.plugins` line in test.ini meant no plugins were loaded
+
+**Solution Applied:**
+- Added `ckan.plugins` line to test.ini with required plugins
+- Plugin list: `activity scheming_datasets authz_service unaids`
+- This ensures all required plugin actions/hooks are available during tests
+- Based on proven solution from PROGRESS_BLOB_STORAGE.md Issue 10
+
+**Files Modified:**
+- `test.ini`: Line 13 - Added ckan.plugins configuration
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 14: SQLAlchemy 2.0 - UnboundExecutionError for dataset_transfer_request table
+
+**Error Message:**
+```
+sqlalchemy.exc.UnboundExecutionError: Table object 'dataset_transfer_request' is not bound to an Engine or Connection
+```
+
+**Root Cause:**
+- After fixing Issue 13 (activity plugin), tests now fail at plugin initialization
+- Error in `plugin.py` line 93 when calling `tables_exists()`
+- `DatasetTransferRequest.__table__.exists()` uses deprecated SQLAlchemy 1.x API
+- SQLAlchemy 2.0+ requires explicit engine/connection binding for table operations
+- The old `.exists(bind=engine)` method is deprecated and unreliable
+- CKAN 2.11 uses SQLAlchemy 2.0+
+- Similar issue documented in PROGRESS_OLD.md Issue 13
+
+**Solution Applied:**
+- Changed `tables_exists()` to use SQLAlchemy inspector API:
+  ```python
+  inspector = inspect(meta.engine)
+  return DatasetTransferRequest.__tablename__ in inspector.get_table_names()
+  ```
+- Changed `init_tables()` to use `checkfirst=True` parameter:
+  ```python
+  DatasetTransferRequest.__table__.create(bind=meta.engine, checkfirst=True)
+  ```
+- Inspector API is the SQLAlchemy 2.0 recommended way to check table existence
+- `checkfirst=True` avoids redundant table existence check
+
+**Files Modified:**
+- `ckanext/unaids/dataset_transfer/model.py`: Lines 32-38 - Updated table operations for SQLAlchemy 2.0
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 15: meta.engine is None during plugin initialization
+
+**Error Message:**
+```
+sqlalchemy.exc.NoInspectionAvailable: No inspection system is available for object of type <class 'NoneType'>
+```
+
+**Root Cause:**
+- After fixing SQLAlchemy 2.0 compatibility in Issue 14, new error appeared
+- `tables_exists()` is called from `plugin.py update_config()` during plugin initialization
+- At that point, `meta.engine` is still `None` - database hasn't been initialized yet
+- `inspect(None)` fails with NoInspectionAvailable error
+- The `update_config()` hook runs very early in CKAN startup, before database connection
+
+**Solution Applied:**
+- Added check for `meta.engine is None` before inspection:
+  ```python
+  if meta.engine is None:
+      return False
+  ```
+- Returns `False` when engine not ready, allowing plugin to load
+- The warning message from `plugin.py` will log that tables need to be created
+- Tables will be checked/created later when database is actually available
+
+**Files Modified:**
+- `ckanext/unaids/dataset_transfer/model.py`: Lines 36-38 - Added None check for meta.engine
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 16: Missing ytp_request plugin for member_request_create chained action
+
+**Error Message:**
+```
+ckan.logic.NotFound: The action 'member_request_create' is not found for chained action
+```
+
+**Root Cause:**
+- After fixing Issue 15, plugin initialization proceeds further
+- Now encounters `member_request_create` chained action in `custom_user_profile/actions.py`
+- This action uses `@toolkit.chained_action` decorator
+- The base `member_request_create` action is provided by `ytp-request` extension
+- Without `ytp_request` plugin loaded, there's no base action to chain to
+
+**Solution Applied:**
+- Added `ytp_request` to plugin list in `test.ini`
+- Updated plugins: `activity scheming_datasets authz_service ytp_request unaids`
+- This provides the base `member_request_create` action for chaining
+
+**Files Modified:**
+- `test.ini`: Line 13 - Added ytp_request plugin
+
 **Result:**
 ⏳ PENDING - Waiting for test verification

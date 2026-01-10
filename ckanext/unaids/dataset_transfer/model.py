@@ -30,9 +30,11 @@ class DatasetTransferRequest(Base):
 
 
 def init_tables():
-    if not DatasetTransferRequest.__table__.exists(bind=meta.engine):
-        DatasetTransferRequest.__table__.create(bind=meta.engine)
+    DatasetTransferRequest.__table__.create(bind=meta.engine, checkfirst=True)
 
 
 def tables_exists():
-    return DatasetTransferRequest.__table__.exists(bind=meta.engine)
+    if meta.engine is None:
+        return False
+    inspector = inspect(meta.engine)
+    return DatasetTransferRequest.__tablename__ in inspector.get_table_names()
