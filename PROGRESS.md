@@ -58,14 +58,76 @@ ImportError: cannot import name '_request_ctx_stack' from 'flask'
 
 ## Current Status
 
-**Remaining Collection Errors: 4**
-1. test_dataset_releases.py - nose framework deprecated
-2. test_dataset_transfer.py - mock module missing
-3. test_plugin.py - mock module missing
-4. test_validators.py - mock module missing
+**Remaining Collection Errors: 3**
+1. test_dataset_transfer.py - mock module missing
+2. test_plugin.py - mock module missing
+3. test_validators.py - mock module missing
 
 **Next Issue:**
-Issue 3: nose framework deprecated
+Issue 5: mock module deprecated (Python 3)
+
+---
+
+### Issue 5: Deprecated mock module (Python 3)
+
+**Error Message:**
+```
+ModuleNotFoundError: No module named 'mock'
+```
+
+**Root Cause:**
+- Three test files using standalone `mock` package
+- In Python 3.3+, mock is built-in as `unittest.mock`
+- Standalone mock package is obsolete and not installed
+
+**Solution Applied:**
+- Replaced `import mock` with `from unittest import mock`
+- Replaced `from mock import X` with `from unittest.mock import X`
+- All mock functionality is identical, just different import path
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_dataset_transfer.py`: Line 6
+- `ckanext/unaids/tests/test_plugin.py`: Line 3
+- `ckanext/unaids/tests/test_validators.py`: Line 15
+
+**Test Results After Fix:**
+- Collection errors: 1 (down from 3)
+- test_dataset_transfer.py: ✅ FIXED
+- test_validators.py: ✅ FIXED
+- Coverage improved: test_dataset_transfer.py 5% → 23%, test_validators.py 21% → 51%
+- Total collected tests increased: 121 → 148 (27 new tests)
+- Overall coverage: 26% → 28%
+
+**Result:**
+✅ FIXED - But revealed another issue (_identify_user_default import in plugin.py)
+
+---
+
+### Issue 6: CKAN _identify_user_default removed from ckan.views
+
+**Error Message:**
+```
+ImportError: cannot import name '_identify_user_default' from 'ckan.views'
+```
+
+**Root Cause:**
+- After fixing mock imports, test_plugin.py now imports plugin.py
+- plugin.py imports `_identify_user_default` from `ckan.views`
+- CKAN 2.11 removed `_identify_user_default` from ckan.views module
+- This was a private method for user identification
+- CKAN 2.11 middleware now handles user identification automatically
+
+**Solution Applied:**
+- Removed `from ckan.views import _identify_user_default` import (line 16)
+- Removed `initialize_g_userobj_using_private_core_ckan_method()` helper function (lines 65-66)
+- Removed call to helper function in `identify()` method (line 282)
+- Added comment explaining CKAN 2.11 middleware populates g.userobj automatically
+
+**Files Modified:**
+- `ckanext/unaids/plugin.py`: Lines 16, 65-66, 277-278
+
+**Result:**
+⏳ PENDING - Waiting for test verification
 
 ---
 
@@ -118,8 +180,15 @@ ImportError: cannot import name 'before_request' from 'ckan.views.user'
 **Files Modified:**
 - `ckanext/unaids/blueprints/user_info_blueprint.py`: Lines 6, 17-18
 
+**Test Results After Fix:**
+- Collection errors: 3 (down from 4)
+- test_dataset_releases.py: ✅ FIXED - Now loading properly
+- Coverage improved: test_dataset_releases.py 4% → 26%
+- Coverage improved: blueprints/__init__.py 30% → 100%
+- Total collected tests increased: 103 → 121 (18 new tests from test_dataset_releases.py)
+
 **Result:**
-⏳ PENDING - Waiting for test verification
+✅ FIXED
 
 ---
 

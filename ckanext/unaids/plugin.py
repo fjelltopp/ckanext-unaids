@@ -13,7 +13,6 @@ import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
-from ckan.views import _identify_user_default
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
@@ -60,10 +59,6 @@ def add_licenses():
         core_licenses.License(licenses.LicenseCreativeCommonsIntergovernmentalOrgs()),
         core_licenses.License(core_licenses.LicenseNotSpecified()),
     ]
-
-
-def initialize_g_userobj_using_private_core_ckan_method():
-    _identify_user_default()
 
 
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
@@ -279,7 +274,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if auth_logic.access_token_present_and_valid_and_user_authorized():
             return
 
-        initialize_g_userobj_using_private_core_ckan_method()
+        # CKAN 2.11: User identification is handled automatically by middleware
+        # g.userobj is populated by the time this method is called
         is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
         substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
 
