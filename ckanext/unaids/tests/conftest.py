@@ -1,5 +1,6 @@
 import pytest
 
+from ckan import model
 from ckan.tests import factories
 from ckanext.unaids.tests import unaids_db_setup, create_version
 from ckanext.versions.tests import versions_db_setup
@@ -7,8 +8,24 @@ from ckanext.validation.model import tables_exist, create_tables
 from ckanext.ytp_request.tests import ytp_request_db_setup
 
 
+@pytest.fixture
+def clean_db_with_migrations(clean_db):
+    """
+    Extends clean_db to add CKAN 2.11 activity plugin migrations.
+    
+    The clean_db fixture rebuilds the database fresh for test isolation,
+    which wipes out plugin migrations. This fixture adds the permission_labels
+    column that the activity plugin requires in CKAN 2.11.
+    """
+    # Add permission_labels column to activity table (required by CKAN 2.11 activity plugin)
+    model.Session.execute(
+        "ALTER TABLE activity ADD COLUMN IF NOT EXISTS permission_labels text[]"
+    )
+    model.Session.commit()
+
+
 @pytest.fixture(autouse=True)
-def unaids_setup(clean_db):
+def unaids_setup(clean_db_with_migrations):
     if not tables_exist():
         create_tables()
 

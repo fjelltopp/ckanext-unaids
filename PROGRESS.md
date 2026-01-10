@@ -313,5 +313,135 @@ ckan.logic.NotFound: The action 'package_activity_list' is not found for chained
 - `ckanext/unaids/actions.py`: Lines 136-169
 - `ckanext/unaids/plugin.py`: Line 115
 
+**Test Results After Fix:**
+- Plugin loading now works
+- 102 tests passing (up from 24)
+- 18 errors remaining (down from 134)
+- 41 failures
+- Revealed issue with Activity.as_dict() accessing non-existent permission_labels column
+
+**Result:**
+✅ FIXED - But needs follow-up fix for Activity model
+
+---
+
+### Issue 10: Activity model permission_labels column missing
+
+**Error Message:**
+```
+sqlalchemy.exc.ProgrammingError: column activity.permission_labels does not exist
+```
+
+**Root Cause:**
+- After fixing package_activity_list, 18 errors occur when querying activities
+- `Activity.as_dict()` tries to serialize all columns including `permission_labels`
+- The `permission_labels` column doesn't exist in the Activity table schema
+- This column might be for a newer CKAN feature not yet migrated
+
+**Solution Applied:**
+- Replaced `activity.as_dict()` with manual dictionary construction (lines 148-166)
+- Only includes columns that actually exist in the Activity model:
+  - id, timestamp, user_id, object_id, revision_id, activity_type, data
+- Converts timestamp to ISO format for JSON serialization
+- Avoids SQLAlchemy trying to access non-existent columns
+
+**Files Modified:**
+- `ckanext/unaids/actions.py`: Lines 148-166
+
 **Result:**
 ⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 10 (Updated): Activity model permission_labels column missing
+
+**Error Message:**
+```
+sqlalchemy.exc.ProgrammingError: column activity.permission_labels does not exist
+```
+
+**Root Cause:**
+- Activity ORM model in CKAN 2.11 defines `permission_labels` column
+- But database schema hasn't been migrated yet
+- SQLAlchemy ORM queries try to SELECT all model columns including the missing one
+- From PROGRESS_OLD.md: CKAN 2.11 moved activity features to ckanext.activity plugin
+
+**Solution Applied:**
+- Try to use `ckanext.activity.logic.action.package_activity_list` if available (lines 144-146)
+- Fallback to raw SQL query if activity plugin not loaded (lines 147-173)
+- Raw SQL only selects existing columns, avoiding ORM column mapping issues
+- Added error handling for missing dataset_version_list action (lines 176-181)
+- Maintains backward compatibility whether activity plugin is loaded or not
+
+**Files Modified:**
+- `ckanext/unaids/actions.py`: Lines 136-192
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 10 (Final Fix): Activity plugin database migration required
+
+**Error Message:**
+```
+sqlalchemy.exc.ProgrammingError: column activity.permission_labels does not exist
+```
+
+**Root Cause:**
+- From PROGRESS_BLOB_STORAGE.md: Same issue encountered in blob-storage migration
+- CKAN 2.11 moved activity to a plugin that requires database migration
+- The `activity` table needs a `permission_labels` column added by migration
+- Tests run `ckan db init` but not `ckan db upgrade`
+- Plugin migrations must be explicitly run after db init
+
+**Solution Applied:**
+- Added `model.repo.upgrade_db()` call in conftest unaids_setup fixture (lines 12-13)
+- Runs after `clean_db` to ensure all plugin migrations are applied
+- This ensures the activity plugin's permission_labels column exists before tests run
+- Uses CKAN's model API instead of CLI functions
+
+**Files Modified:**
+- `ckanext/unaids/tests/conftest.py`: Lines 12-13
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 10 (Final Fix): Activity plugin permission_labels column via custom fixture
+
+**Error Message:**
+```
+sqlalchemy.exc.ProgrammingError: column activity.permission_labels does not exist
+```
+
+**Root Cause:**
+- From PROGRESS_FORK.md: Same issue, proper solution documented there
+- CKAN 2.11 activity plugin requires `permission_labels text[]` column
+- The `clean_db` fixture rebuilds database fresh for test isolation, wiping migrations
+- Running `ckan db upgrade` in workflow doesn't help because `clean_db` runs after it
+- Any Activity ORM query fails without this column
+
+**Solution Applied:**
+- Created `clean_db_with_migrations` fixture in conftest (lines 11-24)
+- Extends `clean_db` by adding permission_labels column after database rebuild:
+  ```sql
+  ALTER TABLE activity ADD COLUMN IF NOT EXISTS permission_labels text[]
+  ```
+- Column type is `text[]` (array), not just `text`, as required by CKAN 2.11
+- Changed `unaids_setup` to depend on `clean_db_with_migrations` instead of `clean_db` (line 28)
+- Based on proven solution from ckanext-fork migration
+
+**Files Modified:**
+- `ckanext/unaids/tests/conftest.py`: Lines 3, 11-24, 28
+
+**Test Results After Fix:**
+- **Permission_labels errors: COMPLETELY ELIMINATED** ✅
+- 102 tests passing (maintained)
+- 18 errors remaining (different errors than before)
+- 41 failures (maintained)
+- Errors no longer related to Activity ORM/permission_labels
+
+**Result:**
+✅ FIXED - Activity plugin permission_labels column issue resolved
