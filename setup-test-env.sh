@@ -42,20 +42,13 @@ docker-compose -f docker-compose.test.yml exec -T ckan-dev bash -c "
     sed -i -e 's/use = config:.*/use = config:\/srv\/app\/src\/ckan\/test-core.ini/' test.ini
 "
 
-# Initialize git repository (required by some CKAN extensions)
-echo "Initializing git repository..."
+# Configure git (CKAN extensions may need git configured)
+echo "Configuring git..."
 docker-compose -f docker-compose.test.yml exec -T ckan-dev bash -c "
-    cd /srv/app/src/ckanext-unaids
-    # Remove any existing .git file or directory (handles submodule references)
-    rm -rf .git
-    # Configure git to trust this directory
+    # Configure git to trust this directory (mounted volume)
     git config --global --add safe.directory /srv/app/src/ckanext-unaids
-    git config --global init.defaultBranch main
-    git init
-    git config user.email 'test@example.com'
-    git config user.name 'Test User'
-    git add .
-    git commit -m 'Initial commit'
+    git config --global user.email 'test@example.com'
+    git config --global user.name 'Test User'
 "
 
 # Initialize CKAN database
