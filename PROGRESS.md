@@ -1196,9 +1196,154 @@ CKAN 2.11 enforces stricter organization ownership requirements.
 
 ---
 
-## Current Test Status (After Batch 11)
+## Batch 12: test_plugin.py and plugin.py Source Code Fixes
 
-### ✅ Fully Passing (11 files)
+### Overview
+Fixed test_plugin.py (14 tests) which had multiple issues:
+- TestPlugin class: 2 tests needed fixture and context fixes
+- TestValidatePackage class: 2 tests had IResourceController interface issues and user context requirements
+- TestResourceLastModified class: 10 tests were already passing
+
+### Issue 1: IResourceController interface method renames in CKAN 2.11
+
+**Error Message:**
+```
+TypeError: before_create() got multiple values for argument 'resource'
+```
+
+**Root Cause:**
+- CKAN 2.11 renamed IResourceController interface methods
+- `before_create` → `before_resource_create`
+- `before_update` → `before_resource_update`
+- `before_show` → `before_resource_show`
+- Old method signatures caused parameter mismatches
+
+**Solution Applied (plugin.py source code fix):**
+1. Renamed methods in plugin.py:
+   - `before_create(self, context, resource)` → `before_resource_create(self, context, resource)`
+   - `before_update(self, context, current, resource)` → `before_resource_update(self, context, current, resource)`
+   - `before_show(self, resource)` → `before_resource_show(self, resource)`
+2. Added `after_resource_update` method for validate_package trigger (see Issue 3)
+
+**Files Modified:**
+- `ckanext/unaids/plugin.py`: Lines 227-265 (method renames and new method)
+
+---
+
+### Issue 2: Validate package trigger not working - wrong callback
+
+**Error Message:**
+```
+AssertionError: get_action('resource_validation_run_batch') call not found
+```
+
+**Root Cause:**
+- The validate_package functionality stored resource IDs in `resources_to_validate_package` dict
+- But checked for those IDs in `after_update` (IPackageController) which receives package IDs, not resource IDs
+- In CKAN 2.11, IResourceController and IPackageController are clearly separated
+- The validation trigger never fired because package_id != resource_id
+
+**Solution Applied:**
+1. Added new `after_resource_update` method for IResourceController:
+   ```python
+   def after_resource_update(self, context, resource):
+       """CKAN 2.11: Added for IResourceController - validate_package trigger."""
+       if resource.get('id') in self.resources_to_validate_package:
+           del self.resources_to_validate_package[resource['id']]
+           toolkit.get_action("resource_validation_run_batch")(
+               context, {"dataset_ids": resource.get("package_id")}
+           )
+   ```
+2. Removed the broken resource validation logic from `after_update` (IPackageController)
+
+**Files Modified:**
+- `ckanext/unaids/plugin.py`: Lines 188-211, 249-262
+
+---
+
+### Issue 3: Activity plugin requires user context for resource operations
+
+**Error Message:**
+```
+ckan.logic.ValidationError: None - {'user_id': ['User not found']}
+```
+
+**Root Cause:**
+- CKAN 2.11 activity plugin's `_get_user_or_raise` expects valid user in context
+- Test fixtures calling `call_action('resource_create', ...)` without user context
+
+**Solution Applied:**
+1. Created separate `validate_package_user` fixture
+2. Updated `validate_package_resource` fixture to use user context:
+   ```python
+   resource["id"] = call_action(
+       'resource_create', {'user': user['name']}, **resource
+   )["id"]
+   ```
+3. Updated test methods to pass user context in resource_update/resource_patch calls
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_plugin.py`: Lines 130-185
+
+---
+
+### Issue 4: Plugin configuration isolation between test classes
+
+**Error Message:**
+```
+ckanext.scheming.errors.SchemingException: preset 'locked' not defined
+```
+
+**Root Cause:**
+- TestPlugin and TestValidatePackage have different plugin configs
+- TestValidatePackage loads validate_package.json schema which needs UNAIDS presets
+- When running tests in sequence, scheming plugin would reload with stale preset config
+
+**Solution Applied:**
+1. Added scheming.presets config to TestPlugin class for consistency:
+   ```python
+   @pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
+   ```
+2. Changed TestValidatePackage to use regular 'dataset' type instead of 'validate-package'
+   - The validate_package field on the resource triggers validation, not the dataset type
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_plugin.py`: Lines 70-83, 120-155
+
+---
+
+### Summary of All Changes in Batch 12
+
+**Requirements (requirements.txt):**
+1. Added `frictionless>=5.0.0` - needed for validation plugin schema processing
+2. Added `tableschema>=1.21.0` - dependency for frictionless schema validation
+
+**Source Code Fixes (plugin.py):**
+1. Renamed IResourceController methods for CKAN 2.11:
+   - `before_create` → `before_resource_create`
+   - `before_update` → `before_resource_update`
+   - `before_show` → `before_resource_show`
+2. Added new `after_resource_update` method for validate_package trigger
+3. Cleaned up `after_update` to only handle package-level updates
+
+**Test Fixes (test_plugin.py):**
+1. TestPlugin: Added scheming.presets config marker for plugin isolation
+2. TestValidatePackage: 
+   - Changed to use regular 'dataset' type
+   - Added separate user fixture for context passing
+   - Added user context to all call_action calls for resource operations
+
+**Test Results After Fix:**
+- test_plugin.py: **14 passed, 0 failed** (was 10 passed, 2 failed, 2 errors)
+
+**Result:**
+✅ FIXED - test_plugin.py is now fully passing
+
+---
+
+## Current Test Status (After Batch 12)
+
+### ✅ Fully Passing (12 files)
 | File | Tests | Batch |
 |------|-------|-------|
 | test_validators.py | 17 | 2 |
@@ -1212,10 +1357,9 @@ CKAN 2.11 enforces stricter organization ownership requirements.
 | test_dataset_transfer.py | 10 | 9 |
 | test_blueprints.py | 7 | 10 |
 | test_helpers.py | 3 | 11 |
+| test_plugin.py | 14 | 12 |
 
-### ⚠️ Remaining Failures (2 files)
+### ⚠️ Remaining Failures (1 file)
 | File | Status | Priority |
 |------|--------|----------|
-| test_plugin.py | 10 passed, 2 failed, 2 errors | MEDIUM - Next |
 | test_giftless_backend.py | 0 passed, 1 failed, 1 error | LOW |
-✅ FIXED - test_dataset_transfer.py is now fully passing

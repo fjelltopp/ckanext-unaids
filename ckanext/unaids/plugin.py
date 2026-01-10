@@ -192,6 +192,11 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             )
 
     def after_update(self, context, data_dict):
+        """IPackageController.after_update - handles package-level updates.
+        
+        CKAN 2.11 Note: Resource validation trigger moved to after_resource_update
+        since IResourceController callbacks are now separate.
+        """
         if "extras" in data_dict:
             org_to_allow_transfer_to = [
                 item["value"]
@@ -203,12 +208,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     dataset_id=data_dict["id"],
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
-
-        if data_dict['id'] in self.resources_to_validate_package:
-            del self.resources_to_validate_package[data_dict['id']]
-            toolkit.get_action("resource_validation_run_batch")(
-                context, {"dataset_ids": data_dict["package_id"]}
-            )
 
     def _process_schema_fields(self, data_dict):
         """
@@ -224,7 +223,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return data_dict
 
-    def before_create(self, context, resource):
+    def before_resource_create(self, context, resource):
+        """CKAN 2.11: Renamed from before_create to before_resource_create."""
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource)
             _update_resource_last_modified_date(resource)
@@ -232,7 +232,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             context["_resource_create_call"] = True
         return self._process_schema_fields(resource)
 
-    def before_update(self, context, current, resource):
+    def before_resource_update(self, context, current, resource):
+        """CKAN 2.11: Renamed from before_update to before_resource_update."""
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
             _update_resource_last_modified_date(resource, current=current)
@@ -245,9 +246,24 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return self._process_schema_fields(resource)
 
-    def before_show(self, resource):
+    def after_resource_update(self, context, resource):
+        """CKAN 2.11: Added for IResourceController - validate_package trigger.
+        
+        In CKAN 2.11, IResourceController callbacks are separate from IPackageController.
+        The validate_package logic was previously in after_update (IPackageController)
+        but needed to be moved here since it tracks resource ids, not package ids.
+        """
+        if resource.get('id') in self.resources_to_validate_package:
+            del self.resources_to_validate_package[resource['id']]
+            toolkit.get_action("resource_validation_run_batch")(
+                context, {"dataset_ids": resource.get("package_id")}
+            )
+
+    def before_resource_show(self, resource):
+        """CKAN 2.11: Renamed from before_show to before_resource_show."""
         if _data_dict_is_resource(resource):
             return logic.update_filename_in_resource_url(resource)
+        return resource
 
     def after_upload(self, context, resource_dict, dataset_dict):
         if "schema" in resource_dict:
