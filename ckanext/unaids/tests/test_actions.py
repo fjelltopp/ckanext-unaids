@@ -69,8 +69,8 @@ class TestFormatGuess(object):
         ('art.csv', 'text/csv', 'CSV'),
         ('anc.xls', 'application/vnd.ms-excel', 'XLS'),
         ('country_regions.geojson', 'application/geo+json', 'GeoJSON'),
-        # CKAN 2.11 returns mimetype as format for custom types like .pjnz
-        ('spectrum_file.pjnz', 'application/pjnz', 'application/pjnz'),
+        # PJNZ is defined in resource_formats.json with format name 'PJNZ'
+        ('spectrum_file.pjnz', 'application/pjnz', 'PJNZ'),
         ('no_file_extension', None, None),
         ('', None, None),
     ])
