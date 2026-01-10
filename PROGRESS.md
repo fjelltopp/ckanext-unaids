@@ -1080,3 +1080,78 @@ After transfer redirect, template rendering requires blob_storage config.
 
 **Result:**
 ✅ FIXED - test_dataset_transfer.py is now fully passing
+
+---
+
+## Batch 10: test_blueprints.py - User Fixture and Factory Fixes
+
+### Issues Fixed:
+
+**1. Email Assertion Failure - Hardcoded vs Factory-Generated Emails**
+```
+AssertionError: assert {'kirstenbean....example.com'} == {'editor@ckan...kan.org', nan}
+```
+
+**Root Cause:**
+- Test expected hardcoded emails like `admin@ckan.org`, `editor@ckan.org`, `member@ckan.org`
+- CKAN 2.11 `factories.User` generates random emails with domain `ckan.example.com` (using Faker)
+- Test didn't account for factory-generated emails
+
+**2. Editor Getting 200 OK Instead of 403**
+```
+assert 200 == 403
+```
+
+**Root Cause:**
+- Test relied on `test_organization['users'][1]` to be the editor
+- The order of users in the returned organization dict may not match the input order
+- Test wasn't using the explicit `org_editor` fixture
+
+**Solutions Applied:**
+
+1. **Moved `test_org_download` fixture inside the test class**
+   - Module-level fixtures don't inherit class-level config markers
+   - Now properly uses `org_admin` fixture directly instead of `test_organization['users'][0]`
+
+2. **Updated email test to use actual fixture emails**
+   - Changed from hardcoded emails to using `org_admin['email']`, `org_editor['email']`, `org_member['email']`
+   - Use `dropna()` to handle site user's NaN email
+
+3. **Updated 403/404 tests to use explicit fixtures**
+   - Changed from `test_organization['users'][1]` to explicit `org_editor` fixture
+   - Ensures correct user is used regardless of ordering
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_blueprints.py`: Refactored entire TestMemberLists class
+
+**Test Results After Fix:**
+- test_blueprints.py: **7 passed, 0 failed** (was 5 passed, 2 failed)
+
+**Result:**
+✅ FIXED - test_blueprints.py is now fully passing
+
+---
+
+## Current Test Status (After Batch 10)
+
+### ✅ Fully Passing (10 files)
+| File | Tests | Batch |
+|------|-------|-------|
+| test_validators.py | 17 | 2 |
+| test_actions_dataset_lock.py | 6 | 3 |
+| test_actions_show_for_release.py | 8 | 4 |
+| test_dataset_releases.py | 18 | 4 |
+| test_auth_logic.py | 26 | 5 |
+| test_auth.py | 12 | 6 |
+| test_logic.py | 20 | 7 |
+| test_actions.py | 18 | 8 |
+| test_dataset_transfer.py | 10 | 9 |
+| test_blueprints.py | 7 | 10 |
+
+### ⚠️ Remaining Failures (3 files)
+| File | Status | Priority |
+|------|--------|----------|
+| test_helpers.py | 1 passed, 2 failed | MEDIUM - Next |
+| test_plugin.py | 10 passed, 2 failed, 2 errors | MEDIUM |
+| test_giftless_backend.py | 0 passed, 1 failed, 1 error | LOW |
+✅ FIXED - test_dataset_transfer.py is now fully passing
