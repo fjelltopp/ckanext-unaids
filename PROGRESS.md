@@ -1154,4 +1154,68 @@ assert 200 == 403
 | test_helpers.py | 1 passed, 2 failed | MEDIUM - Next |
 | test_plugin.py | 10 passed, 2 failed, 2 errors | MEDIUM |
 | test_giftless_backend.py | 0 passed, 1 failed, 1 error | LOW |
+
+---
+
+## Batch 11: test_helpers.py - Scheming Config and Organization Ownership
+
+### Issues Fixed:
+
+**1. test-schema Type Not Recognized**
+```
+ckan.logic.ValidationError: None - {'message': "Type 'test-schema' is invalid...
+```
+
+**Root Cause:**
+- Same scheming configuration issue as other test files
+- CKAN 2.11 requires explicit scheming config when using custom dataset types
+
+**2. Dataset Creation Without Organization**
+CKAN 2.11 enforces stricter organization ownership requirements.
+
+**Solutions Applied:**
+
+1. **Added scheming config markers:**
+   - `scheming.dataset_schemas` pointing to test schema
+   - `scheming.presets` with required presets
+
+2. **Added clean_db fixture** for test isolation
+
+3. **Added autouse setup_org fixture:**
+   - Creates user and organization for dataset creation
+   - Passes owner_org and user to Dataset factory calls
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_helpers.py`
+
+**Test Results After Fix:**
+- test_helpers.py: **3 passed, 0 failed** (was 1 passed, 2 failed)
+
+**Result:**
+✅ FIXED - test_helpers.py is now fully passing
+
+---
+
+## Current Test Status (After Batch 11)
+
+### ✅ Fully Passing (11 files)
+| File | Tests | Batch |
+|------|-------|-------|
+| test_validators.py | 17 | 2 |
+| test_actions_dataset_lock.py | 6 | 3 |
+| test_actions_show_for_release.py | 8 | 4 |
+| test_dataset_releases.py | 18 | 4 |
+| test_auth_logic.py | 26 | 5 |
+| test_auth.py | 12 | 6 |
+| test_logic.py | 20 | 7 |
+| test_actions.py | 18 | 8 |
+| test_dataset_transfer.py | 10 | 9 |
+| test_blueprints.py | 7 | 10 |
+| test_helpers.py | 3 | 11 |
+
+### ⚠️ Remaining Failures (2 files)
+| File | Status | Priority |
+|------|--------|----------|
+| test_plugin.py | 10 passed, 2 failed, 2 errors | MEDIUM - Next |
+| test_giftless_backend.py | 0 passed, 1 failed, 1 error | LOW |
 ✅ FIXED - test_dataset_transfer.py is now fully passing
