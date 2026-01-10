@@ -58,9 +58,9 @@ def test_validate_resource_upload_fields(lfs_prefix, sha256, size, valid):
 @pytest.mark.usefixtures('with_plugins', 'clean_db_with_migrations')
 def test_update_filename_in_upload_resource_url():
     """Test that filename with diacritics is sanitized.
-    
+
     CKAN 2.11 Note: The filename handling may result in lowercase filenames
-    in the URL path. The key test is that the diacritic character 'è' is 
+    in the URL path. The key test is that the diacritic character 'è' is
     replaced with 'e'.
     """
     user = factories.Sysadmin()

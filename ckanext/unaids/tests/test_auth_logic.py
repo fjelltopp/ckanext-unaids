@@ -152,11 +152,11 @@ class TestCreateResponse:
 class TestValidateAndDecodeToken(object):
     """
     Tests for validate_and_decode_token function.
-    
+
     Note: AUTH0_DOMAIN and API_AUDIENCE are set at module import time,
     so we patch them directly instead of using ckan_config markers.
     """
-    
+
     @patch('ckanext.unaids.auth_logic.API_AUDIENCE', 'http://api.unittests.org')
     @patch('ckanext.unaids.auth_logic.AUTH0_DOMAIN', 'unittests.org')
     @patch('ckanext.unaids.auth_logic.jwt.decode')
@@ -322,13 +322,13 @@ class TestValidateAndDecodeToken(object):
 class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
     """
     Tests that standard CKAN authentication works alongside OAuth2 plugin.
-    
+
     This test ensures the unaids OAuth2 plugin's IAuthenticator implementation
-    doesn't break standard CKAN call_action authentication. The key test is 
-    that when a user context is provided to call_action, the action works 
+    doesn't break standard CKAN call_action authentication. The key test is
+    that when a user context is provided to call_action, the action works
     properly even with the OAuth2 plugin loaded.
-    
-    Note: In CKAN 2.11, API keys are deprecated in favor of JWT tokens. 
+
+    Note: In CKAN 2.11, API keys are deprecated in favor of JWT tokens.
     HTTP API token authentication in test environments has configuration
     complexities, so we test using call_action with user context instead.
     """
@@ -338,7 +338,7 @@ class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
         # Create sysadmin user
         user = factories.Sysadmin()
         org = factories.Organization(users=[{'name': user['name'], 'capacity': 'admin'}])
-        
+
         # Use call_action with user context - this is how most extension
         # code and tests authenticate to CKAN
         context = {'user': user['name'], 'ignore_auth': False}
@@ -349,7 +349,7 @@ class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
             private=True,
             owner_org=org['id']
         )
-        
+
         assert result['name'] == 'my-first-private-dataset'
         assert result['private'] is True
 

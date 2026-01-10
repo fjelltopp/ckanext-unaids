@@ -18,7 +18,7 @@ import ckan.lib.helpers as h
 @pytest.mark.usefixtures('with_plugins', 'clean_db')
 class TestGiftlessBackend(object):
     """Test Giftless backend resource creation.
-    
+
     CKAN 2.11 Migration Notes:
     - Added clean_db fixture for test isolation
     - Added scheming_datasets plugin and presets config
@@ -73,7 +73,7 @@ class TestGiftlessBackend(object):
 @pytest.mark.usefixtures('with_plugins', 'clean_db')
 class TestResourceUrlEncoding():
     """Test resource URL encoding with special characters.
-    
+
     CKAN 2.11 Migration Notes:
     - Added with_plugins and clean_db fixtures for test isolation
     - Added user context to call_action for activity plugin compatibility
@@ -92,9 +92,9 @@ class TestResourceUrlEncoding():
 
         # CKAN 2.11: Activity plugin requires user context
         resource = helpers.call_action(
-            'resource_create', 
+            'resource_create',
             {'user': user['name']},
-            package_id=dataset["id"], 
+            package_id=dataset["id"],
             url_type='upload',
             url=unquoted_filename,
             lfs_prefix='prefix',

@@ -3,7 +3,6 @@ import logging
 import pytest
 import ckan.plugins.toolkit as toolkit
 import pandas
-from numpy import nan
 from io import StringIO
 
 log = logging.getLogger(__name__)

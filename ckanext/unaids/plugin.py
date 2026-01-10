@@ -193,7 +193,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def after_update(self, context, data_dict):
         """IPackageController.after_update - handles package-level updates.
-        
+
         CKAN 2.11 Note: Resource validation trigger moved to after_resource_update
         since IResourceController callbacks are now separate.
         """
@@ -248,7 +248,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
     def after_resource_update(self, context, resource):
         """CKAN 2.11: Added for IResourceController - validate_package trigger.
-        
+
         In CKAN 2.11, IResourceController callbacks are separate from IPackageController.
         The validate_package logic was previously in after_update (IPackageController)
         but needed to be moved here since it tracks resource ids, not package ids.

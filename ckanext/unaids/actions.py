@@ -137,14 +137,14 @@ def dataset_version_show(original_action, context, data_dict):
 @t.side_effect_free
 def package_activity_list(original_action, context, data_dict):
     """Get activity list for a package with release names added.
-    
+
     This chains the activity plugin's package_activity_list to add release names.
     """
     dataset_id = data_dict['id']
-    
+
     # Call the original action from activity plugin
     activity_list = original_action(context, data_dict)
-    
+
     # Add release names if versions plugin available
     try:
         releases_list = t.get_action('dataset_version_list')(
@@ -156,7 +156,7 @@ def package_activity_list(original_action, context, data_dict):
             activity['release_name'] = activity_to_release_name.get(activity['id'])
     except (logic.NotFound, KeyError):
         pass
-    
+
     return activity_list
 
 

@@ -145,7 +145,7 @@ def member_request_create(next_action, context, data_dict):
     """
     overrides member_request_create action from ckanext-ytp-request plugin,
     purposely to add job_title and affiliation in the mail sent to the admins
-    
+
     Uses @chained_action - requires ytp_request plugin to be loaded.
     All test classes must include ytp_request in ckan.plugins config.
     """

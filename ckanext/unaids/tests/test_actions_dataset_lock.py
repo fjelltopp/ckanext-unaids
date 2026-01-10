@@ -12,11 +12,11 @@ def _create_locked_dataset():
     # Create dataset with factory first
     dataset = factories.Dataset(owner_org=org['id'], type='test-schema')
     # Trigger activity creation with package_patch (factories don't create activities)
-    call_action('package_patch', 
-                context={'user': user['name']}, 
-                id=dataset['id'], 
+    call_action('package_patch',
+                context={'user': user['name']},
+                id=dataset['id'],
                 notes='Trigger activity')
-    
+
     context = get_context(user['name'])
     context['auth_user_obj'] = context['model'].User.get(user['name'])
     call_action('dataset_lock', context, id=dataset['id'])
@@ -52,7 +52,7 @@ class TestDatasetLock(object):
                     context={'user': user['name']},
                     id=dataset['id'],
                     notes='Trigger activity')
-        
+
         context = get_context(user['name'])
         context['auth_user_obj'] = context['model'].User.get(user['name'])
         call_action(

@@ -21,11 +21,11 @@ def package_update(next_auth_action, context, data_dict):
         package_id = data_dict.get('id') or data_dict.get('name')
         if package_id:
             package = model.Package.get(package_id)
-    
+
     locked = False
     if package:
         locked = toolkit.asbool(package.extras.get("locked", 'false'))
-    
+
     if locked:
         return {
             'success': False,

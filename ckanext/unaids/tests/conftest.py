@@ -9,7 +9,7 @@ from ckanext.ytp_request.tests import ytp_request_db_setup
 
 
 # SQL for creating ckanext_pages table (from ckanext-pages migrations)
-# This is needed because clean_db wipes the database and migrate_db_for("pages") 
+# This is needed because clean_db wipes the database and migrate_db_for("pages")
 # requires the pages plugin to be loaded, but fixtures run before plugin markers
 CKANEXT_PAGES_TABLE_SQL = """
 CREATE TABLE IF NOT EXISTS ckanext_pages (
@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS ckanext_pages (
 def clean_db_with_migrations(clean_db):
     """
     Extends clean_db to add CKAN 2.11 plugin migrations.
-    
+
     The clean_db fixture rebuilds the database fresh for test isolation,
     which wipes out plugin migrations. This fixture adds:
     - permission_labels column required by CKAN 2.11 activity plugin
     - ckanext_pages table required by ckanext-pages plugin
-    
+
     Note: We use SQL instead of migrate_db_for() because the pages plugin
     isn't loaded when fixtures run (fixtures execute before test markers).
     """
