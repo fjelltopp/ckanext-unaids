@@ -15,19 +15,20 @@ from ckanext.unaids.validators import (
 from unittest.mock import MagicMock
 
 
-@pytest.fixture
-def read_only_validator():
-    test_schema = call_action('scheming_dataset_schema_show', type="test-schema")
-    read_only_field = None
-    for field in test_schema['dataset_fields']:
-        if field['field_name'] == 'locked':
-            read_only_field = field
-    return read_only(read_only_field, test_schema)
-
-
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
+@pytest.mark.ckan_config('scheming.dataset_schemas', 'ckanext.unaids.tests.test_scheming_schemas:test_schema.json')
+@pytest.mark.ckan_config('scheming.presets', 'ckanext.unaids:presets.json ckanext.scheming:presets.json')
 @pytest.mark.usefixtures('with_plugins')
 class TestValidators(object):
+
+    @pytest.fixture
+    def read_only_validator(self):
+        test_schema = call_action('scheming_dataset_schema_show', type="test-schema")
+        read_only_field = None
+        for field in test_schema['dataset_fields']:
+            if field['field_name'] == 'locked':
+                read_only_field = field
+        return read_only(read_only_field, test_schema)
 
     def test_organisation_id_exists_validator(self):
         valid_org_id = factories.Organization()['id']
