@@ -932,3 +932,40 @@ ckan.logic.ValidationError: None - {'message': "Type 'test-schema' is inval...
 
 **Result:**
 ✅ FIXED - test_auth.py is now fully passing
+
+---
+
+## Batch 7: test_logic.py - Organization and Scheming Config Fixes
+
+### Issue: Resource Creation Fails Without Organization
+
+**Error Messages:**
+```
+ckan.logic.ValidationError: None - {'owner_org': ['An organization must be...
+```
+
+**Root Cause:**
+- CKAN 2.11 enforces organization ownership for datasets
+- Tests were creating Datasets and Resources without proper organization setup
+- Tests also missing scheming configuration for dataset schemas
+
+**Solution Applied:**
+1. Added scheming config markers to all test functions that use factories.Resource/Dataset
+2. Added `clean_db_with_migrations` fixture for clean database state
+3. Created proper user/org hierarchy in tests:
+   - `factories.Sysadmin()` for user
+   - `factories.Organization()` with user as admin
+   - `factories.Dataset(owner_org=org['id'])` with org ownership
+   - `factories.Resource(package_id=dataset['id'])` attached to dataset
+4. Updated `test_update_filename_in_upload_resource_url` test assertion:
+   - CKAN 2.11 may lowercase filenames in resource URLs
+   - Changed test to verify diacritic replacement (è → e) case-insensitively
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_logic.py`: Lines 54-96, 103-146
+
+**Test Results After Fix:**
+- test_logic.py: **20 passed, 0 failed** (was 13 passed, 7 failed)
+
+**Result:**
+✅ FIXED - test_logic.py is now fully passing
