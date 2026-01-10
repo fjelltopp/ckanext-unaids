@@ -1,0 +1,18 @@
+2026-01-10 05:47:14,767 INFO  [ckan.cli] Using configuration file /srv/app/src/ckanext-unaids/test.ini
+2026-01-10 05:47:14,767 INFO  [ckan.config.environment] Loading static files from public
+2026-01-10 05:47:14,884 INFO  [ckan.config.environment] Loading templates from /srv/app/src/ckan/ckan/templates
+2026-01-10 05:47:15,014 WARNI [ckan.config.middleware.flask_app] Extensions are excluded from CSRF protection! We allow extensions to run without CSRF protection but it will be forced future releases. Read the documentation for more information on how to add CSRF protection to your extension.
+collected 162 items
+
+ckanext/unaids/tests/test_actions.py ..F...............                  [ 11%]
+ckanext/unaids/tests/test_actions_dataset_lock.py EEFEEE                 [ 14%]
+ckanext/unaids/tests/test_actions_show_for_release.py EE.FFEEE           [ 19%]
+ckanext/unaids/tests/test_auth.py ....FFFFFFFF                           [ 27%]
+ckanext/unaids/tests/test_auth_logic.py .........................FF      [ 43%]
+ckanext/unaids/tests/test_blueprints.py FEEEFFF                          [ 48%]
+ckanext/unaids/tests/test_dataset_releases.py FFFFFFFFFFFFFFFFFF         [ 59%]
+ckanext/unaids/tests/test_dataset_transfer.py F........F                 [ 65%]
+ckanext/unaids/tests/test_giftless_backend.py sF                         [ 66%]
+ckanext/unaids/tests/test_helpers.py EEE                                 [ 68%]
+ckanext/unaids/tests/test_logic.py .............F......                  [ 80%]
+ckanext/unaids/tests/test_plugin.py .F

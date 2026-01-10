@@ -249,3 +249,69 @@ ValueError: numpy.dtype size changed, may indicate binary incompatibility. Expec
 
 **Result:**
 ✅ FIXED
+
+---
+
+## Batch 2: SQLAlchemy 2.0 Compatibility
+
+### Issue 8: SQLAlchemy 2.0 Table.exists() deprecated
+
+**Error Message:**
+```
+Table object 'dataset_transfer_request' is not bound to an Engine or Connection.
+Execution can not proceed without a database to execute against.
+```
+
+**Root Cause:**
+- All 161 tests failing at setup in `unaids_setup` fixture
+- `dataset_transfer/model.py` uses deprecated `Table.exists()` method without bind parameter
+- SQLAlchemy 2.0 removed the ability to call `Table.exists()` without an engine binding
+- Same issue with `Table.create()` method
+- Modern SQLAlchemy uses the `inspect()` API to check table existence
+
+**Solution Applied:**
+- Added `inspect` to SQLAlchemy imports (line 1)
+- Changed import from `ckan.model.meta import metadata, engine` to import the `meta` module itself (lines 5-6)
+- Updated `init_tables()`: Changed `DatasetTransferRequest.__table__.create()` to `DatasetTransferRequest.__table__.create(bind=meta.engine)` with check to avoid recreating (lines 32-34)
+- Updated `tables_exists()`: Changed `DatasetTransferRequest.__table__.exists()` to `DatasetTransferRequest.__table__.exists(bind=meta.engine)` (line 38)
+- Using `meta.engine` ensures the engine is properly initialized by CKAN before being accessed
+
+**Files Modified:**
+- `ckanext/unaids/dataset_transfer/model.py`: Lines 1, 5-6, 32-38
+
+**Result:**
+⏳ PENDING - Waiting for test verification
+
+---
+
+### Issue 9: CKAN package_activity_list action removed
+
+**Error Message:**
+```
+ckan.logic.NotFound: The action 'package_activity_list' is not found for chained action
+```
+
+**Root Cause:**
+- After fixing SQLAlchemy issues, plugin loading fails
+- Extension uses `@t.chained_action` to extend `package_activity_list`
+- CKAN 2.11 removed the `package_activity_list` action entirely
+- The extension added release names to activity lists via this chained action
+- Tests and helpers depend on this action returning activity data
+
+**Solution Applied:**
+- Removed chained action approach (line 138 removed `@t.chained_action` decorator)
+- Reimplemented `package_activity_list` as a standalone action (lines 136-169)
+- New implementation:
+  - Gets package activities directly from database using SQLAlchemy Session
+  - Queries Activity model filtered by package object_id
+  - Converts activities to dict format
+  - Adds release names from dataset_version_list
+  - Maintains backward compatibility with existing code
+- Updated plugin.py to register the new action implementation (line 115)
+
+**Files Modified:**
+- `ckanext/unaids/actions.py`: Lines 136-169
+- `ckanext/unaids/plugin.py`: Line 115
+
+**Result:**
+⏳ PENDING - Waiting for test verification
