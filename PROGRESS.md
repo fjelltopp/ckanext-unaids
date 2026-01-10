@@ -861,3 +861,43 @@ Running all tests together causes plugin configuration conflicts - errors increa
 1. Investigate remaining failures in each file
 2. Consider running tests with `--forked` or similar isolation
 3. Focus on test_auth_logic (10 failures), test_auth (8 failures), test_logic (7 failures)
+
+---
+
+## Batch 5: test_auth_logic.py - OAuth2 Config and Module Variable Patches
+
+### Issue: OAuth2 Config Not Available During Tests
+
+**Error Messages:**
+```
+ckanext.unaids.auth_logic.OAuth2AuthorizationError: Invalid scope. Required: 'None'
+TypeError: can only concatenate str (not "NoneType") to str
+```
+
+**Root Cause:**
+- Tests were overriding `ckan.plugins` config without including OAuth2-related config values
+- `AUTH0_DOMAIN`, `API_AUDIENCE`, `REQUIRED_SCOPE` are set at module import time from `config.get()`
+- pytest `ckan_config` markers only affect runtime config, not import-time module-level variables
+- This caused the module-level variables to be `None` when tests ran
+
+**Solution Applied:**
+1. Added `ckan_config` marker for `ckanext.unaids.oauth2_required_scope` to `TestVerifyRequiredScope` and `TestAccessTokenPresentAndValidAndUserAuthorized`
+2. For `TestValidateAndDecodeToken`, the module-level variables issue required patching the variables directly:
+   - Added `@patch('ckanext.unaids.auth_logic.API_AUDIENCE', 'http://api.unittests.org')`
+   - Added `@patch('ckanext.unaids.auth_logic.AUTH0_DOMAIN', 'unittests.org')`
+   - Applied to all 5 test methods in the class
+
+**Files Modified:**
+- `ckanext/unaids/tests/test_auth_logic.py`: Lines 38-42, 58-62, 148-167, 198-204, 219-226, 249-258, 282-290
+
+**Key Patterns Learned:**
+- Module-level variables set from `config.get()` are evaluated at import time
+- pytest `ckan_config` markers don't affect import-time evaluations
+- Use `@patch()` to mock module-level constants when testing
+- For runtime `config.get()` calls, `ckan_config` markers work fine
+
+**Test Results After Fix:**
+- test_auth_logic.py: **26 passed, 0 failed** (was 16 passed, 10 failed)
+
+**Result:**
+✅ FIXED - test_auth_logic.py is now fully passing

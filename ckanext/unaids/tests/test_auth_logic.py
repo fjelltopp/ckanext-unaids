@@ -36,6 +36,7 @@ class TestExtractToken(object):
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids')
+@pytest.mark.ckan_config('ckanext.unaids.oauth2_required_scope', 'access:adr')
 @pytest.mark.usefixtures('with_plugins')
 class TestVerifyRequiredScope(object):
 
@@ -58,6 +59,7 @@ class TestVerifyRequiredScope(object):
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids')
+@pytest.mark.ckan_config('ckanext.unaids.oauth2_required_scope', 'access:adr')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins')
 class TestAccessTokenPresentAndValidAndUserAuthorized():
 
@@ -145,8 +147,18 @@ class TestCreateResponse:
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids')
+@pytest.mark.ckan_config('ckanext.unaids.oauth2_required_scope', 'access:adr')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins')
 class TestValidateAndDecodeToken(object):
+    """
+    Tests for validate_and_decode_token function.
+    
+    Note: AUTH0_DOMAIN and API_AUDIENCE are set at module import time,
+    so we patch them directly instead of using ckan_config markers.
+    """
+    
+    @patch('ckanext.unaids.auth_logic.API_AUDIENCE', 'http://api.unittests.org')
+    @patch('ckanext.unaids.auth_logic.AUTH0_DOMAIN', 'unittests.org')
     @patch('ckanext.unaids.auth_logic.jwt.decode')
     @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
     @patch('json.loads')
@@ -183,6 +195,8 @@ class TestValidateAndDecodeToken(object):
         decode.assert_called_once_with(token, key_c, algorithms=["RS256"], audience="http://api.unittests.org",
                                        issuer="https://unittests.org/")
 
+    @patch('ckanext.unaids.auth_logic.API_AUDIENCE', 'http://api.unittests.org')
+    @patch('ckanext.unaids.auth_logic.AUTH0_DOMAIN', 'unittests.org')
     @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
     @patch('json.loads')
     @patch('ckanext.unaids.auth_logic.urlopen')
@@ -204,6 +218,8 @@ class TestValidateAndDecodeToken(object):
                            match="Unable to find appropriate key"):
             auth_logic.validate_and_decode_token(encoded)
 
+    @patch('ckanext.unaids.auth_logic.API_AUDIENCE', 'http://api.unittests.org')
+    @patch('ckanext.unaids.auth_logic.AUTH0_DOMAIN', 'unittests.org')
     @patch('ckanext.unaids.auth_logic.jwt.decode')
     @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
     @patch('json.loads')
@@ -234,6 +250,8 @@ class TestValidateAndDecodeToken(object):
                            match="Token is expired"):
             auth_logic.validate_and_decode_token(encoded)
 
+    @patch('ckanext.unaids.auth_logic.API_AUDIENCE', 'http://api.unittests.org')
+    @patch('ckanext.unaids.auth_logic.AUTH0_DOMAIN', 'unittests.org')
     @patch('ckanext.unaids.auth_logic.log')
     @patch('ckanext.unaids.auth_logic.jwt.decode')
     @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
@@ -267,6 +285,8 @@ class TestValidateAndDecodeToken(object):
         log.debug.assert_called_once_with(
             "Incorrect claims, expected audience: http://api.unittests.org, original error: something")
 
+    @patch('ckanext.unaids.auth_logic.API_AUDIENCE', 'http://api.unittests.org')
+    @patch('ckanext.unaids.auth_logic.AUTH0_DOMAIN', 'unittests.org')
     @patch('ckanext.unaids.auth_logic.jwt.decode')
     @patch('ckanext.unaids.auth_logic.jwt.get_unverified_header')
     @patch('json.loads')
