@@ -2,11 +2,12 @@ import logging
 import json
 
 from ckantoolkit import config
-from repoze.who.interfaces import IChallengeDecider
+# Legacy repoze.who imports not needed in CKAN 2.11 Flask-based auth
+# from repoze.who.interfaces import IChallengeDecider
 from six.moves.urllib.request import urlopen
-from flask import _request_ctx_stack, Response
+from flask import Response
 from jose import jwt
-from zope.interface import directlyProvides
+# from zope.interface import directlyProvides
 
 from ckan.common import request, g
 from ckan.logic import ActionError
@@ -37,7 +38,8 @@ def json_response_omitting_challenge_decider(environ, status, headers):
     return status.startswith('401 ')
 
 
-directlyProvides(json_response_omitting_challenge_decider, IChallengeDecider)
+# Legacy repoze.who registration not needed in CKAN 2.11 Flask-based auth
+# directlyProvides(json_response_omitting_challenge_decider, IChallengeDecider)
 
 
 # based on work from https://auth0.com/docs/quickstart/backend/python/01-authorization
@@ -92,7 +94,7 @@ def validate_and_decode_token(encoded):
         except Exception:
             raise OAuth2AuthenticationError(message="Unable to parse authentication token")
 
-        _request_ctx_stack.top.current_user = payload
+        g.current_user = payload
         return payload
     raise OAuth2AuthenticationError(message="Unable to find appropriate key")
 
