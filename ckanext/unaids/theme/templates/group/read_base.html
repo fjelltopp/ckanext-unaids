@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{#
+  Override the content_action block to fix icon double-encoding issue.
+  The core link_for tag double-encodes HTML entities for icons in CKAN 2.11.
+  We use the nav_link helper from ckanext-unaids which handles HTML properly.
+#}
+{% block content_action %}
+  {% if h.check_access('group_update', {'id': group_dict.id}) %}
+    {{ h.nav_link(_('Manage'), named_route=group_type+'.edit', id=group_dict.name, class_='btn btn-default', icon='wrench') }}
+  {% endif %}
+{% endblock %}
