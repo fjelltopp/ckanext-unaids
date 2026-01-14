@@ -9,7 +9,7 @@
           {{_('Navigator')}}
         </a>
       {% endif %}
-      {% link_for _('Manage'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-default', icon='wrench' %}
+      {{ h.nav_link(_('Manage'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-default', icon='wrench') }}
     {% elif h.check_access('dataset_lock', {'id': pkg.id}) and pkg.get('locked')  %}
       <a class="btn btn-danger"
          href="{{url_for('dataset_lock.unlock', dataset_id=pkg.id)}}"
