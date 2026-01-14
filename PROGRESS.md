@@ -1529,3 +1529,88 @@ resource['schema'] = 'test_schema'
 - All 160 tests passing, 1 skipped (giftless integration test)
 - User emails are now factory-generated (random), not hardcoded
 - Must use actual fixture values instead of hardcoded expectations
+
+---
+
+## Batch 15: Template Icon Double-Encoding Fixes (UI)
+
+### Issue: Font Awesome icons displayed as escaped HTML text
+
+**Symptom:**
+Buttons and links throughout the UI showed escaped HTML instead of icons:
+```html
+<a class="btn btn-primary" href="...">
+  &amp;lt;i class=&amp;quot;fa fa-plus-square&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; Add Organization
+</a>
+```
+
+Instead of:
+```html
+<a class="btn btn-primary" href="...">
+  <i class="fa fa-plus-square"></i> Add Organization
+</a>
+```
+
+**Affected Areas:**
+- Organization index page: "Add Organization" button
+- Package read page: "Manage" button
+- Resource read page: "Edit resource", "Views" buttons
+- Resource list dropdown: "Edit resource", "Views", "Add new resource" links
+- ckanext-pages: "Edit", "Revisions", "View Page" buttons
+
+**Root Cause:**
+- CKAN 2.11's `{% link_for %}` Jinja2 tag double-encodes HTML entities when the `icon` parameter is used
+- The tag generates icon HTML like `<i class="fa fa-icon"></i>` but then escapes it
+- This is a change in behavior from CKAN 2.10 where icons rendered correctly
+
+**Solution Applied:**
+Created custom `nav_link` helper function in `ckanext/unaids/helpers.py` that:
+1. Builds the `<a>` tag with proper icon HTML using `<i class="fa fa-{icon}"></i>`
+2. Uses `toolkit.literal()` to mark the HTML as safe (like `build_pages_nav_main` does)
+3. Escapes user inputs (URL, title, icon name) to prevent XSS attacks
+
+**Pattern - Replace `link_for` with `h.nav_link`:**
+```jinja2
+{# Before (CKAN 2.10 - worked, CKAN 2.11 - broken) #}
+{% link_for _('Manage'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-default', icon='wrench' %}
+
+{# After (CKAN 2.11 - works) #}
+{{ h.nav_link(_('Manage'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-default', icon='wrench') }}
+```
+
+**Files Created/Modified:**
+- `ckanext/unaids/theme/templates/organization/index.html` - Override `page_primary_action` block
+- `ckanext/unaids/theme/templates/package/read_base.html` - Changed `link_for` to `h.nav_link` for Manage button
+- `ckanext/unaids/theme/templates/package/resource_read.html` - Added `action_manage` block override
+- `ckanext/unaids/theme/templates/package/snippets/resources.html` - Full override with `h.nav_link` for dropdown items
+- `ckanext/unaids/theme/templates/ckanext_pages/page.html` - Override for Edit/Revisions buttons
+- `ckanext/unaids/theme/templates/ckanext_pages/page_revisions.html` - Override for View Page button
+
+**Helper Function (already exists in helpers.py from earlier fix):**
+```python
+def nav_link(text, *args, **kwargs):
+    """
+    Build a navigation link with icon support that doesn't double-encode HTML.
+    """
+    from ckan.lib.helpers import url_for
+    
+    icon = kwargs.pop('icon', None)
+    css_class = kwargs.pop('class_', '')
+    named_route = kwargs.pop('named_route', '')
+    
+    icon_html = ''
+    if icon:
+        icon_html = '<i class="fa fa-{}"></i> '.format(html_escape(icon))
+    
+    url = url_for(named_route, **kwargs) if named_route else url_for(**kwargs)
+    
+    link_parts = ['<a href="', html_escape(url), '"']
+    if css_class:
+        link_parts.extend([' class="', html_escape(css_class), '"'])
+    link_parts.extend(['>', icon_html, html_escape(str(text)), '</a>'])
+    
+    return toolkit.literal(''.join(link_parts))
+```
+
+**Result:**
+✅ FIXED - All icon buttons now render correctly throughout the UI
