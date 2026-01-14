@@ -356,6 +356,13 @@ a.dropdown-item{
 
 .homepage-partners{
   padding-bottom: 30px;
+  padding-top: 30px;
+}
+
+/* Restore Bootstrap 3 heading margins for homepage */
+.homepage H2 {
+  margin-top: 20px;
+  margin-bottom: 10px;
 }
 
 .whats-next H1{
@@ -467,6 +474,7 @@ a.dropdown-item{
 
 .homepage [role=main]{
   min-height: 350px;
+  padding: 30px 0;
 }
 
 .template-button,
@@ -785,14 +793,17 @@ float: right;
 
 .avenir-logo {
   margin: -10px auto;
+  max-width: 200px;
 }
 
 .fjelltopp-logo{
   margin: 5px auto;
+  max-width: 200px;
 }
 
 .imperial-logo{
   margin: 0 0px 0 auto;
+  max-width: 200px;
 }
 
 .page-header .btn-default {
