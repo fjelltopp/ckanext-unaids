@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{#
+  Override the page_primary_action block to fix icon double-encoding issue.
+  The core link_for tag double-encodes HTML entities for icons in CKAN 2.11.
+  We use the nav_link helper from ckanext-unaids which handles HTML properly.
+#}
+{% block page_primary_action %}
+  {% if h.check_access('organization_create') %}
+    {{ h.nav_link(h.humanize_entity_type('organization', group_type, 'add link') or _('Add Organization'), named_route=group_type ~ '.new', class_='btn btn-primary', icon='plus-square') }}
+  {% endif %}
+{% endblock %}
