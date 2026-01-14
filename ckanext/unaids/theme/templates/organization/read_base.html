@@ -1,6 +1,17 @@
 {% ckan_extends %}
 
 {#
+  Override content_action to fix icon double-encoding issue.
+  The core link_for tag double-encodes HTML entities for icons in CKAN 2.11.
+  We use the nav_link helper from ckanext-unaids which handles HTML properly.
+#}
+{% block content_action %}
+  {% if h.check_access('organization_update', {'id': group_dict.id}) %}
+    {{ h.nav_link(_('Manage'), named_route=group_type+'.edit', id=group_dict.name, class_='btn btn-default', icon='wrench') }}
+  {% endif %}
+{% endblock %}
+
+{#
   Override content_primary_nav to add DHIS2 Sources link.
   Activity Stream is added by the activity plugin via super().
 #}
