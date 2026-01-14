@@ -1,0 +1,7 @@
+{% ckan_extends %}
+
+{% block page_primary_action %}
+  {% if h.check_access('package_collaborator_create', {'id': pkg_dict.id})%}
+    {{ h.nav_link(_('Add Collaborators'), named_route='dataset.new_collaborator', id=pkg_dict.name, class_='btn btn-primary', icon='plus-square') }}
+  {% endif %}
+{% endblock %}
