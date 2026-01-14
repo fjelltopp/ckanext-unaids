@@ -30,10 +30,7 @@
 
 {% block content_primary_nav %}
 {% set dataset_id = pkg.id if is_activity_archive else pkg.name %}
-{{ h.build_nav_icon(dataset_type ~ '.read', _('Dataset'), id=dataset_id,
-icon='sitemap') }}
-{{ h.build_nav_icon('activity.package_activity', _('Activity Stream'), id=dataset_id,
-icon='clock-o') }}
+{{ h.build_nav_icon(dataset_type ~ '.read', _('Dataset'), id=dataset_id, icon='sitemap') }}
 {{ h.build_nav_icon('unaids_dataset_releases.list_releases', _('Releases'), dataset_type=dataset_type, dataset_id=dataset_id, icon='code-fork') }}
 {% endblock %}
 
