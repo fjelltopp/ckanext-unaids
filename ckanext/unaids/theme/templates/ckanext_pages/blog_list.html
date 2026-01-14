@@ -1,0 +1,23 @@
+{% extends 'ckanext_pages/blog_edit_base.html' %}
+
+{#
+  Override the page_primary_action block to fix icon double-encoding issue.
+  The core link_for tag double-encodes HTML entities for icons in CKAN 2.11.
+  We use the nav_link helper from ckanext-unaids which handles HTML properly.
+#}
+{% block page_primary_action %}
+  {% if h.check_access('ckanext_pages_update', {}) %}
+    {{ h.nav_link(_('Add Article'), named_route='pages.blog_new', page='', class_='btn btn-primary', icon='plus-square') }}
+  {% endif %}
+{% endblock %}
+
+{% block primary_content_inner %}
+  {% snippet 'ckanext_pages/snippets/pages_list.html', pages=c.page.items, type='blog', title='Blog' %}
+  {{ c.page.pager() }}
+{% endblock %}
+
+{% block main_content %}
+   <div class="wrapper no-nav">
+     {{ self.primary_content() }}
+   </div>
+{% endblock %}
