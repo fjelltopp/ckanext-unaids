@@ -1,5 +1,18 @@
 {% ckan_extends %}
 
+{#
+  Override the action_manage block to fix icon double-encoding issue.
+  The core link_for tag double-encodes HTML entities for icons in CKAN 2.11.
+  We use the nav_link helper from ckanext-unaids which handles HTML properly.
+#}
+{% block action_manage %}
+  {% if h.check_access('package_update', {'id':pkg.id }) %}
+    <li>{{ h.nav_link(_('Edit resource'), named_route=pkg.type ~ '_resource.edit', id=pkg.name, resource_id=res.id, class_='btn btn-default', icon='pencil') }}</li>
+    {% block action_manage_inner %}{% endblock %}
+    <li>{{ h.nav_link(_('Views'), named_route=pkg.type ~ '_resource.views', id=pkg.name, resource_id=res.id, class_='btn btn-default', icon='chart-bar') }}</li>
+  {% endif %}
+{% endblock action_manage %}
+
 {% block resource %}
     {% set activity_id = request.args['activity_id'] %}
     {% if activity_id and res.url_type == 'upload' %}
