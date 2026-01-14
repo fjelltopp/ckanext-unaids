@@ -13,16 +13,17 @@
 
 {#
   Override content_primary_nav to add DHIS2 Sources link.
-  Activity Stream is added by the activity plugin via super().
+  NOTE: Do NOT add Activity Stream here - the activity plugin adds it via super()
+  in ckanext/activity/templates/organization/read_base.html
+  Using group_dict instead of c.group_dict (c is deprecated in CKAN 2.11)
 #}
 {% block content_primary_nav %}
-  {{ h.build_nav_icon(group_type + '.read', _('Datasets'), id=c.group_dict.name, icon='sitemap') }}
+  {{ h.build_nav_icon(group_type + '.read', _('Datasets'), id=group_dict.name, icon='sitemap') }}
   <li>
-    <a href="{{ h.url_for('/harvest', organization=c.group_dict.name) }}">
+    <a href="{{ h.url_for('/harvest', organization=group_dict.name) }}">
       <i class="fa fa-database"></i>
       {{ _('DHIS2 Sources') }}
     </a>
   </li>
-  {{ h.build_nav_icon(group_type + '.about', _('About'), id=c.group_dict.name, icon='info-circle') }}
-  {{ h.build_nav_icon('activity.organization_activity', _('Activity Stream'), id=c.group_dict.name, offset=0, icon='clock') }}
+  {{ h.build_nav_icon(group_type + '.about', _('About'), id=group_dict.name, icon='info-circle') }}
 {% endblock %}
