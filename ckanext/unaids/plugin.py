@@ -1,4 +1,5 @@
 import datetime
+import json
 import logging
 from collections import OrderedDict
 
@@ -327,7 +328,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 class UNAIDSReclineView(p.SingletonPlugin):
     """
     CKAN 2.11: Recline view was removed, now using DataTables-based view.
-    This override allows data explorers to be auto created for geojson files.
+    This view extends datatables_view to auto-create data explorers for
+    geojson files. Requires data to be pushed to datastore via datapusher.
     """
     p.implements(p.IResourceView, inherit=True)
 
@@ -337,17 +339,17 @@ class UNAIDSReclineView(p.SingletonPlugin):
             "title": "Data Explorer",
             "filterable": True,
             "icon": "table",
-            "requires_datastore": False,
+            "requires_datastore": True,  # DataTables view requires datastore
             "default_title": p.toolkit._("Data Explorer"),
         }
 
     def can_view(self, data_dict):
         resource = data_dict["resource"]
 
-        if resource.get(
-                "datastore_active"
-        ) or "_datastore_only_resource" in resource.get("url", ""):
-            return True
+        # Only show for resources with datastore active
+        if not resource.get("datastore_active"):
+            return False
+
         resource_format = resource.get("format", None)
 
         if resource_format:
@@ -360,8 +362,8 @@ class UNAIDSReclineView(p.SingletonPlugin):
 
     def setup_template_variables(self, context, data_dict):
         return {
-            "resource_json": toolkit.h.json.dumps(data_dict.get("resource")),
-            "resource_view_json": toolkit.h.json.dumps(data_dict.get("resource_view"))
+            "resource_json": json.dumps(data_dict.get("resource")),
+            "resource_view_json": json.dumps(data_dict.get("resource_view"))
         }
 
 
