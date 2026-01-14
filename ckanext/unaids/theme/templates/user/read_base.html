@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
-{% block user_heading %}
-    <h1 class="heading">{{ user.display_name }}</h1>
-    <p class="affiliation">{{ user.job_title }}<br/>{{ user.affiliation }}</p>
+{% block content_action %}
+  {% if h.check_access('user_update', user) %}
+    {{ h.nav_link(_('Manage'), named_route='user.edit', id=user.name, class_='btn btn-default', icon='wrench') }}
+  {% endif %}
 {% endblock %}
-    

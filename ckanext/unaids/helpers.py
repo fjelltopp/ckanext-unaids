@@ -17,6 +17,7 @@ except ImportError:
     from cgi import escape as html_escape
 
 from urllib.parse import quote, urlencode
+from markupsafe import Markup
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
@@ -203,7 +204,9 @@ def build_pages_nav_main(*args):
     for page in pages_list:
         type_ = 'blog' if page['page_type'] == 'blog' else 'pages'
         name = quote(page['name'])
-        title = html_escape(_(page['title']))
+        # In CKAN 2.11, don't escape the title as it may contain HTML (e.g., icons)
+        # The toolkit.h.literal() wrapper handles marking the entire link as safe
+        title = _(page['title'])
         link = toolkit.h.literal(u'<a href="/{}/{}/{}">{}</a>'.format(toolkit.h.lang(), type_, name, title))
         if page['name'] == page_name:
             li = toolkit.literal('<li class="active">') + link + toolkit.literal('</li>')
@@ -337,3 +340,153 @@ def dataset_lockable(dataset_id):
         return "locked" in dataset_field_names
     except toolkit.ObjectNotFound:
         return False
+
+
+def build_nav_icon(menu_item, title, **kw):
+    """
+    Build a navigation item with icon support that doesn't double-encode HTML.
+
+    This overrides the core CKAN build_nav_icon to fix HTML encoding issues
+    where <i> tags for icons were being escaped.
+
+    Outputs: <li><a href="..."><i class="fa fa-{icon}"></i> title</a></li>
+
+    :param menu_item: the name of the defined menu item (e.g., 'user.read')
+    :param title: text used for the link
+    :param kw: additional keywords including 'icon' and url parameters
+
+    Security: All user inputs are HTML-escaped to prevent XSS attacks.
+    """
+    from ckan.lib.helpers import url_for
+
+    # Extract icon and build icon HTML if present
+    icon = kw.pop('icon', None)
+    icon_html = ''
+    if icon:
+        # Escape icon name to prevent XSS
+        icon_html = '<i class="fa fa-{}"></i> '.format(html_escape(icon))
+
+    # Check if the link is active
+    controller, action = menu_item.split('.')
+    item = {'action': action, 'controller': controller}
+    item.update(kw)
+
+    # Determine if link is active
+    active = _link_active(item)
+
+    # Remove highlight_controllers so they won't appear in generated urls
+    item.pop('highlight_controllers', False)
+
+    # Get the suppress_active_class if present
+    suppress_active_class = kw.pop('suppress_active_class', False)
+
+    # Build the URL (url_for is safe, returns escaped URL)
+    url = url_for(menu_item, **item)
+
+    # Build link with proper HTML handling and XSS protection
+    # Escape title to prevent XSS, but keep icon_html unescaped (it's our controlled HTML)
+    # Use literal() to mark HTML as safe like build_pages_nav_main does
+    link = toolkit.literal(u'<a href="{}">{}{}</a>'.format(
+        html_escape(url),
+        icon_html,  # Already contains escaped icon name
+        html_escape(title)
+    ))
+
+    # Wrap in <li> tags with active class if needed
+    if active:
+        return toolkit.literal('<li class="active">') + link + toolkit.literal('</li>')
+    return toolkit.literal('<li>') + link + toolkit.literal('</li>')
+
+
+def _link_active(kwargs):
+    """
+    Check if a menu item should be marked as active based on current request.
+    This is a simplified version of the core CKAN helper.
+    """
+    from ckan.plugins import toolkit
+
+    try:
+        controller = kwargs.get('controller')
+        action = kwargs.get('action')
+        highlight_controllers = kwargs.get('highlight_controllers', [])
+
+        endpoint = toolkit.get_endpoint()
+        if not endpoint:
+            return False
+
+        current_controller, current_action = endpoint
+
+        # Check if current matches exactly
+        if controller == current_controller and action == current_action:
+            return True
+
+        # Check highlight controllers
+        if current_controller in highlight_controllers:
+            return True
+
+        return False
+    except Exception:
+        return False
+
+
+def nav_link(text, *args, **kwargs):
+    """
+    Build a navigation link with icon support that doesn't double-encode HTML.
+
+    This overrides the core CKAN nav_link to fix HTML encoding issues
+    where <i> tags for icons were being escaped.
+
+    :param text: text used for the link
+    :param class_: CSS class(es) to add to the <a> tag
+    :param icon: name of Font Awesome icon to use within the link
+    :param condition: if False then no link is returned
+    :param named_route: route name for the link
+
+    Security: All user inputs are HTML-escaped to prevent XSS attacks.
+    """
+    from ckan.lib.helpers import url_for
+    import ckan.plugins as p
+
+    if len(args) > 1:
+        raise Exception('Too many unnamed parameters supplied')
+
+    blueprint, endpoint = p.toolkit.get_endpoint()
+    if args:
+        kwargs['controller'] = blueprint or None
+        kwargs['action'] = endpoint or None
+
+    named_route = kwargs.pop('named_route', '')
+    condition = kwargs.pop('condition', True)
+
+    if not condition:
+        return ''
+
+    # Extract icon and class
+    icon = kwargs.pop('icon', None)
+    css_class = kwargs.pop('class_', '')
+    title_attr = kwargs.pop('title', kwargs.pop('title_', None))
+
+    # Build icon HTML if present
+    icon_html = ''
+    if icon:
+        # Escape icon name to prevent XSS
+        icon_html = '<i class="fa fa-{}"></i> '.format(html_escape(icon))
+
+    # Build the URL (url_for is safe, returns escaped URL)
+    if named_route:
+        url = url_for(named_route, **kwargs)
+    else:
+        # For non-named routes, we need to handle it differently
+        url = url_for(**kwargs)
+
+    # Build the link HTML with proper XSS protection
+    # All user inputs are escaped, icon_html contains our controlled HTML with escaped icon name
+    # Use literal() to mark HTML as safe like build_pages_nav_main does
+    link_parts = ['<a href="', html_escape(url), '"']
+    if css_class:
+        link_parts.extend([' class="', html_escape(css_class), '"'])
+    if title_attr:
+        link_parts.extend([' title="', html_escape(title_attr), '"'])
+    link_parts.extend(['>', icon_html, html_escape(str(text)), '</a>'])
+
+    return toolkit.literal(''.join(link_parts))
