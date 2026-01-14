@@ -17,7 +17,6 @@ except ImportError:
     from cgi import escape as html_escape
 
 from urllib.parse import quote, urlencode
-from markupsafe import Markup
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
@@ -393,7 +392,7 @@ def build_nav_icon(menu_item, title, **kw):
     ))
 
     # Wrap in <li> tags with active class if needed
-    if active:
+    if active and not suppress_active_class:
         return toolkit.literal('<li class="active">') + link + toolkit.literal('</li>')
     return toolkit.literal('<li>') + link + toolkit.literal('</li>')
 

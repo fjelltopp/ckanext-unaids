@@ -1,5 +1,5 @@
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 from ckan.tests import factories
 from ckan.plugins import toolkit
 from markupsafe import Markup
