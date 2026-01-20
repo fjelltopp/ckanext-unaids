@@ -155,6 +155,8 @@ def package_activity_list(original_action, context, data_dict):
         for activity in activity_list:
             activity['release_name'] = activity_to_release_name.get(activity['id'])
     except (logic.NotFound, KeyError):
+        # Silently skip adding release names if the versions plugin is not available
+        # or if the dataset/activity has no releases
         pass
 
     return activity_list

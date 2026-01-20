@@ -101,7 +101,7 @@ class TestPlugin(object):
             'id': u''
         }
         context = {'user': self.user['name']}
-        response = call_action('resource_create', context, **resource)
+        call_action('resource_create', context, **resource)
         response = call_action('package_show', context, id=dataset['id'])
         assert response['resources'][0]['format'] == 'GeoJSON'
 
