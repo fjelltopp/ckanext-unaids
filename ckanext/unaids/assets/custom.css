@@ -992,3 +992,27 @@ div.ckanext-datapreview{
   border: 1px solid #e31837;
   color: #fff;
 }
+
+/* Validation badge styles */
+.validation-badge {
+    display: inline-block;
+    margin: 0 0 20px 0;
+}
+
+.resource-list .validation-badge {
+    float: right;
+    margin: 0 150px 0 0;
+    text-align: right;
+}
+
+@media (max-width: 991px) {
+    .resource-list .validation-badge {
+        margin: 0px;
+    }
+}
+
+.validation-badge p.badge-link {
+    text-align: center;
+    margin: 5px 0 0 0;
+    font-size: 14px;
+}
