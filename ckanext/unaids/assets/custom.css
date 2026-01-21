@@ -129,51 +129,70 @@ a.dropdown-item{
   color: #aaa;
 }
 
-.dataset-resources li a {
+.dataset-resources li a,
+.dataset-resources .badge {
   background-color: #aaa;
 }
 
-.label[data-format=html],
-.label[data-format*=html] {
+/* Resource format badges - Bootstrap 5 compatibility */
+.badge[data-format],
+.label[data-format] {
+  color: #fff;
+}
+
+.label[data-format=html], .badge[data-format=html],
+.label[data-format*=html], .badge[data-format*=html] {
   background-color: #55a1ce;
 }
-.label[data-format=json]{
+.label[data-format=json], .badge[data-format=json] {
   background-color: #ef7100;
 }
-.label[data-format=xml],
-.label[data-format*=xml] {
+.label[data-format=xml], .badge[data-format=xml],
+.label[data-format*=xml], .badge[data-format*=xml] {
   background-color: #ef7100;
 }
-.label[data-format=text],
-.label[data-format*=text] {
+.label[data-format=text], .badge[data-format=text],
+.label[data-format*=text], .badge[data-format*=text] {
   background-color: #74cbec;
 }
-.label[data-format=csv],
-.label[data-format*=csv] {
+.label[data-format=csv], .badge[data-format=csv],
+.label[data-format*=csv], .badge[data-format*=csv] {
   background-color: #dfb100;
 }
-.label[data-format=xls],
-.label[data-format*=xls] {
+.label[data-format=xls], .badge[data-format=xls],
+.label[data-format*=xls], .badge[data-format*=xls] {
   background-color: #2db55d;
 }
-.label[data-format=zip],
-.label[data-format*=zip] {
+.label[data-format=zip], .badge[data-format=zip],
+.label[data-format*=zip], .badge[data-format*=zip] {
   background-color: #686868;
 }
-.label[data-format=api],
-.label[data-format*=api] {
+.label[data-format=api], .badge[data-format=api],
+.label[data-format*=api], .badge[data-format*=api] {
   background-color: #ec96be;
 }
-.label[data-format=pdf],
-.label[data-format*=pdf] {
+.label[data-format=pdf], .badge[data-format=pdf],
+.label[data-format*=pdf], .badge[data-format*=pdf] {
   background-color: #e0051e;
 }
-.label[data-format=rdf],
-.label[data-format*=rdf],
-.label[data-format*=nquad],
-.label[data-format*=ntriples],
-.label[data-format*=turtle] {
+.label[data-format=rdf], .badge[data-format=rdf],
+.label[data-format*=rdf], .badge[data-format*=rdf],
+.label[data-format*=nquad], .badge[data-format*=nquad],
+.label[data-format*=ntriples], .badge[data-format*=ntriples],
+.label[data-format*=turtle], .badge[data-format*=turtle] {
   background-color: #0b4498;
+}
+.label[data-format=geojson], .badge[data-format=geojson],
+.label[data-format*=geojson], .badge[data-format*=geojson] {
+  background-color: #8d2932;
+}
+.label[data-format=shp], .badge[data-format=shp],
+.label[data-format*=shp], .badge[data-format*=shp] {
+  background-color: #91318c;
+}
+.label[data-format=pjnz], .badge[data-format=pjnz],
+.label[data-format*=pjnz], .badge[data-format*=pjnz] {
+  background-color: #aaa;
 }
 
 .homepage .module-search {
@@ -280,13 +299,16 @@ a.dropdown-item{
   border-color: #e31837;
 }
 
-.dataset-heading .label{
+.dataset-heading .label,
+.dataset-heading .badge {
   margin-right: 10px;
   padding: 0.4em 0.4em 0.2em;
 }
 
-.dataset-heading .label.dataset-type{
+.dataset-heading .label.dataset-type,
+.dataset-heading .badge.dataset-type {
   background-color: #e31837;
+  color: #fff;
 }
 
 .label-primary {
