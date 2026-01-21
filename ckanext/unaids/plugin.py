@@ -345,11 +345,6 @@ class UNAIDSReclineView(p.SingletonPlugin):
 
     def can_view(self, data_dict):
         resource = data_dict["resource"]
-
-        # Only show for resources with datastore active
-        if not resource.get("datastore_active"):
-            return False
-
         resource_format = resource.get("format", None)
 
         if resource_format:
@@ -358,7 +353,10 @@ class UNAIDSReclineView(p.SingletonPlugin):
             return False
 
     def view_template(self, context, data_dict):
-        return "datatables/datatables_view.html"
+        resource = data_dict.get("resource", {})
+        if resource.get("datastore_active"):
+            return "datatables/datatables_view.html"
+        return "unaids/datastore_pending.html"
 
     def setup_template_variables(self, context, data_dict):
         return {
