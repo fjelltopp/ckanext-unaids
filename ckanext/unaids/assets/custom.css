@@ -7,6 +7,11 @@
   font-style: normal;
 }
 
+/* Bootstrap 5 compatibility - .hidden class was removed in BS5 */
+.hidden {
+  display: none !important;
+}
+
 body {
   font-family: 'AvenirLTStd-Book', 'sans-serif';
   background: #fff url("../../../base/images/bg.png");

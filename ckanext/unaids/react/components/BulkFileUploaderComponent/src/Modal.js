@@ -5,18 +5,18 @@ export default function Modal(props) {
     const allowClosing = !props.uploadsComplete && !props.uploadInProgress;
     const closeButtonAttrs = [];
     return (
-        <div className="modal fade" id={props.modalElementId} data-backdrop="static" data-keyboard="false">
+        <div className="modal fade" id={props.modalElementId} data-bs-backdrop="static" data-bs-keyboard="false">
             <div className="modal-dialog" role="document">
                 <div className="modal-content">
                     <div className="modal-header">
+                        <h4 className="modal-title">{ckan.i18n._('Upload Resources')}</h4>
                         <button
                             type="button"
-                            className={`close ${!allowClosing && 'disabled'}`}
-                            data-dismiss={allowClosing && 'modal'}
+                            className={`btn-close ${!allowClosing && 'disabled'}`}
+                            data-bs-dismiss={allowClosing && 'modal'}
+                            aria-label="Close"
                         >
-                            <span aria-hidden="true">&times;</span>
                         </button>
-                        <h4 className="modal-title">{ckan.i18n._('Upload Resources')}</h4>
                     </div>
                     <div className="modal-body">
                         <ModalBody {...props} />
