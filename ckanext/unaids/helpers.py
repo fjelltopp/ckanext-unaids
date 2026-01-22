@@ -69,14 +69,14 @@ def get_all_package_downloads(pkg_dict):
     Get all the urls of resources the user has access to in the package.
     """
     file_urls = []
-    for res in pkg_dict['resources']:
+    resources = pkg_dict.get('resources', [])
+    for res in resources:
         can_access_res = check_access(
             'resource_show',
             {'id': res['id'], 'resource': res}
         )
         if can_access_res and res.get('url'):
             file_urls.append(res.get('url'))
-
     return json.dumps(file_urls)
 
 
