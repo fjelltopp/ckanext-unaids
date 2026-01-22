@@ -1,6 +1,14 @@
 {% ckan_extends %}
+
+{% block primary_content_inner %}
+  {# CKAN 2.11 fix: Use h.nav_link() instead of link_for to avoid icon double-encoding #}
+  {{ h.nav_link(_('Back to all collaborators'), named_route='dataset.collaborators_read', id=pkg_dict.name, class_='btn btn-default pull-right', icon='arrow-left') }}
+  <h1 class="page-heading">
+    {% block page_heading %}{{ _('Edit Collaborator') if user else _('Add Collaborator') }}{% endblock %}
+  </h1>
   {% block form %}
   <form class="dataset-form add-member-form" method='post'>
+    {{ h.csrf_input() }}
     <div class="row">
       <div class="col-md-6">
         <div class="form-group control-medium">
@@ -43,3 +51,4 @@
     </div>
   </form>
   {% endblock %}
+{% endblock %}

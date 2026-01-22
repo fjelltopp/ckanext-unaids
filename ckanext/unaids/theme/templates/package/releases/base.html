@@ -2,6 +2,7 @@
 
 {% block primary_content_inner %}
 <form method="POST">
+    {{ h.csrf_input() }}
     <div class="modal-dialog">
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
