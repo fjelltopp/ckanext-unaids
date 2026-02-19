@@ -56,8 +56,8 @@ jobs:
       run: |
         pip install -r requirements.txt
         pip install -r dev-requirements.txt
-        # Force reinstall pandas to ensure binary compatibility with numpy
-        pip install --force-reinstall --no-cache-dir pandas==2.0.3
+        # Force reinstall numpy and pandas to ensure binary compatibility on Python 3.10
+        pip install --force-reinstall --no-cache-dir numpy==1.26.4 pandas==2.0.3
         pip install -e "git+https://github.com/fjelltopp/ckanext-scheming@fix/ckan-2.11-python-3.10-compatibility#egg=ckanext-scheming"
         pip install -e "git+https://github.com/fjelltopp/ckanext-validation@toavina/update-python#egg=ckanext-validation"
         pip install -e "git+https://github.com/fjelltopp/ckanext-ytp-request@toavina/update-python#egg=ckanext-ytp-request"
