@@ -58,8 +58,10 @@
   {% endblock %}
   {# FIXME why is this here? seems wrong #}
   <span class="insert-comment-thread"></span>
+  {# Pre-existing issue: attribute was single-quoted; double-quotes + Jinja2 auto-escape
+     ensure any special characters in the JSON are safely escaped. #}
   <button class="download-all btn btn-primary dropdown-toggle float-end hidden"
-     data-module="download_all" data-module-files='{{h.get_all_package_downloads(pkg)}}'>
+     data-module="download_all" data-module-files="{{ h.get_all_package_downloads(pkg) }}">
     <i class="fa fa-download"></i>
     {{ _('Download All') }}
   </button>

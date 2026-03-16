@@ -10,36 +10,41 @@ this.ckan.module('download_all', function ($) {
     },
     initialize: function () {
       $.proxyAll(this, /_on/);
-      if(this.options.files.length > 1){
+      // CKAN's module system auto-parses data-module-* attributes via jQuery.parseJSON,
+      // so this.options.files is already an array. We keep an Array.isArray guard as a
+      // safety net in case of unexpected environments.
+      // Pre-existing regression fix (ADX-227): the condition was accidentally changed from
+      // >= 1 to > 1, hiding the button when only one file was accessible.
+      var files = Array.isArray(this.options.files) ? this.options.files : [];
+      if (files.length >= 1) {
         $(this.el).removeClass('hidden');
-        this.el.on('click', this._onClick);
-      }else{
+        this.el.on('click', function(event) {
+          event.preventDefault();
+          this.downloadAll(files);
+        }.bind(this));
+      } else {
         $(this.el).addClass('hidden');
       }
     },
-    _onClick: function (event) {
-      event.preventDefault();
-      this.downloadAll(this.options.files);
-    },
     downloadAll: async function (urls) {
-      var link = document.createElement('a');
-      link.setAttribute('target', "_blank");
-      link.style.display = 'none';
       var count = 0;
-      document.body.appendChild(link);
       for (var i = 0; i < urls.length; i++) {
         var name = urls[i].split('/');
         name = name[name.length - 1];
+        var link = document.createElement('a');
+        link.setAttribute('target', "_blank");
         link.setAttribute('href', urls[i]);
         link.setAttribute('download', name);
+        link.style.display = 'none';
+        document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
         if (++count >= 10) {
           // need to pause every 10 files for Google Chrome to work
           await new Promise(r => setTimeout(r, 2000));
           count = 0;
         }
       }
-      document.body.removeChild(link);
     }
   };
 });

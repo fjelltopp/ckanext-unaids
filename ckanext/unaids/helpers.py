@@ -16,7 +16,7 @@ try:
 except ImportError:
     from cgi import escape as html_escape
 
-from urllib.parse import quote, urlencode
+from urllib.parse import quote, urlencode, urlparse
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
@@ -75,8 +75,13 @@ def get_all_package_downloads(pkg_dict):
             'resource_show',
             {'id': res['id'], 'resource': res}
         )
-        if can_access_res and res.get('url'):
-            file_urls.append(res.get('url'))
+        # Pre-existing issue (since 098dab8): no URL scheme validation allowed
+        # javascript: URLs to be injected and executed via link.click() in the browser.
+        # Block dangerous schemes; allow http, https, and relative URLs (empty scheme)
+        # since blob-storage uploaded resources use relative paths.
+        url = res.get('url')
+        if can_access_res and url and urlparse(url).scheme not in ('javascript', 'data', 'vbscript'):
+            file_urls.append(url)
     return json.dumps(file_urls)
 
 
