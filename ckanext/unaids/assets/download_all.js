@@ -29,8 +29,13 @@ this.ckan.module('download_all', function ($) {
     downloadAll: async function (urls) {
       var count = 0;
       for (var i = 0; i < urls.length; i++) {
-        var name = urls[i].split('/');
-        name = name[name.length - 1];
+        // Client-side scheme guard (defence-in-depth): skip anything that isn't
+        // http(s) or a root-relative path. Must run before new URL() to avoid
+        // TypeError on malformed/dangerous URLs.
+        if (!/^(https?:\/\/|\/)/.test(urls[i]) && urls[i].indexOf(':') !== -1) {
+          continue;
+        }
+        var name = decodeURIComponent(new URL(urls[i], window.location.origin).pathname.split('/').pop());
         var link = document.createElement('a');
         link.setAttribute('target', "_blank");
         link.setAttribute('href', urls[i]);

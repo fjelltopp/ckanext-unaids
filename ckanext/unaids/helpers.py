@@ -67,21 +67,53 @@ def validation_load_json_schema(schema):
 def get_all_package_downloads(pkg_dict):
     """
     Get all the urls of resources the user has access to in the package.
+
+    On staging, resource URLs are CKAN download endpoints that issue a 302 redirect to a
+    cross-origin Azure CDN URL. When the browser follows each redirect as a navigation,
+    each new tab cancels the previous one — so only ~1 file downloads. We resolve the
+    signed Azure URL server-side so the JS receives a direct CDN URL with no redirect.
+    Falls back to the resource's own URL if the resource is not an LFS-backed file.
     """
+    import ckan.model as model
     file_urls = []
+    context = {
+        'user': getattr(toolkit.g, 'user', None),
+        'auth_user_obj': getattr(toolkit.g, 'userobj', None),
+        'model': model,
+    }
     resources = pkg_dict.get('resources', [])
     for res in resources:
         can_access_res = check_access(
             'resource_show',
             {'id': res['id'], 'resource': res}
         )
-        # Pre-existing issue (since 098dab8): no URL scheme validation allowed
-        # javascript: URLs to be injected and executed via link.click() in the browser.
-        # Block dangerous schemes; allow http, https, and relative URLs (empty scheme)
-        # since blob-storage uploaded resources use relative paths.
+        if not can_access_res:
+            continue
+
         url = res.get('url')
-        if can_access_res and url and urlparse(url).scheme not in ('javascript', 'data', 'vbscript'):
-            file_urls.append(url)
+        if not url:
+            continue
+
+        # Allow-list: only http, https, and relative URLs (empty scheme).
+        # Deny-lists are fragile — unknown schemes like file://, blob:, mailto: would slip through.
+        if urlparse(url).scheme not in ('http', 'https', ''):
+            continue
+
+        # Try to resolve a direct signed Azure URL via blob-storage to avoid the 302 redirect
+        # that causes only one file to download on staging (each navigation cancels the last).
+        try:
+            spec = get_action('get_resource_download_spec')(
+                context, {'id': res['id'], 'resource': res}
+            )
+            direct_url = spec.get('href')
+            if direct_url:
+                url = direct_url
+        except toolkit.NotAuthorized:
+            pass  # user can see the resource but not download it — skip
+        except Exception:
+            pass  # not an LFS resource or blob-storage not installed — use original URL
+
+        file_urls.append(url)
     return json.dumps(file_urls)
 
 
