@@ -4,5 +4,6 @@ ckanext-saml2auth==1.2.3
 python-dotenv==1.0.0
 python-jose==3.3.0
 pandas==2.0.3
+numpy>=1.21.0,<2.0
 frictionless>=5.0.0
 tableschema>=1.21.0

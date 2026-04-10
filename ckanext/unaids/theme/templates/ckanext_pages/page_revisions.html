@@ -33,9 +33,10 @@
                         <i class="fa fa-circle fa-stack-2x icon"></i>
                         <i class="fa fa-users fa-stack-1x fa-inverse"></i>
                         </span>
-                        {{ _('{actor} updated page at {date}').format(
-                        actor=actor(revision), date=h.render_datetime(revision.created, with_hours=True)
-                        )|safe }}
+                        {{ actor(revision) }}
+                        {{ _('updated page at {date}').format(
+                        date=h.render_datetime(revision.created, with_hours=True)
+                        ) }}
 
                         {% link_for _('Preview'), named_route='pages.pages_revisions_preview', page=c.page.name, revision=key, class_='btn btn-default' %}
                         {% if not revision.current %}
