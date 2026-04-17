@@ -12,7 +12,7 @@ export default function Modal(props) {
                         <h4 className="modal-title">{ckan.i18n._('Upload Resources')}</h4>
                         <button
                             type="button"
-                            className={`btn-close ${!allowClosing && 'disabled'}`}
+                            className={`btn-close ${!allowClosing ? 'disabled' : ''}`}
                             data-bs-dismiss={allowClosing && 'modal'}
                             aria-label="Close"
                         >

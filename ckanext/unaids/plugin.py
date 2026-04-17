@@ -328,8 +328,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 class UNAIDSReclineView(p.SingletonPlugin):
     """
     CKAN 2.11: Recline view was removed, now using DataTables-based view.
-    This view extends datatables_view to auto-create data explorers for
-    geojson files. Requires data to be pushed to datastore via datapusher.
+    Shows a pending message for resources not yet loaded into datastore.
     """
     p.implements(p.IResourceView, inherit=True)
 
@@ -339,7 +338,7 @@ class UNAIDSReclineView(p.SingletonPlugin):
             "title": "Data Explorer",
             "filterable": True,
             "icon": "table",
-            "requires_datastore": True,  # DataTables view requires datastore
+            "requires_datastore": False,
             "default_title": p.toolkit._("Data Explorer"),
         }
 
