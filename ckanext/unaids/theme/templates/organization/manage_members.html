@@ -35,7 +35,7 @@
           <td>{{ role }}</td>
           {% if can_create_members or can_delete_members %}
             <td>
-              <div class="btn-group pull-right">
+              <div class="btn-group float-end">
                 {% if can_create_members %}
                   <a class="btn btn-default btn-sm" href="{{ h.url_for(group_type + '.member_new', id=group_dict.id, user=user_id) }}" title="{{ _('Edit') }}">
                     <i class="fa fa-wrench"></i>
