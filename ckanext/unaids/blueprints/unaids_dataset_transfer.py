@@ -39,8 +39,9 @@ def process_dataset_transfer(dataset_id):
         'owner_org': dataset['org_to_allow_transfer_to'],
         'org_to_allow_transfer_to': None
     })
+    site_user = toolkit.get_action('get_site_user')({'ignore_auth': True}, {})
     toolkit.get_action('package_update')({
-        'user': '',
+        'user': site_user['name'],
         'model': model,
         'session': model.Session,
         'ignore_auth': True

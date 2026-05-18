@@ -13,7 +13,6 @@ import ckan.plugins.toolkit as toolkit
 import ckan.lib.uploader as uploader
 from ckan.lib.plugins import DefaultTranslation
 from ckan.logic import get_action
-from ckan.views import _identify_user_default
 from ckanext.blob_storage.interfaces import IResourceDownloadHandler
 from ckanext.unaids.dataset_transfer.model import tables_exists
 from ckanext.unaids.validators import (
@@ -44,7 +43,6 @@ import ckanext.unaids.actions as actions
 import ckanext.unaids.auth_logic as auth_logic
 from ckanext.unaids import auth, licenses, command, logic
 from ckanext.unaids.blueprints import blueprints
-from ckanext.reclineview.plugin import ReclineViewBase
 from ckanext.validation.interfaces import IDataValidation
 from ckanext.unaids.dataset_transfer.logic import send_dataset_transfer_emails
 from ckanext.datapusher.interfaces import IDataPusher
@@ -60,10 +58,6 @@ def add_licenses():
         core_licenses.License(licenses.LicenseCreativeCommonsIntergovernmentalOrgs()),
         core_licenses.License(core_licenses.LicenseNotSpecified()),
     ]
-
-
-def initialize_g_userobj_using_private_core_ckan_method():
-    _identify_user_default()
 
 
 class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
@@ -210,12 +204,6 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                     recipient_org_id=org_to_allow_transfer_to[0],
                 )
 
-        if data_dict['id'] in self.resources_to_validate_package:
-            del self.resources_to_validate_package[data_dict['id']]
-            toolkit.get_action("resource_validation_run_batch")(
-                context, {"dataset_ids": data_dict["package_id"]}
-            )
-
     def _process_schema_fields(self, data_dict):
         """
         Here we overload the default schema processing (from frictionlessdata/ckanext-validation)
@@ -230,7 +218,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return data_dict
 
-    def before_create(self, context, resource):
+    def before_resource_create(self, context, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource)
             _update_resource_last_modified_date(resource)
@@ -238,7 +226,7 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
             context["_resource_create_call"] = True
         return self._process_schema_fields(resource)
 
-    def before_update(self, context, current, resource):
+    def before_resource_update(self, context, current, resource):
         if _data_dict_is_resource(resource):
             _giftless_upload(context, resource, current=current)
             _update_resource_last_modified_date(resource, current=current)
@@ -251,9 +239,17 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
 
         return self._process_schema_fields(resource)
 
-    def before_show(self, resource):
+    def after_resource_update(self, context, resource):
+        if resource.get('id') in self.resources_to_validate_package:
+            del self.resources_to_validate_package[resource['id']]
+            toolkit.get_action("resource_validation_run_batch")(
+                context, {"dataset_ids": resource.get("package_id")}
+            )
+
+    def before_resource_show(self, resource):
         if _data_dict_is_resource(resource):
             return logic.update_filename_in_resource_url(resource)
+        return resource
 
     def after_upload(self, context, resource_dict, dataset_dict):
         if "schema" in resource_dict:
@@ -279,16 +275,17 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         if auth_logic.access_token_present_and_valid_and_user_authorized():
             return
 
-        initialize_g_userobj_using_private_core_ckan_method()
-        is_sysadmin = toolkit.g.userobj and toolkit.g.userobj.sysadmin
+        userobj = getattr(toolkit.g, 'userobj', None)
+        is_sysadmin = userobj and userobj.sysadmin
         substitute_user_id = toolkit.request.headers.get('CKAN-Substitute-User')
 
         if is_sysadmin and substitute_user_id:
             return auth.substitute_user(substitute_user_id)
 
     def after_saml2_login(self, resp, saml_attributes):
-        user_obj = toolkit.g.userobj
-        custom_user_profile_logic.read_saml_profile(user_obj, saml_attributes)
+        user_obj = getattr(toolkit.g, 'userobj', None)
+        if user_obj:
+            custom_user_profile_logic.read_saml_profile(user_obj, saml_attributes)
 
         return resp
 
@@ -306,11 +303,17 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         return app
 
 
-class UNAIDSReclineView(ReclineViewBase):
+class UNAIDSReclineView(p.SingletonPlugin):
     """
-    This override of the recline view plugin allows data explorers to be auto
-    created for geojson files.
+    DataTables-based resource view that supports the same formats as the old
+    Recline-based view. Replaces the CKAN 2.11-removed ckanext.reclineview.
     """
+
+    p.implements(p.IConfigurer, inherit=True)
+    p.implements(p.IResourceView, inherit=True)
+
+    def update_config(self, config):
+        toolkit.add_template_directory(config, 'templates')
 
     def info(self):
         return {
@@ -335,6 +338,15 @@ class UNAIDSReclineView(ReclineViewBase):
             return resource_format.lower() in ["csv", "xls", "xlsx", "tsv", "geojson"]
         else:
             return False
+
+    def setup_template_variables(self, context, data_dict):
+        return {}
+
+    def view_template(self, context, data_dict):
+        return 'datatables/datatables_view.html'
+
+    def form_template(self, context, data_dict):
+        return 'datatables/datatables_form.html'
 
 
 def _data_dict_is_resource(data_dict):

@@ -1,6 +1,6 @@
 """Tests for plugin.py."""
 # encoding: utf-8
-from mock import patch, call
+from unittest.mock import patch, call
 
 from ckan.tests.helpers import call_action
 from ckan.tests import factories

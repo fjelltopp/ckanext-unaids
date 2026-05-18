@@ -136,17 +136,25 @@ def dataset_version_show(original_action, context, data_dict):
 @t.chained_action
 @t.side_effect_free
 def package_activity_list(original_action, context, data_dict):
-    activity_list = original_action(context, data_dict)
+    """Get activity list for a package with release names added.
+
+    This chains the activity plugin's package_activity_list to add release names.
+    """
     dataset_id = data_dict['id']
-    releases_list = t.get_action('dataset_version_list')(
-        context,
-        {
-            'dataset_id': dataset_id,
-        }
-    )
-    activity_to_release_name = {r['activity_id']: r['name'] for r in releases_list}
-    for activity in activity_list:
-        activity['release_name'] = activity_to_release_name.get(activity['id'])
+
+    activity_list = original_action(context, data_dict)
+
+    try:
+        releases_list = t.get_action('dataset_version_list')(
+            context,
+            {'dataset_id': dataset_id}
+        )
+        activity_to_release_name = {r['activity_id']: r['name'] for r in releases_list}
+        for activity in activity_list:
+            activity['release_name'] = activity_to_release_name.get(activity['id'])
+    except (logic.NotFound, KeyError):
+        pass
+
     return activity_list
 
 

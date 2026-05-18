@@ -3,7 +3,6 @@ import logging
 from ckan.common import g, _
 from ckan.lib import helpers as h
 from ckan.logic import get_action
-from ckan.views.user import before_request
 from six import ensure_str
 import dominate.tags as dom_tags
 from flask import Blueprint
@@ -15,7 +14,6 @@ user_info_blueprint = Blueprint(
     __name__,
     url_prefix=u'/me'
 )
-user_info_blueprint.before_request(before_request)
 
 
 def display_user_details(locale=None):

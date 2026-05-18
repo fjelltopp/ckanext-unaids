@@ -12,7 +12,7 @@ from ckanext.unaids.validators import (
     if_empty_guess_format,
     read_only
 )
-from mock import MagicMock
+from unittest.mock import MagicMock
 
 
 @pytest.fixture

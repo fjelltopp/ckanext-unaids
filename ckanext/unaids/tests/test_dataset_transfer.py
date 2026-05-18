@@ -3,7 +3,7 @@ from ckan.tests import helpers
 from ckan.lib.helpers import url_for
 from ckan.tests import factories
 import pytest
-import mock
+from unittest import mock
 
 from ckanext.unaids.dataset_transfer.logic import (
     get_org_admins_with_email_addresses,
