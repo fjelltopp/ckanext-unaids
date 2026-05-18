@@ -1,4 +1,5 @@
 import pytest
+import ckan.plugins as p
 
 from ckan.tests import factories
 from ckanext.unaids.tests import unaids_db_setup, create_version
@@ -7,8 +8,19 @@ from ckanext.validation.model import tables_exist, create_tables
 from ckanext.ytp_request.tests import ytp_request_db_setup
 
 
+@pytest.fixture
+def clean_db_with_migrations(clean_db, with_plugins, migrate_db_for):
+    # CKAN 2.11: clean_db rebuilds the core schema only. Plugin-owned tables
+    # (activity.permission_labels as text[], ckanext_pages) need their Alembic
+    # migrations re-applied. Only migrate plugins actually loaded for this test
+    # so test classes don't need to declare plugins they don't use.
+    for plugin_name in ("activity", "pages"):
+        if p.plugin_loaded(plugin_name):
+            migrate_db_for(plugin_name)
+
+
 @pytest.fixture(autouse=True)
-def unaids_setup(clean_db):
+def unaids_setup(clean_db_with_migrations):
     if not tables_exist():
         create_tables()
 

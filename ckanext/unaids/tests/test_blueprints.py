@@ -9,7 +9,7 @@ from io import StringIO
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids pages')
+@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids pages')
 @pytest.mark.usefixtures('with_plugins')
 class TestValidateUserProfileBlueprint(object):
     def test_annonymous_access_to_index_page(self, app):
@@ -27,7 +27,7 @@ def test_org_download(app, test_organization):
     return app.get(url, extra_environ={'REMOTE_USER': org_admin_username})
 
 
-@pytest.mark.ckan_config("ckan.plugins", "ytp_request unaids pages")
+@pytest.mark.ckan_config("ckan.plugins", "activity ytp_request unaids pages")
 @pytest.mark.usefixtures("with_plugins")
 class TestMemberLists(object):
     def test_org_member_download_200_ok(self, test_org_download):

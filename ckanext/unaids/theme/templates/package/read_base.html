@@ -32,7 +32,7 @@
 {% set dataset_id = pkg.id if is_activity_archive else pkg.name %}
 {{ h.build_nav_icon(dataset_type ~ '.read', _('Dataset'), id=dataset_id,
 icon='sitemap') }}
-{{ h.build_nav_icon(dataset_type ~ '.activity', _('Activity Stream'), id=dataset_id,
+{{ h.build_nav_icon('activity.package_activity', _('Activity Stream'), id=dataset_id,
 icon='clock-o') }}
 {{ h.build_nav_icon('unaids_dataset_releases.list_releases', _('Releases'), dataset_type=dataset_type, dataset_id=dataset_id, icon='code-fork') }}
 {% endblock %}
@@ -46,7 +46,7 @@ icon='clock-o') }}
     <span> {{ _('Release') }}</span>
   </h2>
   <div class="module-content">
-  {% set release = h.get_current_dataset_release(dataset_id, request.args.activity_id) %}
+  {% set release = h.get_current_dataset_release(dataset_id, request.view_args.activity_id) %}
   {% if release %}
     <h2 style="margin: 0;"><b>{{ release.name }}</b></h2>
     <p class="text-muted">

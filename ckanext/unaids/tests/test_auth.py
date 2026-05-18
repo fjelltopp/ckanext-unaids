@@ -15,7 +15,7 @@ import logging
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets versions')
+@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestAuth(object):
 

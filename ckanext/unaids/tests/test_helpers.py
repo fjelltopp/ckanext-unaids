@@ -3,7 +3,7 @@ from ckan.tests import factories
 from ckan.plugins import toolkit
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'unaids scheming_datasets versions')
+@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetLockHelper(object):
     def test_dataset_lockable(self):

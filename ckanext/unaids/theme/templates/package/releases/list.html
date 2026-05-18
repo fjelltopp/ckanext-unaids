@@ -4,11 +4,11 @@
 
 {% set urls = {
     'create_from_latest_version': h.url_for('unaids_dataset_releases.release_view', dataset_type=dataset_type, dataset_id=pkg.name),
-    'create_from_an_older_version': h.url_for('dataset.activity', id=pkg.id, create_release=True)
+    'create_from_an_older_version': h.url_for('activity.package_activity', id=pkg.id, create_release=True)
 } %}
 
 {% if h.check_access('version_create', {'package_id': pkg.id}) %}
-    {% set release = h.get_current_dataset_release(pkg.id, request.args.activity_id) %}
+    {% set release = h.get_current_dataset_release(pkg.id, request.view_args.activity_id) %}
     {% if release %}
         <p class="empty">
             <span>{{ _('The current version of the dataset is already used by release') }} {{ release.name }},</span>
