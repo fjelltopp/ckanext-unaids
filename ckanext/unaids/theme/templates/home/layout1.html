@@ -8,7 +8,7 @@
             <div id="unaids-wordcloud" class="text-center">
               {{_('<span style="font-size: 2em; color: grey;">The AIDS Data Repository<br />aims to improve the</span><br /><span style="font-size: 2.75em; font-weight: bold;">quality, accessibility <br /> and consistency</span><span style="font-size: 2em;"> of HIV data<br />and HIV estimates by </span><span style="font-size: 2em; color: grey;">providing a</span><br /><span style="font-size: 2.5em; font-weight: bold;">centralised platform</span><br /><span style="font-size: 2em;">with tools to help countries </span><span style="font-size: 2em; font-weight: bold;">manage<br />and share </span><span style="font-size: 2em; color: grey;">their HIV data.</span>')}}
             </div>
-            <a class="pull-right" href={{h.url_for("/pages/about")}}>
+            <a class="float-end" href={{h.url_for("/pages/about")}}>
               {{_('Find out more...')}}
             </a>
           </section>
@@ -27,7 +27,7 @@
 <div role="main" class="help-panel">
   <div class="container">
     <div class='row'>
-      <div class="col-xs-12 order-xs-2 col-md-6 col-lg-4 col-lg-offset-2">
+      <div class="col-12 order-2 col-md-6 col-lg-4 offset-lg-2">
       <a class="btn btn-primary btn-lg guidance-button"
          href="https://navigator.unaids.org"
          target="_blank">
@@ -41,7 +41,7 @@
         <span class="button-text">{{_('Instructions to upload your<br />Country Estimates 2026 Data')}}</span>
       </a>
       </div>
-      <div class="hidden-xs hidden-sm col-md-6 col-lg-4 whats-next">
+      <div class="d-none d-md-block col-md-6 col-lg-4 whats-next">
         <h1>{{_('Unsure what to do next?')}}</h1>
         <h3>{{_('Use the HIV Estimates Navigator to guide you step-by-step through the HIV Estimates process, or click on one of our instruction pages opposite for videos and guidance.')}}</h3>
       </div>
@@ -61,7 +61,7 @@
 <div role="main">
   <div class="container">
     <div class="row">
-      <div class="col-xs-12 text-center">
+      <div class="col-12 text-center">
         <H2> {{_('Featured Organisations')}} </H2>
       </div>
     </div>
@@ -78,7 +78,7 @@
     {% set group = h.get_administrative_boundaries() %}
         {% if group.packages|length > 0 %}
           <div class="row">
-          <div class="col-xs-12 text-center">
+          <div class="col-12 text-center">
             <H2 class="admin-boundaries-group-header"> {{_('Geographic Health Boundaries')}} </H2>
               <div class="row row2">
                       <div class="col-md-12 col2">
@@ -91,7 +91,7 @@
                             {% if loop.first %}
                                 <div class="row">
                             {% endif %}
-                            <div class="col-xs-6 admin-boundaries-column left">
+                            <div class="col-6 admin-boundaries-column left">
                                 {% snippet 'snippets/package_item.html', package=package, admin_boundaries=true %}
                             </div>
                             {% if loop.last %}
@@ -101,7 +101,7 @@
                             {% if loop.first %}
                                 <div class="row">
                             {% endif %}
-                            <div class="col-xs-6 admin-boundaries-column right">
+                            <div class="col-6 admin-boundaries-column right">
                                 {% snippet 'snippets/package_item.html', package=package, admin_boundaries=true %}
                             </div>
                             {% if loop.last %}
@@ -127,38 +127,38 @@
 <div class="homepage-partners">
   <div class="container">
     <div class="row">
-      <div class="col-xs-12 text-center">
+      <div class="col-12 text-center">
         <H2> {{_('The AIDS Data Repository is a project by')}} </H2>
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 text-center">
+      <div class="col-12 text-center">
         <a class="unaids-logo" href="https://www.unaids.org"  target="_blank">
             <img src="{{ h.url_for_static('/unaids.png') }}" alt="aim" width="80%" />
           </a>
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-12 text-center">
+      <div class="col-12 text-center">
         <H2> {{_('With support from')}} </H2>
       </div>
     </div>
     <div class="row">
-      <div class="col-xs-4">
+      <div class="col-4">
         <div class="text-center">
           <a class="" href="https://www.avenirhealth.org/"  target="_blank">
             <img class="avenir-logo" src="{{ h.url_for_static('/avenir.png') }}" alt="aim" width="80%" />
           </a>
         </div>
       </div>
-      <div class="col-xs-4">
+      <div class="col-4">
         <div class="text-center">
           <a class="" href="http://www.fjelltopp.org"  target="_blank">
             <img class="fjelltopp-logo" src="{{ h.url_for_static('/fjelltopp.png') }}" alt="aim" width="80%" />
           </a>
         </div>
       </div>
-      <div class="col-xs-4">
+      <div class="col-4">
         <div class="text-center" style="margin-top: 10px;">
           <a class="" href="https://www.imperial.ac.uk/"  target="_blank">
             <img class="imperial-logo" src="{{ h.url_for_static('/imperial.png') }}" alt="aim" width="80%" />

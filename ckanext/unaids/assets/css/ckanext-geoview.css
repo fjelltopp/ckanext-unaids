@@ -1,6 +1,8 @@
-.label[data-format=shp]{
+.label[data-format=shp],
+.badge[data-format=shp]{
     background-color: #91318c;
 }
-.label[data-format=geojson] {
+.label[data-format=geojson],
+.badge[data-format=geojson] {
     background-color: #8d2932;
 }

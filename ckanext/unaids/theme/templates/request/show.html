@@ -56,7 +56,7 @@
       </table>
       <div class="form-actions">
       {% set locale = h.dump_json({'content': _('Are you sure you want approve this request?')}) %}
-     <a id="request_approve_url" href="{{ h.url_for('member_request.approve', mrequest_id=membership.id) }}" class="btn btn-primary  pull-left" data-module="confirm-action" data-module-i18n="{{ locale }}">{{ _('Approve') }}</a>
+     <a id="request_approve_url" href="{{ h.url_for('member_request.approve', mrequest_id=membership.id) }}" class="btn btn-primary  float-start" data-module="confirm-action" data-module-i18n="{{ locale }}">{{ _('Approve') }}</a>
       
       {% set locale = h.dump_json({'content': _('Are you sure you want reject this request?')}) %}
           <a id="request_reject_url" href="{{ h.url_for('member_request.reject', mrequest_id=membership.id) }}" class="btn btn-danger" data-module="confirm-action" data-module-i18n="{{ locale }}">{{ _('Reject') }}</a>
