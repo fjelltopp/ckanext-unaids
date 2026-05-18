@@ -13,6 +13,7 @@ def locked_dataset():
     context['auth_user_obj'] = context['model'].User.get(user['name'])
     call_action('dataset_lock', context, id=dataset['id'])
     locked_dataset = call_action('package_show', id=dataset['id'])
+    locked_dataset['_user'] = user['name']
     return locked_dataset
 
 
@@ -47,8 +48,10 @@ class TestDatasetLock(object):
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetUnlock(object):
     def test_metadata_updated(self, locked_dataset):
+        context = get_context(locked_dataset['_user'])
         call_action(
             'dataset_unlock',
+            context,
             id=locked_dataset['id']
         )
         updated_dataset = call_action(
@@ -58,21 +61,26 @@ class TestDatasetUnlock(object):
         assert not updated_dataset['locked']
 
     def test_version_deleted(self, locked_dataset):
+        context = get_context(locked_dataset['_user'])
         call_action(
             'dataset_unlock',
+            context,
             id=locked_dataset['id']
         )
         response = call_action('dataset_version_list', dataset_id=locked_dataset['id'])
         assert not response
 
     def test_version_already_deleted(self, locked_dataset):
+        context = get_context(locked_dataset['_user'])
         versions = call_action('dataset_version_list', dataset_id=locked_dataset['id'])
         call_action(
             "version_delete",
+            context,
             version_id=versions[-1]["id"],
         )
         with pytest.raises(toolkit.ObjectNotFound):
             call_action(
                 'dataset_unlock',
+                context,
                 id=locked_dataset['id']
             )

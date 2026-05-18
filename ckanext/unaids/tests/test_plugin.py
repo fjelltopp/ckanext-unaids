@@ -80,7 +80,9 @@ class TestPlugin(object):
         '''
         Test that the format of a geojson file is guessed correctly.
         '''
-        dataset = factories.Dataset()
+        user = factories.Sysadmin()
+        dataset = factories.Dataset(user=user)
+        context = {'user': user['name']}
         resource = {
             'name': u'test',
             'url': u'file.geojson',
@@ -88,14 +90,15 @@ class TestPlugin(object):
             'format': u'',
             'id': u''
         }
-        response = call_action('resource_create', {}, **resource)
-        response = call_action('package_show', {}, id=dataset['id'])
+        call_action('resource_create', context, **resource)
+        response = call_action('package_show', context, id=dataset['id'])
         assert response['resources'][0]['format'] == 'GeoJSON'
 
     def test_blob_storage_validator_is_used_during_resource_actions(self):
-        dataset = factories.Dataset()
+        user = factories.Sysadmin()
+        dataset = factories.Dataset(user=user)
         resource = {'name': 'test', 'package_id': dataset['id']}
-        context = {}
+        context = {'user': user['name']}
         with patch('ckanext.unaids.logic.validate_resource_upload_fields') as mock:
             call_action('resource_create', context, **resource)
             assert mock.called
@@ -103,7 +106,9 @@ class TestPlugin(object):
 
 @pytest.fixture
 def validate_package_resource():
-    dataset = factories.Dataset(type="validate-package")
+    user = factories.Sysadmin()
+    dataset = factories.Dataset(type="validate-package", user=user)
+    context = {'user': user['name']}
     resource = {
         'package_id': dataset["id"],
         'url_type': 'upload',
@@ -111,9 +116,12 @@ def validate_package_resource():
         'lfs_prefix': 'prefix',
         'sha256': 'acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79',
         'size': 100,
-        'validate_package': True
+        'validate_package': True,
+        '_user': user['name'],
     }
-    resource["id"] = call_action('resource_create', **resource)["id"]
+    resource["id"] = call_action('resource_create', context, **{
+        k: v for k, v in resource.items() if not k.startswith('_')
+    })["id"]
     return resource
 
 
@@ -122,18 +130,20 @@ def validate_package_resource():
 class TestValidatePackage(object):
 
     def test_validate_package(self, validate_package_resource):
+        context = {'user': validate_package_resource.pop('_user')}
 
         def return_value(*args, **kwargs):
             return toolkit.get_action(*args, **kwargs)
 
         with patch('ckanext.unaids.plugin.toolkit.get_action', return_value=return_value) as mock:
             call_action(
-                'resource_update', {},
+                'resource_update', context,
                 **validate_package_resource
             )
             mock.assert_any_call('resource_validation_run_batch')
 
     def test_metadata_change_does_not_validate_package(self, validate_package_resource):
+        context = {'user': validate_package_resource.pop('_user')}
         del validate_package_resource['url']
 
         def return_value(*args, **kwargs):
@@ -141,7 +151,7 @@ class TestValidatePackage(object):
 
         with patch('ckanext.unaids.plugin.toolkit.get_action', return_value=return_value) as mock:
             call_action(
-                'resource_patch', {},
+                'resource_patch', context,
                 **validate_package_resource
             )
             assert call('resource_validation_run_batch') not in mock.mock_calls

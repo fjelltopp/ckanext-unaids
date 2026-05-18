@@ -173,9 +173,11 @@ class TestPackageCreate():
             )
 
     def test_create_dataset_without_type_creates_one_with_default_type_of_dataset(self):
-        organization = factories.Organization()
+        user = factories.Sysadmin()
+        organization = factories.Organization(user=user)
         dataset = call_action(
             'package_create',
+            {'user': user['name']},
             name="some-name",
             owner_org=organization['name'],
             title="Dataset without type"
@@ -184,9 +186,11 @@ class TestPackageCreate():
         assert dataset["type"] == "dataset"
 
     def test_create_dataset_with_valid_type(self):
-        organization = factories.Organization()
+        user = factories.Sysadmin()
+        organization = factories.Organization(user=user)
         dataset = call_action(
             'package_create',
+            {'user': user['name']},
             name="some-name",
             type="test-schema",
             title="Dataset with valid type",
