@@ -1,6 +1,7 @@
 {% import "macros/form.html" as form %}
 
 <form id="user-register-form" action="" method="post">
+  {{ h.csrf_input() }}
   {{ form.errors(error_summary) }}
 
   {% if h.config_auto_generate_username_from_fullname() %}

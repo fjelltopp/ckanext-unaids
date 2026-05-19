@@ -1,6 +1,7 @@
 {% ckan_extends %}
   {% block form %}
   <form class="dataset-form add-member-form" method='post'>
+    {{ h.csrf_input() }}
     <div class="row">
       <div class="col-md-6">
         <div class="form-group control-medium">
