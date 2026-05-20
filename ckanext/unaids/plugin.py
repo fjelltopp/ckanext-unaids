@@ -309,11 +309,7 @@ class UNAIDSReclineView(p.SingletonPlugin):
     Recline-based view. Replaces the CKAN 2.11-removed ckanext.reclineview.
     """
 
-    p.implements(p.IConfigurer, inherit=True)
     p.implements(p.IResourceView, inherit=True)
-
-    def update_config(self, config):
-        toolkit.add_template_directory(config, 'templates')
 
     def info(self):
         return {
