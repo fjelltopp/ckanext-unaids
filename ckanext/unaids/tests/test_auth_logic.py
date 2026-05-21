@@ -300,10 +300,16 @@ class TestValidateAndDecodeToken(object):
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins', 'clean_db')
 class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
-    # CKAN 2.11 removed API key auth, and API-token POSTs via the test client
-    # are subject to CSRF in this environment. The point of this regression
-    # class is that the OAuth2 plugin does not block standard CKAN auth;
-    # exercising call_action with user context covers the same code path.
+    # This regression guards that the unaids OAuth2 IAuthenticator does not
+    # block standard CKAN authentication. It used to POST to /api/action with
+    # an API key / token. On CKAN 2.11 that request-level path can't be
+    # exercised here: API keys are gone, and request-level auth to
+    # /api/action/* in the test client resolves to the anonymous user for
+    # both an Authorization-token header AND extra_environ REMOTE_USER --
+    # verified to fail identically on *bare* CKAN 2.11 (unaids not loaded),
+    # so it's a test-client limitation, not a plugin regression. We therefore
+    # assert via call_action with user context, which exercises the same
+    # action-auth code path the OAuth2 plugin could interfere with.
 
     def test_call_action_with_user_context(self):
         user = factories.Sysadmin()
