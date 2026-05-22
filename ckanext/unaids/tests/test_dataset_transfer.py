@@ -237,3 +237,35 @@ class TestDatasetTransfer(object):
         )
         assert result['owner_org'] == org_2['id']
         assert 'org_to_allow_transfer_to' not in result
+
+    @mock.patch('ckanext.unaids.plugin.send_dataset_transfer_emails')
+    def test_after_dataset_update_sends_transfer_email(self, mock_send, app):
+        # Setting org_to_allow_transfer_to on a dataset update must fire the
+        # after_dataset_update hook, which notifies the target organisation.
+        # (Regression guard: CKAN 2.11 renamed after_update -> after_dataset_update,
+        # which silently killed this email.)
+        user_1, user_2 = [
+            factories.User(email="user_{}_@example.com".format(x)) for x in range(2)
+        ]
+        org_1, org_2 = [
+            factories.Organization(
+                users=[{'name': user['name'], 'capacity': 'admin'}]
+            )
+            for user in [user_1, user_2]
+        ]
+        dataset = factories.Dataset(owner_org=org_1['id'], type='test-schema')
+
+        # Creating the dataset (no transfer target) must not send a transfer email
+        mock_send.assert_not_called()
+
+        helpers.call_action(
+            'package_patch',
+            context={'user': user_1['name']},
+            id=dataset['id'],
+            org_to_allow_transfer_to=org_2['id'],
+        )
+
+        mock_send.assert_called_once_with(
+            dataset_id=dataset['id'],
+            recipient_org_id=org_2['id'],
+        )
