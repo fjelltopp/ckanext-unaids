@@ -185,10 +185,30 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
     # IPackageController
     resources_to_validate_package = {}
 
-    def after_create(self, context, pkg_dict):
-        if pkg_dict.get("validate_package"):
+    def after_resource_create(self, context, resource):
+        # NOTE: this hook was named `after_create` for CKAN 2.9; CKAN 2.11
+        # renamed IResourceController.after_create -> after_resource_create, so
+        # the old name was never called.
+        if resource.get("validate_package"):
             toolkit.get_action("resource_validation_run_batch")(
-                context, {"dataset_ids": pkg_dict["package_id"]}
+                context, {"dataset_ids": resource["package_id"]}
+            )
+            return
+
+        # ckanext-validation skips validation on the resource_create path because
+        # `schema` and `format` are applied as scheming defaults (from
+        # resource_type) only AFTER its can_validate gate runs — so bulk-uploaded
+        # core resources never get validated. By the time this hook fires the
+        # resource is stored with its schema, so trigger validation here.
+        supported_formats = toolkit.config.get(
+            "ckanext.validation.formats", "csv xlsx xls").split()
+        if (
+            resource.get("schema")
+            and (resource.get("url") or resource.get("url_type") == "upload")
+            and (resource.get("format") or "").lower() in supported_formats
+        ):
+            toolkit.get_action("resource_validation_run")(
+                context, {"resource_id": resource["id"], "async": True}
             )
 
     def after_update(self, context, data_dict):
