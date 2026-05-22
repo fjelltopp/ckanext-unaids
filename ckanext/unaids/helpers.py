@@ -11,11 +11,6 @@ from ckan.common import _, g, asbool, config
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
 
 
-try:
-    from html import escape as html_escape
-except ImportError:
-    from cgi import escape as html_escape
-
 from urllib.parse import quote, urlencode
 
 log = logging.getLogger()
