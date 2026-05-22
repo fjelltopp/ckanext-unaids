@@ -1,4 +1,5 @@
 # encoding: utf-8
+import ckan.model as model
 from ckan.tests import helpers
 from ckan.lib.helpers import url_for
 from ckan.tests import factories
@@ -168,19 +169,25 @@ class TestDatasetTransfer(object):
         assert dataset_name in email_subject
 
     def test_send_dataset_transfer_emails_errors(self, app):
-        user_1, user_2 = [
-            factories.User()
-            for x in range(2)
-        ]
-        org_1, org_2 = [
-            factories.Organization(user=user)
-            for user in [user_1, user_2]
-        ]
+        # When the recipient org has no admin with an email address there are no
+        # eligible recipients, so no transfer emails should be sent.
+        user_1 = factories.User(email='user_1@example.com')
+        user_2 = factories.User(email='user_2@example.com')
+        org_1 = factories.Organization(
+            user={'name': user_1['name'], 'capacity': 'admin'})
+        org_2 = factories.Organization(
+            user={'name': user_2['name'], 'capacity': 'admin'})
         dataset = factories.Dataset(
             owner_org=org_1['id'],
             type='test-schema',
             org_to_allow_transfer_to=org_2['id']
         )
+        # Remove the email from the recipient org's only admin: it should no
+        # longer be considered an eligible recipient (get_org_admins_with_email
+        # _addresses filters on email is not None).
+        admin = model.User.get(user_2['id'])
+        admin.email = None
+        model.Session.commit()
         with app.flask_app.test_request_context():
             emails_succeeded = send_dataset_transfer_emails(
                 dataset_id=dataset['id'],
