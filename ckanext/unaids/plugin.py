@@ -211,18 +211,25 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
                 context, {"resource_id": resource["id"], "async": True}
             )
 
-    def after_update(self, context, data_dict):
-        if "extras" in data_dict:
-            org_to_allow_transfer_to = [
-                item["value"]
-                for item in data_dict["extras"]
-                if item["key"] == "org_to_allow_transfer_to" and item["value"]
-            ]
-            if org_to_allow_transfer_to:
-                send_dataset_transfer_emails(
-                    dataset_id=data_dict["id"],
-                    recipient_org_id=org_to_allow_transfer_to[0],
-                )
+    def after_dataset_update(self, context, data_dict):
+        # NOTE: this hook was named `after_update` for CKAN 2.9; CKAN 2.11
+        # renamed IPackageController.after_update -> after_dataset_update, so the
+        # old name was never called (dataset-transfer emails silently broke).
+        # org_to_allow_transfer_to is a scheming field, so it comes through
+        # top-level; fall back to the legacy `extras` representation just in case.
+        recipient_org_id = data_dict.get("org_to_allow_transfer_to")
+        if not recipient_org_id:
+            recipient_org_id = next(
+                (item["value"]
+                 for item in data_dict.get("extras", [])
+                 if item.get("key") == "org_to_allow_transfer_to" and item.get("value")),
+                None,
+            )
+        if recipient_org_id:
+            send_dataset_transfer_emails(
+                dataset_id=data_dict["id"],
+                recipient_org_id=recipient_org_id,
+            )
 
     def _process_schema_fields(self, data_dict):
         """
