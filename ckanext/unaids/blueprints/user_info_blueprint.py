@@ -3,7 +3,6 @@ import logging
 from ckan.common import g, _
 from ckan.lib import helpers as h
 from ckan.logic import get_action
-from six import ensure_str
 import dominate.tags as dom_tags
 from flask import Blueprint
 
@@ -32,7 +31,7 @@ def display_user_details(locale=None):
             u'type': u'button',
             u'class': u'btn btn-default btn-xs',
             u'data-module': u'copy-into-buffer',
-            u'data-module-copy-value': ensure_str(apikey)
+            u'data-module-copy-value': str(apikey)
         })
         h.flash_success(
             _('Your api key is: '

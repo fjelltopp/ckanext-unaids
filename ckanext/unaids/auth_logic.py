@@ -26,15 +26,6 @@ class OAuth2AuthorizationError(ActionError):
     pass
 
 
-def json_response_omitting_challenge_decider(environ, status, headers):
-    h_dict = dict(headers)
-    ct = h_dict.get('Content-Type')
-    if ct is not None:
-        return not ct.startswith('text/json') and status.startswith('401 ')
-
-    return status.startswith('401 ')
-
-
 # based on work from https://auth0.com/docs/quickstart/backend/python/01-authorization
 def access_token_present_and_valid_and_user_authorized():
     token = request.headers.get('Authorization', '')
@@ -87,7 +78,6 @@ def validate_and_decode_token(encoded):
         except Exception:
             raise OAuth2AuthenticationError(message="Unable to parse authentication token")
 
-        g.current_user = payload
         return payload
     raise OAuth2AuthenticationError(message="Unable to find appropriate key")
 

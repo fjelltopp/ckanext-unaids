@@ -2,7 +2,6 @@ import logging
 from collections import defaultdict
 
 import pycountry
-import six
 from flask import Blueprint, jsonify
 
 from ckan.plugins import toolkit
@@ -27,7 +26,7 @@ def map_options():
     dataset_search = toolkit.get_action("package_search")({}, {"rows": 0, "facet.field": ["geo-location"]})
     location_facet = dataset_search['facets']['geo-location']
     values = defaultdict(dataset_count)
-    for geo_location, count in six.iteritems(location_facet):
+    for geo_location, count in location_facet.items():
         if geo_location:
             try:
                 country_code = _country_code_from_location_name(geo_location)
