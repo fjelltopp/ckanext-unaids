@@ -8,6 +8,6 @@
       {{ _('DHIS2 Sources') }}
     </a>
   </li>
-  {{ h.build_nav_icon('activity.organization_activity', _('Activity Stream'), id=group_dict.name, offset=0) }}
+  {# Activity Stream is added by the activity plugin's read_base via super() #}
   {{ h.build_nav_icon(group_type + '.about', _('About'), id=group_dict.name) }}
 {% endblock %}
