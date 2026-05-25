@@ -10,12 +10,23 @@ from ckanext.versions.logic.dataset_version_action import (
     dataset_version_list,
 )
 from ckanext.versions.tests import get_context
-from nose.tools import assert_equals, assert_in, assert_not_in
 from ckanext.unaids.blueprints.unaids_dataset_releases import (
     AUTHORIZATION_ERROR,
     RELEASE_ALREADY_EXISTS_FOR_ACTIVITY_ERROR,
     RELEASE_NAME_NOT_UNIQUE_ERROR,
 )
+
+
+def assert_equals(a, b):
+    assert a == b
+
+
+def assert_in(a, b):
+    assert a in b
+
+
+def assert_not_in(a, b):
+    assert a not in b
 
 
 def get_listview(app, user, dataset):

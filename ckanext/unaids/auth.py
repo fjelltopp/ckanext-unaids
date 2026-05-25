@@ -15,7 +15,16 @@ def dataset_lock(context, data_dict):
 @toolkit.auth_sysadmins_check
 def package_update(next_auth_action, context, data_dict):
     result = next_auth_action(context, data_dict)
-    locked = toolkit.asbool(context['package'].extras.get("locked", 'false'))
+    package = context.get('package')
+    if not package:
+        package_id = data_dict.get('id') or data_dict.get('name')
+        if package_id:
+            package = model.Package.get(package_id)
+
+    locked = False
+    if package:
+        locked = toolkit.asbool(package.extras.get("locked", 'false'))
+
     if locked:
         return {
             'success': False,

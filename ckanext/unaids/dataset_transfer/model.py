@@ -1,7 +1,8 @@
-from sqlalchemy import Column, types
+from sqlalchemy import Column, types, inspect
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql import func
 
+from ckan.model import meta
 from ckan.model.meta import metadata
 
 Base = declarative_base(metadata=metadata)
@@ -29,8 +30,11 @@ class DatasetTransferRequest(Base):
 
 
 def init_tables():
-    DatasetTransferRequest.__table__.create()
+    DatasetTransferRequest.__table__.create(bind=meta.engine, checkfirst=True)
 
 
 def tables_exists():
-    return DatasetTransferRequest.__table__.exists()
+    if meta.engine is None:
+        return False
+    inspector = inspect(meta.engine)
+    return DatasetTransferRequest.__tablename__ in inspector.get_table_names()
