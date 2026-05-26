@@ -13,12 +13,14 @@ export default function FileUploader({
     setHiddenInputs,
     setUploadError,
 }) {
+    const csrfToken = document.querySelector('meta[name=_csrf_token]')?.getAttribute('content');
+
     const getAuthToken = () =>
         axios
             .post(
                 '/api/3/action/authz_authorize',
                 { scopes: `obj:${orgId}/${datasetName}/*:write` },
-                { withCredentials: true }
+                { withCredentials: true, headers: { 'X-CSRFToken': csrfToken } }
             )
             .then((res) => res.data.result.token)
             .catch((error) => {

@@ -9,9 +9,11 @@ import ResourceForker from './ResourceForker';
 import HiddenFormInputs from './HiddenFormInputs';
 
 const getRootResourceActivityDetails = async (resourceID, activityID) => {
+    const csrfToken = document.querySelector('meta[name=_csrf_token]')?.getAttribute('content');
     const config = {
         headers: {
             'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
         },
     };
 

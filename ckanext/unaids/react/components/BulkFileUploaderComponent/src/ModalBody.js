@@ -15,6 +15,8 @@ export default function ModalBody({
     networkError, setNetworkError, getDefaultUploadAction
 }) {
 
+    const csrfToken = document.querySelector('meta[name=_csrf_token]')?.getAttribute('content');
+
     const setFileProgress = (pendingFileIndex, loaded, total) => {
         let _pendingFiles = [...pendingFiles];
         _pendingFiles[pendingFileIndex].progress = { loaded, total };
@@ -39,7 +41,7 @@ export default function ModalBody({
         axios.post(
             '/api/3/action/authz_authorize',
             { scopes: `obj:${orgId}/${datasetName}/*:write` },
-            { withCredentials: true }
+            { withCredentials: true, headers: { 'X-CSRFToken': csrfToken } }
         )
             .then(res => res.data.result.token)
             .catch(error => handleNetworkError(
@@ -66,7 +68,7 @@ export default function ModalBody({
                 lfs_prefix: `${orgId}/${datasetName}`,
                 ...defaultFields, ...extraFields
             },
-            { withCredentials: true }
+            { withCredentials: true, headers: { 'X-CSRFToken': csrfToken } }
         ).catch(error => handleNetworkError(
             ckan.i18n._('Resource Create Error'), error
         ));
