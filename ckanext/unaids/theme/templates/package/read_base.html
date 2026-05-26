@@ -20,7 +20,7 @@
         {{_('Unlock')}}
       </a>
     {% elif pkg.get('locked')  %}
-      <a class="btn btn-danger" disabled href="#" data-module="tooltips" data-toggle="tooltip" data-placement="left" title="{{_('A system administrator has made this dataset read-only.')}}">
+      <a class="btn btn-danger" disabled href="#" data-module="tooltips" data-bs-toggle="tooltip" data-bs-placement="left" title="{{_('A system administrator has made this dataset read-only.')}}">
         <i class="fa fa-lock"></i>
         {{_('Locked')}}
       </a>

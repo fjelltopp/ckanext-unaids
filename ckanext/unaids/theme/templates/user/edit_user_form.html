@@ -11,7 +11,7 @@
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="row">
-          <div class="col-xs-6 no-top-padding">
+          <div class="col-6 no-top-padding">
               <ul class="list-unstyled">
                   <li><strong>{{ data.fullname }}</strong> ({{ data.name }})</li>
                   <li>{{ data.email }}</li>
@@ -22,7 +22,7 @@
           </div>
         </div>
           <div class="row">
-          <div class="col-xs-12 text-right no-bottom-padding">
+          <div class="col-12 text-end no-bottom-padding">
             <a class="btn btn-primary" href="{{ h.get_profile_editor_url() }}">{{ _('Update data') }}</a>
           </div>
         </div>
@@ -45,7 +45,7 @@
 
   </fieldset>
 
-   <div class="hidden">
+   <div class="d-none">
       <!-- Hidden inputs required for the CKAN flask view to work -->
       <input type="hidden" name="old_password"/>
       <input type="hidden" name="password1"/>
@@ -57,7 +57,7 @@
   <div class="form-actions">
     {% block delete_button %}
       {% if h.check_access('user_delete', {'id': data.id})  %}
-        <a class="btn btn-danger pull-left" href="{% url_for 'user_delete', id=data.id %}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this User?') }}">{% block delete_button_text %}{{ _('Delete') }}{% endblock %}</a>
+        <a class="btn btn-danger float-start" href="{% url_for 'user_delete', id=data.id %}" data-module="confirm-action" data-module-content="{{ _('Are you sure you want to delete this User?') }}">{% block delete_button_text %}{{ _('Delete') }}{% endblock %}</a>
       {% endif %}
     {% endblock %}
     {% block generate_button %}

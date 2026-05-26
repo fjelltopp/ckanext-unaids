@@ -11,10 +11,10 @@ this.ckan.module('download_all', function ($) {
     initialize: function () {
       $.proxyAll(this, /_on/);
       if(this.options.files.length > 1){
-        $(this.el).removeClass('hidden');
+        $(this.el).removeClass('d-none');
         this.el.on('click', this._onClick);
       }else{
-        $(this.el).addClass('hidden');
+        $(this.el).addClass('d-none');
       }
     },
     _onClick: function (event) {
