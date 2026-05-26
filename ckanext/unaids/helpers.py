@@ -11,11 +11,6 @@ from ckan.common import _, g, asbool, config
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
 
 
-try:
-    from html import escape as html_escape
-except ImportError:
-    from cgi import escape as html_escape
-
 from urllib.parse import quote, urlencode
 
 log = logging.getLogger()
@@ -167,8 +162,10 @@ def get_language_code():
 
 def build_pages_nav_main(*args):
     """
-    This helper is overriding build_pages_nav_main from ckanext-pages
-    to add localization to pages urls and titles
+    This helper is overriding build_pages_nav_main from ckanext-pages.
+    Unlike the original, this version does NOT add pages to the top navbar.
+    Pages are accessible via direct links, the homepage, and the footer.
+    The "2026 Instructions" link is added separately in header.html template.
     """
     about_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.about_menu', True))
     group_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.group_menu', True))
@@ -191,25 +188,12 @@ def build_pages_nav_main(*args):
 
     output = core_build_nav_main(*new_args)
 
-    # do not display any private pages in menu even for sysadmins
-    pages_list = toolkit.get_action('ckanext_pages_list')(None, {'order': True, 'private': False})
-
-    page_name = ''
-    is_current_page = toolkit.get_endpoint() in (('pages', 'show'), ('pages', 'blog_show'))
-
-    if is_current_page:
-        page_name = toolkit.request.path.split('/')[-1]
-
-    for page in pages_list:
-        type_ = 'blog' if page['page_type'] == 'blog' else 'pages'
-        name = quote(page['name'])
-        title = html_escape(_(page['title']))
-        link = toolkit.h.literal(u'<a href="/{}/{}/{}">{}</a>'.format(toolkit.h.lang(), type_, name, title))
-        if page['name'] == page_name:
-            li = toolkit.literal('<li class="active">') + link + toolkit.literal('</li>')
-        else:
-            li = toolkit.literal('<li>') + link + toolkit.literal('</li>')
-        output = output + li
+    # NOTE: We intentionally do NOT add pages to the navbar here.
+    # Pages clutter the top navigation and are better accessed via:
+    # - The homepage help panel (Instructions buttons)
+    # - The footer (About, Terms, Cookie Policy links)
+    # - Direct URLs
+    # The "2026 Instructions" link is added in header.html template block.
 
     return output
 
@@ -280,7 +264,7 @@ def unaids_get_validation_badge(resource, in_listing=False):
 
     link_visibility = ""
     if status in ['success', 'unknown']:
-        link_visibility = 'hidden'
+        link_visibility = 'd-none'
 
     badge_html = '''
 <a href="{validation_url}" {tags} class="validation-badge">

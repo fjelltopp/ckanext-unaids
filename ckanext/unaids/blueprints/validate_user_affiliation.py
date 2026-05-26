@@ -34,13 +34,13 @@ def check_user_affiliation():
     except (toolkit.ValidationError, AttributeError):
         return h.redirect_to(helpers.get_profile_editor_url(
             after_save_url=h.url_for("validate_user_affiliation.success_callback", _external=True),
-            back_url=h.url_for('dashboard.index', _external=True),
+            back_url=h.url_for('activity.dashboard', _external=True),
             flash_message=_("UNAIDS asks that further information be added "
                             "to your user profile. Please complete the required "
                             "fields missing below before continuing...")
         ))
 
-    return h.redirect_to('dashboard.index')
+    return h.redirect_to('activity.dashboard')
 
 
 @validate_user_affiliation.route('/success-callback/')
@@ -48,4 +48,4 @@ def success_callback():
     h.flash_success(
         _("Thank you for updating your profile information.")
     )
-    return h.redirect_to('dashboard.index')
+    return h.redirect_to('activity.dashboard')

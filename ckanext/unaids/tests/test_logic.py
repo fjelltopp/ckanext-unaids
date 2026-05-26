@@ -11,16 +11,19 @@ from ckanext.unaids import logic
 @pytest.mark.parametrize(
     "lfs_prefix,sha256,size,valid",
     [
+        # `size` is a standard CKAN field, NOT part of the blob-storage upload
+        # check: only sha256 + lfs_prefix (the giftless fields) must be present
+        # together and valid. `size` is therefore ignored here.
         ("fjelltopp/my-dataset", "acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79", 100, True),
         (None, None, None, True),
         ("", "", "", True),
-        (None, "", "", False),
-        ("fjelltopp/my-dataset", "acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79", None, False),
-        (None, None, 100, False),
+        (None, "", "", True),
+        ("fjelltopp/my-dataset", "acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79", None, True),
+        (None, None, 100, True),
         ("fjelltopp/my-dataset", "", 100, False),
         ("fjelltopp/my-dataset", None, 100, False),
         ("", "acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79", 100, False),
-        ("", "invalid_sha256", 100, False),
+        ("fjelltopp/my-dataset", "invalid_sha256", 100, False),
         ("", "acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79", 100, False),
         (None, "acbac3b78f9ace071ca3a79f23fc788a1b7ee9dc547becc6404dbb1f58afff79", 100, False),
         ("fjelltopp/my-dataset", "", 100, False)
@@ -28,9 +31,9 @@ from ckanext.unaids import logic
         "validates if all upload fields correct",
         "validates if no upload fields present",
         "validates if all fields are present but empty",
-        "fails if some fields missing and others set to empty string",
-        "fails if size None",
-        "fails if only size present",
+        "validates if sha256 and lfs_prefix empty (size ignored)",
+        "validates if sha256 and lfs_prefix set, size absent (size ignored)",
+        "validates if only size present (size is not a blob field)",
         "fails if sha256 empty string",
         "fails if sha256 None",
         "fails if only sha256 present",

@@ -5,20 +5,19 @@ from ckanext.unaids.helpers import validation_load_json_schema
 
 
 def validate_resource_upload_fields(context, resource_dict):
-    upload_has_sha256 = "sha256" in resource_dict
-    upload_has_lfs_prefix = "lfs_prefix" in resource_dict
-    upload_has_size = "size" in resource_dict
-    valid_blob_storage_upload = (upload_has_sha256 == upload_has_lfs_prefix == upload_has_size)
-    no_upload_fields_present = not any([
-        resource_dict.get("sha256", ""),
-        resource_dict.get("lfs_prefix", ""),
-        resource_dict.get("size", "")
-    ])
+    # sha256 and lfs_prefix are the giftless blob-storage upload fields. `size`
+    # is a standard CKAN field present on any stored resource, so it must NOT
+    # gate the "is this a blob-storage upload" check. Otherwise re-saves that
+    # carry `size` but not the giftless fields (e.g. ckanext-validation patching
+    # validation_status) wrongly fail with "Invalid blob storage upload fields",
+    # which silently blocks validation on the resource-create path.
+    upload_has_sha256 = bool(resource_dict.get("sha256"))
+    upload_has_lfs_prefix = bool(resource_dict.get("lfs_prefix"))
 
-    if not valid_blob_storage_upload:
+    if upload_has_sha256 != upload_has_lfs_prefix:
         raise toolkit.ValidationError(
-            ["Invalid blob storage upload fields. sha256, size and lfs_prefix needs to be provided."])
-    elif no_upload_fields_present:
+            ["Invalid blob storage upload fields. sha256 and lfs_prefix needs to be provided."])
+    elif not upload_has_sha256:
         return None
     else:
         sha256 = resource_dict.get("sha256")
