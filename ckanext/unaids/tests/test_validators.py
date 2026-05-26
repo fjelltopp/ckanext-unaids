@@ -25,7 +25,7 @@ def read_only_validator():
     return read_only(read_only_field, test_schema)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'ytp_request unaids scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestValidators(object):
 
