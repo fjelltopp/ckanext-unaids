@@ -46,13 +46,13 @@ class TestMemberLists(object):
         }
         assert set(df.columns) == expected_columns
 
-    def test_org_member_download_expected_emails(self, test_org_download):
+    def test_org_member_download_expected_emails(self, test_org_download, org_admin, org_editor, org_member):
         df = pandas.read_csv(StringIO(test_org_download.body))
         expected_emails = {
-            "admin@ckan.org",
-            "editor@ckan.org",
-            "member@ckan.org",
-            nan
+            org_admin['email'],
+            org_editor['email'],
+            org_member['email'],
+            nan,
         }
         assert set(df['Email']) == expected_emails
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-from six import StringIO
+from io import BytesIO
 
 from ckan import model
 from ckan.plugins import toolkit
@@ -25,7 +25,7 @@ class TestGiftlessBackend(object):
         )
         dataset = factories.Dataset(user=user, owner_org=org['id'])
         filename = 'file.csv'
-        csv_stream = StringIO(b'col1,col2\ntest,file')
+        csv_stream = BytesIO(b'col1,col2\ntest,file')
         resource = {
             "name": 'Test',
             "description": "Test resource",
@@ -52,6 +52,7 @@ class TestGiftlessBackend(object):
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids pages blob_storage scheming_datasets')
+@pytest.mark.usefixtures('with_plugins')
 class TestResourceUrlEncoding():
     def test_resource_url_encoding_test(self, app):
         user = factories.User()
@@ -65,7 +66,8 @@ class TestResourceUrlEncoding():
         unquoted_filename = 'file%.csv'
         quoted_filename = 'file%25.csv'
 
-        resource = helpers.call_action('resource_create', package_id=dataset["id"], **{
+        context = {'model': model, 'user': user['name']}
+        resource = helpers.call_action('resource_create', context, package_id=dataset["id"], **{
             'url_type': 'upload',
             'url': unquoted_filename,
             'lfs_prefix': 'prefix',
