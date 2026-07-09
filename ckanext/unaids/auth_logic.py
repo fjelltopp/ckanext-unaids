@@ -48,8 +48,17 @@ def access_token_present_and_valid_and_user_authorized():
 
 def validate_and_decode_token(encoded):
     token = extract_token(encoded)
-    jsonurl = urlopen("https://" + AUTH0_DOMAIN + "/.well-known/jwks.json")
-    jwks = json.loads(jsonurl.read())
+
+    if not AUTH0_DOMAIN or not API_AUDIENCE:
+        raise OAuth2AuthenticationError(message="OAuth2 authentication is not configured on this server")
+
+    try:
+        jsonurl = urlopen("https://" + AUTH0_DOMAIN + "/.well-known/jwks.json")
+        jwks = json.loads(jsonurl.read())
+    except Exception:
+        log.exception("Unable to fetch or parse Auth0 JWKS from %s", AUTH0_DOMAIN)
+        raise OAuth2AuthenticationError(message="Unable to fetch authentication keys")
+
     unverified_header = jwt.get_unverified_header(token)
     rsa_key = {}
     for key in jwks["keys"]:
