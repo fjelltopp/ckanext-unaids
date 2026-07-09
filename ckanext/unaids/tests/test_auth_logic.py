@@ -315,3 +315,7 @@ class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
 
 class User:
     name = "Some name"
+    is_active = True
+
+    def get_id(self):
+        return "Some name"
