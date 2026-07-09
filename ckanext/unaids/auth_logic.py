@@ -6,7 +6,7 @@ from urllib.request import urlopen
 from flask import Response
 from jose import jwt
 
-from ckan.common import request, g
+from ckan.common import request, g, login_user
 from ckan.logic import ActionError
 from ckan.model import Session, User
 
@@ -40,6 +40,7 @@ def access_token_present_and_valid_and_user_authorized():
         user = find_user_by_saml_id(subject)
         g.userobj = user
         g.user = user.name
+        login_user(user)
 
         return True
 
