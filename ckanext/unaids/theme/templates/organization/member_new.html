@@ -8,6 +8,7 @@
   {{_('Add a ckan user to your organisation by searching for their username and assigning them a role. See the note on the left about role descriptions.')}}
 </p>
 <form class="dataset-form add-member-form" method='post'>
+  {{ h.csrf_input() }}
   <div class="row">
     <div class="col-md-5">
       <div class="form-group control-medium">
