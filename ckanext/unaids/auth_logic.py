@@ -41,6 +41,9 @@ def access_token_present_and_valid_and_user_authorized():
         g.userobj = user
         g.user = user.name
         login_user(user)
+        # Matches CKAN's own API-token request_loader flag (ckan/config/middleware/flask_app.py),
+        # which the before_request hook checks to exempt header-authenticated requests from CSRF.
+        g.login_via_auth_header = True
 
         return True
 

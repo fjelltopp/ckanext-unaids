@@ -66,6 +66,7 @@ class TestAccessTokenPresentAndValidAndUserAuthorized():
         assert auth_logic.access_token_present_and_valid_and_user_authorized()
         assert g.userobj == user
         assert g.user == "Some name"
+        assert g.login_via_auth_header is True
         find_user_by_saml_id.assert_called_once_with(user_id)
         validate_and_decode_token.assert_called_once_with(token_from_request)
 
