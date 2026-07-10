@@ -11,7 +11,7 @@ from ckan.common import _, g, asbool, config
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
 
 
-from urllib.parse import quote, urlencode
+from urllib.parse import quote, urlencode, urlsplit
 
 log = logging.getLogger()
 BULK_FILE_UPLOADER_DEFAULT_FIELDS = 'ckanext.bulk_file_uploader_default_fields'
@@ -221,8 +221,15 @@ def get_google_analytics_id():
 def get_support_url():
     url = os.environ.get('CKAN_UNAIDS_SUPPORT_URL', None) \
         or toolkit.config.get('ckanext.unaids.support_url', None)
-    if url and url.strip().lower().startswith('https://'):
-        return url.strip()
+    if not url:
+        return None
+    url = url.strip()
+    try:
+        parts = urlsplit(url)
+    except ValueError:
+        return None
+    if parts.scheme == 'https' and parts.netloc:
+        return url
     return None
 
 
