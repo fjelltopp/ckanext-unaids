@@ -11,7 +11,7 @@
 {% block resource_item_description %}
   {% if res.description %}
     <p class="description">
-        {{ h.markdown_extract(h.get_translated(res, 'description'), extract_length=80) }}
+        {{ h.render_markdown(h.get_translated(res, 'description')) | striptags | truncate(80) }}
     </p>
   {% endif %}
 
