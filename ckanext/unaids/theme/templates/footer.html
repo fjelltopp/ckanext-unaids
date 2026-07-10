@@ -16,7 +16,9 @@
           <li><a href={{h.url_for("/pages/terms-and-conditions")}}>{{ _('Terms and Conditions') }}</a></li>
           <li><a href={{h.url_for("/pages/cookies")}}>{{ _('Cookie Policy') }}</a></li>
           <li><a target="blank" href="https://github.com/fjelltopp/adx_develop">{{_('Github Source Code')}}</a></li>
-          <li><a target="blank" href="https://adr.unaids.org/bug")>{{_('Report a Bug')}}</a></li>
+          {% if h.get_support_url() %}
+            <li><a target="_blank" rel="noopener" href="{{ h.get_support_url() }}">{{_('Report a Bug')}}</a></li>
+          {% endif %}
         {% endblock %}
       </ul>
     {% endblock %}

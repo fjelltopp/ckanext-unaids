@@ -1,6 +1,21 @@
 import pytest
 from ckan.tests import factories
 from ckan.plugins import toolkit
+from ckanext.unaids.helpers import get_support_url
+
+
+class TestGetSupportUrl(object):
+    @pytest.mark.parametrize('value,expected', [
+        ('https://support.example.org/new', 'https://support.example.org/new'),
+        ('  https://support.example.org/new  ', 'https://support.example.org/new'),
+        ('http://support.example.org', None),
+        ('javascript:alert(1)', None),
+        ('data:text/html,hi', None),
+        ('/relative/path', None),
+    ])
+    def test_only_absolute_https_is_exposed(self, monkeypatch, value, expected):
+        monkeypatch.setenv('CKAN_UNAIDS_SUPPORT_URL', value)
+        assert get_support_url() == expected
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')

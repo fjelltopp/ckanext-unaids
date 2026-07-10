@@ -218,6 +218,14 @@ def get_google_analytics_id():
     return from_env
 
 
+def get_support_url():
+    url = os.environ.get('CKAN_UNAIDS_SUPPORT_URL', None) \
+        or toolkit.config.get('ckanext.unaids.support_url', None)
+    if url and url.strip().lower().startswith('https://'):
+        return url.strip()
+    return None
+
+
 def is_an_estimates_dataset(dataset_type_name):
     return 'estimates' in dataset_type_name.lower()
 
