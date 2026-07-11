@@ -1,7 +1,10 @@
 import pytest
 from ckan.tests import factories
 from ckan.plugins import toolkit
-from ckanext.unaids.helpers import get_support_url
+from ckanext.unaids.helpers import (
+    get_support_url,
+    get_freshdesk_widget_id,
+)
 
 
 class TestGetSupportUrl(object):
@@ -41,6 +44,48 @@ class TestGetSupportUrl(object):
         monkeypatch.setenv(
             'CKAN_UNAIDS_SUPPORT_URL', 'https://env.example.org/new')
         assert get_support_url() == 'https://env.example.org/new'
+
+
+class TestGetFreshdeskWidgetId(object):
+    @pytest.mark.parametrize('value,expected', [
+        ('157000000691', 157000000691),
+        ('  12345  ', 12345),
+        ('0', None),
+        ('-5', None),
+        ('abc', None),
+        ('12ab', None),
+        ('0};alert(1)//', None),
+        ('', None),
+        ('9007199254740991', 9007199254740991),
+        ('9007199254740992', None),
+    ])
+    def test_only_positive_int_is_exposed(self, monkeypatch, value, expected):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', value)
+        assert get_freshdesk_widget_id() == expected
+
+    def test_blank_env_falls_back_to_config(self, monkeypatch):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', '   ')
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', '111')
+        assert get_freshdesk_widget_id() == 111
+
+    def test_none_when_unset(self, monkeypatch):
+        monkeypatch.delenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', raising=False)
+        monkeypatch.delitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', raising=False)
+        assert get_freshdesk_widget_id() is None
+
+    def test_falls_back_to_config(self, monkeypatch):
+        monkeypatch.delenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', raising=False)
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', '157000000691')
+        assert get_freshdesk_widget_id() == 157000000691
+
+    def test_env_takes_precedence_over_config(self, monkeypatch):
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', '111')
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', '222')
+        assert get_freshdesk_widget_id() == 222
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')

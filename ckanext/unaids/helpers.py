@@ -233,6 +233,19 @@ def get_support_url():
     return None
 
 
+def get_freshdesk_widget_id():
+    raw = (os.environ.get('CKAN_UNAIDS_FRESHDESK_WIDGET_ID') or '').strip() \
+        or toolkit.config.get('ckanext.unaids.freshdesk_widget_id', None)
+    try:
+        widget_id = int(str(raw).strip())
+    except (TypeError, ValueError):
+        return None
+    # id is emitted into a JS Number; reject ids that would lose precision
+    if 0 < widget_id <= 2 ** 53 - 1:
+        return widget_id
+    return None
+
+
 def is_an_estimates_dataset(dataset_type_name):
     return 'estimates' in dataset_type_name.lower()
 
