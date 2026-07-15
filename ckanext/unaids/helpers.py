@@ -246,6 +246,12 @@ def get_freshdesk_widget_id():
     return None
 
 
+def get_freshdesk_app_name():
+    name = (os.environ.get('CKAN_UNAIDS_FRESHDESK_APP_NAME') or '').strip() \
+        or (toolkit.config.get('ckanext.unaids.freshdesk_app_name') or '')
+    return name.strip() or None
+
+
 def is_an_estimates_dataset(dataset_type_name):
     return 'estimates' in dataset_type_name.lower()
 

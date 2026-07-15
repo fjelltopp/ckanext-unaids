@@ -4,6 +4,7 @@ from ckan.plugins import toolkit
 from ckanext.unaids.helpers import (
     get_support_url,
     get_freshdesk_widget_id,
+    get_freshdesk_app_name,
 )
 
 
@@ -86,6 +87,36 @@ class TestGetFreshdeskWidgetId(object):
             toolkit.config, 'ckanext.unaids.freshdesk_widget_id', '111')
         monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', '222')
         assert get_freshdesk_widget_id() == 222
+
+
+class TestGetFreshdeskAppName(object):
+    @pytest.mark.parametrize('value,expected', [
+        ('AIDS Data Repository (ADR)', 'AIDS Data Repository (ADR)'),
+        ('  AIDS Data Repository (ADR)  ', 'AIDS Data Repository (ADR)'),
+        ('', None),
+        ('   ', None),
+    ])
+    def test_env_value(self, monkeypatch, value, expected):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', value)
+        assert get_freshdesk_app_name() == expected
+
+    def test_none_when_unset(self, monkeypatch):
+        monkeypatch.delenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', raising=False)
+        monkeypatch.delitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_app_name', raising=False)
+        assert get_freshdesk_app_name() is None
+
+    def test_blank_env_falls_back_to_config(self, monkeypatch):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', '   ')
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_app_name', 'ADR')
+        assert get_freshdesk_app_name() == 'ADR'
+
+    def test_env_takes_precedence_over_config(self, monkeypatch):
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_app_name', 'FromConfig')
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', 'FromEnv')
+        assert get_freshdesk_app_name() == 'FromEnv'
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')
