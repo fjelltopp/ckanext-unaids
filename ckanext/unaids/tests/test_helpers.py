@@ -119,7 +119,8 @@ class TestGetFreshdeskAppName(object):
         assert get_freshdesk_app_name() == 'FromEnv'
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids pages')
+@pytest.mark.ckan_config(
+    'ckan.plugins', 'activity ytp_request unaids pages scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestFreshdeskWidgetTemplate(object):
     @pytest.mark.ckan_config(
