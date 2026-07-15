@@ -1,7 +1,11 @@
 import pytest
 from ckan.tests import factories
 from ckan.plugins import toolkit
-from ckanext.unaids.helpers import get_support_url
+from ckanext.unaids.helpers import (
+    get_support_url,
+    get_freshdesk_widget_id,
+    get_freshdesk_app_name,
+)
 
 
 class TestGetSupportUrl(object):
@@ -41,6 +45,108 @@ class TestGetSupportUrl(object):
         monkeypatch.setenv(
             'CKAN_UNAIDS_SUPPORT_URL', 'https://env.example.org/new')
         assert get_support_url() == 'https://env.example.org/new'
+
+
+class TestGetFreshdeskWidgetId(object):
+    @pytest.mark.parametrize('value,expected', [
+        ('157000000691', 157000000691),
+        ('  12345  ', 12345),
+        ('0', None),
+        ('-5', None),
+        ('abc', None),
+        ('12ab', None),
+        ('0};alert(1)//', None),
+        ('', None),
+        ('9007199254740991', 9007199254740991),
+        ('9007199254740992', None),
+    ])
+    def test_only_positive_int_is_exposed(self, monkeypatch, value, expected):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', value)
+        assert get_freshdesk_widget_id() == expected
+
+    def test_blank_env_falls_back_to_config(self, monkeypatch):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', '   ')
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', '111')
+        assert get_freshdesk_widget_id() == 111
+
+    def test_none_when_unset(self, monkeypatch):
+        monkeypatch.delenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', raising=False)
+        monkeypatch.delitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', raising=False)
+        assert get_freshdesk_widget_id() is None
+
+    def test_falls_back_to_config(self, monkeypatch):
+        monkeypatch.delenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', raising=False)
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', '157000000691')
+        assert get_freshdesk_widget_id() == 157000000691
+
+    def test_env_takes_precedence_over_config(self, monkeypatch):
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_widget_id', '111')
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_WIDGET_ID', '222')
+        assert get_freshdesk_widget_id() == 222
+
+
+class TestGetFreshdeskAppName(object):
+    @pytest.mark.parametrize('value,expected', [
+        ('AIDS Data Repository (ADR)', 'AIDS Data Repository (ADR)'),
+        ('  AIDS Data Repository (ADR)  ', 'AIDS Data Repository (ADR)'),
+        ('', None),
+        ('   ', None),
+    ])
+    def test_env_value(self, monkeypatch, value, expected):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', value)
+        assert get_freshdesk_app_name() == expected
+
+    def test_none_when_unset(self, monkeypatch):
+        monkeypatch.delenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', raising=False)
+        monkeypatch.delitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_app_name', raising=False)
+        assert get_freshdesk_app_name() is None
+
+    def test_blank_env_falls_back_to_config(self, monkeypatch):
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', '   ')
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_app_name', 'ADR')
+        assert get_freshdesk_app_name() == 'ADR'
+
+    def test_env_takes_precedence_over_config(self, monkeypatch):
+        monkeypatch.setitem(
+            toolkit.config, 'ckanext.unaids.freshdesk_app_name', 'FromConfig')
+        monkeypatch.setenv('CKAN_UNAIDS_FRESHDESK_APP_NAME', 'FromEnv')
+        assert get_freshdesk_app_name() == 'FromEnv'
+
+
+@pytest.mark.ckan_config(
+    'ckan.plugins', 'activity ytp_request unaids pages scheming_datasets')
+@pytest.mark.usefixtures('with_plugins')
+class TestFreshdeskWidgetTemplate(object):
+    @pytest.mark.ckan_config(
+        'ckanext.unaids.freshdesk_widget_id', '156000001542')
+    @pytest.mark.ckan_config(
+        'ckanext.unaids.freshdesk_app_name', '</script><script>alert(1)</script>')
+    def test_widget_and_prefill_render_escaped(self, app):
+        body = app.get('/', follow_redirects=False).body
+        assert 'widget.freshworks.com/widgets/156000001542.js' in body
+        assert "FreshworksWidget('prefill', 'ticketForm'" in body
+        # app name is emitted via tojson: value present but escaped, so it
+        # can't break out of the inline <script>
+        assert 'alert(1)' in body
+        assert '</script><script>alert(1)</script>' not in body
+
+    @pytest.mark.ckan_config(
+        'ckanext.unaids.freshdesk_widget_id', '156000001542')
+    def test_widget_without_prefill_when_app_name_unset(self, app):
+        body = app.get('/', follow_redirects=False).body
+        assert 'widget.freshworks.com/widgets/156000001542.js' in body
+        assert "FreshworksWidget('prefill'" not in body
+
+    def test_no_widget_when_id_unset(self, app):
+        body = app.get('/', follow_redirects=False).body
+        assert 'widget.freshworks.com' not in body
+        assert 'fwSettings' not in body
 
 
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')

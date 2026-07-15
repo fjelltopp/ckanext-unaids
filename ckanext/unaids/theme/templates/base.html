@@ -17,6 +17,18 @@
       gtag('config', '{{ h.get_google_analytics_id() }}');
     </script>
   {% endif %}
+  {% set fw_id = h.get_freshdesk_widget_id() %}
+  {% if fw_id %}
+    {% set fw_app_name = h.get_freshdesk_app_name() %}
+    <script>
+      window.fwSettings = {'widget_id': {{ fw_id | tojson }}};
+      !function(){if("function"!=typeof window.FreshworksWidget){var n=function(){n.q.push(arguments)};n.q=[],window.FreshworksWidget=n}}()
+      {% if fw_app_name %}
+      FreshworksWidget('prefill', 'ticketForm', {custom_fields: {cf_select_model: {{ fw_app_name | tojson }}}});
+      {% endif %}
+    </script>
+    <script type="text/javascript" src="https://widget.freshworks.com/widgets/{{ fw_id | tojson }}.js" async defer></script>
+  {% endif %}
 {% endblock %}
 
 {% block scripts %}
