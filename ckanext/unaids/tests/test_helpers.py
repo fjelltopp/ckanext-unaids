@@ -119,6 +119,35 @@ class TestGetFreshdeskAppName(object):
         assert get_freshdesk_app_name() == 'FromEnv'
 
 
+@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids pages')
+@pytest.mark.usefixtures('with_plugins')
+class TestFreshdeskWidgetTemplate(object):
+    @pytest.mark.ckan_config(
+        'ckanext.unaids.freshdesk_widget_id', '156000001542')
+    @pytest.mark.ckan_config(
+        'ckanext.unaids.freshdesk_app_name', '</script><script>alert(1)</script>')
+    def test_widget_and_prefill_render_escaped(self, app):
+        body = app.get('/', follow_redirects=False).body
+        assert 'widget.freshworks.com/widgets/156000001542.js' in body
+        assert "FreshworksWidget('prefill', 'ticketForm'" in body
+        # app name is emitted via tojson: value present but escaped, so it
+        # can't break out of the inline <script>
+        assert 'alert(1)' in body
+        assert '</script><script>alert(1)</script>' not in body
+
+    @pytest.mark.ckan_config(
+        'ckanext.unaids.freshdesk_widget_id', '156000001542')
+    def test_widget_without_prefill_when_app_name_unset(self, app):
+        body = app.get('/', follow_redirects=False).body
+        assert 'widget.freshworks.com/widgets/156000001542.js' in body
+        assert "FreshworksWidget('prefill'" not in body
+
+    def test_no_widget_when_id_unset(self, app):
+        body = app.get('/', follow_redirects=False).body
+        assert 'widget.freshworks.com' not in body
+        assert 'fwSettings' not in body
+
+
 @pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetLockHelper(object):
