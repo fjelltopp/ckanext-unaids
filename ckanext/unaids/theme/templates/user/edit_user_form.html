@@ -59,7 +59,7 @@
       <legend>{{ _('Sysadmin password') }}</legend>
       {# ckan/views/user.py treats email_changed as always True on a cross-user edit,
          so it requires the acting sysadmin's own password to authorize the save. #}
-      {{ form.input('old_password', type='password', label=_('Sysadmin Password'), id='field-password-old', value=data.oldpassword, error=errors.oldpassword, classes=['control-medium'], attrs={'autocomplete': 'off', 'class': 'form-control', 'required': ''}, is_required=true) }}
+      {{ form.input('old_password', type='password', label=_('Sysadmin Password'), id='field-password-old', error=errors.oldpassword, classes=['control-medium'], attrs={'autocomplete': 'off', 'class': 'form-control', 'required': ''}, is_required=true) }}
     </fieldset>
   {% else %}
     <input type="hidden" name="old_password"/>
