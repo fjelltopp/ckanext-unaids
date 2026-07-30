@@ -776,6 +776,12 @@ float: right;
   width: 100%;
 }
 
+/* Exempt toggles: width:100% stretches them to the full field width, pushing their label onto the next line. */
+.dataset-form input[type="checkbox"],
+.dataset-form input[type="radio"] {
+  width: auto;
+}
+
 .avenir-logo {
   margin: -10px auto;
 }

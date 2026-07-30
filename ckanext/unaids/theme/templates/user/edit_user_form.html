@@ -32,10 +32,10 @@
 
     {{ form.markdown('about', label=_('About'), id='field-about', value=data.about, error=errors.about, placeholder=_('A little information about yourself')) }}
 
-    {% if show_email_notifications %}
-      {% call form.checkbox('activity_streams_email_notifications', label=_('Subscribe to notification emails'), id='field-activity-streams-email-notifications', value=True, checked=g.userobj.activity_streams_email_notifications) %}
+    {% if 'activity_show_email_notifications' in h and h.activity_show_email_notifications() %}
+      {% call form.checkbox('activity_streams_email_notifications', label=_('Subscribe to notification emails'), id='field-activity-streams-email-notifications', value=True, checked=data.activity_streams_email_notifications) %}
       {% set helper_text = _("You will receive notification emails from {site_title}, e.g. when you have new activities on your dashboard."|string) %}
-      {{ form.info(helper_text.format(site_title=g.site_title), classes=['info-help-tight']) }}
+      {{ form.info(helper_text.format(site_title=g.site_title)) }}
       {% endcall %}
     {% endif %}
 
@@ -48,12 +48,22 @@
 
    <div class="d-none">
       <!-- Hidden inputs required for the CKAN flask view to work -->
-      <input type="hidden" name="old_password"/>
       <input type="hidden" name="password1"/>
       <input type="hidden" name="password2"/>
       <input type="hidden" name="email" value="{{data.email}}" />
       <input type="hidden" name="name" value="{{data.name}}" />
   </div>
+
+  {% if is_sysadmin and current_user.name != data.name %}
+    <fieldset>
+      <legend>{{ _('Sysadmin password') }}</legend>
+      {# ckan/views/user.py treats email_changed as always True on a cross-user edit,
+         so it requires the acting sysadmin's own password to authorize the save. #}
+      {{ form.input('old_password', type='password', label=_('Sysadmin Password'), id='field-password-old', error=errors.oldpassword, classes=['control-medium'], attrs={'autocomplete': 'off', 'class': 'form-control', 'required': ''}, is_required=true) }}
+    </fieldset>
+  {% else %}
+    <input type="hidden" name="old_password"/>
+  {% endif %}
 
   <div class="form-actions">
     {% block delete_button %}
