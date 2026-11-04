@@ -165,7 +165,7 @@ def build_pages_nav_main(*args):
     This helper is overriding build_pages_nav_main from ckanext-pages.
     Unlike the original, this version does NOT add pages to the top navbar.
     Pages are accessible via direct links, the homepage, and the footer.
-    The "2026 Instructions" link is added separately in header.html template.
+    The "2027 Instructions" link is added separately in header.html template.
     """
     about_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.about_menu', True))
     group_menu = toolkit.asbool(toolkit.config.get('ckanext.pages.group_menu', True))
@@ -193,7 +193,7 @@ def build_pages_nav_main(*args):
     # - The homepage help panel (Instructions buttons)
     # - The footer (About, Terms, Cookie Policy links)
     # - Direct URLs
-    # The "2026 Instructions" link is added in header.html template block.
+    # The "2027 Instructions" link is added in header.html template block.
 
     return output
 
