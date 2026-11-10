@@ -1,0 +1,34 @@
+{% ckan_extends %}
+
+{# Replaces the activity extension's `activity_stream` block so that the
+   package activity snippets know whether the user may create releases
+   (`can_create_version`). Keep the loop in line with the extension's version. #}
+{% block activity_stream %}
+  {% set can_create_version = h.check_access('version_create', {'package_id': id}) if object_type == 'package' else false %}
+  {% if can_create_version and request.args.create_release %}
+    <div class="alert alert-info">
+      <p>{{ _('Use the "Add Release" button to select a version of this dataset') }}</p>
+    </div>
+  {% endif %}
+  <ul class="activity {% if not activity_stream %}activity-empty{% endif %}">
+  {% set can_show_activity_detail = h.check_access('activity_list', {'id': id, 'include_data': True, 'object_type': object_type}) %}
+
+  {% for activity in activity_stream %}
+    {%- snippet "snippets/activities/{}.html".format(activity.activity_type.replace(' ', '_')),
+      "snippets/activities/fallback.html",
+      activity=activity, can_show_activity_detail=can_show_activity_detail,
+      can_create_version=can_create_version,
+      ah={
+        'actor': actor,
+        'dataset': dataset,
+        'organization': organization,
+        'user': user,
+        'group': group,
+      },
+      id=id
+    -%}
+  {% else %}
+      {{ _("No activity found for this type") }}
+  {% endfor %}
+  </ul>
+{% endblock %}

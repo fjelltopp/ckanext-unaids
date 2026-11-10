@@ -6,7 +6,7 @@ from ckan.plugins import toolkit
 
 @pytest.mark.ckan_config(
     'ckan.plugins',
-    'activity ytp_request unaids versions restricted blob_storage scheming_datasets'
+    'unaids activity ytp_request versions restricted blob_storage scheming_datasets'
 )
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetShowForRelease(object):

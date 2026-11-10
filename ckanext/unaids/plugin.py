@@ -1,5 +1,4 @@
 import datetime
-import os
 import logging
 from collections import OrderedDict
 
@@ -105,22 +104,8 @@ class UNAIDSPlugin(p.SingletonPlugin, DefaultTranslation):
         add_licenses()
         log.info("UNAIDS Plugin is enabled")
         p.toolkit.add_template_directory(config, "theme/templates")
-        # The activity extension is listed before this plugin in ckan.plugins,
-        # so its templates win over ours of the same name. A few of its
-        # templates (the old-version notices) must be replaced, so those live
-        # in a separate directory registered through CKAN's `extra_template_paths`,
-        # which is searched before every plugin's template directory.
-        self._prepend_extra_template_path(
-            config, os.path.join(os.path.dirname(__file__), "theme", "activity_overrides")
-        )
         p.toolkit.add_public_directory(config, "theme/public")
         toolkit.add_resource("assets", "ckanext-unaids")
-
-    @staticmethod
-    def _prepend_extra_template_path(config, path):
-        existing = [p_ for p_ in (config.get("extra_template_paths") or "").split(",") if p_]
-        if path not in existing:
-            config["extra_template_paths"] = ",".join([path] + existing)
 
     def get_blueprint(self):
         return blueprints
