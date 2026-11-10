@@ -1,7 +1,10 @@
 {% ckan_extends %}
 
+{# CKAN 2.11 puts the activity id in the path of old-version pages (/history/<activity_id>);
+   older links may still use ?activity_id=. Set at top level so every block sees it. #}
+{% set activity_id = request.view_args.activity_id or request.args['activity_id'] %}
+
 {% block resource %}
-    {% set activity_id = request.args['activity_id'] %}
     {% if activity_id and res.url_type == 'upload' %}
         {# res.url is used quite deep in the template blocks, to avoid #}
         {# duplication I update the param field #}
