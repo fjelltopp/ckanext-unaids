@@ -15,7 +15,7 @@
         </a>
       {% elif h.check_access('unaids_organization_update', {'id': pkg.owner_org}) %}
         <p>{{ _('This dataset is pending transfer to ') + h.get_organization(pkg.org_to_allow_transfer_to).display_name + '.'}}</p>
-        <p><u>{{ _('Please ask an admin or editor of ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name + _(' to accept the request.')}}</u></p>          
+        <p><u>{{ _('Please ask an admin or editor of ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name + _(' to accept the request.')}}</u></p>
       {% else %}
         <p>{{ _('This dataset is pending transfer to ') +  h.get_organization(pkg.org_to_allow_transfer_to).display_name }}</p>
       {% endif %}
@@ -28,16 +28,6 @@
       {{ _('Private') }}
     </span>
   {% endif %}
-  {% block package_archive_notice %}
-    {% if is_activity_archive %}
-      <div class="alert alert-danger">
-        {% trans url=h.url_for(pkg.type ~ '.read', id=pkg.id) %}
-        You're currently viewing an old version of this dataset. To see the
-        current version, click <a href="{{ url }}">here</a>.
-        {% endtrans %}
-      </div>
-    {% endif %}
-  {% endblock %}
   <h1>
     {% block page_heading %}
       {{ h.dataset_display_name(pkg) }}

@@ -120,7 +120,7 @@ class TestGetFreshdeskAppName(object):
 
 
 @pytest.mark.ckan_config(
-    'ckan.plugins', 'activity ytp_request unaids pages scheming_datasets')
+    'ckan.plugins', 'unaids activity ytp_request pages scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestFreshdeskWidgetTemplate(object):
     @pytest.mark.ckan_config(
@@ -149,7 +149,7 @@ class TestFreshdeskWidgetTemplate(object):
         assert 'fwSettings' not in body
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets versions')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request scheming_datasets versions')
 @pytest.mark.usefixtures('with_plugins')
 class TestDatasetLockHelper(object):
     def test_dataset_lockable(self):

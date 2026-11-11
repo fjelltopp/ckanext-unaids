@@ -1,5 +1,7 @@
 {% ckan_extends %}
-{% set activity_id = request.args['activity_id'] %}
+{# CKAN 2.11 puts the activity id in the path of old-version pages (/history/<activity_id>);
+   older links may still use ?activity_id= #}
+{% set activity_id = request.view_args.activity_id or request.args['activity_id'] %}
 {% block resource_item_title %}
     <a class="heading" href="{{ url }}" title="{{ res.name or res.description }}">
       {{ h.resource_display_name(res) | truncate(50) }}<span class="format-label" property="dc:format" data-format="{{ res.format.lower() or 'data' }}">{{ h.get_translated(res, 'format') }}</span>

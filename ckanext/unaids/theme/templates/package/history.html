@@ -1,0 +1,13 @@
+{% ckan_extends %}
+
+{# Replaces the activity extension's notice. Its text says the data files may not
+   match the old metadata, which is not true for us: old versions keep their data. #}
+
+{% block package_archive_notice %}
+  <div class="alert alert-danger" id="activity-archive-notice">
+    {% trans url=h.url_for(pkg.type ~ '.read', id=pkg.id) %}
+    You're currently viewing an old version of this dataset. To see the
+    current version, click <a href="{{ url }}">here</a>.
+    {% endtrans %}
+  </div>
+{% endblock %}

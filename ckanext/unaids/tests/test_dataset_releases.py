@@ -4,6 +4,8 @@ import pytest
 from bs4 import BeautifulSoup
 from ckan.lib.helpers import url_for
 from ckanext.unaids.tests import create_dataset_with_releases
+from ckan.plugins import toolkit
+from ckan.tests import factories as ckan_factories
 from ckan.tests.factories import User
 from ckanext.versions.logic.dataset_version_action import (
     dataset_version_create,
@@ -53,7 +55,7 @@ def assert_releases_are_exactly(user, dataset_id, expected_releases):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids blob_storage versions pages scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseCreateAndEdit(object):
 
     def _create_or_edit(self, app, user, dataset, release, activity_id=None):
@@ -149,7 +151,7 @@ class TestDatasetReleaseCreateAndEdit(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids blob_storage versions pages scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseDelete(object):
 
     def _delete(self, app, user, dataset, release):
@@ -190,7 +192,7 @@ class TestDatasetReleaseDelete(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids blob_storage versions pages scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseRestore(object):
 
     def _restore(self, app, user, dataset, release):
@@ -234,7 +236,7 @@ class TestDatasetReleaseRestore(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids blob_storage versions pages scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request blob_storage versions pages scheming_datasets')
 class TestDatasetReleaseListView(object):
 
     def test_no_releases_created(self, app):
@@ -272,7 +274,7 @@ class TestDatasetReleaseListView(object):
 
 
 @pytest.mark.usefixtures('with_plugins')
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids blob_storage versions pages scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request blob_storage versions pages scheming_datasets')
 class TestDatasetRead(object):
 
     def _get_dataset_release_sidebar(self, app, user, dataset, activity_id=None):
@@ -321,3 +323,77 @@ class TestDatasetRead(object):
         assert_in(release['name'], response)
         assert_in(release['notes'], response)
         assert_not_in('Create Release', response)
+
+
+@pytest.mark.usefixtures('with_plugins')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request blob_storage versions pages scheming_datasets')
+class TestOldVersionPages(object):
+    """Pages showing an old version (release) of a dataset and its resources."""
+
+    @pytest.fixture
+    def release(self):
+        user = User()
+        org = ckan_factories.Organization(user=user)
+        dataset = ckan_factories.Dataset(user=user, owner_org=org['id'])
+        resource = ckan_factories.Resource(
+            package_id=dataset['id'], name='data.csv', url='data.csv', url_type='upload',
+            sha256='a' * 64, size=10, lfs_prefix='test-org/test-dataset',
+        )
+        # A package change after adding the resource, so that the newest
+        # activity is one whose stored dataset contains the resource.
+        toolkit.get_action('package_patch')(get_context(user), {'id': dataset['id'], 'title': 'released-title'})
+        activities = toolkit.get_action('package_activity_list')(get_context(user), {'id': dataset['id']})
+        release = dataset_version_create(
+            get_context(user),
+            {'dataset_id': dataset['id'], 'activity_id': activities[0]['id'], 'name': 'v1'}
+        )
+        # Make the current version differ from the release
+        toolkit.get_action('package_patch')(get_context(user), {'id': dataset['id'], 'title': 'newer-title'})
+        return {'user': user, 'dataset': dataset, 'resource': resource, 'release': release}
+
+    def _get(self, app, endpoint, release, **kwargs):
+        response = app.get(
+            url=url_for(endpoint, id=release['dataset']['id'],
+                        activity_id=release['release']['activity_id'], **kwargs),
+            extra_environ={'REMOTE_USER': release['user']['name']},
+        )
+        return BeautifulSoup(response.body, 'html.parser')
+
+    @staticmethod
+    def _old_version_notices(soup):
+        return [a for a in soup.select('.alert-danger') if 'old version' in a.text]
+
+    @staticmethod
+    def _download_hrefs(soup):
+        return [a['href'] for a in soup.find_all('a', href=True) if 'download' in a['href']]
+
+    def test_dataset_page_shows_a_single_old_version_notice(self, app, release):
+        soup = self._get(app, 'activity.package_history', release)
+
+        notices = self._old_version_notices(soup)
+        assert len(notices) == 1
+        # The data files of every release are stored, so there must be no warning
+        assert 'may not match' not in notices[0].text
+
+    def test_resource_page_shows_a_single_old_version_notice(self, app, release):
+        soup = self._get(app, 'activity.resource_history', release, resource_id=release['resource']['id'])
+
+        notices = self._old_version_notices(soup)
+        assert len(notices) == 1
+        assert 'may not match' not in notices[0].text
+
+    def test_dataset_page_download_links_use_the_release_activity_id(self, app, release):
+        soup = self._get(app, 'activity.package_history', release)
+
+        hrefs = self._download_hrefs(soup)
+        assert hrefs
+        for href in hrefs:
+            assert 'activity_id={}'.format(release['release']['activity_id']) in href
+
+    def test_resource_page_download_links_use_the_release_activity_id(self, app, release):
+        soup = self._get(app, 'activity.resource_history', release, resource_id=release['resource']['id'])
+
+        hrefs = self._download_hrefs(soup)
+        assert hrefs
+        for href in hrefs:
+            assert 'activity_id={}'.format(release['release']['activity_id']) in href

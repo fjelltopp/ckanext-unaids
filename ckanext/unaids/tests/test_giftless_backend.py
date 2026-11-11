@@ -10,7 +10,7 @@ from werkzeug.datastructures import FileStorage as FlaskFileStorage
 import ckan.lib.helpers as h
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids authz_service blob_storage')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request authz_service blob_storage')
 @pytest.mark.usefixtures('with_plugins')
 class TestGiftlessBackend(object):
 
@@ -51,7 +51,7 @@ class TestGiftlessBackend(object):
         assert resource.get('name', None) == filename
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids pages blob_storage scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request pages blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 class TestResourceUrlEncoding():
     def test_resource_url_encoding_test(self, app):

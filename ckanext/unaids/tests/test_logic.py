@@ -6,7 +6,7 @@ from ckan.tests import factories
 from ckanext.unaids import logic
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids authz_service blob_storage')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request authz_service blob_storage')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.parametrize(
     "lfs_prefix,sha256,size,valid",
@@ -55,7 +55,7 @@ def test_validate_resource_upload_fields(lfs_prefix, sha256, size, valid):
         logic.validate_resource_upload_fields(context, resource_dict)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids authz_service blob_storage scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request authz_service blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 def test_update_filename_in_upload_resource_url():
     actual_filename = u"TeStè.CSV"
@@ -69,7 +69,7 @@ def test_update_filename_in_upload_resource_url():
     assert resource['url'].endswith(expected_filename)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids authz_service blob_storage scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request authz_service blob_storage scheming_datasets')
 @pytest.mark.usefixtures('with_plugins')
 @pytest.mark.parametrize("link_url",
                          ["http://link.my", "https://link.my", "https://link.my/path/to/resource"],

@@ -23,7 +23,7 @@ class TestExtractToken(object):
             auth_logic.extract_token("Bearer")
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request')
 @pytest.mark.usefixtures('with_plugins')
 class TestVerifyRequiredScope(object):
 
@@ -45,7 +45,7 @@ class TestVerifyRequiredScope(object):
             auth_logic.verify_required_scope(token)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins')
 class TestAccessTokenPresentAndValidAndUserAuthorized():
 
@@ -133,7 +133,7 @@ class TestCreateResponse:
         assert response.content_type == "text/json"
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins')
 class TestValidateAndDecodeToken(object):
     @patch('ckanext.unaids.auth_logic.jwt.decode')
@@ -286,7 +286,7 @@ class TestValidateAndDecodeToken(object):
             auth_logic.validate_and_decode_token(encoded)
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'activity ytp_request unaids scheming_datasets')
+@pytest.mark.ckan_config('ckan.plugins', 'unaids activity ytp_request scheming_datasets')
 @pytest.mark.usefixtures('with_request_context', 'with_plugins', 'clean_db')
 class TestRegressionOAuth2PluginDoesntPreventVanillaCkanAuthentication:
     # This regression guards that the unaids OAuth2 IAuthenticator does not
