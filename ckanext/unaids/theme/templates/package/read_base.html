@@ -3,12 +3,6 @@
 {% block content_action %}
   {% if not is_activity_archive %}
     {% if h.check_access('package_update', {'id':pkg.id }) %}
-      {% if pkg.type == "country-estimates-23" %}
-        <a class="btn btn-default" href="https://navigator.unaids.org/{{ h.get_language_code() }}/?datasetId={{ pkg.id }}" target="_blank">
-          <i class="fa fa-compass"></i>
-          {{_('Navigator')}}
-        </a>
-      {% endif %}
       {% link_for _('Manage'), named_route=pkg.type ~ '.edit', id=pkg.name, class_='btn btn-default', icon='wrench' %}
     {% elif h.check_access('dataset_lock', {'id': pkg.id}) and pkg.get('locked')  %}
       <a class="btn btn-danger"
