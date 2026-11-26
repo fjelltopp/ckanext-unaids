@@ -5,7 +5,7 @@ import json
 import requests
 from ckan.lib.helpers import url_for_static_or_external, check_access, full_current_url, lang
 from ckan.lib.i18n import get_lang
-from ckan.plugins.toolkit import get_action, request
+from ckan.plugins.toolkit import get_action
 from ckan.plugins import toolkit
 from ckan.common import _, g, asbool, config
 from ckan.lib.helpers import build_nav_main as core_build_nav_main
@@ -154,10 +154,6 @@ def get_current_dataset_release(dataset_id, activity_id=None):
     for release in releases:
         if release['activity_id'] == activity_id:
             return release
-
-
-def get_language_code():
-    return request.environ['CKAN_LANG'].split('_')[0]
 
 
 def build_pages_nav_main(*args):

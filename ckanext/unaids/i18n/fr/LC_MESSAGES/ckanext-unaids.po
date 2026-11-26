@@ -854,10 +854,6 @@ msgstr ""
 msgid "Find out more..."
 msgstr "Plus d’informations..."
 
-#: ckanext/unaids/theme/templates/home/layout1.html:35
-msgid "HIV Estimates<br />Navigator"
-msgstr "Navigateur<br />pour les Estimations du VIH"
-
 #: ckanext/unaids/theme/templates/home/layout1.html:41
 msgid "Instructions to upload your<br />Country Estimates 2027 Data"
 msgstr "Instructions pour mettre en ligne vos<br />données sur les estimations 2027"
@@ -867,14 +863,8 @@ msgid "Unsure what to do next?"
 msgstr "Vous hésitez sur la marche à suivre ?"
 
 #: ckanext/unaids/theme/templates/home/layout1.html:46
-msgid ""
-"Use the HIV Estimates Navigator to guide you step-by-step through the HIV "
-"Estimates process, or click on one of our instruction pages opposite for "
-"videos and guidance."
-msgstr ""
-"Utilisez le navigateur Estimations VIH pour vous guider pas à pas dans le "
-"processus des Estimations du VIH, ou cliquez sur l'une des pages "
-"d'instructions ci-contre pour obtenir des vidéos et des conseils."
+msgid "Click on our instruction page opposite for videos and guidance."
+msgstr "Cliquez sur notre page d'instructions ci-contre pour obtenir des vidéos et des conseils."
 
 #: ckanext/unaids/theme/templates/home/layout1.html:53
 msgid "Datasets by country"
@@ -1105,10 +1095,6 @@ msgstr ""
 #: ckanext/unaids/theme/templates/package/read.html:64
 msgid "Download All"
 msgstr "Télécharger tout"
-
-#: ckanext/unaids/theme/templates/package/read_base.html:9
-msgid "Navigator"
-msgstr "Navigateur"
 
 #: ckanext/unaids/theme/templates/package/read_base.html:12
 msgid "Manage"
